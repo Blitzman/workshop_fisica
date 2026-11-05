@@ -215,7 +215,10 @@ def main():
     assert '{{' not in page
     out = RES / 'informe_axiones.html'
     out.write_text(page)
+    guia_out = RES / 'guia_departamento.html'
+    guia_out.write_text((Path(__file__).parent / 'guia_departamento.html').read_text())
     print(out, f'{len(page) / 1e3:.0f} kB', f'{n_ok}/{n_tot}')
+    print(guia_out, f'{guia_out.stat().st_size / 1e3:.0f} kB')
 
 
 if __name__ == '__main__':

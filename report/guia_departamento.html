@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de implantación · Sistema agéntico para física teórica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --paper: #f4f6f9;
+  --sheet: #ffffff;
+  --ink: #161e2e;
+  --muted: #586378;
+  --rule: #d8dde6;
+  --accent: #2b4bb3;
+  --ok: #1d7451;
+  --ok-bg: #e4f3eb;
+  --flag: #9a5400;
+  --flag-bg: #fdf0dc;
+  --bad: #a3262f;
+  --bad-bg: #fbe5e6;
+  --code-bg: #eaeef4;
+  --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0d121b; --sheet: #141b27; --ink: #e3e8f1; --muted: #98a3b7; --rule: #263042;
+    --accent: #93a8ff; --ok: #62c99c; --ok-bg: #12291f; --flag: #f1a84d; --flag-bg: #2b2112;
+    --bad: #f08a90; --bad-bg: #2d1518; --code-bg: #1b2433; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0d121b; --sheet: #141b27; --ink: #e3e8f1; --muted: #98a3b7; --rule: #263042;
+  --accent: #93a8ff; --ok: #62c99c; --ok-bg: #12291f; --flag: #f1a84d; --flag-bg: #2b2112;
+  --bad: #f08a90; --bad-bg: #2d1518; --code-bg: #1b2433; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1rem/1.62 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 2rem 4rem;
+}
+.wrap {
+  display: grid;
+  gap: 2.6rem 0;
+  grid-template-columns: [full-start] minmax(0, 1fr) [content-start] minmax(0, 74ch) [content-end] minmax(0, 1fr) [full-end];
+}
+.wrap > * { grid-column: content; min-width: 0; }
+.wrap > .wide { grid-column: full; width: min(1040px, 100%); justify-self: center; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 600; text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font-size: clamp(1.9rem, 4.5vw, 2.7rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.55rem; }
+h3 { font-size: 1.15rem; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+.eyebrow { font: 500 0.78rem/1.4 var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.stack { display: grid; gap: 1rem; }
+.lede { font-size: 1.1rem; }
+.muted { color: var(--muted); }
+section[id] { scroll-margin-top: 4.2rem; }
+code { font-family: var(--f-mono); font-size: 0.88em; background: var(--code-bg); padding: 0.12rem 0.35rem; border-radius: 3px; }
+pre { margin: 0; padding: 1rem 1.15rem; background: var(--code-bg); border: 1px solid var(--rule); border-radius: 6px; overflow-x: auto; font: 0.84rem/1.55 var(--f-mono); }
+pre code { background: none; padding: 0; font-size: inherit; }
+
+/* Barra superior */
+.topbar {
+  position: sticky;
+  top: 0.6rem;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0.55rem 0.9rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.06);
+  font-size: 0.88rem;
+}
+.navlinks { display: flex; flex-wrap: wrap; gap: 0.3rem 0.85rem; align-items: center; }
+.navlinks a { text-decoration: none; font-weight: 500; color: var(--ink); }
+.navlinks a:hover { color: var(--accent); text-decoration: underline; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+.btn-link, .btn-theme {
+  font: 500 0.78rem/1.2 var(--f-mono);
+  padding: 0.38rem 0.65rem;
+  border-radius: 5px;
+  border: 1px solid var(--rule);
+  background: var(--code-bg);
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-link { border-color: var(--accent); color: var(--accent); background: transparent; }
+.btn-link:hover, .btn-theme:hover { background: var(--code-bg); }
+
+/* Destacado inicial */
+.pitch {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem 1.4rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+}
+.diagram {
+  padding: 1rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}
+.diagram svg { display: block; width: 100%; max-width: 780px; height: auto; margin: 0 auto; color: var(--ink); }
+
+/* Reglas numeradas */
+.rules {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.95rem;
+  counter-reset: rl;
+}
+.rules li {
+  counter-increment: rl;
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  gap: 0.3rem 0.9rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  align-items: baseline;
+}
+.rules li::before {
+  content: counter(rl);
+  grid-row: span 3;
+  font: 600 1.5rem/1 var(--f-display);
+  color: var(--accent);
+}
+.rules h3 { font-size: 1.12rem; }
+.rules p { font-size: 0.95rem; color: var(--muted); }
+.rules .ref { font: 500 0.78rem/1.3 var(--f-mono); color: var(--accent); }
+
+/* Grid de tarjetas */
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: 1rem;
+}
+.card {
+  display: grid;
+  gap: 0.65rem;
+  align-content: start;
+  padding: 1.15rem 1.25rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.card header { display: grid; gap: 0.35rem; }
+.card p, .card li { font-size: 0.93rem; color: var(--muted); }
+.card ul { margin: 0; padding-left: 1.15rem; display: grid; gap: 0.35rem; }
+.chip {
+  display: inline-block;
+  width: fit-content;
+  font: 500 0.7rem/1 var(--f-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.26rem 0.48rem;
+  border-radius: 3px;
+}
+.chip-ok { color: var(--ok); background: var(--ok-bg); }
+.chip-obs { color: var(--flag); background: var(--flag-bg); }
+.chip-bad { color: var(--bad); background: var(--bad-bg); }
+
+/* Tabla de tropiezos */
+.tablewrap {
+  overflow-x: auto;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+table.pitfalls {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.pitfalls th, .pitfalls td {
+  text-align: left;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.pitfalls tr:last-child td { border-bottom: 0; }
+.pitfalls th {
+  font: 600 0.78rem/1.2 var(--f-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: var(--code-bg);
+}
+.pitfalls td:first-child { font-weight: 600; color: var(--ink); width: 22%; }
+.pitfalls td:nth-child(2) { color: var(--muted); width: 36%; }
+
+.copybar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: -0.5rem;
+}
+footer {
+  font-size: 0.85rem;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  padding-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+@media (max-width: 600px) {
+  .topbar { position: static; }
+}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+  <nav class="topbar wide" aria-label="Navegación rápida">
+    <div class="navlinks">
+      <a href="#principio">Principio</a>
+      <a href="#reglas">5 reglas</a>
+      <a href="#flujos">3 flujos</a>
+      <a href="#trampas">Trampas y soluciones</a>
+      <a href="#kit">Kit del grupo</a>
+      <a href="#agents">AGENTS.md</a>
+    </div>
+    <div class="actions">
+      <a class="btn-link" href="informe_axiones.html" target="_blank" rel="noopener">Informe de Jose ↗</a>
+      <button type="button" class="btn-theme" id="themetoggle">Tema</button>
+    </div>
+  </nav>
+
+  <header class="stack">
+    <p class="eyebrow">Aprendizajes del Caso 2 · Guía de implantación para el Departamento de Física</p>
+    <h1>Cómo montar este sistema agéntico en un grupo de física teórica</h1>
+  </header>
+
+  <section class="stack" id="principio">
+    <h2>El principio central: por qué aquí no «alucina»</h2>
+    <div class="pitch">
+      <p class="lede">Si a un modelo de lenguaje le pides que linealice las ecuaciones de Einstein en texto, se inventa signos y cancelaciones. El aprendizaje clave de este proyecto es que <b>el agente nunca hace el álgebra de cabeza: programa a un sistema de álgebra computacional (SymPy) desde la acción y diseña un arnés de pruebas que exige cero exacto</b>.</p>
+      <p>Así se invierten los papeles habituales: el físico define la acción, el <i>ansatz</i> métrico, las aproximaciones físicas y qué límites tienen sentido; el agente escribe el código tensorial, ejecuta las reducciones simbólicas, planta errores artificiales para probar el comparador y compila las ecuaciones verificadas directamente a código numérico sin reescribirlas a mano.</p>
+    </div>
+
+    <figure class="diagram wide">
+      <svg viewBox="0 0 760 155" role="img" aria-label="Flujo de trabajo: Acción y ansatz en SymPy, comparador con controles negativos y límites conocidos, y compilación directa a integrador numérico">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="10" y="25" width="165" height="95" rx="6"/>
+          <rect x="205" y="25" width="175" height="95" rx="6"/>
+          <rect x="410" y="25" width="165" height="95" rx="6" style="stroke: var(--ok)" stroke-width="1.8"/>
+          <rect x="605" y="25" width="145" height="95" rx="6"/>
+          <line x1="175" y1="72" x2="203" y2="72" marker-end="url(#arr)"/>
+          <line x1="380" y1="72" x2="408" y2="72" marker-end="url(#arr)"/>
+          <line x1="575" y1="72" x2="603" y2="72" marker-end="url(#arr)"/>
+        </g>
+        <g fill="currentColor" font-size="12" text-anchor="middle">
+          <text x="92" y="50" font-weight="600">1. Punto de partida</text>
+          <text x="92" y="70" font-size="11" fill-opacity="0.75">Acción S + ansatz métrico</text>
+          <text x="92" y="88" font-size="11" fill-opacity="0.75">+ convenio de variables</text>
+          <text x="92" y="106" font-size="10.5" style="fill: var(--accent)">geometry.py · model.py</text>
+
+          <text x="292" y="50" font-weight="600">2. Derivación en CAS</text>
+          <text x="292" y="70" font-size="11" fill-opacity="0.75">Euler-Lagrange, Einstein,</text>
+          <text x="292" y="88" font-size="11" fill-opacity="0.75">linealización y serie r→0</text>
+          <text x="292" y="106" font-size="10.5" style="fill: var(--accent)">nonradial.py · fullgr.py</text>
+
+          <text x="492" y="50" font-weight="600" style="fill: var(--ok)">3. Arnés de verificación</text>
+          <text x="492" y="70" font-size="11" fill-opacity="0.75">Diferencia = 0 (mód. fondo)</text>
+          <text x="492" y="88" font-size="11" fill-opacity="0.75">+ controles negativos + límites</text>
+          <text x="492" y="106" font-size="10.5" style="fill: var(--ok)">compare.py · step1…10</text>
+
+          <text x="677" y="50" font-weight="600">4. Puente numérico</text>
+          <text x="677" y="70" font-size="11" fill-opacity="0.75">Compilación directa</text>
+          <text x="677" y="88" font-size="11" fill-opacity="0.75">sin reescribir a mano</text>
+          <text x="677" y="106" font-size="10.5" style="fill: var(--accent)">axstar.py · axgr.py</text>
+        </g>
+      </svg>
+    </figure>
+  </section>
+
+  <section class="stack" id="reglas">
+    <h2>Las 5 reglas de arquitectura que hemos aprendido</h2>
+    <ol class="rules">
+      <li>
+        <h3>Separar estrictamente el código que deriva del que transcribe</h3>
+        <p>El fichero que deduce las ecuaciones desde la acción (<code>model.py</code>, <code>fullgr.py</code>) no contiene las ecuaciones del artículo; solo conoce la métrica y el Lagrangiano. Las ecuaciones del borrador en LaTeX viven en un fichero aparte (<code>paper.py</code>) que solo sirve como diana contra la que disparar el comparador.</p>
+        <span class="ref">Evita que el agente haga «trampa» forzando pasos intermedios para llegar a la fórmula del paper.</span>
+      </li>
+      <li>
+        <h3>Comparar «módulo las ecuaciones de fondo» hasta obtener 0 exacto</h3>
+        <p>En física teórica una misma ecuación de perturbación se puede escribir de diez formas usando el equilibrio hidrostático (TOV) o Klein-Gordon estática. El comparador (<code>compare.py</code>) despeja una derivada, sustituye las ecuaciones de equilibrio y simplifica simbólicamente hasta obtener <code>0</code> exacto, sin evaluaciones numéricas en puntos aleatorios.</p>
+        <span class="ref">Así se verificó que la Ec. (3.3e) del Paper I o las relaciones de LD coinciden exactamente tras aplicar el equilibrio.</span>
+      </li>
+      <li>
+        <h3>Exigir controles negativos en cada etapa</h3>
+        <p>Un test simbólico que devuelve siempre <code>True</code> por un fallo de programación es el mayor peligro con IA. Por regla, en cada paso hay que plantar errores deliberados en las ecuaciones transcritas (un <code>8π</code> por <code>4π</code>, un signo cambiado, un <code>2l</code> en vez de <code>2(l+1)</code>) y exigir que el comparador los cace como <code>FAIL</code>.</p>
+        <span class="ref">Es el equivalente computacional de calibrar el detector antes de medir.</span>
+      </li>
+      <li>
+        <h3>Para física nueva (sin ecuaciones publicadas): proyectar sobre todos los límites conocidos</h3>
+        <p>Cuando se deriva algo inédito —como el sistema de Lindblom–Detweiler acoplado al axión del paso 7—, la validación consiste en apagar piezas una a una: congelar la métrica debe devolver exactamente las ecuaciones de Cowling (Paper II); apagar el axión debe devolver Lindblom–Detweiler (1983); ir al exterior debe desacoplar Zerilli y la Ec. (13); y las identidades de Bianchi deben anular idénticamente <code>G_tt</code> y la traza angular.</p>
+        <span class="ref">Y además integrar el límite sin axión contra tablas clásicas (52 modos de LMI 1997 y Yoshida–Kojima 1997).</span>
+      </li>
+      <li>
+        <h3>Prohibido reescribir ecuaciones a mano al pasar al código numérico</h3>
+        <p>Las erratas que cazamos en la literatura (el signo en <code>X'</code> de Zhao y Lattimer 2022 que baja un 31 % el modo <i>f</i>, o las cinco erratas de Burgio et al. 2011) ocurren al transcribir a mano del papel al código. En <code>axgr.py</code>, el integrador numérico toma directamente las expresiones simbólicas <code>fullgr.EXT</code> verificadas en el paso 7 y evalúa su matriz jacobiana automáticamente.</p>
+        <span class="ref">Si el grupo usa Fortran o C++, SymPy exporta directamente las expresiones verificadas con <code>fcode()</code> y <code>ccode()</code>.</span>
+      </li>
+    </ol>
+  </section>
+
+  <section class="stack wide" id="flujos">
+    <h2>3 flujos de trabajo inmediatos para los doctorandos y postdocs de Jose</h2>
+    <div class="grid3">
+      <article class="card">
+        <header>
+          <span class="chip chip-ok">Flujo 1 · 1 tarde</span>
+          <h3>«Referee interno» antes de enviar a arXiv</h3>
+        </header>
+        <p>Antes de subir un manuscrito nuevo del grupo, se le pasa el <code>.tex</code> al agente para que monte el script de verificación:</p>
+        <ul>
+          <li>Comprueba todas las ecuaciones numeradas desde la acción o desde las ecuaciones maestras.</li>
+          <li>Recalcula con <code>scipy.constants</code> todas las estimaciones del texto (factores <code>2π</code>, cambios entre unidades naturales y cgs/SI).</li>
+          <li>Cruza las tablas numéricas con las figuras y las fórmulas asintóticas de los apéndices.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <header>
+          <span class="chip chip-obs">Flujo 2 · 2–3 días</span>
+          <h3>Exploración rápida de extensiones teóricas</h3>
+        </header>
+        <p>Cuando un doctorando quiere probar «qué pasa si añadimos X», el agente hace el álgebra pesada y deja el cuaderno de pruebas listo:</p>
+        <ul>
+          <li>Cambiar el potencial axiónico <code>V(a)</code> o el acoplo con nucleones/hiperones.</li>
+          <li>Añadir rotación lenta (Hartle–Thorne) o campo magnético al fondo y a las perturbaciones.</li>
+          <li>Obtener automáticamente los desarrollos en serie en el origen (<code>r → 0</code>) a cualquier orden.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <header>
+          <span class="chip chip-ok">Flujo 3 · Producción</span>
+          <h3>Generación de subrutinas verificadas para el código del grupo</h3>
+        </header>
+        <p>El grupo no tiene por qué abandonar sus códigos en Fortran/C++ o sus tablas exactas de EOS:</p>
+        <ul>
+          <li>El agente deduce y verifica en SymPy los términos nuevos del sistema de EDOs.</li>
+          <li>Exporta los coeficientes verificados a funciones de Python, C o Fortran.</li>
+          <li>Se enchufa la tabla exacta de BSk26 del grupo en lugar del ajuste analítico de Potekhin.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="stack wide" id="trampas">
+    <h2>Trampas técnicas reales que encontramos (y cómo dejarlas resueltas desde el día 1)</h2>
+    <div class="tablewrap">
+      <table class="pitfalls">
+        <thead>
+          <tr><th>Tropiezo real en este proyecto</th><th>Por qué ocurre</th><th>Regla para el departamento</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bloqueo de 9 horas en SymPy al separar armónicos esféricos</td>
+            <td><code>simplify()</code> y <code>trigsimp()</code> dependen de la semilla de hash de Python (<code>PYTHONHASHSEED</code>) y entran en bucles exponenciales con polinomios en <code>(cos θ, sin θ)</code>.</td>
+            <td>Prohibir <code>simplify()</code> ciego en tensores grandes. Usar reducción polinómica dirigida: sustituir <code>sin²θ → 1 − cos²θ</code> y dividir polinomios con <code>cancel()</code> (función <code>_divide</code> en <code>nonradial.py</code>).</td>
+          </tr>
+          <tr>
+            <td>20 minutos por modo al integrar desde el centro (<code>r → 0</code>)</td>
+            <td>La ecuación de Klein-Gordon acoplada es muy rígida (<i>stiff</i>) cerca de <code>r = 0</code>; un Runge–Kutta explícito (<code>DOP853</code>) da cientos de miles de pasos diminutos.</td>
+            <td>Arrancar con desarrollo en serie analítico en <code>r = r₀</code>, integrar el primer medio kilómetro con un método implícito (<code>BDF</code> o <code>Radau</code>) y cambiar a <code>DOP853</code> en el resto de la estrella (&lt; 1 s por modo).</td>
+          </tr>
+          <tr>
+            <td>Prueba falsa al congelar la métrica en las ecuaciones de LD</td>
+            <td>Intentamos poner <code>H₀ = H₁ = K = 0</code> directamente en el sistema de Lindblom–Detweiler para recuperar Cowling. No salía ni sin axión, porque LD ya usa las ecuaciones de Einstein para eliminar derivadas del fluido.</td>
+            <td>Las reducciones de límite deben hacerse sobre las ecuaciones de campo antes de sustituir ligaduras que pertenecen al otro régimen, o comparando módulo las ecuaciones que sí siguen vigentes.</td>
+          </tr>
+          <tr>
+            <td>Incoherencia al apagar <code>δθ</code> con métrica dinámica</td>
+            <td>En Cowling puedes apagar <code>δθ</code> para ver el efecto «solo del fondo» sobre el amortiguamiento. Con métrica dinámica, si apagas <code>δθ</code> pero dejas <code>θ₀' ≠ 0</code>, violas las identidades de Bianchi y no se conserva la energía.</td>
+            <td>Pedir siempre al agente que compruebe si una aproximación respeta la conservación covariante <code>∇_μ T^μν = 0</code> y las ligaduras de Einstein antes de interpretar partes imaginarias.</td>
+          </tr>
+          <tr>
+            <td>Discrepancia del 4 % con tablas clásicas de politropos</td>
+            <td>Algunos artículos clásicos (Yoshida–Kojima 1997) escriben <code>p = K ρ²</code> llamando <code>ρ</code> a la densidad de energía <code>ε</code> en lugar de a la masa en reposo.</td>
+            <td>Incluir siempre un paso de calibración reproduciendo una tabla clásica antes de encender la física nueva; caza convenios implícitos de la literatura al instante.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="stack" id="kit">
+    <h2>Qué necesita el departamento para arrancar (en una mañana)</h2>
+    <ol class="rules">
+      <li>
+        <h3>Repositorio plantilla con <code>uv</code> y la librería base</h3>
+        <p>Clonar este repositorio como plantilla base: ya incluye <code>geometry.py</code> (Christoffel, Ricci, Einstein, divergencia covariante), <code>compare.py</code> (comparador módulo fondo), <code>bsk26.py</code> y los integradores de TOV, Zerilli y Whittaker. Con <code>uv sync --frozen</code> cualquier estudiante tiene exactamente las mismas versiones de Python, SymPy, SciPy y mpmath en 10 segundos.</p>
+      </li>
+      <li>
+        <h3>Conectar la tabla de ecuación de estado del grupo</h3>
+        <p>Añadir un módulo <code>eos_table.py</code> que lea las tablas numéricas exactas que usa el grupo de Jose (en lugar del ajuste analítico de Potekhin), manteniendo la misma interfaz <code>p(n), eps(n), cs2(n)</code>. Eso eliminará el 0,3 % de diferencia de base en las frecuencias sin axión.</p>
+      </li>
+      <li>
+        <h3>Incluir el fichero <code>AGENTS.md</code> / <code>CLAUDE.md</code> en la raíz del proyecto</h3>
+        <p>Es el fichero que lee el agente nada más abrir el proyecto y le transmite todas las convenciones físicas y reglas técnicas aprendidas para que no repita ningún tropiezo.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="stack" id="agents">
+    <div class="copybar">
+      <h2>Plantilla <code>CLAUDE.md</code> / <code>AGENTS.md</code> lista para el grupo</h2>
+      <button type="button" class="btn-theme" id="copybtn">Copiar plantilla</button>
+    </div>
+    <p class="muted">Guardando este fichero en la raíz de cualquier repositorio del grupo, el agente seguirá automáticamente esta metodología desde el primer comando:</p>
+    <pre id="agentsmd"><code># Reglas para cálculo simbólico y numérico en astrofísica relativista
+
+## 1. Principio de verificación
+- NUNCA deduzcas ecuaciones en texto libre: toda ecuación debe derivarse en SymPy partiendo de la acción o de las ecuaciones de campo en `geometry.py`.
+- Separa siempre el módulo que deriva (`model.py`) del módulo que transcribe las ecuaciones de referencia o del borrador LaTeX (`paper.py`).
+- Una ecuación solo pasa el test si su diferencia con la de referencia, módulo las ecuaciones de equilibrio de fondo (`compare.py`), se simplifica simbólicamente a `0` exacto.
+- Incluye siempre CONTROLES NEGATIVOS (errores de signo, factores 4π→8π, coeficientes l(l+1)) y comprueba que el comparador devuelve `False`.
+
+## 2. Convenios físicos por defecto
+- Signatura métrica: (+, -, -, -), unidades naturales c = ħ = 1 (salvo conversión explícita con CODATA vía `scipy.constants`).
+- Armónicos esféricos y gauge de Regge-Wheeler según la convención de Lindblom-Detweiler (1983) / Gómez-Bañón, Pnigouras &amp; Pons (2025, 2026).
+
+## 3. Reglas técnicas de SymPy y SciPy (evitar cuelgues)
+- PROHIBIDO llamar a `sympy.simplify()` o `sympy.trigsimp()` sobre expresiones tensoriales grandes con dependencia angular: depende de `PYTHONHASHSEED` y puede no terminar.
+- Para separar factores angulares Y_lm(θ, φ), usa división exacta de polinomios en (cos θ, sin θ) módulo cos²θ + sin²θ = 1 (`nonradial._divide`).
+- PROHIBIDO reescribir a mano las ecuaciones simbólicas al pasar al integrador numérico: construye la matriz del sistema directamente desde las expresiones de SymPy verificadas (como en `axgr.py`) o expórtalas con `ccode`/`fcode`.
+- En integraciones radiales desde r = 0 con modos acoplados rígidos, usa el desarrollo en serie analítico en el centro, integra con `BDF` el primer tramo (r &lt; 0.5 km) y continúa con `DOP853`.</code></pre>
+  </section>
+
+  <footer>
+    <span>Guía de implantación para el Departamento de Física · Basada en el proyecto <code>workshop_fisica</code></span>
+    <span><a href="informe_axiones.html">Ir al informe técnico →</a></span>
+  </footer>
+</main>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  document.getElementById('themetoggle')?.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark' ||
+      (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  });
+
+  const copyBtn = document.getElementById('copybtn');
+  copyBtn?.addEventListener('click', async () => {
+    const text = document.getElementById('agentsmd')?.innerText || '';
+    try {
+      await navigator.clipboard.writeText(text);
+      copyBtn.textContent = '¡Copiado!';
+      setTimeout(() => { copyBtn.textContent = 'Copiar plantilla'; }, 1800);
+    } catch (_) {}
+  });
+})();
+</script>
+</body>
+</html>
