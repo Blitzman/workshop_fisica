@@ -290,7 +290,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
 
   <section class="stack" id="resumen">
     <h2>Qué hemos hecho</h2>
-    <p>Se le dio al agente solo la acción del Paper I (gravedad, campo axiónico y fluido) y, a partir de ahí, rehízo el cálculo en seis etapas. En cada una, cada ecuación se compara automáticamente con la publicada o con una referencia independiente.</p>
+    <p>El agente leyó el LaTeX de los dos artículos con una regla: no dar por buena ninguna ecuación intermedia sin deducirla en SymPy desde la acción del Paper I (gravedad, campo axiónico y fluido) usando las definiciones de variables de los autores. Después, sobre ese mismo motor simbólico y sin código previo del grupo, abordó el trabajo nuevo: perturbó también la métrica (extendiendo el sistema de Lindblom y Detweiler con el axión), implementó la ecuación de estado BSk26 desde los ajustes de Potekhin e integró numéricamente los modos con emisión simultánea de ondas gravitacionales y axiones. En las seis etapas, cada resultado se contrasta automáticamente con lo publicado o con referencias independientes.</p>
     <ol class="chain">
       <li><h3>Paper I: equilibrio y modos radiales</h3><p class="refs">Pasos 1–4. De la acción a las ecuaciones de equilibrio (TOV + Klein-Gordon), las perturbaciones radiales y el modelo simplificado de la Sec. IV; luego, las cifras del texto y la Fig. 3. {{N_OK1}}/{{N_TOT1}}: el álgebra es correcta, tres cifras no cuadran y queda una pregunta sobre el punto de linealización del modelo simplificado.</p></li>
       <li><h3>Paper II: modos no radiales en Cowling</h3><p class="refs">Pasos 5–6. Las ecuaciones de perturbación con la métrica congelada, las condiciones en el centro y fuera de la estrella, los apéndices y las tablas cruzadas entre sí. {{N_OK2}}/{{N_TOT2}}, sin discrepancias; la Tabla IV sale igual por un camino independiente.</p></li>
@@ -374,7 +374,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
       </article>
       <article class="ob">
         <header><span class="weight w-ok">IA</span><h3>Claude Code hace el trabajo</h3></header>
-        <p>Transcribió las ecuaciones del LaTeX de arXiv, escribió todo el código (SymPy y SciPy), diseñó las comprobaciones y los controles negativos, buscó las referencias con las que contrastar (Lindblom–Mendell–Ipser, Yoshida–Kojima y cuatro transcripciones de las ecuaciones de LD) y redactó esta página.</p>
+        <p>Transcribió las ecuaciones del LaTeX de arXiv como referencia de contraste, programó la derivación simbólica desde la acción (SymPy) y los integradores (SciPy), implementó los ajustes analíticos de BSk26 (Potekhin et al.), convirtió directamente el sistema simbólico extendido en matriz numérica sin reescribir ecuaciones a mano, buscó las referencias independientes (Lindblom–Mendell–Ipser, Yoshida–Kojima y cuatro transcripciones de LD) y redactó esta página.</p>
       </article>
       <article class="ob">
         <header><span class="weight w-num">Tropiezos</span><h3>Lo que salió mal, y cómo se vio</h3></header>
