@@ -308,7 +308,9 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
       <div class="rail">
         <button type="button"><span>1</span>Acción</button><button type="button"><span>2</span>Fondo</button><button type="button"><span>3</span>Cowling</button>
         <button type="button"><span>4</span>Métrica</button><button type="button"><span>5</span>Axión + LD</button><button type="button"><span>6</span>Modos</button>
+        <button type="button" class="btn" data-chain-play style="margin-left:auto;border-radius:999px;padding:0.3rem 0.75rem">Pausa</button>
       </div>
+      <div class="stage-canvas"><canvas class="chain-cv" role="img" aria-label="Visualización animada estilo 3Blue1Brown de cada paso de la derivación"></canvas></div>
       <div class="steps">
         <article class="step"><p class="tag">Punto de partida · Paper I, Sec. II</p><h3>Una acción para gravedad, axión y fluido</h3>
           \[ S = \int d^4x\,\sqrt{-g}\,\Big[-\frac{R}{16\pi G} + \tfrac12 g^{\mu\nu}\partial_\mu a\,\partial_\nu a - V(a) - \varepsilon(n,a)\Big],\qquad \varepsilon(n,a) = \varepsilon_0(n) + n\big[m^*(a)-m_N\big] \]
