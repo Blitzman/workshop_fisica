@@ -1,0 +1,795 @@
+<title>Condensados axiónicos rederivados</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una columna de lectura (~68ch) con bandas más anchas para la figura y la tabla; tono de cuaderno de cálculo. */
+:root {
+  --paper: #f4f6f9;
+  --sheet: #ffffff;
+  --ink: #161e2e;
+  --muted: #586378;
+  --rule: #d8dde6;
+  --accent: #2b4bb3;
+  --ok: #1d7451;
+  --ok-bg: #e4f3eb;
+  --flag: #9a5400;
+  --flag-bg: #fdf0dc;
+  --bad: #a3262f;
+  --bad-bg: #fbe5e6;
+  --code-bg: #eaeef4;
+  --c1: #2b4bb3; --c2: #c2410c; --c3: #7c3aed;
+  --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0d121b; --sheet: #141b27; --ink: #e3e8f1; --muted: #98a3b7; --rule: #263042;
+    --accent: #93a8ff; --ok: #62c99c; --ok-bg: #12291f; --flag: #f1a84d; --flag-bg: #2b2112;
+    --bad: #f08a90; --bad-bg: #2d1518; --code-bg: #1b2433; color-scheme: dark;
+    --c1: #6283ee; --c2: #d9733a; --c3: #a174ec;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0d121b; --sheet: #141b27; --ink: #e3e8f1; --muted: #98a3b7; --rule: #263042;
+  --accent: #93a8ff; --ok: #62c99c; --ok-bg: #12291f; --flag: #f1a84d; --flag-bg: #2b2112;
+  --bad: #f08a90; --bad-bg: #2d1518; --code-bg: #1b2433; color-scheme: dark;
+    --c1: #6283ee; --c2: #d9733a; --c3: #a174ec;
+}
+body {
+  background: var(--paper); color: var(--ink);
+  font: 400 1rem/1.62 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 2.5rem 4rem;
+}
+.wrap { display: grid; gap: 3rem 0;
+  grid-template-columns: [full-start] minmax(0, 1fr) [content-start] minmax(0, 68ch) [content-end] minmax(0, 1fr) [full-end]; }
+.wrap > * { grid-column: content; min-width: 0; }
+.wrap > .wide { grid-column: full; width: min(1080px, 100%); justify-self: center; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 600; text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font-size: clamp(2rem, 5vw, 2.9rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.15rem; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+.eyebrow { font: 500 0.78rem/1.4 var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.stack { display: grid; gap: 1rem; }
+.stack > *, .wrap > * { min-width: 0; }
+.lede { font-size: 1.12rem; color: var(--ink); }
+.muted { color: var(--muted); }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; padding-block: 0.2rem; }
+
+/* resumen */
+.tally { display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; padding-block: 1rem; border-block: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+.tally div { display: grid; gap: 0.1rem; min-width: 0; }
+.tally b { font: 600 1.5rem/1.1 var(--f-display); }
+.tally span { font-size: 0.85rem; color: var(--muted); }
+
+/* cadena de derivación */
+.chain { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: step; }
+.chain li { counter-increment: step; display: grid; grid-template-columns: 2.4rem 1fr; gap: 0.2rem 0.8rem; padding-block: 0.9rem; border-top: 1px solid var(--rule); }
+.chain li::before { content: counter(step); grid-row: span 2; font: 600 1.3rem/1.2 var(--f-display); color: var(--accent); }
+.chain li > * { min-width: 0; }
+.chain .refs { font-size: 0.9rem; color: var(--muted); }
+
+/* tabla de contenidos */
+.toc { display: grid; gap: 0.7rem; padding: 1rem 1.2rem; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+.toccols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 0.8rem 2rem; }
+.toccols > div { min-width: 0; display: grid; gap: 0.4rem; align-content: start; }
+.toc h3 { font: 600 0.95rem/1.3 var(--f-body); color: var(--muted); }
+.toc ol { margin: 0; padding-left: 1.3rem; display: grid; gap: 0.25rem; font-size: 0.95rem; }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+html { scroll-behavior: smooth; }
+section[id], h3[id], footer[id] { scroll-margin-top: 1rem; }
+
+/* escenario de las animaciones: siempre oscuro */
+.stage { background: #0e121c; color: #e6edf6; border: 1px solid #232c3d; border-radius: 8px; padding: 0.9rem; display: grid; gap: 0.7rem; min-width: 0; }
+.stage-bar, .stage-foot { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; }
+.seg { display: inline-flex; border: 1px solid #2c3850; border-radius: 6px; overflow: hidden; }
+.seg button, .stage .btn { background: none; color: #aab6c9; border: 0; padding: 0.4rem 0.75rem; font: 500 0.85rem/1.2 var(--f-body); cursor: pointer; }
+.seg button + button { border-left: 1px solid #2c3850; }
+.seg button[aria-pressed="true"] { background: #24324d; color: #fff; }
+.stage .btn { border: 1px solid #2c3850; border-radius: 6px; }
+.stage .btn:hover, .seg button:hover { color: #fff; }
+.stage button:focus-visible, .stage input:focus-visible { outline: 2px solid #58c4dd; outline-offset: 2px; }
+.stage-bar .btn[data-play] { margin-left: auto; }
+.stage-canvas { min-width: 0; }
+.stage-canvas canvas { display: block; width: 100%; border-radius: 4px; }
+.slider { display: grid; gap: 0.25rem; flex: 1 1 15rem; font-size: 0.85rem; color: #aab6c9; }
+.slider input { width: 100%; accent-color: #58c4dd; }
+.readout { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 1rem; font-size: 0.9rem; color: #aab6c9; font-variant-numeric: tabular-nums; }
+.readout b { font: 600 1.15rem/1.2 var(--f-body); color: #fff; }
+.chain .rail { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.chain .rail button { display: inline-flex; gap: 0.4rem; align-items: center; background: none; border: 1px solid #2c3850; color: #aab6c9; border-radius: 999px; padding: 0.3rem 0.75rem 0.3rem 0.35rem; font: 500 0.82rem/1 var(--f-body); cursor: pointer; }
+.chain .rail button span { display: inline-grid; place-items: center; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: #1b2436; font-variant-numeric: tabular-nums; }
+.chain .rail button.done span { background: #2b4d5c; color: #e6edf6; }
+.chain .rail button[aria-current="step"] { color: #fff; border-color: #58c4dd; }
+.chain .rail button[aria-current="step"] span { background: #58c4dd; color: #0e121c; }
+.chain .steps { display: grid; min-height: 15rem; }
+.chain .step { grid-area: 1 / 1; display: grid; gap: 0.7rem; align-content: start; visibility: hidden; pointer-events: none; min-width: 0; }
+.chain .step.on { visibility: visible; pointer-events: auto; animation: stepin 0.6s ease both; }
+@keyframes stepin { from { opacity: 0; transform: translateY(12px); } }
+.chain .step h3 { font: 600 1.25rem/1.25 var(--f-display); color: #fff; }
+.chain .step p { color: #c7d0dd; max-width: 72ch; }
+.chain .step .tag { font: 500 0.72rem/1 var(--f-mono); letter-spacing: 0.05em; text-transform: uppercase; color: #58c4dd; }
+.chain .nt, .chain .nt * { fill: #f7d96f; color: #f7d96f; }
+.chain .step.on .nt { animation: glow 1.4s ease-in-out 0.5s 2; }
+@keyframes glow { 50% { opacity: 0.35; } }
+.chain .nav { display: flex; gap: 0.5rem; justify-content: flex-end; }
+@media (prefers-reduced-motion: reduce) { .chain .step.on, .chain .step.on .nt { animation: none; } }
+
+/* papers de partida */
+.cites { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+.cites li { display: grid; gap: 0.25rem; padding: 0.9rem 1.1rem; background: var(--sheet); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; min-width: 0; }
+.cites .tag { font: 500 0.72rem/1 var(--f-mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent); }
+.cites .muted { font-size: 0.92rem; }
+
+/* observaciones */
+.obs { display: grid; gap: 1.6rem; }
+.ob { display: grid; gap: 0.7rem; padding: 1.2rem 1.3rem; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; min-width: 0; }
+.ob header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 0.8rem; }
+.weight { font: 500 0.72rem/1 var(--f-mono); letter-spacing: 0.05em; text-transform: uppercase; padding: 0.3rem 0.5rem; border-radius: 3px; }
+.w-main { color: var(--flag); background: var(--flag-bg); }
+.w-num { color: var(--bad); background: var(--bad-bg); }
+.w-minor { color: var(--muted); background: var(--code-bg); }
+.w-ok { color: var(--ok); background: var(--ok-bg); }
+.newterm { color: var(--flag); font-weight: 600; }
+.nt, .nt * { fill: var(--flag); color: var(--flag); }
+.eqs { display: grid; gap: 0.2rem; }
+.part { border-top: 2px solid var(--ink, currentColor); padding-top: 1.6rem; }
+
+/* qué demuestra */
+.why { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1rem; }
+.why .ob { align-content: start; }
+.why .ob header { display: grid; gap: 0.5rem; justify-items: start; }
+.points { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.6rem; }
+.next { padding: 1rem 1.2rem; border-left: 3px solid var(--accent); background: var(--sheet); border-radius: 0 6px 6px 0; }
+.more { border-top: 1px solid var(--rule); padding-top: 0.8rem; }
+.more summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.more[open] summary { margin-bottom: 0.6rem; }
+
+/* figura */
+figure { margin: 0; display: grid; gap: 0.8rem; }
+figure > *, .charts > * { min-width: 0; }
+.plate { background: #ffffff; border: 1px solid var(--rule); border-radius: 6px; padding: 0.6rem; overflow-x: auto; }
+.plate img { display: block; width: 100%; min-width: 640px; height: auto; }
+figcaption { font-size: 0.92rem; color: var(--muted); max-width: 72ch; }
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: 1rem; }
+.charts.one { grid-template-columns: minmax(0, 1fr); max-width: 760px; }
+.chart { position: relative; display: grid; gap: 0.55rem; align-content: start; min-width: 0; padding: 0.95rem 0.95rem 0.5rem; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+.chead { display: grid; gap: 0.1rem; }
+.chart h4 { margin: 0; font: 600 0.98rem/1.3 var(--f-body); }
+.chart .sub { font-size: 0.82rem; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-size: 0.8rem; color: var(--muted); }
+.legend > span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.heatbar { display: inline-block; width: 34px; height: 8px; border-radius: 2px; border: 1px solid var(--rule); }
+.plot { display: block; width: 100%; height: auto; font: 400 11px var(--f-body); touch-action: pan-y; }
+.plot .tick { fill: var(--muted); font-variant-numeric: tabular-nums; }
+.plot .alabel { fill: var(--muted); font-size: 11.5px; }
+.plot .dlabel { fill: var(--ink); font-size: 11px; paint-order: stroke; stroke: var(--sheet); stroke-width: 3px; stroke-linejoin: round; }
+.plot .grid line { stroke: var(--rule); stroke-width: 1; }
+.plot .axis { stroke: var(--muted); stroke-width: 1; }
+.plot .line { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.plot .dot { stroke: var(--sheet); stroke-width: 2; }
+.plot .ring { fill: var(--sheet); stroke-width: 2; }
+.plot .hair { stroke: var(--muted); stroke-width: 1; }
+.plot .hover { fill: none; stroke-width: 2; }
+.tip { position: absolute; z-index: 3; pointer-events: none; display: grid; gap: 0.2rem; min-width: 7rem; max-width: 18rem; padding: 0.45rem 0.6rem; font-size: 0.8rem; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; box-shadow: 0 6px 18px rgb(0 0 0 / 0.14); }
+.tip[hidden] { display: none; }
+.tip .row { display: flex; align-items: baseline; gap: 0.45rem; }
+.tip .k { flex: none; width: 14px; height: 2px; align-self: center; border-radius: 1px; }
+.tip b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.tip .nm { color: var(--muted); }
+.diagram svg { display: block; width: 100%; max-width: 640px; height: auto; margin: 0 auto; color: var(--ink); }
+
+/* comprobaciones */
+.checkgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr)); gap: 1.6rem 2.4rem; }
+.steplist { display: grid; gap: 0.6rem; align-content: start; min-width: 0; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; }
+.checks li { display: grid; grid-template-columns: 6.6rem 1fr; gap: 0.7rem; align-items: baseline; padding-block: 0.45rem; border-top: 1px solid var(--rule); font-size: 0.93rem; }
+.checks .ck { min-width: 0; overflow-wrap: anywhere; }
+.chip { font: 500 0.7rem/1 var(--f-mono); letter-spacing: 0.04em; text-transform: uppercase; padding: 0.28rem 0.45rem; border-radius: 3px; text-align: center; }
+.chip-ok { color: var(--ok); background: var(--ok-bg); }
+.chip-obs { color: var(--flag); background: var(--flag-bg); }
+.chip-bad { color: var(--bad); background: var(--bad-bg); }
+
+/* código */
+pre { margin: 0; padding: 0.9rem 1rem; background: var(--code-bg); border-radius: 6px; overflow-x: auto; font: 0.86rem/1.55 var(--f-mono); }
+code { font-family: var(--f-mono); font-size: 0.9em; }
+.files { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1.2rem; font-size: 0.92rem; }
+.files code { color: var(--accent); }
+.files a { text-decoration: none; }
+.files a:hover code { text-decoration: underline; }
+.files > * { min-width: 0; }
+.repro h3 { margin: 0.6rem 0 -0.2rem; font-size: 1.02rem; }
+.tablewrap { overflow-x: auto; }
+.steps { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.steps th, .steps td { text-align: left; padding: 0.45rem 0.7rem 0.45rem 0; border-bottom: 1px solid var(--rule); vertical-align: baseline; }
+.steps th { font-weight: 600; color: var(--muted); font-size: 0.84rem; }
+.steps .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 1rem; }
+.steps tr > :last-child { padding-right: 0; }
+.steps tfoot td { border-bottom: 0; font-weight: 600; }
+.env { display: grid; grid-template-columns: max-content 1fr; gap: 0.3rem 1.2rem; margin: 0; font-size: 0.92rem; }
+.env dt { color: var(--muted); }
+.env dd { margin: 0; min-width: 0; font-variant-numeric: tabular-nums; }
+.knobs { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.45rem; font-size: 0.95rem; }
+.download { display: inline-flex; align-items: baseline; gap: 0.5rem; padding: 0.55rem 0.9rem; border: 1px solid var(--accent); border-radius: 6px; color: var(--accent); text-decoration: none; font-weight: 600; width: fit-content; }
+.download span { font-weight: 400; color: var(--muted); font-size: 0.88rem; }
+.download { background: none; font: inherit; font-weight: 600; cursor: pointer; }
+.download[hidden] { display: none; }
+.download:hover { background: var(--code-bg); }
+.dl { display: grid; gap: 0.5rem; }
+.dlalt { margin: 0; font-size: 0.88rem; color: var(--muted); }
+footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 1rem; display: grid; gap: 0.4rem; }
+@media (max-width: 520px) {
+  .checks li { grid-template-columns: 1fr; gap: 0.3rem; }
+  .chip { justify-self: start; }
+  .files { grid-template-columns: 1fr; }
+  .steps .mod { display: none; }
+}
+</style>
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js" async></script>
+
+<main class="wrap">
+  <header class="stack">
+    <p class="eyebrow">arXiv:2510.16245 y 2610.37308 · Gómez-Bañón, Pnigouras &amp; Pons</p>
+    <h1>Condensados axiónicos, rederivados desde la acción</h1>
+  </header>
+
+  <nav class="toc" aria-label="Contenido">
+    <p class="eyebrow">Contenido</p>
+    <div class="toccols">
+      <div>
+        <h3>Resumen</h3>
+        <ol>
+          <li><a href="#papers">Los papers de partida</a></li>
+          <li><a href="#resumen">Qué hemos hecho</a></li>
+          <li><a href="#cadena">De la acción a los modos (animación)</a></li>
+          <li><a href="#demuestra">Qué demuestra</a></li>
+          <li><a href="#salido">Lo que ha salido</a></li>
+          <li><a href="#como">Cómo se ha hecho</a></li>
+          <li><a href="#grupo">Qué podría hacer el grupo con esto</a></li>
+          <li><a href="#limites">Lo que todavía no demuestra</a></li>
+        </ol>
+      </div>
+      <div>
+        <h3>Los detalles</h3>
+        <ol>
+          <li><a href="#partida">Paper I: punto de partida y derivación</a></li>
+          <li><a href="#observaciones">Paper I: observaciones para comentar</a></li>
+          <li><a href="#secuela">Paper II: modos no radiales en Cowling</a></li>
+          <li><a href="#cowling">Más allá de Cowling (nuevo)</a></li>
+          <li><a href="#numeros">Comprobación con números</a></li>
+          <li><a href="#conaxion">Con axión: Tablas I y II (nuevo)</a></li>
+          <li><a href="#etapaB">Con axión, sin Cowling (nuevo)</a></li>
+          <li><a href="#verifica">Cómo se verifica</a></li>
+          <li><a href="#comprobaciones">Todas las comprobaciones</a></li>
+          <li><a href="#reproducirlo">Reproducirlo</a></li>
+          <li><a href="#fuentes">Fuentes</a></li>
+        </ol>
+      </div>
+    </div>
+  </nav>
+
+  <section class="stack" id="papers">
+    <h2>Los papers de partida</h2>
+    <ol class="cites">
+      <li><span class="tag">Paper I</span><p>A. Gómez-Bañón, P. Pnigouras y J. A. Pons, <i>Axion condensates in neutron stars and radial oscillation modes</i>, <a href="https://arxiv.org/abs/2510.16245">arXiv:2510.16245</a> (2025).</p><p class="muted">Equilibrio y modos radiales de una estrella de neutrones con un condensado de axiones; incluye un modelo simplificado con solución analítica (Sec. IV).</p></li>
+      <li><span class="tag">Paper II</span><p>A. Gómez-Bañón, P. Pnigouras y J. A. Pons, <i>Nonradial oscillation modes of axion condensed neutron stars in the Cowling approximation</i>, <a href="https://arxiv.org/abs/2610.37308">arXiv:2610.37308</a> (2026).</p><p class="muted">La secuela: modos no radiales con la métrica congelada (aproximación de Cowling). Deja como siguiente paso natural quitar esa aproximación.</p></li>
+    </ol>
+    <p class="muted">Las referencias usadas para contrastar el trabajo nuevo están en el <a href="#fuentes">pie de la página</a>. La numeración de ecuaciones es la de los PDF publicados.</p>
+  </section>
+
+  <section class="stack" id="resumen">
+    <h2>Qué hemos hecho</h2>
+    <p>Se le dio al agente solo la acción del Paper I (gravedad, campo axiónico y fluido) y, a partir de ahí, rehízo el cálculo en seis etapas. En cada una, cada ecuación se compara automáticamente con la publicada o con una referencia independiente.</p>
+    <ol class="chain">
+      <li><h3>Paper I: equilibrio y modos radiales</h3><p class="refs">Pasos 1–4. De la acción a las ecuaciones de equilibrio (TOV + Klein-Gordon), las perturbaciones radiales y el modelo simplificado de la Sec. IV; luego, las cifras del texto y la Fig. 3. {{N_OK1}}/{{N_TOT1}}: el álgebra es correcta, tres cifras no cuadran y queda una pregunta sobre el punto de linealización del modelo simplificado.</p></li>
+      <li><h3>Paper II: modos no radiales en Cowling</h3><p class="refs">Pasos 5–6. Las ecuaciones de perturbación con la métrica congelada, las condiciones en el centro y fuera de la estrella, los apéndices y las tablas cruzadas entre sí. {{N_OK2}}/{{N_TOT2}}, sin discrepancias; la Tabla IV sale igual por un camino independiente.</p></li>
+      <li><h3>Trabajo nuevo: más allá de Cowling</h3><p class="refs">Paso 7. Se perturba también la métrica y salen las ecuaciones de Lindblom y Detweiler extendidas con el axión, que no estaban publicadas. {{N_OK3}}/{{N_TOT3}} comprobaciones de límites: con la métrica congelada se recupera el Paper II, y sin axión, las ecuaciones de LD.</p></li>
+      <li><h3>Comprobación con números</h3><p class="refs">Paso 8. Integradas sin axión, las ecuaciones nuevas dan las frecuencias publicadas de un politropo con todas sus cifras ({{N_OK4}}/{{N_TOT4}}).</p></li>
+      <li><h3>Con axión, en Cowling</h3><p class="refs">Paso 9. Una estrella realista (BSk26) con su condensado de axiones, y sus modos con la perturbación del axión: las Tablas I, II y IV de la secuela salen dentro del 0.5 % ({{N_OK5}}/{{N_TOT5}}). Es la base de la última etapa.</p></li>
+      <li><h3>Con axión, sin Cowling</h3><p class="refs">Paso 10. Las ecuaciones de la etapa 3, integradas con el axión encendido sobre esa estrella: el resultado que la secuela deja abierto ({{N_OK6}}/{{N_TOT6}}). Sin referencia publicada; el programa se comprueba con el caso sin axión.</p></li>
+    </ol>
+    <p class="muted">Todo se reproduce con un comando en unos {{MINS}} minutos; el código se descarga al <a href="#reproducirlo">final de la página</a>.</p>
+  </section>
+
+  <section class="stack wide" id="cadena">
+    <h2>De la acción a los modos, en seis ecuaciones</h2>
+    <div class="stage chain" data-anim="chain" tabindex="0" aria-label="Cadena de ecuaciones; use las flechas para avanzar">
+      <div class="rail">
+        <button type="button"><span>1</span>Acción</button><button type="button"><span>2</span>Fondo</button><button type="button"><span>3</span>Cowling</button>
+        <button type="button"><span>4</span>Métrica</button><button type="button"><span>5</span>Axión + LD</button><button type="button"><span>6</span>Modos</button>
+      </div>
+      <div class="steps">
+        <article class="step"><p class="tag">Punto de partida · Paper I, Sec. II</p><h3>Una acción para gravedad, axión y fluido</h3>
+          \[ S = \int d^4x\,\sqrt{-g}\,\Big[-\frac{R}{16\pi G} + \tfrac12 g^{\mu\nu}\partial_\mu a\,\partial_\nu a - V(a) - \varepsilon(n,a)\Big],\qquad \varepsilon(n,a) = \varepsilon_0(n) + n\big[m^*(a)-m_N\big] \]
+          <p>El acoplo axión-nucleón entra solo por la masa efectiva \(m^*(a)\). Todo lo que sigue se obtiene variando \(g_{\mu\nu}\) y \(a\), y conservando \(T^{\mu\nu}\) y el número bariónico.</p></article>
+        <article class="step"><p class="tag">Fondo · Ec. (2.6) del Paper I · paso 1</p><h3>El núcleo condensa</h3>
+          \[ \Big(1-\frac{2GM}{r}\Big)a'' + \frac{2a'}{r}\Big[1-\frac{GM}{r}-2\pi G r^2(\varepsilon-p+2V)\Big] = \frac{\partial V}{\partial a} + n\,\frac{\partial m^*}{\partial a} \]
+          <p>Por encima de \(n_c=\epsilon m_\pi^2f_\pi^2/\sigma_N\) el mínimo del potencial efectivo pasa de \(\theta=0\) a \(\theta=\pi\). El campo se queda en \(\theta_0\simeq\pi\) dentro y cae a cero en una capa de transición cuya anchura fija \(m_a\).</p></article>
+        <article class="step"><p class="tag">Perturbaciones en Cowling · Ec. (8d) del Paper II · paso 5</p><h3>El fluido excita al axión</h3>
+          \[ e^{-2\lambda}\delta\theta'' + \dots + \Big[\omega^2e^{-2\Phi} - m_\mathrm{eff}^2 + \dots\Big]\delta\theta = \frac{\delta n_b}{f_a^2}\,\frac{\partial m^*_N}{\partial\theta} \]
+          <p>La fuente es \(\partial m^*/\partial\theta\propto\sin\theta_0\): se anula donde el fondo está en un mínimo y solo vive en la capa de transición. Fuera, \(\delta\theta\) se propaga si \(\omega>m_a\) y queda ligada si no.</p></article>
+        <article class="step"><p class="tag">Más allá de Cowling · gauge de Regge-Wheeler · paso 7</p><h3>La métrica también oscila</h3>
+          \[ ds^2 = e^{2\Phi}(1 + H_0\mathcal{Y})\,dt^2 - 2i\omega r H_1\mathcal{Y}\,dt\,dr - e^{2\lambda}(1 - H_2\mathcal{Y})\,dr^2 - r^2(1 - K\mathcal{Y})\,d\Omega^2 \]
+          <p>Con \(H_0, H_1, K\) aparece un segundo canal de radiación, las ondas gravitacionales, y el axión se acopla a la métrica además de al fluido.</p></article>
+        <article class="step"><p class="tag">Sistema extendido · paso 7</p><h3>Lindblom-Detweiler más el axión</h3>
+          \[ rK' = H_0 + (n+1)H_1 + (e^{2\lambda}Q-l-1)K - 8\pi G(\varepsilon+p)e^{\lambda}W \class{nt}{\;+\;8\pi G\, r f_a a_0'\,\delta\theta} \]
+          \[ \text{Ec. (8d)} \class{nt}{\;+\;\Big[\frac{n_b\mathcal{M}'}{f_a^2} - 2e^{-2\lambda}\Phi'\theta_0'\Big]H_0 - 16\pi G\,e^{-2\lambda}a_0'^2\,\delta\theta} = 0 \]
+          <p>En amarillo, dos de los términos que añade el axión (el sistema completo está en la tercera parte). Sin axión se recupera LD, contrastado con cuatro transcripciones; en los límites, la secuela, Zerilli y la identidad de Bianchi.</p></article>
+        <article class="step"><p class="tag">Modos cuasinormales · pasos 8–10</p><h3>Dos canales de radiación</h3>
+          \[ A^\mathrm{GW}_\mathrm{in}(\omega)=0,\qquad \delta\theta_\mathrm{ext}\propto\frac{e^{i(kr+\eta\ln r)}}{r},\quad k=\sqrt{\omega^2-m_a^2},\qquad \frac{1}{\tau}=2\pi\,|\mathrm{Im}\,\nu| \]
+          <p>Un modo es una frecuencia compleja sin onda gravitacional entrante y con la radiación axiónica saliente, o ligada si \(\omega<m_a\). Sin axión, el programa reproduce el modo \(f\) de LMI con cinco cifras; con axión, los resultados están en la quinta parte.</p></article>
+      </div>
+      <div class="nav"><button type="button" class="btn" data-prev>← Anterior</button><button type="button" class="btn" data-next>Siguiente →</button></div>
+    </div>
+  </section>
+
+  <section class="stack wide" id="demuestra">
+    <h2>Qué demuestra</h2>
+    <div class="why">
+      <article class="ob">
+        <header><span class="weight w-ok">Rehace</span><h3>El álgebra pesada, en días</h3></header>
+        <p>Linealizar, eliminar las derivadas del fondo con las ecuaciones de equilibrio, desarrollar en el origen, casar interior y exterior: lo que a mano suele llevar semanas se ha hecho en dos días. El primero, los dos papers: 49 ecuaciones numeradas, de las ecuaciones de campo a los apéndices. El segundo, el paso nuevo más allá de Cowling y su comprobación numérica.</p>
+      </article>
+      <article class="ob">
+        <header><span class="weight w-ok">Se comprueba</span><h3>No hay que fiarse de la IA</h3></header>
+        <p>Una ecuación solo se da por buena si su diferencia con la del paper se reduce <em>exactamente</em> a cero, sin tolerancias numéricas. El comparador también tiene que detectar errores plantados a propósito. Las ecuaciones nuevas, integradas sin axión, dan las frecuencias publicadas de un caso de referencia con todas sus cifras. Y cualquiera puede volver a ejecutarlo todo en unos {{MINS}} minutos (<a href="#reproducirlo">cómo</a>).</p>
+      </article>
+      <article class="ob">
+        <header><span class="weight w-main">Revisa</span><h3>Como un árbitro con tiempo</h3></header>
+        <p>Además del álgebra, recalcula las cifras del texto y cruza las tablas entre sí. Encontró un factor \(2\pi\), una constante que no cuadra y una pregunta de fondo sobre el modelo simplificado, y reprodujo la Tabla IV de la secuela por un camino independiente.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="stack" id="salido">
+    <h2>Lo que ha salido</h2>
+    <ul class="points">
+      <li><b>El álgebra de los dos papers es correcta en todos los pasos.</b></li>
+      <li><b>Primer paper:</b> una pregunta sobre el punto en que se linealiza el modelo simplificado de la Sec. IV (\(\theta=0\) frente a \(\theta=\pi\)), tres cifras del texto que no cuadran y dos detalles menores. <a href="#observaciones">Ver las observaciones</a>.</li>
+      <li><b>Secuela:</b> {{N_OK2}}/{{N_TOT2}} comprobaciones, sin ninguna discrepancia. Su Tabla IV sale igual con un cálculo independiente, y su descripción del fondo (\(\theta\simeq\pi\) dentro de la estrella) refuerza la pregunta sobre el modelo simplificado. <a href="#secuela">Ver la secuela</a>.</li>
+      <li><b>Más allá de Cowling (nuevo):</b> las ecuaciones de perturbación con la métrica también perturbada, es decir, las de Lindblom y Detweiler extendidas con el axión, y sus condiciones en el centro. Pasan {{N_OK3}}/{{N_TOT3}} comprobaciones de límites y de consistencia, y, integradas sin axión, reproducen las frecuencias publicadas de un politropo con sus cinco cifras ({{N_OK4}}/{{N_TOT4}} comprobaciones numéricas). De paso, aparecieron erratas en dos transcripciones de las ecuaciones de LD; trabajos posteriores ya las escriben corregidas. <a href="#cowling">Ver el cálculo</a>.</li>
+      <li><b>Con axión, en Cowling (nuevo):</b> una estrella realista con su condensado y sus modos con la perturbación del axión. Reproducen las Tablas I, II y IV de la secuela dentro del 0.5 % ({{N_OK5}}/{{N_TOT5}}). Es la base para el paso siguiente. <a href="#conaxion">Ver los resultados</a>.</li>
+      <li><b>Con axión, sin Cowling (nuevo, sin publicar):</b> los modos con la métrica también perturbada. El axión sube el modo \(f\) más que en Cowling (hasta un 7.7 %, frente a 5.4 %), los modos \(p\) se mueven igual, y la regla de sumar amortiguamientos de la secuela solo acierta en orden de magnitud ({{N_OK6}}/{{N_TOT6}}). <a href="#etapaB">Ver los resultados</a>.</li>
+    </ul>
+    <p class="muted">Las discrepancias se plantean como preguntas: puede haber un convenio o un contexto que el cálculo no ve.</p>
+  </section>
+
+  <section class="stack wide" id="como">
+    <h2>Cómo se ha hecho</h2>
+    <div class="why">
+      <article class="ob">
+        <header><span class="weight w-main">Persona</span><h3>Dirige y decide</h3></header>
+        <p>Planteó el experimento y el criterio de éxito: rederivar desde la acción y comprobarlo todo contra lo publicado. Llevó a Jose las opciones para seguir y trajo su elección (quitar la aproximación de Cowling). Pidió que todo se pudiera reproducir y una revisión crítica de esta página, de la que salieron la comprobación numérica y las figuras de la tercera parte. Después pidió las dos etapas con axión: reproducir las tablas de la secuela y quitar Cowling. No ha revisado las ecuaciones línea a línea.</p>
+      </article>
+      <article class="ob">
+        <header><span class="weight w-ok">IA</span><h3>Claude Code hace el trabajo</h3></header>
+        <p>Transcribió las ecuaciones del LaTeX de arXiv, escribió todo el código (SymPy y SciPy), diseñó las comprobaciones y los controles negativos, buscó las referencias con las que contrastar (Lindblom–Mendell–Ipser, Yoshida–Kojima y cuatro transcripciones de las ecuaciones de LD) y redactó esta página.</p>
+      </article>
+      <article class="ob">
+        <header><span class="weight w-num">Tropiezos</span><h3>Lo que salió mal, y cómo se vio</h3></header>
+        <ul class="points">
+          <li>Dos comprobaciones del paso 7 fallaban por errores de programación (un choque de nombres y una normalización distinta), no de física. Se corrigieron las comprobaciones, no las ecuaciones.</li>
+          <li>La ejecución completa se colgó nueve horas: el <code>simplify</code> de SymPy depende de la semilla de hash. Se sustituyó por una división exacta y se probó con varias semillas.</li>
+          <li>Para comprobar la etapa B, primero se congeló la métrica en el sistema extendido esperando obtener Cowling. No coincidía ni sin axión: esas ecuaciones ya usan las de Einstein para simplificarse, así que la prueba estaba mal pensada. Se sustituyó por la comparación con el paso 8 y con el politropo de LMI.</li>
+          <li>Cerca del centro, la parte axiónica es rígida y el integrador daba cientos de miles de pasos: cada modo tardaba 20 minutos. Con un integrador implícito en el primer medio kilómetro, menos de un segundo.</li>
+          <li>La tabla de Yoshida–Kojima no dice si \(\rho\) es la densidad de energía o la de masa en reposo. Con la segunda, Cowling discrepaba hasta un 4 %; con la primera coincide, y Lindblom–Mendell–Ipser lo dicen explícitamente.</li>
+        </ul>
+      </article>
+    </div>
+    <p class="muted">Lo que falta es la revisión de alguien del grupo: la IA ha comprobado su propio trabajo de todas las formas independientes que ha encontrado, pero no sustituye a un físico que conoce el problema.</p>
+  </section>
+
+  <section class="stack" id="grupo">
+    <h2>Qué podría hacer el grupo con esto</h2>
+    <ul class="points">
+      <li><b>Revisar un borrador antes de enviarlo.</b> Pasar el mismo proceso sobre las ecuaciones del manuscrito para cazar signos, factores y cifras que no son coherentes entre sí.</li>
+      <li><b>Explorar variantes en horas.</b> Linealizar el modelo simplificado en \(\theta=\pi\) (ya hecho: panel derecho de la primera figura), ir más allá de la aproximación de Cowling (ya hecho: tercera parte) o cambiar el potencial o el acoplo, y ver qué cambia.</li>
+      <li><b>Dejar a los doctorandos la física.</b> El agente hace el álgebra y la deja comprobada y documentada; la persona decide qué aproximaciones tienen sentido y qué significan los resultados.</li>
+      <li><b>Quedarse con la herramienta.</b> El código queda como base reutilizable para el siguiente paper de la serie.</li>
+    </ul>
+  </section>
+
+  <section class="stack" id="limites">
+    <h2>Lo que todavía no demuestra</h2>
+    <p>En los dos papers el camino ya estaba recorrido: se sabía a qué ecuaciones había que llegar. La tercera parte es distinta: ahí no hay respuesta publicada. Sin axión, las ecuaciones ya están comprobadas también con números. Los términos nuevos, en cambio, se anulan en todos los límites conocidos: solo los comprueban la derivación desde la acción y los controles negativos, porque ninguna referencia externa los contiene. Integradas con axión (quinta parte), dan las primeras frecuencias sin Cowling, pero sin nada publicado con qué compararlas: el programa está comprobado con el caso sin axión, y el fondo y la parte axiónica, con las Tablas I, II y IV de la secuela (cuarta parte). Si un término nuevo estuviera mal, esas comprobaciones no lo verían. La Tabla III, la de los modos axiónicos muy amortiguados, sigue sin recalcular.</p>
+    <p class="next"><b>Siguiente paso propuesto:</b> que el grupo revise los términos nuevos del sistema extendido y, si puede, repita con su código uno de los números de la quinta parte (por ejemplo, el modo \(f\) a 6 kHz: 2.105 kHz). Comparar con sus propios cálculos, si ya han empezado este, sería la mejor prueba de las ecuaciones.</p>
+  </section>
+
+  <section class="stack part">
+    <p class="eyebrow">Los detalles · Primera parte · arXiv:2510.16245 · modos radiales</p>
+    <p class="muted">Lo que sigue es el cálculo en sí: la acción de partida, la cadena de derivación, las observaciones con sus fórmulas y, al final, la lista completa de comprobaciones y cómo reproducirlo.</p>
+  </section>
+
+  <section class="stack" id="partida">
+    <h2>Punto de partida</h2>
+    <p>Signatura \((+,-,-,-)\), \(c=\hbar=1\). El fluido se describe por su densidad de energía \(\varepsilon(n,a)\), y el acoplo axión-nucleón entra por la masa efectiva, con \(n_s = n_b\) como en el paper:</p>
+    \[ S = \int d^4x\,\sqrt{-g}\,\Big[-\frac{R}{16\pi G} + \tfrac12 g^{\mu\nu}\partial_\mu a\,\partial_\nu a - V(a) - \varepsilon(n,a)\Big] \]
+    \[ \varepsilon(n,a) = \varepsilon_0(n) + n\,\big[m^*(a)-m_N\big],\qquad g(a) = \sqrt{1-\beta\sin^2\!\big(a/2f_a\big)} \]
+    \[ V(a) = \epsilon\, m_\pi^2 f_\pi^2\,[1-g(a)],\qquad m^*(a) = m_N - \sigma_N[1-g(a)] \]
+    <p>A partir de aquí todo se deriva: las ecuaciones de Einstein (con \(T_{\mu\nu}\) del axión obtenido por variación respecto a \(g^{\mu\nu}\)), Klein-Gordon por Euler-Lagrange, y las ecuaciones del fluido por conservación de \(T^{\mu\nu}\) total y del número bariónico.</p>
+  </section>
+
+  <section class="stack">
+    <h2>La cadena de derivación</h2>
+    <ol class="chain">
+      <li><h3>Equilibrio: TOV + Klein-Gordon</h3><p class="refs">Ec. (2.6a–d) reproducidas. Sin axión se recupera el TOV estándar.</p></li>
+      <li><h3>Perturbaciones radiales lineales</h3><p class="refs">Ec. (3.3a–e) reproducidas, y su límite exterior, Ec. (3.7). \(G_{tt}\) linealizada sale redundante, como exige Bianchi.</p></li>
+      <li><h3>Modelo simplificado (Sec. IV)</h3><p class="refs">Ec. (4.2) desde (3.3) con las aproximaciones (4.1); forma adimensional, matriz \(\mathbb{M}\), dispersión (4.7)–(4.8), \(\bar k_\pm\) (4.12) y ecuación trascendente (4.13), casando interior y exterior con \(\delta p(\bar x_0)=0\).</p></li>
+      <li><h3>Números y figura</h3><p class="refs">Constantes del texto recalculadas con CODATA y reproducción de la Fig. 3 buscando las raíces de (4.13).</p></li>
+    </ol>
+  </section>
+
+  <section class="stack" id="observaciones">
+    <h2>Observaciones para comentar</h2>
+    <div class="obs">
+      <article class="ob">
+        <header><span class="weight w-main">De fondo</span><h3>Punto de linealización del modelo simplificado</h3></header>
+        <p>Las aproximaciones (4.1) se evalúan en \(\theta = a/f_a = 0\), pero el texto toma \(\theta=\pi\) en el interior cuando \(\alpha = n_b/n_c > 1\). Con las funciones completas de la Sec. II:</p>
+        \[ \frac{\partial m^*}{\partial a} = -\frac{\beta\sigma_N}{4f_a}\,\frac{\sin\theta}{g(\theta)} \quad\Longrightarrow\quad \frac{\partial m^*}{\partial a}\Big|_{\theta=0} = \frac{\partial m^*}{\partial a}\Big|_{\theta=\pi} = 0 \]
+        \[ \Big(V'' + n\,m^{*\prime\prime}\Big)_{\theta=0} = m_a^2(1-\alpha),\qquad \Big(V'' + n\,m^{*\prime\prime}\Big)_{\theta=\pi} = m_a^2\,\frac{\alpha-1}{\sqrt{1-\beta}} \]
+        <p>Para \(\alpha=10\), la masa efectiva al cuadrado en el fondo \(\theta=\pi\) es \(\approx +26\,m_a^2\), y no \(-9\,m_a^2\), que es taquiónica. Además, el acoplo lineal fluido-axión desaparece. Linealizando de forma consistente en \(\theta=\pi\), los modos fluidos del modelo simplificado no se amortiguan y el espectro axiónico se desplaza (panel derecho de la figura). En la estrella realista el acoplo vendría de las zonas donde \(a_0\) no está en un mínimo, como la capa de transición. Las secciones V y siguientes usan \(m^*(a)\) y \(V(a)\) completos, así que no se ven afectadas.</p>
+      </article>
+      <article class="ob">
+        <header><span class="weight w-num">Numérica</span><h3>\(m_a R \simeq 0.12\) lleva un factor \(2\pi\) de menos</h3></header>
+        <p>Con \(m_a = 3\) kHz (12.4 peV, \(E = h\nu\)) y \(R = 12\) km:</p>
+        \[ m_a R = \frac{m_a c^2}{\hbar}\,\frac{R}{c} = \frac{2\pi\nu R}{c} \approx 0.75,\qquad \text{frente a}\quad \frac{\nu R}{c} \approx 0.12 \]
+        <p>La longitud de Compton es \(\approx 1.3\,R\), lo que matiza la frase de que el campo varía en escalas de "varios radios estelares".</p>
+      </article>
+      <article class="ob">
+        <header><span class="weight w-num">Numérica</span><h3>\(m_a^2 f_a^2 \sim \epsilon\cdot 13\) MeV/fm³ y \(\lambda^2 \sim \epsilon\cdot0.02\)</h3></header>
+        \[ m_a^2 f_a^2 = \frac{\epsilon\beta\, m_\pi^2 f_\pi^2}{4} \approx \epsilon \times (4.4\text{–}4.8)\ \text{MeV/fm}^3,\qquad m_\pi^2 f_\pi^2 \approx 20\text{–}22\ \text{MeV/fm}^3 \]
+        <p>El paper siguiente (arXiv:2610.37308) usa \(\epsilon\, m_\pi^2 f_\pi^2 \simeq 2\) MeV/fm³ para \(\epsilon=0.1\), que encaja con este valor. Con \((\varepsilon+p) = 500\) MeV/fm³ y \(c_s^2=0.3\) resulta \(\lambda^2 \approx \epsilon\cdot0.03\). Tomando el 13 del texto saldría \(\epsilon\cdot0.087\), así que las dos cifras del paper tampoco son coherentes entre sí.</p>
+      </article>
+      <article class="ob">
+        <header><span class="weight w-minor">Menores</span><h3>Dos detalles</h3></header>
+        <p>Con la Ec. (2.7), \(p = n\,\partial_n\varepsilon - \varepsilon = p_0(n)\) <em>exactamente</em>: los términos en \(\sigma_N\) se cancelan, de modo que la Ec. (2.8) puede escribirse con "=" en lugar de "≈".</p>
+        <p>En la forma con tangentes de la Ec. (4.13), cada modo fluido es un cero pegado a un polo de \(\tan(\bar k_+\bar x_0)\), separados \(\mathcal{O}(\lambda^2)\). Los buscadores de raíces y los mapas de \(|f|\) no los ven. La forma entera \(f\cos(\bar k_+\bar x_0)\cos(\bar k_-\bar x_0)\) no tiene ese problema, y parece ser la representada en la Fig. 3.</p>
+      </article>
+    </div>
+  </section>
+
+  <figure class="wide">
+    <div class="charts one"><div class="chart" data-chart="meff"></div></div>
+    <figcaption><b>El punto de linealización importa.</b> Masa efectiva al cuadrado del axión, \((V'' + n\,m^{*\prime\prime})/m_a^2\), con las funciones completas de la Sec. II del primer paper. Dentro de la estrella (\(\alpha=10\)) el fondo estable es \(\theta=\pi\), donde la masa efectiva es positiva (\(\approx +26\,m_a^2\)); el modelo simplificado se linealiza en \(\theta=0\), un máximo del potencial, donde sale taquiónica (\(-9\,m_a^2\)). Fuera de la capa (\(\alpha&lt;1\)) el mínimo es \(\theta=0\).</figcaption>
+  </figure>
+
+  <figure class="wide">
+    <div class="charts"><div class="chart" data-chart="toy0"></div><div class="chart" data-chart="toy1"></div></div>
+    <figcaption><b>Espectro de QNMs del modelo simplificado</b>, con los parámetros de la Fig. 3 del paper (\(\lambda^2=10^{-3}\), \(\alpha=10\), \(c_s^2=0.3\), \(\bar x_0=0.6\)). Los círculos son raíces refinadas con el método de Muller. En la primera, la Ec. (4.13) tal como está: los modos axiónicos caen en \(\bar\omega \approx 3.56-2.15i\), \(9.53-3.25i\), \(15.01-3.89i\), \(20.39-4.35i\) y \(25.71-4.71i\), y los fluidos en \(\bar\omega \approx c_s(k+\tfrac12)\pi/\bar x_0\), con \(|\mathrm{Im}\,\bar\omega| \lesssim 4\times10^{-3}\). En la segunda, la misma geometría linealizada en \(\theta=\pi\). Pasa el puntero (o toca) sobre una raíz para ver su valor.</figcaption>
+  </figure>
+
+
+  <section class="stack part" id="secuela">
+    <p class="eyebrow">Segunda parte · arXiv:2610.37308 · publicado el 27 de octubre de 2026</p>
+    <h2>La secuela: modos no radiales en la aproximación de Cowling</h2>
+    <p>Se ha usado el mismo pipeline con la misma acción. Solo cambia la linealización: la métrica queda fija (Cowling), las perturbaciones son polares con \(Y_{lm}(\vartheta,\varphi)\) y se sigue la convención del paper de extraer el factor \((r/R)^l\):</p>
+    \[ \delta a = f_a\Big(\tfrac{r}{R}\Big)^{l}\delta\theta\,Y_{lm}e^{-i\omega t},\qquad \delta n_b = \Big(\tfrac{r}{R}\Big)^{l}\delta n_b(r)\,Y_{lm}e^{-i\omega t} \]
+    \[ \xi^r = \Big(\tfrac{r}{R}\Big)^{l}\frac{e^{-\lambda}W}{r}\,Y_{lm}e^{-i\omega t},\qquad \xi^A = -\Big(\tfrac{r}{R}\Big)^{l}\frac{\mathcal{V}}{r^2}\,\nabla^A Y_{lm}e^{-i\omega t} \]
+    <p><b>{{N_OK2}}/{{N_TOT2}} comprobaciones superadas.</b> No hay ninguna discrepancia en el álgebra, en las tablas ni en las cifras del texto.</p>
+    <ol class="chain">
+      <li><h3>Ecuaciones de perturbación</h3><p class="refs">Ecs. (8a–d) desde \(\nabla_\mu T^{\mu}{}_{\nu}=0\), la conservación bariónica y Klein-Gordon, con la dependencia angular eliminada mediante la ecuación de Legendre. También el exterior, Ec. (13), y el ajuste en la superficie, Ec. (15).</p></li>
+      <li><h3>Regularidad en el origen</h3><p class="refs">Ecs. (10a,b), (16a–c) y (17), mediante un desarrollo en serie con un fondo regular genérico, incluido el factor \(1/(2l+3)\) de \(\delta\theta''(0)\).</p></li>
+      <li><h3>Integración exterior (apéndice A)</h3><p class="refs">Transformación de Liouville, ecuación de Milne, condiciones iniciales de Whittaker \((z,\kappa,\mu)\), forma de Schrödinger (21)–(22) y niveles hidrogénicos (23).</p></li>
+      <li><h3>Energía y amortiguamiento (apéndice B)</h3><p class="refs">El flujo (B4), la luminosidad promediada (B6) y las energías del modo (B7a,b), a partir del tensor energía-momento de la acción.</p></li>
+      <li><h3>Números</h3><p class="refs">La coherencia de las Tablas I–IV con el texto, y la Tabla IV recalculada de forma independiente.</p></li>
+    </ol>
+    <div class="obs">
+      <article class="ob">
+        <header><span class="weight w-main">Conecta</span><h3>La secuela describe el fondo \(\theta\simeq\pi\) del primer paper</h3></header>
+        <p>Según la secuela, el fondo pasa de \(\theta\sim\pi\) dentro a \(\theta\sim0\) fuera en una capa estrecha bajo la superficie, donde \(m_\mathrm{eff}^2<0\) (pie de la Fig. 5). El acoplo con el fluido solo actúa en la capa donde \(\partial m^*_N/\partial\theta \neq 0\) (Sec. III E y Fig. 7). Ese es justo el escenario de la primera observación: en \(\theta=\pi\), \(\partial m^*/\partial\theta = 0\) y \(m_\mathrm{eff}^2>0\). La pregunta sobre el modelo simplificado de la Sec. IV del primer paper queda así más concreta: su acoplo uniforme con \(m_\mathrm{eff}^2 = m_a^2(1-\alpha)\) no representa la configuración que los propios autores encuentran.</p>
+      </article>
+      <article class="ob">
+        <header><span class="weight w-ok">Independiente</span><h3>La Tabla IV, recalculada solo desde el exterior</h3></header>
+        <p>Se ha resuelto la Ec. (13) en Schwarzschild sin axión de fondo. La condición en \(\tilde r_\infty\) viene de la función de Whittaker decreciente, Ecs. (A13)–(A16), y el interior solo entra como condición en \(R\), acotada entre dos extremos: \(\delta\theta\) plano o \(\delta\theta_\mathrm{ext}(R)=0\), con \(R\) entre 10.5 y 12 km. Hasta \(\nu_a = 10\) kHz, los niveles \(n=3,4\) coinciden con la tabla con un error de 5 Hz o menos, sea cual sea el interior. Por encima, el interior empieza a pesar (la banda llega a 56 Hz a 15 kHz) y los valores del paper caen dentro de ella. Las mismas soluciones sitúan los cruces evitados de la Sec. III E donde dice el texto.</p>
+      </article>
+      <article class="ob">
+        <header><span class="weight w-minor">Coherencia</span><h3>\(\epsilon\,m_\pi^2 f_\pi^2 \simeq 2\) MeV/fm³</h3></header>
+        <p>El pie de la Fig. 7 usa este valor para \(\epsilon=0.1\), que concuerda con \(m_\pi^2 f_\pi^2\approx 20\)–\(22\) MeV/fm³ recalculado arriba. Eso apunta a que el "\(\epsilon\cdot13\) MeV/fm³" del primer paper es una errata y no un cambio de convenio.</p>
+      </article>
+    </div>
+  </section>
+
+  <figure class="wide">
+    <div class="charts"><div class="chart" data-chart="levels"></div><div class="chart" data-chart="psi"></div></div>
+    <figcaption><b>Niveles de «átomo gravitatorio» con \(l=2\), calculados de forma independiente.</b> Primera gráfica: la desviación del espectro hidrogénico frente a la Tabla IV (círculos). La línea corresponde al interior «plano» con \(R=10.5\) km, y la banda recorre las cuatro combinaciones de interior y radio. Segunda: el potencial \(\Delta V\) de la Ec. (22) y las funciones \(\psi = r\,\delta\theta_\mathrm{ext}\) a \(\nu_a=12\) kHz, desplazadas a la altura de su \(\tilde k_n^2\), como en la Fig. 5 del paper: el mínimo del potencial (\(\approx -0.058\) en 35 km), el pico de \(n=3\) y el nodo de \(n=4\) caen en el mismo sitio.</figcaption>
+  </figure>
+
+  <section class="stack part" id="cowling">
+    <p class="eyebrow">Tercera parte · cálculo nuevo · el siguiente paso que propone la secuela</p>
+    <h2>Más allá de Cowling: la métrica también oscila</h2>
+    <p>La secuela trabaja en la aproximación de Cowling: la estrella vibra, pero la gravedad se queda quieta. Sus conclusiones proponen como primer paso natural quitar esa aproximación. Es lo que permite que el modo emita ondas gravitacionales, y comparar ese amortiguamiento con el de la radiación de axiones. Este cálculo no está publicado, así que no hay ecuaciones con las que comparar: la derivación se valida con sus límites conocidos y con su consistencia interna.</p>
+    <p>Se usa la misma acción y el mismo pipeline, ahora también con la métrica perturbada, en el gauge de Regge-Wheeler y con las variables de Lindblom y Detweiler (LD), adaptadas a la signatura y la dependencia \(e^{-i\omega t}\) de los papers (con \(\mathcal{Y} = (r/R)^l Y_{lm} e^{-i\omega t}\)):</p>
+    \[ ds^2 = e^{2\Phi}(1 + H_0\mathcal{Y})\,dt^2 - 2i\omega r H_1\mathcal{Y}\,dt\,dr - e^{2\lambda}(1 - H_2\mathcal{Y})\,dr^2 - r^2(1 - K\mathcal{Y})\,d\Omega^2 \]
+    <p>El fluido y el axión siguen la convención de la secuela; \(X = -e^{\Phi}\Delta p\) es la perturbación lagrangiana de la presión.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 560 330" role="img" aria-label="El sistema extendido se deriva de la acción y se compara, apagando una parte cada vez, con las ecuaciones de la secuela, con Lindblom-Detweiler, con Zerilli y con la identidad de Bianchi; sin axión, además, se integra y se compara con 52 frecuencias publicadas. Los términos nuevos se anulan en todos esos límites." style="font-family: inherit">
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+        <g fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="170" y="6" width="220" height="34" rx="5"/>
+          <rect x="40" y="72" width="480" height="58" rx="6"/>
+          <rect x="8" y="196" width="124" height="48" rx="5"/>
+          <rect x="148" y="196" width="124" height="48" rx="5"/>
+          <rect x="288" y="196" width="124" height="48" rx="5"/>
+          <rect x="428" y="196" width="124" height="48" rx="5"/>
+          <rect x="110" y="278" width="200" height="44" rx="5" stroke-width="2"/>
+        </g>
+        <rect x="330" y="80" width="180" height="42" rx="4" style="fill: var(--flag-bg); stroke: var(--flag)" stroke-width="1.4"/>
+        <g stroke="currentColor" stroke-width="1.4" fill="none" marker-end="url(#ah)">
+          <line x1="280" y1="40" x2="280" y2="70"/>
+          <line x1="70" y1="130" x2="70" y2="194"/>
+          <line x1="210" y1="130" x2="210" y2="194"/>
+          <line x1="350" y1="130" x2="350" y2="194"/>
+          <line x1="490" y1="130" x2="490" y2="194"/>
+          <line x1="210" y1="244" x2="210" y2="276"/>
+          <polyline points="70,244 70,300 108,300"/>
+        </g>
+        <g fill="currentColor" font-size="12" text-anchor="middle">
+          <text x="280" y="28">Acción de los dos papers</text>
+          <text x="180" y="99" font-weight="600" font-size="13">Sistema extendido</text>
+          <text x="180" y="117">Lindblom–Detweiler + axión</text>
+          <text x="420" y="98" style="fill: var(--flag)" font-weight="600">términos nuevos</text>
+          <text x="420" y="114" font-size="10.5">se anulan en cada límite</text>
+          <text x="70" y="216">(8a)–(8d)</text><text x="70" y="232">de la secuela</text>
+          <text x="210" y="216">Lindblom–Detweiler</text><text x="210" y="232">4 transcripciones</text>
+          <text x="350" y="216">Zerilli + Ec. (13)</text><text x="350" y="232">desacoplados</text>
+          <text x="490" y="216">G<tspan font-size="9" dy="3">tt</tspan><tspan dy="-3"> y traza</tspan></text><text x="490" y="232">redundantes</text>
+          <text x="210" y="297" font-weight="600">52 frecuencias publicadas</text><text x="210" y="313">LMI 1997 · Yoshida–Kojima 1997</text>
+        </g>
+        <g fill="currentColor" font-size="11" fill-opacity="0.72">
+          <text x="288" y="59">variar y linealizar</text>
+          <text x="76" y="166">métrica fija</text>
+          <text x="216" y="166">sin axión</text>
+          <text x="356" y="166">fuera, r &gt; R</text>
+          <text x="496" y="166">Bianchi</text>
+          <text x="216" y="264">integrar</text>
+          <text x="76" y="264">integrar</text>
+        </g>
+      </svg>
+      <figcaption><b>Cómo se valida un cálculo sin respuesta publicada.</b> Cada flecha apaga una parte del sistema y la compara con algo conocido: con la métrica congelada salen las ecuaciones de la secuela; sin axión, las de Lindblom y Detweiler y, al integrarlas, 52 frecuencias publicadas; fuera de la estrella, Zerilli y la Ec. (13); y la identidad de Bianchi exige que dos ecuaciones sean redundantes. Los términos nuevos se anulan en todos esos límites: a ellos solo los comprueban la derivación desde la acción, ecuación a ecuación, y los controles negativos.</figcaption>
+    </figure>
+    <p><b>{{N_OK3}}/{{N_TOT3}} comprobaciones algebraicas superadas, y {{N_OK4}}/{{N_TOT4}} numéricas.</b></p>
+    <ol class="chain">
+      <li><h3>Estructura</h3><p class="refs">La parte sin traza de las ecuaciones angulares da \(H_2 = H_0\), y el axión no la modifica. \(G_{tt}\) y la traza angular salen redundantes, como exige Bianchi, y la ligadura algebraica para \(H_0\) se conserva al integrar.</p></li>
+      <li><h3>Límite de Cowling</h3><p class="refs">Congelando la métrica, las cuatro ecuaciones de materia son exactamente las (8a)–(8d) de la secuela.</p></li>
+      <li><h3>Límite sin axión</h3><p class="refs">Salen las ecuaciones de Lindblom y Detweiler. Se contrastaron con cuatro transcripciones independientes; dos tienen erratas que las otras dos ya corrigen (ver abajo).</p></li>
+      <li><h3>Exterior</h3><p class="refs">Sin axión, la función de Zerilli cumple su ecuación. Con el axión de fondo en \(\theta=0\), \(\delta\theta\) se desacopla de la métrica y cumple la Ec. (13) de la secuela.</p></li>
+      <li><h3>Centro</h3><p class="refs">Desarrollo en serie con un fondo regular que cumple TOV + KG: las condiciones de LD y sus correcciones axiónicas.</p></li>
+    </ol>
+
+    <h3>El sistema extendido</h3>
+    <p>Son las seis ecuaciones de primer orden de LD para \(H_1, K, W, X\) más las dos del axión, con \(H_0\) y \(V\) algebraicos. En <span class="newterm">color</span> los términos nuevos. Notación: \(e^{-2\lambda} = 1-2b\), \(b = Gm/r\); \(Q = r e^{-2\lambda}\Phi'\), que equivale a \(b + 4\pi G r^2 p_r\) con la presión radial total \(p_r = p - V + \tfrac12 e^{-2\lambda}a_0'^2\); \(n = (l-1)(l+2)/2\) solo como coeficiente; \(\theta_0 = a_0/f_a\); \(\mathcal{M}' = \partial m^*/\partial\theta\) y \(\mathcal{M}'' = \partial^2 m^*/\partial\theta^2\); y \(\Delta\theta = \delta\theta + e^{-\lambda}\theta_0' W/r\), la perturbación lagrangiana del axión.</p>
+    <div class="eqs">
+    \[ \begin{aligned} rH_1' = {}& -\big[l+1+2be^{2\lambda}+4\pi G r^2e^{2\lambda}(p-\varepsilon\,\class{nt}{-\,2V})\big]H_1 \\ & + e^{2\lambda}\big[H_0+K-16\pi G(\varepsilon+p)V\big] \end{aligned} \]
+    \[ \begin{aligned} rK' = {}& H_0 + (n+1)H_1 + (e^{2\lambda}Q-l-1)K \\ & - 8\pi G(\varepsilon+p)e^{\lambda}W \class{nt}{\;+\;8\pi G\, r f_a a_0'\,\delta\theta} \end{aligned} \]
+    \[ rW' = -(l+1)\big(W + l e^{\lambda}V\big) + r^2e^{\lambda}\Big[\frac{e^{-\Phi}X}{(\varepsilon+p)c_s^2} + \frac{H_0}{2} + K\Big] \]
+    \[ \begin{aligned} rX' = {}& -lX + \tfrac12(\varepsilon+p)e^{\Phi}\Big\{(3e^{2\lambda}Q-1)K - \frac{4(n+1)e^{2\lambda}Q}{r^2}V \\ & \quad + (1-e^{2\lambda}Q)H_0 + \big(r^2\omega^2e^{-2\Phi}+n+1\big)H_1 \\ & \quad + \Big[-2\omega^2e^{\lambda-2\Phi} - 8\pi G(\varepsilon+p)e^{\lambda} + r^2\Big(\frac{2e^{-\lambda}\Phi'}{r^2}\Big)'\Big]W\Big\} \\ & \class{nt}{+\,e^{\Phi}n_b\mathcal{M}'\Big[r\theta_0'\Big(\frac{H_0}{2}+K\Big) - \frac{l(l+1)\theta_0'}{r}V + r\,\delta\theta' + (l + r\Phi')\,\delta\theta\Big]} \\ & \class{nt}{+\,e^{\Phi}r\theta_0'\big[n_b\mathcal{M}'' - 4\pi G f_a^2(\varepsilon+p)\big]\delta\theta} \\ & \class{nt}{+\,e^{\Phi-\lambda}n_b\Big[\frac{n_b e^{2\lambda}\mathcal{M}'^2}{f_a^2} - \frac{4\mathcal{M}'\theta_0'}{r} + \mathcal{M}''\theta_0'^2\Big]W} \end{aligned} \]
+    \[ \begin{aligned} \big(2b+n+Q\,\class{nt}{+\,4\pi G r^2e^{-2\lambda}a_0'^2}\big)H_0 = {}& 8\pi G r^2e^{-\Phi}X - \big[(n+1)Q-\omega^2r^2e^{-2\Phi-2\lambda}\big]H_1 \\ & + \big[n-\omega^2r^2e^{-2\Phi}-Q(Qe^{2\lambda}-1)\big]K \\ & \class{nt}{-\,8\pi G\,re^{-2\lambda}f_a a_0'\big[r\,\delta\theta' + (l+2+r\Phi')\,\delta\theta\big]} \\ & \class{nt}{-\,8\pi G\,re^{-\lambda}n_b\mathcal{M}'\theta_0'\,W} \end{aligned} \]
+    \[ V = \frac{e^{\Phi}}{\omega^2}\Big[\frac{X}{\varepsilon+p} - \frac{Q e^{\Phi+\lambda}}{r^2}W - \frac{e^{\Phi}}{2}H_0\Big] \class{nt}{\;-\;\frac{n_b\mathcal{M}'e^{2\Phi}}{\omega^2(\varepsilon+p)}\,\Delta\theta} \]
+    \[ \text{Ec. (8d)} \class{nt}{\;+\;\Big[\frac{n_b\mathcal{M}'}{f_a^2} - 2e^{-2\lambda}\Phi'\theta_0'\Big]H_0 - 16\pi G\,e^{-2\lambda}a_0'^2\,\delta\theta} = 0 \]
+    </div>
+    <p>Cada una de estas siete ecuaciones se ha comprobado contra la derivación desde la acción, y todos los términos nuevos se anulan sin axión. Para integrarlas, \(\delta n_b\) se obtiene de \(X\) y \(W\) con la definición de \(X\), y \(\Delta p = \delta p + \xi^r p'\).</p>
+
+    <h3>Condiciones en el centro</h3>
+    <p>\(H_0(0) = K(0)\), \(V(0) = -W(0)/l\) y \(H_1(0) = [2lK(0) + 16\pi G(\varepsilon+p)_cW(0)]/[l(l+1)]\) quedan como en LD, sin corrección. Cambian dos:</p>
+    \[ X(0) = X_\mathrm{LD}(0) \class{nt}{\;+\;e^{\Phi_c}\Big[n_c\mathcal{M}'_c\,\Delta\theta(0) - \tfrac{8\pi G}{3}(\varepsilon+p)_c V(\theta_c)\,W(0)\Big]} \]
+    \[ \Delta\theta(0) = \delta\theta(0) + \theta_0''(0)\,W(0) \]
+    \[ \delta\theta''(0) = \text{Ec. (16c)} \class{nt}{\;-\;\frac{3\,\theta_0''(0)}{2l+3}K(0)} \]
+
+    <h3 id="numeros">Comprobación con números (sin axión)</h3>
+    <p>Que unas ecuaciones pasen sus límites no garantiza que, integradas, den lo que deben: una condición de contorno mal puesta, o un factor que solo importa lejos de los límites, pasaría desapercibido. Por eso el sistema extendido, con el axión apagado, se integra tal cual: desde el centro con las condiciones de arriba, hasta la superficie con \(X(R)=0\), y fuera con Zerilli. El modo es la frecuencia real a la que la onda gravitacional saliente es mínima, y la anchura del mínimo da el amortiguamiento.</p>
+    <p>Para el politropo de referencia de Lindblom, Mendell e Ipser (1997), las frecuencias de los modos \(f\) con \(l=2\)–5 coinciden con las cinco cifras que publican, y el amortiguamiento por ondas gravitacionales, dentro del 2 %. Las ecuaciones de Cowling de la secuela, integradas igual, reproducen los 24 modos \(f\), \(p_1\) y \(p_2\) de Yoshida y Kojima (1997): 23 dentro de media unidad de su última cifra y el otro, \(p_2\) con \(l=4\), a 0.0057 (6.0157 frente a 6.01). Sus 24 valores «exactos», con tres cifras, caen dentro del 0.5 %; esas diferencias no siguen ningún patrón y no aparecen frente a las cinco cifras de LMI, así que vienen de la precisión de esa tabla.</p>
+    <figure class="wide">
+      <div class="charts"><div class="chart" data-chart="res"></div><div class="chart" data-chart="cmp"></div></div>
+      <figcaption><b>Las ecuaciones nuevas, sin axión, dan las frecuencias publicadas.</b> Primera gráfica: amplitud de la onda de Zerilli saliente frente a la frecuencia real, modo \(f\) con \(l=2\) del politropo \(p=\kappa\varepsilon^2\) de 1.4 \(M_\odot\) y 14.45 km. El mínimo cae en el valor exacto de LMI. Cowling, con las ecuaciones del paso 5, da una frecuencia un 20 % más alta: es lo que cambia al dejar oscilar la métrica. Con el signo de \(X'\) tal como lo imprimen Zhao y Lattimer, la resonancia se va a 0.83. Segunda: diferencia relativa con 52 frecuencias publicadas; las barras son media unidad de la última cifra de cada referencia.</figcaption>
+    </figure>
+    <details class="more">
+      <summary>Ver las 52 frecuencias</summary>
+      <div class="tablewrap"><table class="steps">
+        <thead><tr><th>Comparación</th><th>Modo</th><th class="num">Este cálculo</th><th class="num">Referencia</th><th class="num">Dif. (%)</th><th class="num">Precisión (%)</th></tr></thead>
+        <tbody id="freqtable"></tbody>
+      </table></div>
+    </details>
+
+    <div class="obs">
+      <article class="ob">
+        <header><span class="weight w-main">Física</span><h3>El acoplo sigue viviendo en la capa de transición</h3></header>
+        <p>Casi todos los términos nuevos van con \(\theta_0'\) o con \(\partial m^*/\partial\theta\), y los dos se anulan donde el fondo está en un mínimo: \(\theta\simeq\pi\) dentro y \(\theta\simeq0\) fuera. Allí solo sobrevive la energía de vacío del axión, \(V(\theta)\), que entra como \(\varepsilon\to\varepsilon+V\), \(p\to p-V\) en la gravedad. Es el mismo patrón que la secuela encuentra en Cowling: el intercambio de energía entre fluido, axión y ahora también ondas gravitacionales se concentra en la capa donde \(\theta\) pasa de \(\pi\) a \(0\). Hay además dos acoplos directos con la métrica que no existen en Cowling: el flujo de momento del axión, \(8\pi G\,rf_a a_0'\,\delta\theta\) en \(K'\), y el término \(-2e^{-2\lambda}\Phi'\theta_0' H_0\) en Klein-Gordon. La figura de abajo lo muestra sobre un fondo esquemático.</p>
+      </article>
+      <article class="ob">
+        <header><span class="weight w-num">Literatura</span><h3>Erratas en dos transcripciones de LD, ya corregidas en otras</h3></header>
+        <p>Para el límite sin axión se compararon las ecuaciones de LD en el LaTeX de cuatro papers; no he podido consultar el original de 1983. En Zhao y Lattimer (arXiv:2204.03037) coinciden cinco de seis; en \(X'\), el término \(2\omega^2 e^{\lambda/2-\nu}W\) lleva el signo cambiado. Kunjipurayil et al. (arXiv:2205.02081), con Zhao como coautor, lo escriben ya con el signo correcto, y coinciden las seis. La errata no es inocua: con el signo impreso, el modo \(f\) del politropo de referencia sale un 31 % más bajo (figura de arriba).</p>
+        <p>En Burgio et al. (arXiv:1106.2736, apéndice A) solo coincide \(W'\). A \(H_1'\) le falta el factor \(H_1\); en \(K'\) y en \(X'\) el signo de \(\psi'/2\) está cambiado, y a \(X'\) además le falta \(H_0\); el último término de \(K\) en la relación de \(H_0\) tiene el signo cambiado; y en \(V\) pone \(r^{(\psi-\lambda)/2}\) donde va \(e^{(\psi-\lambda)/2}\). Zhang et al. (arXiv:2601.21911) usan la misma forma y escriben ya las cinco corregidas, con una errata propia: \(\omega^3\) en vez de \(\omega^2\) en \(V\). Son las versiones de arXiv; las publicadas pueden estar corregidas.</p>
+      </article>
+      <article class="ob">
+        <header><span class="weight w-minor">Pendiente</span><h3>Lo que falta para tener frecuencias</h3></header>
+        <p>Sin axión, el integrador ya funciona: reproduce las frecuencias de referencia. La estrella de fondo con BSk26 y el axión ya está (cuarta parte). Para obtener los modos con axión faltan añadir al integrador las dos ecuaciones de \(\delta\theta\) e igualar fuera con Zerilli (ondas gravitacionales) y con la Ec. (13) (radiación de axiones) a la vez. Se ha supuesto, como en la secuela, que fuera de la estrella el axión está en \(\theta=0\); la figura de abajo muestra que la cola de \(\theta_0\) se extiende fuera, y si fuera relevante el exterior tendría acoplo.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="stack">
+    <figure class="wide">
+      <div class="charts one"><div class="chart" data-chart="bg"></div></div>
+      <figcaption><b>Dónde actúan los términos nuevos</b>, sobre un fondo esquemático: politropo \(n=1\) de 1.4 \(M_\odot\) y 12 km, con \(\alpha = n_b/n_c = 19\) en el centro (\(\approx 0.6\) fm⁻³ frente a \(n_c\approx 0.03\) fm⁻³ con \(\epsilon=0.1\)), y el axión resuelto con Klein-Gordon estática, sin retroacción sobre la métrica. Líneas: \(\theta_0/\pi\). Sombras: \(n_b|\partial m^*/\partial\theta|\), que acompaña a casi todos los términos nuevos (\(\theta_0'\) se comporta igual). A 15 kHz el campo está en \(\theta\simeq\pi\) hasta \(0.6R\) y el acoplo vive en una capa bajo la superficie; a 5 kHz la transición es más ancha y ocupa media estrella. No es el fondo de la secuela (BSk26): solo ilustra dónde actúan.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stack part" id="conaxion">
+    <p class="eyebrow">Cuarta parte · con axión, en Cowling · etapa A</p>
+    <h2>Modos con axión en Cowling: Tablas I y II, recalculadas</h2>
+    <p>Para integrar el sistema extendido con axión hacen falta antes dos cosas comprobadas con números: una estrella de fondo realista con su condensado y la parte axiónica de las ecuaciones de perturbación. En Cowling, la secuela publica las respuestas (Tablas I, II y IV), así que ese es el primer banco de pruebas.</p>
+    <ul class="points">
+      <li><b>Fondo.</b> TOV + Klein-Gordon del primer paper, Ec. (2.6), con BSk26 en la forma analítica de Potekhin et al. (la de Pearson et al. 2018), \(\varepsilon(n,\theta)=\varepsilon_0(n)-n\sigma_N(1-g)\) y presión central de 100 MeV/fm³. El valor central \(\theta(0)\) se busca por bisección hasta que el campo decae fuera de la estrella.</li>
+      <li><b>Modos.</b> Las (8a)–(8d) de la secuela, que el paso 5 comprueba contra la derivación desde la acción, con las condiciones (10) en el centro, \(\Delta p(R)=0\) y, para \(\delta\theta\), empalme con la Ec. (13) fuera: onda saliente si \(\mathrm{Re}\,\nu>\nu_a\) y ligada si no. Las frecuencias complejas se buscan con el método de Muller.</li>
+      <li><b>Comparación.</b> Como el ajuste analítico de BSk26 no es exactamente la tabla del grupo, las frecuencias sin axión ya difieren hasta un 0.3 %. Por eso las Tablas I y II se comparan como desplazamiento \(\nu/\nu_0-1\), cada cálculo con su propia \(\nu_0\).</li>
+    </ul>
+    <figure class="wide">
+      <div class="charts"><div class="chart" data-chart="ax_f"></div><div class="chart" data-chart="ax_p1"></div><div class="chart" data-chart="ax_p2"></div><div class="chart" data-chart="ax_im"></div></div>
+      <figcaption><b>El fondo axiónico sube las frecuencias, y la perturbación del axión compensa parte de la subida.</b> Las tres primeras gráficas muestran el desplazamiento de \(f\), \(p_1\) y \(p_2\) con \(l=2\) frente a la masa del axión: en naranja, solo el fondo con axión (Tabla I); en azul, con \(\delta\theta\) (Tabla II). Líneas: este cálculo; anillos: la secuela. La cuarta muestra el amortiguamiento por emisión de axiones, \(|\mathrm{Im}\,\nu|\), en escala logarítmica: los modos por debajo del umbral \(\nu_a\) no radian y no aparecen.</figcaption>
+    </figure>
+    <p><b>{{N_OK5}}/{{N_TOT5}} comprobaciones.</b> Sin axión, la estrella sale con 1.536 \(M_\odot\) y 11.72 km, y sus modos en 2.429, 7.171 y 10.194 kHz, frente a 2.43, 7.15 y 10.18. El condensado aparece entre 2.5 y 2.8 kHz, como dice el primer paper. Las masas de la Tabla IV coinciden dentro del 0.35 %. Los 24 desplazamientos de la Tabla I y los 36 de la Tabla II coinciden dentro de 0.55 puntos porcentuales; los del modo \(f\), dentro de 0.33. Los modos que radian son los mismos, salvo \(p_1\) a 8 kHz, cuya parte real cae a un 0.1 % del umbral: en nuestro cálculo queda justo por encima. El amortiguamiento coincide en orden de magnitud: los once valores de al menos 1 Hz, dentro de un factor 2, y el tiempo más corto, 12.4 ms frente a 12.</p>
+    <p class="muted">El margen de 0.6 puntos se fijó después de ver los datos y es mayor que el redondeo de las tablas (0.2 puntos para \(f\)); la diferencia que queda, de hasta un 0.5 %, tiene el mismo tamaño que la de las frecuencias sin axión y es coherente con usar otra representación de BSk26. El amortiguamiento depende de \(\delta\theta(R)\), que la secuela muestra que pasa por ceros casi exactos según \(\nu_a\), así que es muy sensible al fondo.</p>
+    <p class="next"><b>Etapa B:</b> con este fondo y esta parte axiónica comprobados, la quinta parte integra el sistema extendido de la tercera parte con el axión encendido, con emisión de axiones y de ondas gravitacionales a la vez.</p>
+  </section>
+
+  <section class="stack part" id="etapaB">
+    <p class="eyebrow">Quinta parte · con axión y métrica dinámica · etapa B · sin publicar</p>
+    <h2>Modos con axión, sin la aproximación de Cowling</h2>
+    <p>Es el paso que la secuela deja abierto: integrar a la vez el fluido, el axión y la métrica perturbada sobre la estrella de la cuarta parte. Las ecuaciones son las de la tercera parte; no se han reescrito a mano para integrarlas. El programa convierte directamente las que se derivaron desde la acción, así que lo integrado es exactamente lo que se comprobó en el paso 7. Fuera de la estrella se sigue integrando el sistema completo mientras dura la cola del axión, unos 100 km, y después se separan la onda gravitacional (Zerilli) y la del axión (Ec. 13). Un modo cuasinormal es una frecuencia compleja a la que no llega onda gravitacional desde fuera y la del axión sale o queda ligada.</p>
+    <figure class="wide">
+      <div class="stage" data-anim="mode">
+        <div class="stage-bar">
+          <div class="seg" role="group" aria-label="Modo"><button type="button" data-mode="0">f</button><button type="button" data-mode="1">p₁</button><button type="button" data-mode="2">p₂</button></div>
+          <div class="seg" role="group" aria-label="Tratamiento de la métrica"><button type="button" data-metric="dyn">Métrica dinámica</button><button type="button" data-metric="cow">Cowling</button></div>
+          <button type="button" class="btn" data-play>Pausa</button>
+        </div>
+        <div class="stage-canvas"><canvas role="img" aria-label="Corte de la estrella oscilando en el modo elegido: dentro, el condensado axiónico; a la izquierda, las ondas gravitacionales; a la derecha, la radiación axiónica, que se propaga si la frecuencia supera la masa del axión y queda ligada si no."></canvas></div>
+        <div class="stage-foot">
+          <label class="slider"><span data-out="nua"></span><input type="range" min="0" max="12" step="1" aria-label="Masa del axión"></label>
+          <div class="readout"><b data-out="freq"></b><span data-out="damp"></span><span data-out="rad"></span></div>
+        </div>
+      </div>
+      <figcaption><b>Anatomía de un modo, con los números de los pasos 9 y 10.</b> Corte meridional de la estrella (\(l=2\), \(m=0\)) con la deformación exagerada. Dentro, el color marca \(\theta_0/\pi\): el núcleo condensado y la capa de transición, con el perfil calculado para cada \(\nu_a\). A la izquierda, la onda gravitacional (\(\propto\sin^2\vartheta\)), que no existe en Cowling; a la derecha, \(\delta\theta\) (\(\propto P_2(\cos\vartheta)\)), que se propaga si \(\nu>\nu_a\) y decae exponencialmente si no. Fuera de la estrella las distancias están comprimidas, pero la razón entre las longitudes de onda gravitacional y axiónica es la real. Las frecuencias y amortiguamientos son los calculados; los perfiles radiales del desplazamiento son ilustrativos.</figcaption>
+    </figure>
+    <p><b>{{N_OK6}}/{{N_TOT6}} comprobaciones.</b> No hay resultado publicado con el que comparar, así que se comprueba el programa. Con el axión apagado convierte las ecuaciones igual que el del paso 8, a \(10^{-15}\). Las sustituciones del axión dan las cantidades del Paper II. Y, de principio a fin, reproduce el modo \(f\) del politropo de Lindblom, Mendell e Ipser: 1.20162 frente a 1.2016, con el amortiguamiento al 0.2 %. Los resultados no cambian con la tolerancia, el radio de empalme ni la distancia de extracción: menos de \(10^{-6}\) en la frecuencia y del 0.3 % en el amortiguamiento.</p>
+    <figure class="wide">
+      <div class="charts"><div class="chart" data-chart="gr_f"></div><div class="chart" data-chart="gr_p1"></div><div class="chart" data-chart="gr_p2"></div><div class="chart" data-chart="gr_im"></div></div>
+      <figcaption><b>Con la métrica dinámica, el axión desplaza las frecuencias como en Cowling, salvo la del modo \(f\).</b> Desplazamiento de cada frecuencia respecto a la misma estrella sin axión, también con la métrica dinámica. Azul: el cálculo completo; naranja: con \(\delta\theta\) apagado (solo el fondo); gris discontinuo: Cowling con \(\delta\theta\) (paso 9). La última gráfica muestra el amortiguamiento total, ondas gravitacionales más axiones (puntos), junto al de solo axiones en Cowling (anillos).</figcaption>
+    </figure>
+    <ul class="points">
+      <li><b>El modo \(f\) sube más que en Cowling:</b> hasta un 7.7 % a 5 kHz (Cowling: 5.4 %) y un 5.9 % a 15 kHz (Cowling: 2.7 %). La perturbación del axión vuelve a compensar buena parte de la subida que produce el fondo, como en la secuela, pero deja más. Como no radia axiones (\(\nu_f<\nu_a\)), su amortiguamiento es solo gravitacional, y se acelera de 0.174 s sin axión a unos 0.13 s.</li>
+      <li><b>Los modos \(p\) apenas cambian respecto a Cowling:</b> sus desplazamientos coinciden dentro de un punto porcentual. Con la métrica dinámica las frecuencias son más bajas (\(p_1\), un 8 %), así que el umbral \(\nu_a\) les llega antes: \(p_1\) deja de radiar a 8 kHz, donde en nuestro Cowling (paso 9) aún radia un poco.</li>
+      <li><b>El amortiguamiento máximo no cambia:</b> \(p_2\) a 5 kHz, 12.8 Hz (\(\tau_a\approx12\) ms), igual que en Cowling. Pero la suma \(1/\tau_{GW}+1/\tau_a\) que propone la secuela, con el \(\tau_a\) de Cowling, solo acierta en orden de magnitud. Falla hasta un factor 10 donde el amortiguamiento por axiones pasa por un mínimo, como \(p_2\) a 8 kHz (0.10 Hz frente a 1.0): esos mínimos se desplazan cuando la métrica oscila.</li>
+    </ul>
+    <p class="muted">Cuidado con dos cosas. Con \(\delta\theta\) apagado, el sistema con métrica dinámica deja de ser coherente (las ligaduras de Einstein incluyen al axión) y no conserva la energía; de esa variante solo se muestran las frecuencias, que sirven para separar el efecto del fondo del de la onda. Y todo esto descansa en los términos nuevos de la tercera parte, que nadie ha revisado: los comprueban la derivación desde la acción y los controles negativos, no un cálculo independiente.</p>
+  </section>
+
+  <section class="stack" id="verifica">
+    <h2>Cómo se verifica</h2>
+    <p>Cada ecuación del paper está transcrita desde su LaTeX. Para compararla, se despeja una variable de la ecuación derivada, se sustituye en la del paper, se eliminan las derivadas del fondo con TOV + KG y se simplifica hasta cero. Así se reconocen como iguales ecuaciones escritas de formas distintas, por ejemplo la (3.3e), que solo coincide con la conservación bariónica tras usar el equilibrio. Para la secuela se usa el mismo comparador; la dependencia angular se elimina con la ecuación de Legendre, y las condiciones en el origen se obtienen desarrollando en serie de \(r\).</p>
+    <p>Para que un "coincide" signifique algo, el comparador tiene que fallar cuando debe: se plantan errores en ecuaciones de los papers (un \(8\pi\) por \(4\pi\), un signo, un término omitido, un \(2l\) por \(2(l+1)\)) y se exige que los detecte. A eso se suman comprobaciones de consistencia que no dependen del paper: la identidad de Bianchi, el límite sin axión y el exterior de Schwarzschild.</p>
+    <p>En la tercera parte, donde no hay paper con el que comparar, las ecuaciones sin axión se integran además numéricamente y se comparan con frecuencias publicadas (<a href="#numeros">comprobación con números</a>).</p>
+  </section>
+
+  <section class="stack wide" id="comprobaciones">
+    <h2>Todas las comprobaciones</h2>
+    <div class="checkgrid">
+{{CHECKS}}
+    </div>
+  </section>
+
+  <section class="stack repro" id="reproducirlo">
+    <h2>Reproducirlo</h2>
+    <p>El código completo va en un zip junto con <code>pyproject.toml</code> y <code>uv.lock</code>, que fijan las versiones exactas de todas las dependencias. Los ficheros también se pueden leer uno a uno en la lista de abajo. No hace falta Mathematica ni instalar nada a mano: <a href="https://docs.astral.sh/uv/">uv</a> descarga Python y las librerías en un entorno aislado.</p>
+    <div class="dl">
+      <button type="button" class="download" id="dlzip" hidden>Descargar el código <span>{{ZIP}} · {{ZIP_N}} ficheros · {{ZIP_KB}} kB</span></button>
+      <p class="dlalt">Si la descarga no está disponible en este navegador, el mismo código está en <a href="{{BUNDLE}}">{{BUNDLE}}</a>: un script de Python que, guardado y ejecutado con <code>python3 {{BUNDLE}}</code>, recrea la carpeta <code>axiones/</code>.</p>
+    </div>
+    <script type="application/octet-stream;base64" id="zipdata">{{ZIP_B64}}</script>
+    <script>
+    (async () => {
+      const btn = document.getElementById('dlzip');
+      const downloads = await window.claude?.use?.('downloads');
+      if (!downloads) return;
+      btn.hidden = false;
+      btn.addEventListener('click', async () => {
+        const b64 = document.getElementById('zipdata').textContent.trim();
+        const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+        try { await downloads.save({ filename: '{{ZIP}}', data: bytes }); } catch (e) { /* rechazada por el usuario o no disponible */ }
+      });
+    })();
+    </script>
+
+    <h3>Pasos</h3>
+    <pre># 1. instalar uv, si no está (Linux / macOS)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 2. descomprimir y crear el entorno con las versiones fijadas
+unzip {{ZIP}} &amp;&amp; cd axiones
+uv sync --frozen
+
+# 3. ejecutar las {{N_TOT}} comprobaciones (unos {{MINS}} min)
+uv run python -m axion_ns.run_all
+
+# 4. regenerar esta página y las figuras en results/
+uv run python report/build.py</pre>
+    <p>Cada paso se puede ejecutar por separado, por ejemplo <code>uv run python -m axion_ns.step5_nonradial</code>, e imprime cada comprobación con una nota que da los valores calculados.</p>
+
+    <h3>Salida esperada</h3>
+    <pre>{{N_OK}}/{{N_TOT}} comprobaciones OK en {{SECS}} s
+{{FAILS}}</pre>
+    <p>Los tres FAIL son intencionados: son las cifras del texto del primer paper que no cuadran con el recálculo. Cualquier otro FAIL indica que algo ha cambiado.</p>
+
+    <details class="more">
+    <summary>Detalles técnicos: tiempos, entorno y parámetros numéricos</summary>
+    <div class="stack">
+    <h3>Tiempo por paso</h3>
+    <div class="tablewrap"><table class="steps">
+      <thead><tr><th>#</th><th>Paso</th><th class="mod">Módulo</th><th class="num">OK</th><th class="num">Tiempo</th></tr></thead>
+      <tbody>{{STEPS}}</tbody>
+      <tfoot><tr><td></td><td>Total</td><td class="mod"></td><td class="num">{{N_OK}}/{{N_TOT}}</td><td class="num">{{SECS}} s</td></tr></tfoot>
+    </table></div>
+    <p>Los pasos 7 y 8 son los más lentos. En el 7, comprobar la identidad de Bianchi y la conservación de la ligadura de \(H_0\) obliga a reducir expresiones muy grandes. El 8 integra unos cuantos miles de problemas de valores iniciales, repartidos en seis procesos; es lo único paralelizado. Le sigue el paso 4, que evalúa la ecuación trascendente (4.13) con mpmath en una rejilla de 600 × 250 puntos del plano complejo para dibujar la Fig. 3.</p>
+
+    <h3>Entorno de referencia</h3>
+    <dl class="env">{{ENV}}</dl>
+
+    <h3>Decisiones que afectan a los números</h3>
+    <ul class="knobs">
+      <li><b>Comparación simbólica exacta.</b> Una ecuación «coincide» solo si la diferencia con la del paper, módulo las ecuaciones de fondo, se simplifica a 0 exactamente. No hay evaluación numérica en puntos de prueba ni tolerancias.</li>
+      <li><b>Fuentes.</b> Las ecuaciones se transcribieron del LaTeX de arXiv:2510.16245v2 y arXiv:2610.37308v1, y la numeración se comprobó contra los PDF. Las tablas del Paper II están copiadas en <code>step6_nonradial_numerics.py</code>.</li>
+      <li><b>Constantes.</b> En el primer paper, CODATA a través de <code>scipy.constants</code>. En la secuela, \(GM_\odot/c^2 = 1.4766250614\) km, \(\hbar c\) y \(h\) de CODATA 2018.</li>
+      <li><b>Fig. 3.</b> Raíces de (4.13) con Müller en mpmath (tolerancia \(10^{-20}\)), sembradas desde los mínimos de \(|f|\) en la rejilla; se aceptan si \(|f| &lt; 10^{-8}\).</li>
+      <li><b>Tabla IV.</b> Integración de la Ec. (13) hacia dentro con DOP853 (rtol \(10^{-10}\), atol \(10^{-14}\)), desde \(r = R + 30/q\) con la solución de Whittaker como semilla, y búsqueda del nivel con <code>brentq</code> (xtol \(10^{-13}\)). El interior entra solo como condición en \(R\), acotada entre \(\delta\theta^\prime = 0\) («plano») y \(\delta\theta = 0\) (Dirichlet), con \(R = 10.5\) y 12 km.</li>
+      <li><b>Determinismo.</b> El <code>simplify</code> de sympy no es determinista: depende de la semilla de hash de Python. Con algunas semillas, separar el factor angular en el paso 7 no terminaba nunca. Ahora se hace como cociente exacto de polinomios en \(\cos\theta, \sin\theta\) (<code>nonradial._divide</code>, también en el paso 5), probado con varias semillas.</li>
+      <li><b>Modos (paso 8).</b> Politropos con \(p=K\varepsilon^2\), \(\varepsilon\) la densidad de energía, como en LMI; con la de masa en reposo, Cowling se aparta de Yoshida–Kojima hasta un 4 %. DOP853 (rtol \(10^{-11}\)) desde \(r=10^{-4}R\) con las condiciones de LD hasta \(R(1-10^{-7})\); Zerilli hasta 40 longitudes de onda y amplitud saliente con la corrección \(1/r\). Re \(\omega\): mínimo de \(|A_\mathrm{out}|^2\); Im \(\omega\): curvatura en el mínimo. Cambiar el punto de partida, el corte y la extracción mueve Re \(\omega\) menos de \(10^{-5}\).</li>
+      <li><b>Fondo con axión (paso 8).</b> Politropo \(n=1\) con \(\rho\) de masa en reposo y \(M/R=0.172\) (1.4 \(M_\odot\), 12 km), \(\alpha=19\) en el centro y \(\beta=0.88\); <code>solve_bvp</code> con \(\theta'(0)=0\) y caída de Yukawa en \(R+12/m_a\).</li>
+    </ul>
+
+    </div>
+    </details>
+
+    <h3>Ficheros</h3>
+    <div class="files">
+      <a href="codigo/axion_ns/geometry.py.txt"><code>geometry.py</code></a><span>Christoffel, Ricci, Einstein y divergencia covariante</span>
+      <a href="codigo/axion_ns/model.py.txt"><code>model.py</code></a><span>la acción y la derivación de las ecuaciones de campo, el fondo y la linealización</span>
+      <a href="codigo/axion_ns/paper.py.txt"><code>paper.py</code></a><span>las ecuaciones del primer paper, transcritas</span>
+      <a href="codigo/axion_ns/nonradial.py.txt"><code>nonradial.py</code></a><span>la secuela: linealización no radial en Cowling y sus ecuaciones transcritas</span>
+      <a href="codigo/axion_ns/fullgr.py.txt"><code>fullgr.py</code></a><span>más allá de Cowling: métrica perturbada, las ecuaciones de LD transcritas y el sistema extendido</span>
+      <a href="codigo/axion_ns/fmodes.py.txt"><code>fmodes.py</code></a><span>integración numérica de las ecuaciones derivadas: fondo TOV, centro, superficie y Zerilli</span>
+      <a href="codigo/axion_ns/compare.py.txt"><code>compare.py</code></a><span>la comparación módulo las ecuaciones de fondo</span>
+      <code>step1…10_*.py</code><span>los diez pasos (1–4: primer paper; 5–6: secuela; 7–8: más allá de Cowling; 9: con axión en Cowling; 10: con axión sin Cowling); cada uno devuelve una lista de (nombre, ok, nota): <a href="codigo/axion_ns/step1_background.py.txt">1</a> · <a href="codigo/axion_ns/step2_perturbations.py.txt">2</a> · <a href="codigo/axion_ns/step3_toy_model.py.txt">3</a> · <a href="codigo/axion_ns/step4_numerics.py.txt">4</a> · <a href="codigo/axion_ns/step5_nonradial.py.txt">5</a> · <a href="codigo/axion_ns/step6_nonradial_numerics.py.txt">6</a> · <a href="codigo/axion_ns/step7_fullgr.py.txt">7</a> · <a href="codigo/axion_ns/step8_numerics.py.txt">8</a> · <a href="codigo/axion_ns/step9_axion_cowling.py.txt">9</a> · <a href="codigo/axion_ns/step10_axion_gr.py.txt">10</a></span>
+      <a href="codigo/axion_ns/axgr.py.txt"><code>axgr.py</code></a><span>el sistema extendido convertido a números e integrado con axión: centro, interior, cola del axión, Zerilli y la radiación axiónica, Ec. (13)</span>
+      <a href="codigo/axion_ns/bsk26.py.txt"><code>bsk26.py</code></a><span>la ecuación de estado BSk26 (ajustes analíticos de Potekhin et al.)</span>
+      <a href="codigo/axion_ns/axstar.py.txt"><code>axstar.py</code></a><span>estrella BSk26 con condensado axiónico y sus modos en Cowling con \(\delta\theta\)</span>
+      <a href="codigo/axion_ns/run_all.py.txt"><code>run_all.py</code></a><span>ejecuta los diez pasos y escribe <code>results/checks.json</code></span>
+      <a href="codigo/report/build.py.txt"><code>report/build.py</code></a><span>genera esta página a partir de <code>checks.json</code> y de los datos de las figuras (<code>results/fig_*.json</code>, escritos por <a href="codigo/axion_ns/figdata.py.txt"><code>figdata.py</code></a>)</span>
+      <a href="codigo/report/charts.js.txt"><code>report/charts.js</code></a><span>dibuja las gráficas de la página en SVG a partir de esos datos</span>
+      <a href="codigo/report/anim.js.txt"><code>report/anim.js</code></a><span>las dos animaciones: la anatomía de un modo y la cadena de ecuaciones</span>
+    </div>
+    <p>Para probar una variante, por ejemplo otra forma de una ecuación, basta con editar su transcripción en <code>paper.py</code> o <code>nonradial.py</code> y volver a ejecutar el paso correspondiente.</p>
+  </section>
+
+  <footer id="fuentes">
+    <p>Preparado el 29 y 30 de octubre de 2026 con Claude Code, SymPy 1.14, SciPy y mpmath.</p>
+    <p>Fuentes: <a href="https://arxiv.org/abs/2510.16245">arXiv:2510.16245</a> · <a href="https://arxiv.org/abs/2610.37308">arXiv:2610.37308</a>. Referencias numéricas: <a href="https://arxiv.org/abs/gr-qc/9704046">Lindblom, Mendell e Ipser (1997)</a> · <a href="https://arxiv.org/abs/gr-qc/9705081">Yoshida y Kojima (1997)</a>. Transcripciones de LD: <a href="https://arxiv.org/abs/2204.03037">2204.03037</a> · <a href="https://arxiv.org/abs/2205.02081">2205.02081</a> · <a href="https://arxiv.org/abs/1106.2736">1106.2736</a> · <a href="https://arxiv.org/abs/2601.21911">2601.21911</a>. Ecuación de estado: <a href="https://doi.org/10.1093/mnras/sty2413">Pearson et al. (2018)</a>, con los <a href="http://www.ioffe.ru/astro/NSG/BSk/">ajustes de Potekhin</a>.</p>
+  </footer>
+</main>
+<script type="application/json" id="figdata">{{FIGDATA}}</script>
+<script>
+{{CHARTS_JS}}
+</script>
+<script>
+{{ANIM_JS}}
+</script>

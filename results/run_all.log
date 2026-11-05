@@ -1,0 +1,184 @@
+
+== Paso 1: fondo (TOV + KG)
+  [OK ] Identidad nabla_mu T^mu_r(axion) = (box a + V') d_r a
+  [OK ] Ec. G_tr del fondo estático se anula idénticamente
+  [OK ] Paper (2.6a) p' == derivada de la acción
+  [OK ] Paper (2.6b) Phi' == derivada de la acción
+  [OK ] Paper (2.6c) M' == derivada de la acción
+  [OK ] Paper (2.6d) KG == derivada de la acción
+  [OK ] Límite sin axión reproduce TOV estándar (p' = -(eps+p) Phi')
+  [OK ] p = n d(eps)/dn - eps no depende de a (la Ec. (2.8) del paper es exacta)  -- el paper la presenta como aproximación (≈)
+
+== Paso 2: perturbaciones radiales
+  [OK ] Paper (3.3a) KG == linealización de la acción
+  [OK ] Paper (3.3b) rr == linealización de la acción
+  [OK ] Paper (3.3c) tr == linealización de la acción
+  [OK ] Paper (3.3d) Euler == linealización de la acción
+  [OK ] Paper (3.3e) continuidad == linealización de la acción
+  [OK ] Control negativo: (3.3b) con 8 pi en vez de 4 pi -> se detecta
+  [OK ] Control negativo: (3.3a) con signo cambiado en el término 2 delta lambda -> se detecta
+  [OK ] Control negativo: (3.3e) sin el término delta lambda -> se detecta
+  [OK ] G_tt linealizada es redundante (Bianchi + conservación bariónica)
+  [OK ] Exterior: (3.3a) -> KG en Schwarzschild, Ec. (3.7)
+
+== Paso 3: modelo simplificado (Sec. IV)
+  [OK ] Toy (Ec. 4.2a) se sigue de (3.3d)+(3.3e) con las aproximaciones del paper
+  [OK ] Toy (Ec. 4.2b) se sigue de (3.3a) con las aproximaciones del paper
+  [OK ] Forma adimensional -> matriz M de la Ec. (4.6)  -- fila 1 = combinación de filas
+  [OK ] det(M - k^2) == Ec. (4.7) (salvo factor c_s^2)
+  [OK ] Cuadrática en omegabar^2 == Ec. (4.8)
+  [OK ] Raíces omegabar^2(k) == expresión del paper
+  [OK ] k_+-^2 y Delta (Ec. 4.12) son raíces de det(M - k^2) = 0
+  [OK ] Ajuste interior/exterior con dp(x0)=0 reproduce f(omega) de la Ec. (4.13)  -- sqrt(Delta) = k_+^2 - k_-^2
+  [OK ] Límite lambda->0: f ∝ k_a tan(k_a x0) + i k_out  (Ec. 4.11)
+  [OK ] V'' + n m*'' en theta=0 vale m_a^2 (1 - alpha)  [la aproximación del paper]
+  [OK ] dm*/da = -beta sigma sin(theta)/(4 f_a g): se ANULA en theta = 0 y theta = pi  -- dm*/da = -sqrt(2)*beta*sigma_N*sin(theta)/(4*f_a*sqrt(beta*cos(theta) - beta + 2))
+  [OK ] En theta=pi (fondo del toy si alpha>1): m_eff^2/m_a^2 = (alpha-1)/sqrt(1-beta) > 0  -- el toy usa 1-alpha < 0 (taquiónico), que corresponde a theta=0
+
+== Paso 4: números y figura
+  [OK ] beta = 4z/(1+z)^2 = 0.877 (paper: 0.88)
+  [OK ] Reducción de masa sigma_N [1-g(pi f_a)] = 32.4 MeV (paper: ~32 MeV)
+  [OK ] m_a = 3 kHz <-> 12.4 peV (paper: 12 peV)  -- E = h nu
+  [FAIL] m_a R para 3 kHz y R=12 km = 0.75 (paper: 0.12)  -- el paper usa nu R/c = 0.12; m_a c^2/hbar = 2 pi nu  -> factor 2 pi
+  [FAIL] m_a^2 f_a^2 = eps beta m_pi^2 f_pi^2 / 4 = eps x (4.4-4.8) MeV/fm^3 (paper: eps x 13)  -- m_pi^2 f_pi^2 = 20.1-21.9 MeV/fm^3; el paper siguiente (2610.37308) da eps m_pi^2 f_pi^2 ~ 2 MeV/fm^3 para eps=0.1, coherente con esto
+  [FAIL] lambda^2 con (eps+p)=500 MeV/fm^3, c_s^2=0.3: eps x (0.029-0.032) (paper: eps x 0.02)  -- incluso con el 13 del paper: 13/150 = 0.087; las dos cifras del paper no son coherentes entre sí
+  [OK ] n_c(eps=1) = m_pi^2 f_pi^2/sigma_N = 0.40 fm^-3 = 2.5 n_sat (paper: ~2 n_sat)
+  [OK ] Fig. 3 reproducida: 10 modos fluidos (Im~0) + 5 modos axiónicos  -- axiónicos: 3.56-2.15i, 9.53-3.25i, 15.01-3.89i, 20.39-4.35i, 25.71-4.71i
+  [OK ] Variante theta=pi (m_eff^2 = 25.6 m_a^2, sin acoplo): 10 modos fluidos SIN amortiguar + 6 axiónicos  -- axiónicos: 5.55-0.33i, 8.96-1.70i, 13.68-2.63i, 18.70-3.24i, 23.83-3.69i
+  [OK ] Figura guardada en results/toy_qnm_landscape.png
+
+== Paso 5: Paper II, perturbaciones no radiales (simbólico)
+  [OK ] Paper II (8a) momento radial == linealización de la acción (Cowling)
+  [OK ] Paper II (8b) bariones == linealización de la acción (Cowling)
+  [OK ] Paper II (8c) momento angular == linealización de la acción (Cowling)
+  [OK ] Paper II (8d) KG interior == linealización de la acción (Cowling)
+  [OK ] Control negativo: (8a) sin el término l/r en (dtheta' + l dtheta/r) -> se detecta
+  [OK ] Control negativo: (8b) sin Phi' en el lado izquierdo -> se detecta
+  [OK ] Control negativo: (8d) con 2l/r en vez de 2(l+1)/r -> se detecta
+  [OK ] Exterior: (8d) con n_b=0 y dtheta=(R/r)^l dtheta_ext es la Ec. (13)
+  [OK ] Ec. (15): dtheta'/dtheta = L_ext - l/R
+  [OK ] Ec. (10b): el orden 1/r de (8d) impone dtheta'(0) = 0
+  [OK ] Ec. (10a): delta p(0) del orden 1/r de (8a)
+  [OK ] El orden 1/r de (8b) es compatible con (10a) (misma condición)
+  [OK ] Ecs. (16a,b): delta p'(0) = 0 y [(eps+p)W]'(0) = 0
+  [OK ] Ec. (16c): dtheta''(0)
+  [OK ] Ec. (17): delta p(0) = c_s^2 (eps+p) delta n_b(0)/n_b es exacta con p = p(n)
+  [OK ] Ecs. (A2)-(A4): Liouville elimina la derivada primera y da el potencial U
+  [OK ] Ec. (A6): Psi = Q^{-1/2} e^{iw} resuelve (A3) si Q cumple la ecuación de Milne
+  [OK ] Ecs. (A7) y (A18): derivadas logarítmicas L+- y su inversión para (Q, Q')
+  [OK ] Ec. (A10): L_ext a partir de L+
+  [OK ] Ec. (A13): U desarrollado hasta O(1/r~^2)
+  [OK ] Ec. (A14): z = -2ik~r~, kappa, mu reducen (A13) a la ecuación de Whittaker
+  [OK ] Ecs. (21)-(22): psi = r dtheta_ext en coordenada tortuga y potencial Delta V
+  [OK ] Ec. (23): k~_n^2 = -alpha^2/n^2 para el problema de Coulomb (n = l+1, l+2)
+  [OK ] Ec. (B4): sqrt(-g) T^r_t del axión
+  [OK ] Ec. (B6): luminosidad promediada <L> = f_a^2/2 r^2 e^{Phi-lambda} Re w Im L_ext |dtheta_ext|^2
+  [OK ] Ec. (B7b): energía del modo axiónico
+  [OK ] Ec. (B7a): energía del modo fluido (término cuadrático de T^t_t)
+
+== Paso 6: Paper II, números y niveles ligados
+  [OK ] lambda_a = hbar/(m_a c) = 19.7 km para m_a = 1e-11 eV (paper: ~20 km)
+  [OK ] nu_a = m_a/2pi = 2.42 kHz para m_a = 1e-11 eV (paper: ~2.4 kHz)
+  [OK ] Tabla I: desplazamientos f, p1, p2 a 15 kHz = 18.1%, 14.5%, 19.0% (texto: 18%, 15%, 19%; resumen: hasta ~20%)
+  [OK ] Texto vs tablas: f 2.43->2.87->2.50, p1 7.15->8.19->7.96, p2 10.18->12.11->12.00, máximo de f = 2.56 kHz en 5-6 kHz  -- el acoplo dinámico compensa el 84% del desplazamiento de f ("almost entirely")
+  [OK ] Tabla II: Im nu != 0 exactamente cuando Re nu > nu_a (36 entradas)
+  [OK ] tau_a mínimo = 1/(2 pi x 13 Hz) = 12 ms (texto: ~10 ms)
+  [OK ] Tabla III: el asterisco marca exactamente Re nu < nu_a; Fig. 4 = fila de 4 kHz (10.2-3.8i, 22.4-5.7i)
+  [OK ] Tabla IV: alpha = G M m_a reproduce la columna alpha (máx. dif. 0.0005)
+  [OK ] Tabla IV: nu_n coherente con la columna -k~^2 n^2/alpha^2 (máx. dif. 0.005 kHz)
+  [OK ] Tabla IV reproducida desde el exterior de Schwarzschild: para nu_a <= 10 kHz, máx. dif. 5 Hz (precisión de la tabla: 10 Hz)  -- independiente del interior (plano/Dirichlet, R = 10.5-12 km)
+  [OK ] Tabla IV, nu_a = 11-15 kHz: valores del paper dentro de la banda debida al interior  -- la banda crece con m_a R: 56 Hz a 15 kHz; todas dentro
+  [OK ] Cruces evitados: nivel n=3 a 12.19 kHz = 11.93-11.94 kHz y n=4 a 12.06 kHz = 11.92-11.92 kHz, frente a p2 = 11.93 kHz
+  [OK ] Figura guardada en results/paper2_atom_levels.png
+
+== Paso 7: Estructura y límites
+  [OK ] Parte sin traza de las ecuaciones angulares: H2 = H0, sin contribución del axión  -- -(H0(r) - H2(r))/2
+  [OK ] Métrica congelada (H0 = H1 = K = 0): las cuatro ecuaciones de materia son las de Cowling (paso 5)
+  [OK ] Bianchi: G_tt linealizada es redundante (con axión)
+  [OK ] Bianchi: la traza angular linealizada es redundante (con axión)
+  [OK ] La ligadura algebraica de H0 se conserva al integrar (su derivada se anula con el sistema)
+
+== Paso 7: Lindblom-Detweiler
+  [OK ] Sin axión: H1', K', W', H0 y V de Lindblom-Detweiler (Zhao y Lattimer, arXiv:2204.03037)  -- coinciden: ["H1'", "K'", "W'", 'H0', 'V']
+  [OK ] X' de Zhao y Lattimer: no coincide tal cual; con -2 w^2 en el término de W, sí (errata de signo)
+  [OK ] Burgio et al. (arXiv:1106.2736): W' coincide; H1', K', X', H0 y V fallan tal cual y coinciden con una corrección mínima cada una  -- H1': falta el factor H_1 en el primer término; K': signo de psi'/2 en el coeficiente de K; X': falta H_0 y el signo de psi'/2 es el contrario: (1/r - psi'/2) H_0; H0: signo del último término de K; V: r^{(psi-lambda)/2} donde va e^{(psi-lambda)/2}
+  [OK ] Kunjipurayil et al. (arXiv:2205.02081, coautor T. Zhao): las seis coinciden, X' con -2 w^2  -- coinciden: ["H1'", "K'", "W'", "X'", 'H0', 'V']
+  [OK ] Zhang et al. (arXiv:2601.21911): H1', K', W', X' y H0 coinciden, escritas ya con las cinco correcciones de Burgio et al.; en V pone w^3 donde va w^2
+  [OK ] Control negativo: 16 pi -> 8 pi en H1' de LD se detecta
+
+== Paso 7: Exterior
+  [OK ] Exterior sin axión: Z = r^{l+2}(K - e^psi H1)/(nr+3M) cumple la ecuación de Zerilli
+  [OK ] Exterior con axión (theta_0 = 0): delta theta no ve la métrica y cumple la Ec. (13) del Paper II
+
+== Paso 7: Centro
+  [OK ] Centro: H0(0) = K(0), H1(0) = [2l K(0) + 16 pi G (eps+p) W(0)]/[l(l+1)] y V(0) = -W(0)/l, como en LD, sin corrección axiónica
+  [OK ] Centro: X(0) = X_LD(0) + e^{Phi_c}[n dm*/dtheta Delta theta(0) - (8 pi G/3)(eps+p) V(theta_c) W(0)]  -- Delta theta(0) = delta theta(0) + theta_0''(0) W(0)
+  [OK ] Centro: delta theta''(0) = Ec. (16c) del Paper II - 3 K(0) theta_0''(0)/(2l+3)
+
+== Paso 7: Sistema extendido
+  [OK ] Sistema extendido, H1': se sigue de la acción
+  [OK ] Sistema extendido, K': se sigue de la acción
+  [OK ] Sistema extendido, W' (sin cambios): se sigue de la acción
+  [OK ] Sistema extendido, X': se sigue de la acción
+  [OK ] Sistema extendido, relación algebraica de H0: se sigue de la acción
+  [OK ] Sistema extendido, relación algebraica de V: se sigue de la acción
+  [OK ] Sistema extendido, Klein-Gordon: Ec. (8d) + términos métricos: se sigue de la acción
+  [OK ] Todos los términos nuevos se anulan sin axión
+  [OK ] Control negativo: quitar el flujo 8 pi G r f_a^2 theta_0' delta theta de K' se detecta
+<lambdifygenerated-1>:2: RuntimeWarning: divide by zero encountered in scalar divide
+  return array([[-(bP1*bn*omega**2*r**2 - bP1*omega**2*r**2 + bn*l*omega**2*r + bn*omega**2*r - 2*bn1*l**2*exp(2*bP) - 2*bn1*l*exp(2*bP) - 2*bn1*omega**2*r**2 - l*omega**2*r - omega**2*r)/(omega**2*r**2*(bn - 1)), -1/2*(bn - 1)**2*(2*bn*l**2*exp(2*bP) + 2*bn*l*exp(2*bP) + bn*omega**2*r**2 - omega**2*r**2)*exp(bL)*exp(-bP)/(bn**2*omega**2*r)], [-(2*bL1*bn**2*bn1*omega**2*r**2*exp(2*bP) - 2*bL1*bn*bn1*omega**2*r**2*exp(2*bP) + bP1*bn**2*bn1*omega**2*r**2*exp(2*bP) - 2*bP1*bn*bn1*omega**2*r**2*exp(2*bP) + bP1*bn1*omega**2*r**2*exp(2*bP) + bn**3*omega**4*r**2*exp(2*bL) + 4*bn**2*bn1*omega**2*r*exp(2*bP) - 2*bn**2*bn2*omega**2*r**2*exp(2*bP) - 2*bn**2*omega**4*r**2*exp(2*bL) - 4*bn*bn1**2*l**2*exp(4*bP) - 4*bn*bn1**2*l*exp(4*bP) - 4*bn*bn1*omega**2*r*exp(2*bP) + 2*bn*bn2*omega**2*r**2*exp(2*bP) + bn*omega**4*r**2*exp(2*bL) + 2*bn1**2*omega**2*r**2*exp(2*bP))*exp(-bL)*exp(-bP)/(omega**2*r**3*(bn - 1)**4), (1/2)*(bP1*bn**2*omega**2*r**2 - 2*bP1*bn*omega**2*r**2 + bP1*omega**2*r**2 - 2*bn**2*l*omega**2*r - 4*bn*bn1*l**2*exp(2*bP) - 4*bn*bn1*l*exp(2*bP) - 2*bn*bn1*omega**2*r**2 + 2*bn*l*omega**2*r + 2*bn1*omega**2*r**2)/(bn*omega**2*r**2*(bn - 1))]])
+/home/bergo/Workspace/workshop_fisica/.venv/lib/python3.14/site-packages/scipy/integrate/_ivp/rk.py:684: RuntimeWarning: invalid value encountered in dot
+  err5 = np.dot(K.T, self.E5) / scale
+/home/bergo/Workspace/workshop_fisica/.venv/lib/python3.14/site-packages/scipy/integrate/_ivp/rk.py:685: RuntimeWarning: invalid value encountered in dot
+  err3 = np.dot(K.T, self.E3) / scale
+<lambdifygenerated-1>:2: RuntimeWarning: divide by zero encountered in scalar divide
+  return array([[-(bP1*bn*omega**2*r**2 - bP1*omega**2*r**2 + bn*l*omega**2*r + bn*omega**2*r - 2*bn1*l**2*exp(2*bP) - 2*bn1*l*exp(2*bP) - 2*bn1*omega**2*r**2 - l*omega**2*r - omega**2*r)/(omega**2*r**2*(bn - 1)), -1/2*(bn - 1)**2*(2*bn*l**2*exp(2*bP) + 2*bn*l*exp(2*bP) + bn*omega**2*r**2 - omega**2*r**2)*exp(bL)*exp(-bP)/(bn**2*omega**2*r)], [-(2*bL1*bn**2*bn1*omega**2*r**2*exp(2*bP) - 2*bL1*bn*bn1*omega**2*r**2*exp(2*bP) + bP1*bn**2*bn1*omega**2*r**2*exp(2*bP) - 2*bP1*bn*bn1*omega**2*r**2*exp(2*bP) + bP1*bn1*omega**2*r**2*exp(2*bP) + bn**3*omega**4*r**2*exp(2*bL) + 4*bn**2*bn1*omega**2*r*exp(2*bP) - 2*bn**2*bn2*omega**2*r**2*exp(2*bP) - 2*bn**2*omega**4*r**2*exp(2*bL) - 4*bn*bn1**2*l**2*exp(4*bP) - 4*bn*bn1**2*l*exp(4*bP) - 4*bn*bn1*omega**2*r*exp(2*bP) + 2*bn*bn2*omega**2*r**2*exp(2*bP) + bn*omega**4*r**2*exp(2*bL) + 2*bn1**2*omega**2*r**2*exp(2*bP))*exp(-bL)*exp(-bP)/(omega**2*r**3*(bn - 1)**4), (1/2)*(bP1*bn**2*omega**2*r**2 - 2*bP1*bn*omega**2*r**2 + bP1*omega**2*r**2 - 2*bn**2*l*omega**2*r - 4*bn*bn1*l**2*exp(2*bP) - 4*bn*bn1*l*exp(2*bP) - 2*bn*bn1*omega**2*r**2 + 2*bn*l*omega**2*r + 2*bn1*omega**2*r**2)/(bn*omega**2*r**2*(bn - 1))]])
+/home/bergo/Workspace/workshop_fisica/.venv/lib/python3.14/site-packages/scipy/integrate/_ivp/rk.py:684: RuntimeWarning: invalid value encountered in dot
+  err5 = np.dot(K.T, self.E5) / scale
+/home/bergo/Workspace/workshop_fisica/.venv/lib/python3.14/site-packages/scipy/integrate/_ivp/rk.py:685: RuntimeWarning: invalid value encountered in dot
+  err3 = np.dot(K.T, self.E3) / scale
+<lambdifygenerated-1>:2: RuntimeWarning: divide by zero encountered in scalar divide
+  return array([[-(bP1*bn*omega**2*r**2 - bP1*omega**2*r**2 + bn*l*omega**2*r + bn*omega**2*r - 2*bn1*l**2*exp(2*bP) - 2*bn1*l*exp(2*bP) - 2*bn1*omega**2*r**2 - l*omega**2*r - omega**2*r)/(omega**2*r**2*(bn - 1)), -1/2*(bn - 1)**2*(2*bn*l**2*exp(2*bP) + 2*bn*l*exp(2*bP) + bn*omega**2*r**2 - omega**2*r**2)*exp(bL)*exp(-bP)/(bn**2*omega**2*r)], [-(2*bL1*bn**2*bn1*omega**2*r**2*exp(2*bP) - 2*bL1*bn*bn1*omega**2*r**2*exp(2*bP) + bP1*bn**2*bn1*omega**2*r**2*exp(2*bP) - 2*bP1*bn*bn1*omega**2*r**2*exp(2*bP) + bP1*bn1*omega**2*r**2*exp(2*bP) + bn**3*omega**4*r**2*exp(2*bL) + 4*bn**2*bn1*omega**2*r*exp(2*bP) - 2*bn**2*bn2*omega**2*r**2*exp(2*bP) - 2*bn**2*omega**4*r**2*exp(2*bL) - 4*bn*bn1**2*l**2*exp(4*bP) - 4*bn*bn1**2*l*exp(4*bP) - 4*bn*bn1*omega**2*r*exp(2*bP) + 2*bn*bn2*omega**2*r**2*exp(2*bP) + bn*omega**4*r**2*exp(2*bL) + 2*bn1**2*omega**2*r**2*exp(2*bP))*exp(-bL)*exp(-bP)/(omega**2*r**3*(bn - 1)**4), (1/2)*(bP1*bn**2*omega**2*r**2 - 2*bP1*bn*omega**2*r**2 + bP1*omega**2*r**2 - 2*bn**2*l*omega**2*r - 4*bn*bn1*l**2*exp(2*bP) - 4*bn*bn1*l*exp(2*bP) - 2*bn*bn1*omega**2*r**2 + 2*bn*l*omega**2*r + 2*bn1*omega**2*r**2)/(bn*omega**2*r**2*(bn - 1))]])
+/home/bergo/Workspace/workshop_fisica/.venv/lib/python3.14/site-packages/scipy/integrate/_ivp/rk.py:684: RuntimeWarning: invalid value encountered in dot
+  err5 = np.dot(K.T, self.E5) / scale
+/home/bergo/Workspace/workshop_fisica/.venv/lib/python3.14/site-packages/scipy/integrate/_ivp/rk.py:685: RuntimeWarning: invalid value encountered in dot
+  err3 = np.dot(K.T, self.E3) / scale
+
+== Paso 8: frecuencias de un politropo (sin axión) frente a la literatura
+  [OK ] Fondo: el modelo de 1.4 M_sun con kappa = 1.3346e5 cgs tiene R = 14.449 km (LMI: 14.45 km)
+  [OK ] Cowling, Ecs. (8a)-(8c) del paso 5: los 24 modos f, p1, p2 (l = 2-5, M/R = 0.1 y 0.2) de Yoshida y Kojima (1997): 23 dentro de media unidad de su última cifra, máx. dif. 0.0057  -- p2 l=4 M/R=0.1: 6.0157 vs 6.01
+  [OK ] Métrica dinámica, sistema extendido sin axión: Re w de los modos f l = 2-5 igual a las 5 cifras de Lindblom, Mendell e Ipser (1997) (máx. dif. 0.00002)
+  [OK ] Im w (emisión de ondas gravitacionales) dentro del 2 % de LMI (máx. 0.4 %)
+  [OK ] Métrica dinámica: los 24 modos "exactos" de Yoshida y Kojima dentro del 0.5 % (a 3 cifras; LMI, a 5, coincide entero)
+  [OK ] Convergencia: otro punto de partida, corte en la superficie y extracción mueven Re w en 2e-06
+  [OK ] Errata de signo de Zhao y Lattimer: con su X' tal como está impreso, el modo f l = 2 sale en 0.8328 en vez de 1.2016 (-31 %)
+
+== Paso 8: fondo con axión
+  [OK ] Fondo con axión (politropo + KG, m_a R = 1.26): converge, theta_0 = 3.10 en el centro y 3e-06 fuera
+  [OK ] Fondo con axión (politropo + KG, m_a R = 3.77): converge, theta_0 = 3.14 en el centro y 5e-06 fuera
+
+== Paso 9: notas con axión en Cowling (Tablas I, II y IV del Paper II)
+  [OK ] Fondo BSk26 sin axión, p_c = 100 MeV/fm^3: M = 1.536 M_sun, R = 11.72 km (Paper I: 1.53 M_sun, 11.7 km)
+  [OK ] Cowling sin axión: f, p1, p2 = 2.429, 7.171, 10.194 kHz (Paper II: 2.43, 7.15, 10.18); máx. dif. 0.29 %  -- ajuste analítico de BSk26 frente a la tabla del grupo; el paper da un 0.3 % de acuerdo con otros cálculos
+  [OK ] Umbral del condensado: no hay a 2.5 kHz y sí a 2.8 kHz (Paper I: desaparece por debajo de ~2.8 kHz)
+  [OK ] Tabla IV: masas de las estrellas con axión (6 valores, 8-15 kHz) dentro del 0.5 % (máx. 0.35 %)
+  [OK ] Tabla I (solo fondo): los 24 desplazamientos nu/nu_0 - 1 coinciden con el paper dentro de 0.6 puntos (máx. 0.55)  -- nu_0: la nota sin axión de cada cálculo
+  [OK ] Tabla II (acoplado), parte real: los 36 desplazamientos dentro de 0.6 puntos (máx. 0.53; modo f, 0.33)
+  [OK ] Tabla II: los modos amortiguados son los mismos (Im nu = 0 por debajo de nu_a) salvo 1 justo en el umbral  -- p1 a 8.0 kHz: Re nu a menos del 0.3 % de nu_a
+  [OK ] Tabla II, amortiguamiento: los 11 |Im nu| >= 1 Hz del paper, dentro de un factor 2 (cociente 0.59-1.57); tau_a mínimo = 12.4 ms (paper: 12 ms)  -- el amortiguamiento depende de delta theta(R), muy sensible al fondo (Fig. 6 del paper)
+
+== Paso 10: con axión y métrica dinámica (etapa B, sin publicar)
+  [OK ] Conversión de fullgr.EXT a números: con el axión apagado, igual que la del paso 8 (máx. dif. relativa 9e-16)
+  [OK ] Sustituciones del axión: 8/8 cantidades del Paper II (n dm*/dtheta, m_eff^2, eps(n, theta), c_s^2...)
+  [OK ] Todo el programa, sin axión, con el politropo de LMI: Re w = 1.20162 (LMI: 1.2016), Im w = 3.944e-04 (LMI: 3.95e-4)
+  [OK ] Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 3e-07 e Im nu en 0.3 %
+  [OK ] Sin axión, la métrica dinámica baja las notas de Cowling: f, p1, p2 = 1.961, 6.594, 9.872 kHz frente a 2.429, 7.171, 10.194 (-19 %, -8 %, -3 %); f amortiguado por ondas gravitacionales en 0.174 s
+  [OK ] Las 36 notas acopladas (f, p1, p2 para 12 masas del axión) encontradas y amortiguadas
+  [OK ] Umbral: los modos p solo radian axiones por encima de nu_a (|Im nu| > 0.05 Hz si Re nu > nu_a; por debajo, solo ondas gravitacionales, < 0.05 Hz)
+  [OK ] Con la métrica dinámica, el axión sube el modo f hasta un 7.7 % (Cowling, paso 9: 5.4 %) y su amortiguamiento por ondas gravitacionales pasa de 0.17 a 0.13 s  -- resultado nuevo
+  [OK ] Amortiguamiento máximo por axiones: p2 a 5 kHz, 12.8 Hz (tau_a = 12.4 ms), como en Cowling; la suma 1/tau_GW + 1/tau_a con el tau_a de Cowling solo acierta en orden de magnitud (p2 a 8 kHz: 0.10 Hz frente a 1.0)  -- resultado nuevo
+
+128/131 comprobaciones OK en 4163 s
+  FAIL: m_a R para 3 kHz y R=12 km = 0.75 (paper: 0.12)
+  FAIL: m_a^2 f_a^2 = eps beta m_pi^2 f_pi^2 / 4 = eps x (4.4-4.8) MeV/fm^3 (paper: eps x 13)
+  FAIL: lambda^2 con (eps+p)=500 MeV/fm^3, c_s^2=0.3: eps x (0.029-0.032) (paper: eps x 0.02)
