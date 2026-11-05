@@ -1,17 +1,10 @@
-"""Genera results/informe_axiones.html a partir de results/checks.json y la figura."""
-import base64
+"""Genera results/informe_axiones.html a partir de results/checks.json y las figuras."""
 import html
 import json
-import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RES = ROOT / 'results'
-ZIP = 'axion_ns_codigo.zip'
-BUNDLE = 'axiones_codigo.py.txt'  # los artifacts no sirven .zip: un script que recrea la carpeta, como texto
-# Lo que necesita alguien para reproducirlo desde cero (results/ se regenera).
-SOURCES = ['README.md', 'pyproject.toml', 'uv.lock', '.python-version', 'axion_ns/*.py', 'report/build.py', 'report/charts.js', 'report/anim.js',
-           'report/template.html']
 
 # Etiquetas legibles (LaTeX) en el mismo orden que las comprobaciones de cada paso.
 # 'obs' marca comprobaciones que pasan pero señalan algo a comentar con los autores.
@@ -180,30 +173,6 @@ def rows():
     return '\n'.join(out), n_ok, n_tot, data, per_step
 
 
-def code_files():
-    return sorted({f for pat in SOURCES for f in ROOT.glob(pat)})
-
-
-def code_zip(files):
-    with zipfile.ZipFile(RES / ZIP, 'w', zipfile.ZIP_DEFLATED) as z:
-        for f in files:
-            z.write(f, Path('axiones') / f.relative_to(ROOT))
-
-
-def code_bundle(files):
-    body = ',\n'.join(f'    {str(f.relative_to(ROOT))!r}: {f.read_text()!r}' for f in files)
-    (RES / BUNDLE).write_text(
-        '"""Recrea el código de la página «Condensados axiónicos rederivados» en ./axiones/.\n\n'
-        f'Uso: python3 {BUNDLE}\n"""\n'
-        'from pathlib import Path\n\nFILES = {\n' + body + ',\n}\n\n'
-        "for name, text in FILES.items():\n"
-        "    path = Path('axiones') / name\n"
-        "    path.parent.mkdir(parents=True, exist_ok=True)\n"
-        "    path.write_text(text)\n"
-        "print(f'{len(FILES)} ficheros escritos en axiones/')\n")
-    return (RES / BUNDLE).stat().st_size
-
-
 def repro(data, per_step):
     steps = ''.join(
         f'<tr><td>{i}</td><td>{html.escape(s["step"])}</td><td class="mod"><code>{s["module"]}</code></td>'
@@ -220,10 +189,6 @@ def repro(data, per_step):
 def main():
     tpl = (Path(__file__).parent / 'template.html').read_text()
     table, n_ok, n_tot, data, per_step = rows()
-    files = code_files()
-    code_zip(files)
-    code_bundle(files)
-    nfiles, zsize = len(files), (RES / ZIP).stat().st_size
     steps, env = repro(data, per_step)
     fails = '\n'.join('  FAIL: ' + html.escape(c['name']) for s in data['steps'] for c in s['checks'] if not c['ok'])
     ok1, tot1 = (sum(x[i] for x in per_step[0:4]) for i in (0, 1))
@@ -246,13 +211,11 @@ def main():
             .replace('{{N_OK6}}', str(ok6)).replace('{{N_TOT6}}', str(tot6))
             .replace('{{FIGDATA}}', figdata).replace('{{CHARTS_JS}}', charts_js).replace('{{ANIM_JS}}', anim_js)
             .replace('{{SECS}}', str(data['seconds'])).replace('{{MINS}}', str(round(data['seconds'] / 60))).replace('{{STEPS}}', steps).replace('{{ENV}}', env)
-            .replace('{{FAILS}}', fails).replace('{{BUNDLE}}', BUNDLE).replace('{{ZIP}}', ZIP)
-            .replace('{{ZIP_B64}}', base64.b64encode((RES / ZIP).read_bytes()).decode()).replace('{{ZIP_KB}}', f'{zsize / 1e3:.0f}')
-            .replace('{{ZIP_N}}', str(nfiles)))
+            .replace('{{FAILS}}', fails))
     assert '{{' not in page
     out = RES / 'informe_axiones.html'
     out.write_text(page)
-    print(out, f'{len(page) / 1e3:.0f} kB', f'{n_ok}/{n_tot}', f'{ZIP}: {nfiles} ficheros, {zsize / 1e3:.0f} kB')
+    print(out, f'{len(page) / 1e3:.0f} kB', f'{n_ok}/{n_tot}')
 
 
 if __name__ == '__main__':

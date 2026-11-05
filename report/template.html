@@ -299,7 +299,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
       <li><h3>Con axión, en Cowling</h3><p class="refs">Paso 9. Una estrella realista (BSk26) con su condensado de axiones, y sus modos con la perturbación del axión: las Tablas I, II y IV de la secuela salen dentro del 0.5 % ({{N_OK5}}/{{N_TOT5}}). Es la base de la última etapa.</p></li>
       <li><h3>Con axión, sin Cowling</h3><p class="refs">Paso 10. Las ecuaciones de la etapa 3, integradas con el axión encendido sobre esa estrella: el resultado que la secuela deja abierto ({{N_OK6}}/{{N_TOT6}}). Sin referencia publicada; el programa se comprueba con el caso sin axión.</p></li>
     </ol>
-    <p class="muted">Todo se reproduce con un comando en unos {{MINS}} minutos; el código se descarga al <a href="#reproducirlo">final de la página</a>.</p>
+    <p class="muted">Todo se reproduce con un comando en unos {{MINS}} minutos; el código está en <a href="#reproducirlo">GitHub</a>.</p>
   </section>
 
   <section class="stack wide" id="cadena">
@@ -308,9 +308,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
       <div class="rail">
         <button type="button"><span>1</span>Acción</button><button type="button"><span>2</span>Fondo</button><button type="button"><span>3</span>Cowling</button>
         <button type="button"><span>4</span>Métrica</button><button type="button"><span>5</span>Axión + LD</button><button type="button"><span>6</span>Modos</button>
-        <button type="button" class="btn" data-chain-play style="margin-left:auto;border-radius:999px;padding:0.3rem 0.75rem">Pausa</button>
       </div>
-      <div class="stage-canvas"><canvas class="chain-cv" role="img" aria-label="Visualización animada estilo 3Blue1Brown de cada paso de la derivación"></canvas></div>
       <div class="steps">
         <article class="step"><p class="tag">Punto de partida · Paper I, Sec. II</p><h3>Una acción para gravedad, axión y fluido</h3>
           \[ S = \int d^4x\,\sqrt{-g}\,\Big[-\frac{R}{16\pi G} + \tfrac12 g^{\mu\nu}\partial_\mu a\,\partial_\nu a - V(a) - \varepsilon(n,a)\Big],\qquad \varepsilon(n,a) = \varepsilon_0(n) + n\big[m^*(a)-m_N\big] \]
@@ -341,7 +339,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
     <div class="why">
       <article class="ob">
         <header><span class="weight w-ok">Rehace</span><h3>El álgebra pesada, en días</h3></header>
-        <p>Linealizar, eliminar las derivadas del fondo con las ecuaciones de equilibrio, desarrollar en el origen, casar interior y exterior: lo que a mano suele llevar semanas se ha hecho en dos días. El primero, los dos papers: 49 ecuaciones numeradas, de las ecuaciones de campo a los apéndices. El segundo, el paso nuevo más allá de Cowling y su comprobación numérica.</p>
+        <p>Linealizar, eliminar las derivadas del fondo con las ecuaciones de equilibrio, desarrollar en el origen, casar interior y exterior: lo que a mano suele llevar semanas se ha hecho en unos pocos días. Primero, los dos papers: 49 ecuaciones numeradas, de las ecuaciones de campo a los apéndices. Después, el sistema extendido más allá de Cowling con su comprobación numérica sin axión, y por último la estrella realista BSk26 con axión en Cowling y con métrica dinámica.</p>
       </article>
       <article class="ob">
         <header><span class="weight w-ok">Se comprueba</span><h3>No hay que fiarse de la IA</h3></header>
@@ -614,8 +612,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
         <p>En Burgio et al. (arXiv:1106.2736, apéndice A) solo coincide \(W'\). A \(H_1'\) le falta el factor \(H_1\); en \(K'\) y en \(X'\) el signo de \(\psi'/2\) está cambiado, y a \(X'\) además le falta \(H_0\); el último término de \(K\) en la relación de \(H_0\) tiene el signo cambiado; y en \(V\) pone \(r^{(\psi-\lambda)/2}\) donde va \(e^{(\psi-\lambda)/2}\). Zhang et al. (arXiv:2601.21911) usan la misma forma y escriben ya las cinco corregidas, con una errata propia: \(\omega^3\) en vez de \(\omega^2\) en \(V\). Son las versiones de arXiv; las publicadas pueden estar corregidas.</p>
       </article>
       <article class="ob">
-        <header><span class="weight w-minor">Pendiente</span><h3>Lo que falta para tener frecuencias</h3></header>
-        <p>Sin axión, el integrador ya funciona: reproduce las frecuencias de referencia. La estrella de fondo con BSk26 y el axión ya está (cuarta parte). Para obtener los modos con axión faltan añadir al integrador las dos ecuaciones de \(\delta\theta\) e igualar fuera con Zerilli (ondas gravitacionales) y con la Ec. (13) (radiación de axiones) a la vez. Se ha supuesto, como en la secuela, que fuera de la estrella el axión está en \(\theta=0\); la figura de abajo muestra que la cola de \(\theta_0\) se extiende fuera, y si fuera relevante el exterior tendría acoplo.</p>
+        <header><span class="weight w-ok">Integración</span><h3>Del sistema extendido a los modos con axión</h3></header>
+        <p>Con el integrador ya validado sin axión frente a las referencias clásicas, las dos partes siguientes encienden el campo axiónico sobre la estrella realista BSk26: primero en la aproximación de Cowling (<a href="#conaxion">cuarta parte</a>, contrastando el fondo y el acoplo con las Tablas I, II y IV de la secuela) y después integrando el sistema extendido completo con Zerilli y la Ec. (13) a la vez (<a href="#etapaB">quinta parte</a>). Como la figura de abajo muestra que la cola de \(\theta_0\) se extiende fuera de la superficie, en la quinta parte se integra el sistema acoplado a lo largo de la cola antes de separar las ondas gravitacional y axiónica.</p>
       </article>
     </div>
   </section>
@@ -693,32 +691,17 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
 
   <section class="stack repro" id="reproducirlo">
     <h2>Reproducirlo</h2>
-    <p>El código completo va en un zip junto con <code>pyproject.toml</code> y <code>uv.lock</code>, que fijan las versiones exactas de todas las dependencias. Los ficheros también se pueden leer uno a uno en la lista de abajo. No hace falta Mathematica ni instalar nada a mano: <a href="https://docs.astral.sh/uv/">uv</a> descarga Python y las librerías en un entorno aislado.</p>
+    <p>El código completo está en GitHub junto con <code>pyproject.toml</code> y <code>uv.lock</code>, que fijan las versiones exactas de todas las dependencias. Los módulos también se pueden consultar uno a uno en la lista de abajo. No hace falta Mathematica ni instalar nada a mano: <a href="https://docs.astral.sh/uv/">uv</a> descarga Python y las librerías en un entorno aislado.</p>
     <div class="dl">
-      <button type="button" class="download" id="dlzip" hidden>Descargar el código <span>{{ZIP}} · {{ZIP_N}} ficheros · {{ZIP_KB}} kB</span></button>
-      <p class="dlalt">Si la descarga no está disponible en este navegador, el mismo código está en <a href="{{BUNDLE}}">{{BUNDLE}}</a>: un script de Python que, guardado y ejecutado con <code>python3 {{BUNDLE}}</code>, recrea la carpeta <code>axiones/</code>.</p>
+      <a class="download" href="https://github.com/Blitzman/workshop_fisica" target="_blank" rel="noopener">Repositorio en GitHub <span>github.com/Blitzman/workshop_fisica</span></a>
     </div>
-    <script type="application/octet-stream;base64" id="zipdata">{{ZIP_B64}}</script>
-    <script>
-    (async () => {
-      const btn = document.getElementById('dlzip');
-      const downloads = await window.claude?.use?.('downloads');
-      if (!downloads) return;
-      btn.hidden = false;
-      btn.addEventListener('click', async () => {
-        const b64 = document.getElementById('zipdata').textContent.trim();
-        const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-        try { await downloads.save({ filename: '{{ZIP}}', data: bytes }); } catch (e) { /* rechazada por el usuario o no disponible */ }
-      });
-    })();
-    </script>
 
     <h3>Pasos</h3>
     <pre># 1. instalar uv, si no está (Linux / macOS)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# 2. descomprimir y crear el entorno con las versiones fijadas
-unzip {{ZIP}} &amp;&amp; cd axiones
+# 2. clonar el repositorio y crear el entorno con las versiones fijadas
+git clone https://github.com/Blitzman/workshop_fisica.git &amp;&amp; cd workshop_fisica
 uv sync --frozen
 
 # 3. ejecutar las {{N_TOT}} comprobaciones (unos {{MINS}} min)
@@ -764,27 +747,27 @@ uv run python report/build.py</pre>
 
     <h3>Ficheros</h3>
     <div class="files">
-      <a href="codigo/axion_ns/geometry.py.txt"><code>geometry.py</code></a><span>Christoffel, Ricci, Einstein y divergencia covariante</span>
-      <a href="codigo/axion_ns/model.py.txt"><code>model.py</code></a><span>la acción y la derivación de las ecuaciones de campo, el fondo y la linealización</span>
-      <a href="codigo/axion_ns/paper.py.txt"><code>paper.py</code></a><span>las ecuaciones del primer paper, transcritas</span>
-      <a href="codigo/axion_ns/nonradial.py.txt"><code>nonradial.py</code></a><span>la secuela: linealización no radial en Cowling y sus ecuaciones transcritas</span>
-      <a href="codigo/axion_ns/fullgr.py.txt"><code>fullgr.py</code></a><span>más allá de Cowling: métrica perturbada, las ecuaciones de LD transcritas y el sistema extendido</span>
-      <a href="codigo/axion_ns/fmodes.py.txt"><code>fmodes.py</code></a><span>integración numérica de las ecuaciones derivadas: fondo TOV, centro, superficie y Zerilli</span>
-      <a href="codigo/axion_ns/compare.py.txt"><code>compare.py</code></a><span>la comparación módulo las ecuaciones de fondo</span>
-      <code>step1…10_*.py</code><span>los diez pasos (1–4: primer paper; 5–6: secuela; 7–8: más allá de Cowling; 9: con axión en Cowling; 10: con axión sin Cowling); cada uno devuelve una lista de (nombre, ok, nota): <a href="codigo/axion_ns/step1_background.py.txt">1</a> · <a href="codigo/axion_ns/step2_perturbations.py.txt">2</a> · <a href="codigo/axion_ns/step3_toy_model.py.txt">3</a> · <a href="codigo/axion_ns/step4_numerics.py.txt">4</a> · <a href="codigo/axion_ns/step5_nonradial.py.txt">5</a> · <a href="codigo/axion_ns/step6_nonradial_numerics.py.txt">6</a> · <a href="codigo/axion_ns/step7_fullgr.py.txt">7</a> · <a href="codigo/axion_ns/step8_numerics.py.txt">8</a> · <a href="codigo/axion_ns/step9_axion_cowling.py.txt">9</a> · <a href="codigo/axion_ns/step10_axion_gr.py.txt">10</a></span>
-      <a href="codigo/axion_ns/axgr.py.txt"><code>axgr.py</code></a><span>el sistema extendido convertido a números e integrado con axión: centro, interior, cola del axión, Zerilli y la radiación axiónica, Ec. (13)</span>
-      <a href="codigo/axion_ns/bsk26.py.txt"><code>bsk26.py</code></a><span>la ecuación de estado BSk26 (ajustes analíticos de Potekhin et al.)</span>
-      <a href="codigo/axion_ns/axstar.py.txt"><code>axstar.py</code></a><span>estrella BSk26 con condensado axiónico y sus modos en Cowling con \(\delta\theta\)</span>
-      <a href="codigo/axion_ns/run_all.py.txt"><code>run_all.py</code></a><span>ejecuta los diez pasos y escribe <code>results/checks.json</code></span>
-      <a href="codigo/report/build.py.txt"><code>report/build.py</code></a><span>genera esta página a partir de <code>checks.json</code> y de los datos de las figuras (<code>results/fig_*.json</code>, escritos por <a href="codigo/axion_ns/figdata.py.txt"><code>figdata.py</code></a>)</span>
-      <a href="codigo/report/charts.js.txt"><code>report/charts.js</code></a><span>dibuja las gráficas de la página en SVG a partir de esos datos</span>
-      <a href="codigo/report/anim.js.txt"><code>report/anim.js</code></a><span>las dos animaciones: la anatomía de un modo y la cadena de ecuaciones</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/geometry.py" target="_blank" rel="noopener"><code>geometry.py</code></a><span>Christoffel, Ricci, Einstein y divergencia covariante</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/model.py" target="_blank" rel="noopener"><code>model.py</code></a><span>la acción y la derivación de las ecuaciones de campo, el fondo y la linealización</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/paper.py" target="_blank" rel="noopener"><code>paper.py</code></a><span>las ecuaciones del primer paper, transcritas</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/nonradial.py" target="_blank" rel="noopener"><code>nonradial.py</code></a><span>la secuela: linealización no radial en Cowling y sus ecuaciones transcritas</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/fullgr.py" target="_blank" rel="noopener"><code>fullgr.py</code></a><span>más allá de Cowling: métrica perturbada, las ecuaciones de LD transcritas y el sistema extendido</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/fmodes.py" target="_blank" rel="noopener"><code>fmodes.py</code></a><span>integración numérica de las ecuaciones derivadas: fondo TOV, centro, superficie y Zerilli</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/compare.py" target="_blank" rel="noopener"><code>compare.py</code></a><span>la comparación módulo las ecuaciones de fondo</span>
+      <code>step1…10_*.py</code><span>los diez pasos (1–4: primer paper; 5–6: secuela; 7–8: más allá de Cowling; 9: con axión en Cowling; 10: con axión sin Cowling); cada uno devuelve una lista de (nombre, ok, nota): <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/step1_background.py" target="_blank" rel="noopener">1</a> · <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/step2_perturbations.py" target="_blank" rel="noopener">2</a> · <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/step3_toy_model.py" target="_blank" rel="noopener">3</a> · <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/step4_numerics.py" target="_blank" rel="noopener">4</a> · <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/step5_nonradial.py" target="_blank" rel="noopener">5</a> · <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/step6_nonradial_numerics.py" target="_blank" rel="noopener">6</a> · <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/step7_fullgr.py" target="_blank" rel="noopener">7</a> · <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/step8_numerics.py" target="_blank" rel="noopener">8</a> · <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/step9_axion_cowling.py" target="_blank" rel="noopener">9</a> · <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/step10_axion_gr.py" target="_blank" rel="noopener">10</a></span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/axgr.py" target="_blank" rel="noopener"><code>axgr.py</code></a><span>el sistema extendido convertido a números e integrado con axión: centro, interior, cola del axión, Zerilli y la radiación axiónica, Ec. (13)</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/bsk26.py" target="_blank" rel="noopener"><code>bsk26.py</code></a><span>la ecuación de estado BSk26 (ajustes analíticos de Potekhin et al.)</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/axstar.py" target="_blank" rel="noopener"><code>axstar.py</code></a><span>estrella BSk26 con condensado axiónico y sus modos en Cowling con \(\delta\theta\)</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/run_all.py" target="_blank" rel="noopener"><code>run_all.py</code></a><span>ejecuta los diez pasos y escribe <code>results/checks.json</code></span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/report/build.py" target="_blank" rel="noopener"><code>report/build.py</code></a><span>genera esta página a partir de <code>checks.json</code> y de los datos de las figuras (<code>results/fig_*.json</code>, escritos por <a href="https://github.com/Blitzman/workshop_fisica/blob/main/axion_ns/figdata.py" target="_blank" rel="noopener"><code>figdata.py</code></a>)</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/report/charts.js" target="_blank" rel="noopener"><code>report/charts.js</code></a><span>dibuja las gráficas de la página en SVG a partir de esos datos</span>
+      <a href="https://github.com/Blitzman/workshop_fisica/blob/main/report/anim.js" target="_blank" rel="noopener"><code>report/anim.js</code></a><span>las dos animaciones: la anatomía de un modo y la cadena de ecuaciones</span>
     </div>
     <p>Para probar una variante, por ejemplo otra forma de una ecuación, basta con editar su transcripción en <code>paper.py</code> o <code>nonradial.py</code> y volver a ejecutar el paso correspondiente.</p>
   </section>
 
   <footer id="fuentes">
-    <p>Preparado el 29 y 30 de octubre de 2026 con Claude Code, SymPy 1.14, SciPy y mpmath.</p>
+    <p>Preparado entre octubre y noviembre de 2026 con Claude Code, SymPy 1.14, SciPy y mpmath · <a href="https://github.com/Blitzman/workshop_fisica" target="_blank" rel="noopener">Código en GitHub</a>.</p>
     <p>Fuentes: <a href="https://arxiv.org/abs/2510.16245">arXiv:2510.16245</a> · <a href="https://arxiv.org/abs/2610.37308">arXiv:2610.37308</a>. Referencias numéricas: <a href="https://arxiv.org/abs/gr-qc/9704046">Lindblom, Mendell e Ipser (1997)</a> · <a href="https://arxiv.org/abs/gr-qc/9705081">Yoshida y Kojima (1997)</a>. Transcripciones de LD: <a href="https://arxiv.org/abs/2204.03037">2204.03037</a> · <a href="https://arxiv.org/abs/2205.02081">2205.02081</a> · <a href="https://arxiv.org/abs/1106.2736">1106.2736</a> · <a href="https://arxiv.org/abs/2601.21911">2601.21911</a>. Ecuación de estado: <a href="https://doi.org/10.1093/mnras/sty2413">Pearson et al. (2018)</a>, con los <a href="http://www.ioffe.ru/astro/NSG/BSk/">ajustes de Potekhin</a>.</p>
   </footer>
 </main>
