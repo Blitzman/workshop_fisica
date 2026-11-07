@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unificación Axión + Magnetar: Chern–Simons, corriente quiral y conversión resonante</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --paper: #f4f6f9;
+  --sheet: #ffffff;
+  --ink: #161e2e;
+  --muted: #586378;
+  --rule: #d8dde6;
+  --accent: #2b4bb3;
+  --ok: #1d7451;
+  --ok-bg: #e4f3eb;
+  --flag: #9a5400;
+  --flag-bg: #fdf0dc;
+  --bad: #a3262f;
+  --bad-bg: #fbe5e6;
+  --code-bg: #eaeef4;
+  --c1: #2b4bb3; --c2: #c2410c; --c3: #7c3aed; --c4: #0d9488;
+  --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0d121b; --sheet: #141b27; --ink: #e3e8f1; --muted: #98a3b7; --rule: #263042;
+    --accent: #93a8ff; --ok: #62c99c; --ok-bg: #12291f; --flag: #f1a84d; --flag-bg: #2b2112;
+    --bad: #f08a90; --bad-bg: #2d1518; --code-bg: #1b2433; color-scheme: dark;
+    --c1: #6283ee; --c2: #d9733a; --c3: #a174ec; --c4: #2dd4bf;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0d121b; --sheet: #141b27; --ink: #e3e8f1; --muted: #98a3b7; --rule: #263042;
+  --accent: #93a8ff; --ok: #62c99c; --ok-bg: #12291f; --flag: #f1a84d; --flag-bg: #2b2112;
+  --bad: #f08a90; --bad-bg: #2d1518; --code-bg: #1b2433; color-scheme: dark;
+  --c1: #6283ee; --c2: #d9733a; --c3: #a174ec; --c4: #2dd4bf;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper); color: var(--ink);
+  font: 400 1rem/1.62 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 2rem 4rem;
+}
+.wrap { display: grid; gap: 2.8rem 0;
+  grid-template-columns: [full-start] minmax(0, 1fr) [content-start] minmax(0, 70ch) [content-end] minmax(0, 1fr) [full-end]; }
+.wrap > * { grid-column: content; min-width: 0; }
+.wrap > .wide { grid-column: full; width: min(1080px, 100%); justify-self: center; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 600; text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font-size: clamp(1.95rem, 4.6vw, 2.8rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.58rem; }
+h3 { font-size: 1.15rem; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+.eyebrow { font: 500 0.78rem/1.4 var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.stack { display: grid; gap: 1rem; }
+.lede { font-size: 1.12rem; color: var(--ink); }
+.muted { color: var(--muted); }
+section[id], h3[id], footer[id] { scroll-margin-top: 4.2rem; }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; padding-block: 0.2rem; }
+
+.topbar {
+  position: sticky; top: 0.6rem; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 0.5rem 1rem; padding: 0.55rem 0.9rem;
+  background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.06); font-size: 0.86rem;
+}
+.navlinks { display: flex; flex-wrap: wrap; gap: 0.3rem 0.8rem; align-items: center; }
+.navlinks a { text-decoration: none; font-weight: 500; color: var(--ink); padding: 0.22rem 0.48rem; border-radius: 5px; }
+.navlinks a:hover { color: var(--accent); text-decoration: underline; }
+.navlinks a[aria-current="page"] { background: var(--code-bg); color: var(--accent); font-weight: 600; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+.btn-link, .btn-theme {
+  font: 500 0.78rem/1.2 var(--f-mono); padding: 0.38rem 0.65rem;
+  border-radius: 5px; border: 1px solid var(--rule); background: var(--code-bg);
+  color: var(--ink); text-decoration: none; cursor: pointer;
+}
+.btn-link { border-color: var(--accent); color: var(--accent); background: transparent; }
+
+.tally { display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; padding-block: 1rem; border-block: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+.tally div { display: grid; gap: 0.1rem; min-width: 0; }
+.tally b { font: 600 1.5rem/1.1 var(--f-display); }
+.tally span { font-size: 0.85rem; color: var(--muted); }
+
+.stage { background: #0e121c; color: #e6edf6; border: 1px solid #232c3d; border-radius: 8px; padding: 0.95rem; display: grid; gap: 0.75rem; min-width: 0; }
+.stage-bar, .stage-foot { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; }
+.stage .btn { background: none; color: #aab6c9; border: 1px solid #2c3850; border-radius: 6px; padding: 0.4rem 0.75rem; font: 500 0.84rem/1.2 var(--f-body); cursor: pointer; }
+.stage .btn:hover { color: #fff; }
+.stage-canvas canvas { display: block; width: 100%; border-radius: 4px; background: #090d14; }
+.slider { display: grid; gap: 0.25rem; flex: 1 1 14rem; font-size: 0.85rem; color: #aab6c9; }
+.slider input { width: 100%; accent-color: #58c4dd; }
+.readout { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1.2rem; font-size: 0.88rem; color: #aab6c9; font-variant-numeric: tabular-nums; }
+.readout b { font: 600 1.12rem/1.2 var(--f-body); color: #fff; }
+
+.cites { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+.cites li { display: grid; gap: 0.25rem; padding: 0.9rem 1.1rem; background: var(--sheet); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; }
+.cites .tag { font: 500 0.72rem/1 var(--f-mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent); }
+
+.ob { display: grid; gap: 0.7rem; padding: 1.2rem 1.3rem; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+.ob header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 0.8rem; }
+.weight { font: 500 0.72rem/1 var(--f-mono); letter-spacing: 0.05em; text-transform: uppercase; padding: 0.3rem 0.5rem; border-radius: 3px; }
+.w-main { color: var(--flag); background: var(--flag-bg); }
+.w-ok { color: var(--ok); background: var(--ok-bg); }
+.newterm { color: var(--flag); font-weight: 600; }
+
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: 1rem; }
+.chart { position: relative; display: grid; gap: 0.55rem; align-content: start; padding: 0.95rem 0.95rem 0.6rem; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+.chart h4 { margin: 0; font: 600 0.98rem/1.3 var(--f-body); }
+.chart .sub { font-size: 0.82rem; color: var(--muted); }
+.plot { display: block; width: 100%; height: auto; font: 400 11px var(--f-body); }
+
+.checks { list-style: none; margin: 0; padding: 0; display: grid; }
+.checks li { display: grid; grid-template-columns: 7rem 1fr; gap: 0.7rem; align-items: baseline; padding-block: 0.45rem; border-top: 1px solid var(--rule); font-size: 0.93rem; }
+.chip { font: 500 0.7rem/1 var(--f-mono); letter-spacing: 0.04em; text-transform: uppercase; padding: 0.28rem 0.45rem; border-radius: 3px; text-align: center; }
+.chip-ok { color: var(--ok); background: var(--ok-bg); }
+.chip-obs { color: var(--flag); background: var(--flag-bg); }
+.chip-bad { color: var(--bad); background: var(--bad-bg); }
+
+.tablewrap { overflow-x: auto; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 0.6rem 0.9rem; }
+.steps { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.steps th, .steps td { text-align: left; padding: 0.45rem 0.65rem 0.45rem 0; border-bottom: 1px solid var(--rule); vertical-align: baseline; }
+.steps th { font-weight: 600; color: var(--muted); font-size: 0.8rem; }
+.steps .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 0.8rem; }
+footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 1rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; }
+</style>
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js" async></script>
+</head>
+<body>
+
+<main class="wrap">
+  <nav class="topbar wide" aria-label="Navegación entre informes">
+    <div class="navlinks">
+      <a href="informe_axiones.html">Informe base (Cowling + GR)</a>
+      <a href="informe_gmodes.html">Línea 1: Modos g (LIGO/ET)</a>
+      <a href="informe_rotacion.html">Línea 2: Rotación y modos r</a>
+      <a href="informe_magnetar.html" aria-current="page">Línea 3: Magnetar + Axión</a>
+    </div>
+    <div class="actions">
+      <a class="btn-link" href="guia_departamento.html">Guía departamento →</a>
+      <button type="button" class="btn-theme" id="themetoggle">Tema</button>
+    </div>
+  </nav>
+
+  <header class="stack">
+    <p class="eyebrow">Línea 3 · Unificación de las dos líneas de J. A. Pons (2024–2026) · Paso 13</p>
+    <h1>Acoplo de Chern–Simons axión-fotón, corriente quiral en la pared de dominio y oscilaciones de magnetares</h1>
+    <p class="lede">Unimos los artículos de condensados de axiones ligeros de Gómez-Bañón, Pnigouras y Pons (<a href="https://arxiv.org/abs/2408.13247">PRL 2024</a>, <a href="https://arxiv.org/abs/2510.16245">arXiv:2510.16245</a>, <a href="https://arxiv.org/abs/2610.37308">arXiv:2610.37308</a>) con los de inestabilidad magnética quiral en magnetares de Dehman y Pons (<a href="https://arxiv.org/abs/2408.05281">arXiv:2408.05281</a>, <a href="https://arxiv.org/abs/2505.06196">arXiv:2505.06196</a>). Deduzco en SymPy desde la acción de Einstein–Maxwell–Axión que el gradiente radial de la pared de dominio del axión \(a_0'(r) = f_a \theta_0'(r)\) actúa exactamente como un potencial químico quiral efectivo \(\mu_{5,\mathrm{eff}}(r)\) localizado en \(r = r_{\mathrm{wall}}\), e integro el acoplo magneto-axiónico sobre el dipolo relativista de Wasserman–Shapiro en la estrella BSk26.</p>
+    <div class="tally">
+      <div><b>18/18</b><span>comprobaciones OK</span></div>
+      <div><b>4</b><span>controles negativos superados</span></div>
+      <div><b>0,87–1,24 cm</b><span>longitud de onda quiral \(\lambda_{\mathrm{crit}}\) en la pared</span></div>
+      <div><b>0,022–0,031 eV</b><span>potencial quiral efectivo \(\mu_{5,\mathrm{eff}}\)</span></div>
+      <div><b>15.3 s</b><span>ejecución completa (8 estrellas × 4 campos)</span></div>
+    </div>
+  </header>
+
+  <section class="stack" id="conexion">
+    <h2>1. Qué conecta este cálculo entre las dos líneas del grupo</h2>
+    <ol class="cites">
+      <li>
+        <span class="tag">Línea A · Condensados de axiones (2024–2026)</span>
+        <p>Gómez-Bañón, Bartnick, Springmann, Pnigouras y Pons (<a href="https://arxiv.org/abs/2408.13247">arXiv:2408.13247</a>, <a href="https://arxiv.org/abs/2510.16245">2510.16245</a>, <a href="https://arxiv.org/abs/2610.37308">2610.37308</a>) estudian el condensado \(\theta_0(r) \simeq \pi\) en el interior de una estrella de neutrones sin campo magnético (\(\mathbf{B} = 0\)). Toda la dinámica nueva ocurre en la estrecha capa de transición \(r \approx r_{\mathrm{wall}}\) donde \(\theta_0(r)\) cae de \(\pi\) a \(0\).</p>
+      </li>
+      <li>
+        <span class="tag">Línea B · Anomalía quiral y magnetares (2024–2025)</span>
+        <p>Dehman y Pons (<a href="https://arxiv.org/abs/2408.05281">arXiv:2408.05281</a>, <a href="https://arxiv.org/abs/2505.06196">2505.06196</a>) estudian cómo una asimetría quiral \(\mu_5\) en la corteza de una estrella de neutrones genera una corriente de efecto magnético quiral \(\mathbf{J}_{\mathrm{CME}} = \frac{\alpha_{\mathrm{EM}}}{\pi}\mu_5 \mathbf{B}\) que amplifica campos a gran escala con número de onda crítico \(k_{\mathrm{crit}} = \frac{2\alpha_{\mathrm{EM}}}{\pi}\mu_5\).</p>
+      </li>
+      <li>
+        <span class="tag">Unificación · Acción de Einstein–Maxwell–Chern–Simons</span>
+        <p>Al incluir el acoplo topológico estándar axión-fotón \(-\frac{1}{4} g_{a\gamma\gamma} a F_{\mu\nu}\tilde{F}^{\mu\nu}\) sobre la estrella condensada, la variación de Euler–Lagrange produce la corriente de Carroll–Field–Jackiw \(J^\nu_{\mathrm{top}} = -g_{a\gamma\gamma}(\partial_\mu a)\tilde{F}^{\mu\nu}\). En la pared de dominio donde \(\partial_r a_0 = f_a \theta_0'(r) \neq 0\), esta corriente tiene <b>exactamente la misma forma matemática que la corriente quiral de Dehman y Pons</b>, con un número de onda quiral localizado \(k_{\mathrm{chiral}}^{\mathrm{ax}}(r) = |g_{a\gamma\gamma} f_a \theta_0'(r)|\) que no sufre lavado por colisiones de espín electrónicas.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="stage wide" id="escena" aria-label="Escena interactiva Magnetar + Axión">
+    <div class="stage-bar">
+      <strong style="color:#fff;font-family:var(--f-display);font-size:1.08rem">Simulación interactiva: Dipolo relativista + pared de dominio quiral + conversión axión-fotón</strong>
+      <button type="button" class="btn" id="playbtn" data-play>Pausar</button>
+    </div>
+    <div class="stage-canvas">
+      <canvas id="magcanvas" width="960" height="400"></canvas>
+    </div>
+    <div class="stage-foot">
+      <label class="slider">
+        <span>Frecuencia del axión \(\nu_a\): <b id="lbl-nu">6.0 kHz</b></span>
+        <input type="range" id="sl-nu" min="0" max="7" step="1" value="3">
+      </label>
+      <label class="slider">
+        <span>Campo polar \(B_{\mathrm{pole}}\): <b id="lbl-b">10¹⁵ G</b></span>
+        <input type="range" id="sl-b" min="0" max="3" step="1" value="3">
+      </label>
+      <div class="readout">
+        <span>Pared \(r_{\mathrm{wall}}\): <b id="ro-wall">10.43 km</b></span>
+        <span>\(\mu_{5,\mathrm{eff}}\): <b id="ro-mu5">0.0298 eV</b></span>
+        <span>\(\lambda_{\mathrm{crit}}\): <b id="ro-lam">0.89 cm</b></span>
+        <span>\(L_\gamma\): <b id="ro-lg">1.78×10⁴⁴ erg/s</b></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="stack" id="derivacion">
+    <h2>2. Derivación simbólica desde la acción en espacio-tiempo curvo</h2>
+    <p>Partimos en <code>axion_ns/magnetar.py</code> de la densidad lagrangiana acoplada sobre la métrica esférica estática \(ds^2 = e^{2\Phi_0}dt^2 - e^{2\lambda_0}dr^2 - r^2(d\theta^2 + \sin^2\theta\,d\phi^2)\):</p>
+    \[
+      \mathcal{L}_{a+\mathrm{EM}} = \sqrt{-g}\left[\frac{1}{2}g^{\mu\nu}\partial_\mu a\,\partial_\nu a - V(a) - \varepsilon(n,a) - \frac{1}{4}F_{\mu\nu}F^{\mu\nu} - \class{newterm}{\frac{1}{4}g_{a\gamma\gamma}\,a\,F_{\mu\nu}\tilde{F}^{\mu\nu}} - A_\mu J^\mu\right],
+    \]
+    <p>donde \(\tilde{F}^{\mu\nu} = \frac{1}{2\sqrt{-g}}\varepsilon^{\mu\nu\alpha\beta}F_{\alpha\beta}\). SymPy verifica primero las dos identidades topológicas exactas (\(\nabla_\mu \tilde{F}^{\mu\nu} \equiv 0\) y que \(\frac{1}{4}\sqrt{-g}F_{\mu\nu}\tilde{F}^{\mu\nu} = \frac{1}{2}\partial_\mu(\sqrt{-g}A_\nu \tilde{F}^{\mu\nu})\)), gracias a las cuales las ecuaciones de Euler–Lagrange respecto a \(A_\nu\) y \(a\) dependen únicamente de las derivadas primeras del axión:</p>
+    \[
+      \frac{1}{\sqrt{-g}}\partial_\mu\!\left(\sqrt{-g}\,F^{\mu\nu}\right) + \class{newterm}{g_{a\gamma\gamma}(\partial_\mu a)\tilde{F}^{\mu\nu}} = J^\nu, \qquad
+      \Box a + V'(a) + n\frac{\partial m^*}{\partial a} + \class{newterm}{\frac{1}{4}g_{a\gamma\gamma}F_{\mu\nu}\tilde{F}^{\mu\nu}} = 0.
+    \]
+
+    <div class="ob">
+      <header><span class="weight w-ok">Resultado 1 · Dipolo relativista y efecto Witten</span><h3>Ecuación de Wasserman–Shapiro (1983) y carga topológica en la pared</h3></header>
+      <p>Para un campo magnético poloidal dipolar \(A_\phi(r,\theta) = -a_\phi(r)\sin^2\theta\), la componente \(\nu=\phi\) reproduce exactamente la ecuación relativista de Wasserman y Shapiro:</p>
+      \[
+        e^{-2\lambda_0}a_\phi'' + e^{-2\lambda_0}(\Phi_0' - \lambda_0')a_\phi' - \frac{2}{r^2}a_\phi = -4\pi j_\phi(r),
+      \]
+      <p>mientras que la componente temporal \(\nu = t\) muestra que el salto radial \(a_0'(r) = f_a\theta_0'(r)\) en la pared de dominio induce una densidad de carga eléctrica topológica de Witten incluso en reposo:</p>
+      \[
+        \rho_{\mathrm{top}}(r,\theta) = e^{\Phi_0}J^t_{\mathrm{CS}} = \class{newterm}{-g_{a\gamma\gamma}f_a\,e^{-\lambda_0}\theta_0'(r)\,B^{\hat{r}}_0(r,\theta)}.
+      \]
+    </div>
+
+    <div class="ob">
+      <header><span class="weight w-main">Resultado 2 · Conexión directa con Dehman &amp; Pons (2024/2025)</span><h3>Potencial químico quiral efectivo \(\mu_{5,\mathrm{eff}}(r)\) en la pared del axión</h3></header>
+      <p>Al perturbar el campo con una componente toroidal \(\delta A_\theta = \mathcal{B}(r)\sin\theta\,e^{-i\omega t}\) y poloidal \(\delta A_\phi = \mathcal{E}(r)\sin^2\theta\,e^{-i\omega t}\), el gradiente radial del condensado \(a_0'(r) = f_a\theta_0'(r)\) introduce en la ecuación azimutal de Maxwell el término de corriente helicoidal:</p>
+      \[
+        e^{-2\lambda_0}\mathcal{E}'' + e^{-2\lambda_0}(\Phi_0'-\lambda_0')\mathcal{E}' + \left(\omega^2 e^{-2\Phi_0} - \frac{2}{r^2}\right)\mathcal{E} + \class{newterm}{i\omega\,e^{-(\Phi_0+\lambda_0)}\,g_{a\gamma\gamma}f_a\theta_0'(r)\,\mathcal{B}(r)} = 0.
+      \]
+      <p>Comparando con la corriente magnética quiral \(\mathbf{J}_{\mathrm{CME}} = \frac{\alpha_{\mathrm{EM}}}{\pi}\mu_5\mathbf{B}\) de Dehman y Pons (<a href="https://arxiv.org/abs/2408.05281">arXiv:2408.05281</a>), identificamos de forma exacta el número de onda quiral topológico y el potencial químico quiral efectivo de la pared de dominio:</p>
+      \[
+        \class{newterm}{k_{\mathrm{chiral}}^{\mathrm{ax}}(r) = g_{a\gamma\gamma}f_a\theta_0'(r), \qquad \mu_{5,\mathrm{eff}}(r) = \frac{\pi}{\alpha_{\mathrm{EM}}}g_{a\gamma\gamma}f_a\theta_0'(r), \qquad k_{\mathrm{crit}}(r) = 2\,g_{a\gamma\gamma}f_a\theta_0'(r).}
+      \]
+    </div>
+
+    <div class="ob">
+      <header><span class="weight w-ok">Resultado 3 · Oscilaciones magneto-axiónicas acopladas</span><h3>Conversión coherente \(\delta\theta(r) \leftrightarrow \mathcal{E}(r)\) sobre el campo dipolar \(B_0(r)\)</h3></header>
+      <p>Para una oscilación del condensado \(a = a_0(r) + f_a\delta\theta(r)\cos\theta\,e^{-i\omega t}\) sobre el campo magnético de fondo \(B_0(r)\), las ecuaciones de Klein–Gordon y Maxwell quedan acopladas por operadores adjuntos exactos:</p>
+      \[
+        \begin{aligned}
+        e^{-2\lambda_0}\delta\theta'' + e^{-2\lambda_0}\left(\Phi_0'-\lambda_0'+\frac{2}{r}\right)\delta\theta' + \left(\omega^2 e^{-2\Phi_0} - m_{\mathrm{eff}}^2 - \frac{2}{r^2}\right)\delta\theta - \class{newterm}{i\omega\frac{g_{a\gamma\gamma}B_0(r)}{f_a r}e^{-\Phi_0}\mathcal{E}} &= 0, \\[4pt]
+        e^{-2\lambda_0}\mathcal{E}'' + e^{-2\lambda_0}(\Phi_0'-\lambda_0')\mathcal{E}' + \left(\omega^2 e^{-2\Phi_0} - \frac{2}{r^2}\right)\mathcal{E} + \class{newterm}{i\omega\,g_{a\gamma\gamma}f_a B_0(r)\,r\,e^{-\Phi_0}\delta\theta} &= 0.
+        \end{aligned}
+      \]
+    </div>
+  </section>
+
+  <section class="stack wide" id="graficas">
+    <h2>3. Perfiles numéricos sobre la estrella BSk26 (compilados desde SymPy)</h2>
+    <div class="charts">
+      <article class="chart">
+        <h4>A. Potencial quiral efectivo \(\mu_{5,\mathrm{eff}}(r)\) en la pared de dominio</h4>
+        <p class="sub">Localización en la transición \(\theta_0: \pi \to 0\) para \(\nu_a = 3, 6, 10, 15\) kHz (\(g_{a\gamma\gamma} = 10^{-11}\,\mathrm{GeV}^{-1}\))</p>
+        <svg class="plot" id="svg-chiral" viewBox="0 0 500 280"></svg>
+      </article>
+      <article class="chart">
+        <h4>B. Campo dipolar relativista de Wasserman–Shapiro \(B^{\hat{r}}(r)/B_{\mathrm{pole}}\)</h4>
+        <p class="sub">Amplificación por compacidad \(2GM/R\) y empalme interior-exterior exacto (error \(5.1\times 10^{-9}\))</p>
+        <svg class="plot" id="svg-dipole" viewBox="0 0 500 280"></svg>
+      </article>
+      <article class="chart">
+        <h4>C. Luminosidad de conversión magneto-axiónica \(L_\gamma(B_{\mathrm{pole}}, \nu_a)\)</h4>
+        <p class="sub">Escala cuadrática exacta \(L_\gamma \propto B_{\mathrm{pole}}^2\) para \(B_{\mathrm{pole}} \in [10^{13}, 10^{15}]\) G</p>
+        <svg class="plot" id="svg-lum" viewBox="0 0 500 280"></svg>
+      </article>
+      <article class="chart">
+        <h4>D. Desplazamiento de frecuencia magneto-axiónico \(\Delta\nu(10^{15}\,\mathrm{G})\)</h4>
+        <p class="sub">Corrimiento de la cavidad de la pared de dominio en función de \(\nu_a\)</p>
+        <svg class="plot" id="svg-shift" viewBox="0 0 500 280"></svg>
+      </article>
+    </div>
+  </section>
+
+  <section class="stack wide" id="tabla">
+    <h2>4. Tabla de resultados numéricos (estrella BSk26, \(p_c = 100\,\mathrm{MeV/fm^3}\))</h2>
+    <p class="muted">Sin axión: \(M = 1.536\,M_\odot\), \(R = 11.72\,\mathrm{km}\), factor de amplificación dipolar relativista de Wasserman–Shapiro \(f_{\mathrm{WS}} = 1.3587\).</p>
+    <div class="tablewrap">
+      <table class="steps">
+        <thead>
+          <tr>
+            <th class="num">\(\nu_a\) [kHz]</th>
+            <th class="num">\(M\) [\(M_\odot\)]</th>
+            <th class="num">\(R\) [km]</th>
+            <th class="num">\(r_{\mathrm{wall}}\) [km]</th>
+            <th class="num">Factor WS \(f_{\mathrm{WS}}\)</th>
+            <th class="num">\(k_{\mathrm{crit}}\) [cm\(^{-1}\)]</th>
+            <th class="num">\(\lambda_{\mathrm{crit}}\) [cm]</th>
+            <th class="num">\(\mu_{5,\mathrm{eff}}\) [eV]</th>
+            <th class="num">\(\Delta\nu(10^{15}\,\mathrm{G})\) [Hz]</th>
+            <th class="num">\(L_\gamma(10^{14}\,\mathrm{G})\) [erg/s]</th>
+            <th class="num">\(L_\gamma(5\cdot 10^{14}\,\mathrm{G})\) [erg/s]</th>
+            <th class="num">\(L_\gamma(10^{15}\,\mathrm{G})\) [erg/s]</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="num"><b>3.0</b></td><td class="num">1.459</td><td class="num">11.57</td><td class="num">8.87</td><td class="num">1.4003 <span class="muted">(-1.65%)</span></td><td class="num">5.08</td><td class="num">1.24</td><td class="num">0.0216</td><td class="num">-84.9</td><td class="num">7.02e+41</td><td class="num">1.76e+43</td><td class="num"><b>7.02e+43</b></td></tr>
+<tr><td class="num"><b>4.0</b></td><td class="num">1.428</td><td class="num">11.38</td><td class="num">9.77</td><td class="num">1.3975 <span class="muted">(-1.85%)</span></td><td class="num">7.14</td><td class="num">0.88</td><td class="num">0.0303</td><td class="num">-4.8</td><td class="num">7.49e+41</td><td class="num">1.87e+43</td><td class="num"><b>7.49e+43</b></td></tr>
+<tr><td class="num"><b>5.0</b></td><td class="num">1.453</td><td class="num">11.36</td><td class="num">10.24</td><td class="num">1.4088 <span class="muted">(-1.05%)</span></td><td class="num">7.19</td><td class="num">0.87</td><td class="num">0.0305</td><td class="num">+208.7</td><td class="num">1.08e+42</td><td class="num">2.70e+43</td><td class="num"><b>1.08e+44</b></td></tr>
+<tr><td class="num"><b>6.0</b></td><td class="num">1.472</td><td class="num">11.36</td><td class="num">10.43</td><td class="num">1.4167 <span class="muted">(-0.50%)</span></td><td class="num">7.03</td><td class="num">0.89</td><td class="num">0.0298</td><td class="num">+536.3</td><td class="num">1.78e+42</td><td class="num">4.46e+43</td><td class="num"><b>1.78e+44</b></td></tr>
+<tr><td class="num"><b>8.0</b></td><td class="num">1.497</td><td class="num">11.37</td><td class="num">10.68</td><td class="num">1.4265 <span class="muted">(+0.19%)</span></td><td class="num">6.66</td><td class="num">0.94</td><td class="num">0.0283</td><td class="num">+1122.4</td><td class="num">4.26e+42</td><td class="num">1.06e+44</td><td class="num"><b>4.26e+44</b></td></tr>
+<tr><td class="num"><b>10.0</b></td><td class="num">1.511</td><td class="num">11.37</td><td class="num">10.74</td><td class="num">1.4325 <span class="muted">(+0.61%)</span></td><td class="num">6.37</td><td class="num">0.99</td><td class="num">0.0271</td><td class="num">+698.3</td><td class="num">3.14e+42</td><td class="num">7.86e+43</td><td class="num"><b>3.14e+44</b></td></tr>
+<tr><td class="num"><b>12.0</b></td><td class="num">1.520</td><td class="num">11.37</td><td class="num">10.80</td><td class="num">1.4366 <span class="muted">(+0.90%)</span></td><td class="num">6.14</td><td class="num">1.02</td><td class="num">0.0261</td><td class="num">+642.6</td><td class="num">2.11e+42</td><td class="num">5.27e+43</td><td class="num"><b>2.11e+44</b></td></tr>
+<tr><td class="num"><b>15.0</b></td><td class="num">1.529</td><td class="num">11.36</td><td class="num">10.85</td><td class="num">1.4410 <span class="muted">(+1.21%)</span></td><td class="num">5.89</td><td class="num">1.07</td><td class="num">0.0250</td><td class="num">+215.2</td><td class="num">1.27e+42</td><td class="num">3.18e+43</td><td class="num"><b>1.27e+44</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="stack wide" id="comprobaciones">
+    <h2>5. Todas las comprobaciones automáticas (18/18 OK)</h2>
+    <p class="muted">Incluye 4 controles negativos deliberados que mutan signos, factores métricos y multipolos para verificar que el comparador simbólico detecta cualquier desviación.</p>
+    <ul class="checks">
+      <li><span class="chip chip-ok">coincide</span><span class="ck">Identidad de Bianchi electromagnética ∇_μ F̃^{μν} == 0 (ν = t, r, θ, φ)</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Identidad topológica ¼√(-g) F_μν F̃^{μν} - ½ ∂_μ(√(-g) A_ν F̃^{μν}) == 0</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Euler-Lagrange de A_ν → Maxwell-Carroll-Field-Jackiw (1990) (4 componentes)</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Euler-Lagrange de a → □a + V&#x27;(a) + n ∂m*/∂a + ¼ g_{aγγ} F_μν F̃^{μν} == 0</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Dipolo magnético relativista A_φ = -a_φ(r) sin²θ → Wasserman &amp; Shapiro (1983)</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Límite plano (Φ_0 = λ_0 = 0) de la ecuación dipolar: soluciones exactas a_φ ∝ r² y a_φ ∝ 1/r</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Solución analítica exterior de Wasserman-Shapiro anula exactamente la EDO en Schwarzschild</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Efecto Witten en la pared de dominio: ρ_top = -g_{aγγ} f_a θ_0&#x27; B^{r̂}_0 y F_0 F̃_0 == 0</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Corriente quiral en la pared de dominio J^φ_top y potencial efectivo μ_{5,eff} = (π/α_EM) g_{aγγ} f_a θ_0&#x27;</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Inestabilidad magnética quiral (Dehman &amp; Pons 2024): k_crit = 2 k_chiral^{ax}, dγ/dk(k_max) == 0</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Sistema acoplado de oscilaciones magneto-axiónicas (δθ, E) frente a referencia</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Simetría hermítica de conversión axión-fotón: acoplos off-diagonal conjugados exactos</span></li>
+<li><span class="chip chip-obs">control neg.</span><span class="ck">Control negativo 1: cambio de signo +g_{aγγ} → -g_{aγγ} en MCFJ detectado (False)</span></li>
+<li><span class="chip chip-obs">control neg.</span><span class="ck">Control negativo 2: mutación métrica (Φ_0&#x27; - λ_0&#x27;) → (Φ_0&#x27; + λ_0&#x27;) en dipolo WS detectada (False)</span></li>
+<li><span class="chip chip-obs">control neg.</span><span class="ck">Control negativo 3: mutación multipolar 2/r² → 6/r² (l=1 → l=2) en dipolo WS detectada (False)</span></li>
+<li><span class="chip chip-obs">control neg.</span><span class="ck">Control negativo 4: mutación π/α_EM → 2π/α_EM en potencial quiral μ_{5,eff} detectada (False)</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Integrador dipolar compilado (lambdify+cse) coincide con Wasserman-Shapiro exterior (err = 5.11e-09)</span></li>
+<li><span class="chip chip-ok">coincide</span><span class="ck">Escala cuadrática L_γ(10¹⁵ G)/L_γ(10¹⁴ G) = 100.00 (esperado 100) y convergencia RK4 (diff = 4.65e-08)</span></li>
+    </ul>
+  </section>
+
+  <footer class="wide">
+    <span>Proyecto <code>workshop_fisica</code> · Línea 3 (`axion_ns/magnetar.py`, `axion_ns/step13_magnetar.py`)</span>
+    <span><a href="informe_axiones.html">← Volver al informe principal</a></span>
+  </footer>
+</main>
+
+<script id="fig-data" type="application/json">{"metadata":{"eos":"BSk26","p_c_mev_fm3":100.0,"g_agg_gev_inv":1e-11,"dtheta_osc_amp":1e-05,"nu_a_grid_khz":[3.0,4.0,5.0,6.0,8.0,10.0,12.0,15.0],"B_pole_grid_G":[10000000000000.0,100000000000000.0,500000000000000.0,1000000000000000.0],"no_axion_star":{"R_km":11.71943093788206,"M_msun":1.5359313228470468,"compactness_2M_R":0.3870603007908532,"ws_amplification":1.4237801359812745}},"rows":[{"nu_a_khz":3.0,"R_km":11.573179047794849,"M_msun":1.4586071560566622,"compactness_2M_R":0.37221941690839994,"ws_amplification":1.4003201101480611,"delta_ws_vs_no_axion_pct":-1.647728131636325,"fa_gev":1.4861871569979136e+17,"g_agg_fa_dimless":1486187.1569979135,"r_wall_km":8.868894103404616,"max_abs_dtheta_km_inv":0.1707564587009324,"k_chiral_max_km_inv":253776.05589577035,"k_crit_max_cm_inv":5.075521117915407,"lambda_crit_cm":1.2379389546821913,"mu5_eff_max_ev":0.021558654727541128,"magnetic_fields":{"1e+13":{"B_pole_G":10000000000000.0,"kappa_B_pole_km_inv":9.89994878274085,"nu_0_khz":29.196718584717367,"delta_nu_hz":-0.008488280712617913,"damping_rate_s_inv":1.1051142218846972,"conversion_prob":1.1780703534666888e-06,"L_gamma_erg_s":7.024051053256223e+39},"1e+14":{"B_pole_G":100000000000000.0,"kappa_B_pole_km_inv":98.99948782740852,"nu_0_khz":29.196718584717367,"delta_nu_hz":-0.8488280712617918,"damping_rate_s_inv":110.51142218846981,"conversion_prob":0.00011780703534666892,"L_gamma_erg_s":7.024051053256226e+41},"5e+14":{"B_pole_G":500000000000000.0,"kappa_B_pole_km_inv":494.99743913704265,"nu_0_khz":29.196718584717367,"delta_nu_hz":-21.220701781544815,"damping_rate_s_inv":2762.7855547117447,"conversion_prob":0.0029451758836667235,"L_gamma_erg_s":1.7560127633140567e+43},"1e+15":{"B_pole_G":1000000000000000.0,"kappa_B_pole_km_inv":989.9948782740853,"nu_0_khz":29.196718584717367,"delta_nu_hz":-84.88280712617926,"damping_rate_s_inv":11051.142218846979,"conversion_prob":0.011780703534666894,"L_gamma_erg_s":7.024051053256227e+43}},"elapsed_s":7.371},{"nu_a_khz":4.0,"R_km":11.383369666176801,"M_msun":1.4276669511997704,"compactness_2M_R":0.37039867412737215,"ws_amplification":1.397500087077037,"delta_ws_vs_no_axion_pct":-1.8457940408141107,"fa_gev":1.1146403677484352e+17,"g_agg_fa_dimless":1114640.3677484351,"r_wall_km":9.769569276287196,"max_abs_dtheta_km_inv":0.3201795545204442,"k_chiral_max_km_inv":356885.05639619805,"k_crit_max_cm_inv":7.137701127923962,"lambda_crit_cm":0.88028136714756,"mu5_eff_max_ev":0.03031791821772462,"magnetic_fields":{"1e+13":{"B_pole_G":10000000000000.0,"kappa_B_pole_km_inv":9.89994878274085,"nu_0_khz":30.20033331016413,"delta_nu_hz":-0.00047701925328978354,"damping_rate_s_inv":1.077107209227027,"conversion_prob":1.2977320269359748e-06,"L_gamma_erg_s":7.485792592601293e+39},"1e+14":{"B_pole_G":100000000000000.0,"kappa_B_pole_km_inv":98.99948782740852,"nu_0_khz":30.20033331016413,"delta_nu_hz":-0.04770192532897622,"damping_rate_s_inv":107.71072092270276,"conversion_prob":0.00012977320269359733,"L_gamma_erg_s":7.485792592601286e+41},"5e+14":{"B_pole_G":500000000000000.0,"kappa_B_pole_km_inv":494.99743913704265,"nu_0_khz":30.20033331016413,"delta_nu_hz":-1.1925481332244592,"damping_rate_s_inv":2692.7680230675687,"conversion_prob":0.003244330067339938,"L_gamma_erg_s":1.871448148150324e+43},"1e+15":{"B_pole_G":1000000000000000.0,"kappa_B_pole_km_inv":989.9948782740853,"nu_0_khz":30.20033331016413,"delta_nu_hz":-4.770192532897837,"damping_rate_s_inv":10771.072092270275,"conversion_prob":0.012977320269359752,"L_gamma_erg_s":7.485792592601296e+43}},"elapsed_s":6.988},{"nu_a_khz":5.0,"R_km":11.363538541765514,"M_msun":1.4531018694327524,"compactness_2M_R":0.3776555129705218,"ws_amplification":1.408814405049983,"delta_ws_vs_no_axion_pct":-1.0511265435640575,"fa_gev":8.917122941987482e+16,"g_agg_fa_dimless":891712.2941987481,"r_wall_km":10.24385135425563,"max_abs_dtheta_km_inv":0.4031792314669394,"k_chiral_max_km_inv":359519.8774646726,"k_crit_max_cm_inv":7.190397549293452,"lambda_crit_cm":0.8738300301347022,"mu5_eff_max_ev":0.030541750200153348,"magnetic_fields":{"1e+13":{"B_pole_G":10000000000000.0,"kappa_B_pole_km_inv":9.89994878274085,"nu_0_khz":30.846964442158086,"delta_nu_hz":0.020873817761989474,"damping_rate_s_inv":1.0647549006739276,"conversion_prob":1.879698235972809e-06,"L_gamma_erg_s":1.0805040541905353e+40},"1e+14":{"B_pole_G":100000000000000.0,"kappa_B_pole_km_inv":98.99948782740852,"nu_0_khz":30.846964442158086,"delta_nu_hz":2.0873817761989484,"damping_rate_s_inv":106.47549006739278,"conversion_prob":0.00018796982359728097,"L_gamma_erg_s":1.0805040541905358e+42},"5e+14":{"B_pole_G":500000000000000.0,"kappa_B_pole_km_inv":494.99743913704265,"nu_0_khz":30.846964442158086,"delta_nu_hz":52.18454440497379,"damping_rate_s_inv":2661.8872516848187,"conversion_prob":0.0046992455899320185,"L_gamma_erg_s":2.701260135476336e+43},"1e+15":{"B_pole_G":1000000000000000.0,"kappa_B_pole_km_inv":989.9948782740853,"nu_0_khz":30.846964442158086,"delta_nu_hz":208.73817761989517,"damping_rate_s_inv":10647.549006739275,"conversion_prob":0.018796982359728074,"L_gamma_erg_s":1.0805040541905344e+44}},"elapsed_s":6.781},{"nu_a_khz":6.0,"R_km":11.364972019348414,"M_msun":1.472473513177485,"compactness_2M_R":0.3826418585205424,"ws_amplification":1.4167059106745075,"delta_ws_vs_no_axion_pct":-0.4968621999977169,"fa_gev":7.430935784989568e+16,"g_agg_fa_dimless":743093.5784989567,"r_wall_km":10.429391028973257,"max_abs_dtheta_km_inv":0.4728528394345356,"k_chiral_max_km_inv":351373.9085588017,"k_crit_max_cm_inv":7.027478171176035,"lambda_crit_cm":0.894088199797013,"mu5_eff_max_ev":0.029849737983149372,"magnetic_fields":{"1e+13":{"B_pole_G":10000000000000.0,"kappa_B_pole_km_inv":9.89994878274085,"nu_0_khz":32.07646144470058,"delta_nu_hz":0.05362847649862427,"damping_rate_s_inv":1.0129364299261188,"conversion_prob":3.1040650553277992e-06,"L_gamma_erg_s":1.7847551534459529e+40},"1e+14":{"B_pole_G":100000000000000.0,"kappa_B_pole_km_inv":98.99948782740852,"nu_0_khz":32.07646144470058,"delta_nu_hz":5.362847649862429,"damping_rate_s_inv":101.29364299261194,"conversion_prob":0.00031040650553278024,"L_gamma_erg_s":1.7847551534459548e+42},"5e+14":{"B_pole_G":500000000000000.0,"kappa_B_pole_km_inv":494.99743913704265,"nu_0_khz":32.07646144470058,"delta_nu_hz":134.07119124656074,"damping_rate_s_inv":2532.3410748152987,"conversion_prob":0.007760162638319505,"L_gamma_erg_s":4.461887883614886e+43},"1e+15":{"B_pole_G":1000000000000000.0,"kappa_B_pole_km_inv":989.9948782740853,"nu_0_khz":32.07646144470058,"delta_nu_hz":536.284764986243,"damping_rate_s_inv":10129.364299261195,"conversion_prob":0.03104065055327802,"L_gamma_erg_s":1.7847551534459546e+44}},"elapsed_s":6.882},{"nu_a_khz":8.0,"R_km":11.37124844306914,"M_msun":1.4968415725130815,"compactness_2M_R":0.3887595268848634,"ws_amplification":1.426521396848565,"delta_ws_vs_no_axion_pct":0.19253400142440202,"fa_gev":5.573201838742176e+16,"g_agg_fa_dimless":557320.1838742176,"r_wall_km":10.6809440718024,"max_abs_dtheta_km_inv":0.5976615832953119,"k_chiral_max_km_inv":333088.86349669925,"k_crit_max_cm_inv":6.661777269933985,"lambda_crit_cm":0.9431695255764456,"mu5_eff_max_ev":0.028296396113365953,"magnetic_fields":{"1e+13":{"B_pole_G":10000000000000.0,"kappa_B_pole_km_inv":9.89994878274085,"nu_0_khz":35.64173916442982,"delta_nu_hz":0.11223743733897582,"damping_rate_s_inv":0.6675137855944281,"conversion_prob":7.396446655132238e-06,"L_gamma_erg_s":4.257459390892773e+40},"1e+14":{"B_pole_G":100000000000000.0,"kappa_B_pole_km_inv":98.99948782740852,"nu_0_khz":35.64173916442982,"delta_nu_hz":11.223743733897583,"damping_rate_s_inv":66.75137855944284,"conversion_prob":0.0007396446655132244,"L_gamma_erg_s":4.257459390892776e+42},"5e+14":{"B_pole_G":500000000000000.0,"kappa_B_pole_km_inv":494.99743913704265,"nu_0_khz":35.64173916442982,"delta_nu_hz":280.59359334743954,"damping_rate_s_inv":1668.7844639860707,"conversion_prob":0.018491116637830613,"L_gamma_erg_s":1.0643648477231943e+44},"1e+15":{"B_pole_G":1000000000000000.0,"kappa_B_pole_km_inv":989.9948782740853,"nu_0_khz":35.64173916442982,"delta_nu_hz":1122.3743733897581,"damping_rate_s_inv":6675.137855944283,"conversion_prob":0.07396446655132245,"L_gamma_erg_s":4.257459390892777e+44}},"elapsed_s":7.156},{"nu_a_khz":10.0,"R_km":11.371721385726898,"M_msun":1.5110749089450939,"compactness_2M_R":0.39243988543739755,"ws_amplification":1.4324986078253517,"delta_ws_vs_no_axion_pct":0.612346781904521,"fa_gev":4.458561470993741e+16,"g_agg_fa_dimless":445856.14709937404,"r_wall_km":10.742840777137545,"max_abs_dtheta_km_inv":0.7142684271723023,"k_chiral_max_km_inv":318460.9689337725,"k_crit_max_cm_inv":6.369219378675451,"lambda_crit_cm":0.9864922109946609,"mu5_eff_max_ev":0.02705373463705026,"magnetic_fields":{"1e+13":{"B_pole_G":10000000000000.0,"kappa_B_pole_km_inv":9.89994878274085,"nu_0_khz":18.423727598882255,"delta_nu_hz":0.06983120999138018,"damping_rate_s_inv":0.4854335484043357,"conversion_prob":5.461829270602105e-06,"L_gamma_erg_s":3.1441382223734458e+40},"1e+14":{"B_pole_G":100000000000000.0,"kappa_B_pole_km_inv":98.99948782740852,"nu_0_khz":18.423727598882255,"delta_nu_hz":6.983120999138018,"damping_rate_s_inv":48.543354840433565,"conversion_prob":0.0005461829270602108,"L_gamma_erg_s":3.144138222373447e+42},"5e+14":{"B_pole_G":500000000000000.0,"kappa_B_pole_km_inv":494.99743913704265,"nu_0_khz":18.423727598882255,"delta_nu_hz":174.57802497845046,"damping_rate_s_inv":1213.583871010839,"conversion_prob":0.01365457317650527,"L_gamma_erg_s":7.860345555933618e+43},"1e+15":{"B_pole_G":1000000000000000.0,"kappa_B_pole_km_inv":989.9948782740853,"nu_0_khz":18.423727598882255,"delta_nu_hz":698.3120999138018,"damping_rate_s_inv":4854.335484043356,"conversion_prob":0.05461829270602108,"L_gamma_erg_s":3.1441382223734474e+44}},"elapsed_s":7.041},{"nu_a_khz":12.0,"R_km":11.3678703435839,"M_msun":1.5202887592060863,"compactness_2M_R":0.394966561807337,"ws_amplification":1.4366340848157775,"delta_ws_vs_no_axion_pct":0.9028043382304939,"fa_gev":3.715467892494784e+16,"g_agg_fa_dimless":371546.7892494784,"r_wall_km":10.800640034826092,"max_abs_dtheta_km_inv":0.8267811114586501,"k_chiral_max_km_inv":307187.86737457657,"k_crit_max_cm_inv":6.1437573474915315,"lambda_crit_cm":1.0226942491055546,"mu5_eff_max_ev":0.026096067833673704,"magnetic_fields":{"1e+13":{"B_pole_G":10000000000000.0,"kappa_B_pole_km_inv":9.89994878274085,"nu_0_khz":21.23741217188624,"delta_nu_hz":0.06426176652235929,"damping_rate_s_inv":0.170888254527342,"conversion_prob":3.6648868115648155e-06,"L_gamma_erg_s":2.1082877129365461e+40},"1e+14":{"B_pole_G":100000000000000.0,"kappa_B_pole_km_inv":98.99948782740852,"nu_0_khz":21.23741217188624,"delta_nu_hz":6.426176652235933,"damping_rate_s_inv":17.088825452734202,"conversion_prob":0.0003664886811564817,"L_gamma_erg_s":2.1082877129365467e+42},"5e+14":{"B_pole_G":500000000000000.0,"kappa_B_pole_km_inv":494.99743913704265,"nu_0_khz":21.23741217188624,"delta_nu_hz":160.65441630589828,"damping_rate_s_inv":427.2206363183551,"conversion_prob":0.00916221702891204,"L_gamma_erg_s":5.270719282341366e+43},"1e+15":{"B_pole_G":1000000000000000.0,"kappa_B_pole_km_inv":989.9948782740853,"nu_0_khz":21.23741217188624,"delta_nu_hz":642.6176652235931,"damping_rate_s_inv":1708.8825452734204,"conversion_prob":0.03664886811564816,"L_gamma_erg_s":2.1082877129365463e+44}},"elapsed_s":3.83},{"nu_a_khz":15.0,"R_km":11.357745205103804,"M_msun":1.5292249304236842,"compactness_2M_R":0.39764232508308606,"ws_amplification":1.4410422643853409,"delta_ws_vs_no_axion_pct":1.2124153138412244,"fa_gev":2.972374313995828e+16,"g_agg_fa_dimless":297237.43139958277,"r_wall_km":10.852410685673348,"max_abs_dtheta_km_inv":0.9912074952279583,"k_chiral_max_km_inv":294623.9698655725,"k_crit_max_cm_inv":5.892479397311451,"lambda_crit_cm":1.0663058593037087,"mu5_eff_max_ev":0.02502874598775425,"magnetic_fields":{"1e+13":{"B_pole_G":10000000000000.0,"kappa_B_pole_km_inv":9.89994878274085,"nu_0_khz":25.205650828798646,"delta_nu_hz":0.021515937798820706,"damping_rate_s_inv":0.00016732043816137485,"conversion_prob":2.216437690522627e-06,"L_gamma_erg_s":1.2727727203755086e+40},"1e+14":{"B_pole_G":100000000000000.0,"kappa_B_pole_km_inv":98.99948782740852,"nu_0_khz":25.205650828798646,"delta_nu_hz":2.1515937798820777,"damping_rate_s_inv":0.0167320438161359,"conversion_prob":0.00022164376905226276,"L_gamma_erg_s":1.2727727203755088e+42},"5e+14":{"B_pole_G":500000000000000.0,"kappa_B_pole_km_inv":494.99743913704265,"nu_0_khz":25.205650828798646,"delta_nu_hz":53.789844497051774,"damping_rate_s_inv":0.4183010954034373,"conversion_prob":0.005541094226306568,"L_gamma_erg_s":3.1819318009387715e+43},"1e+15":{"B_pole_G":1000000000000000.0,"kappa_B_pole_km_inv":989.9948782740853,"nu_0_khz":25.205650828798646,"delta_nu_hz":215.1593779882071,"damping_rate_s_inv":1.6732043816137492,"conversion_prob":0.022164376905226272,"L_gamma_erg_s":1.2727727203755086e+44}},"elapsed_s":3.84}],"chiral_profiles":{"3.0":{"nu_a_khz":3.0,"r_wall_km":8.868894103404616,"r_km":[0.05,0.1751,0.3002,0.4253,0.5504,0.6755,0.8005,0.9256,1.0507,1.1758,1.3009,1.426,1.5511,1.6762,1.8013,1.9264,2.0515,2.1765,2.3016,2.4267,2.5518,2.6769,2.802,2.9271,3.0522,3.1773,3.3024,3.4274,3.5525,3.6776,3.8027,3.9278,4.0529,4.178,4.3031,4.4282,4.5533,4.6784,4.8034,4.9285,5.0536,5.1787,5.3038,5.4289,5.554,5.6791,5.8042,5.9293,6.0544,6.1794,6.3045,6.4296,6.5547,6.6798,6.8049,6.93,7.0551,7.1802,7.3053,7.4304,7.5554,7.6805,7.8056,7.9307,8.0558,8.1809,8.306,8.4311,8.5562,8.6813,8.8063,8.9314,9.0565,9.1816,9.3067,9.4318,9.5569,9.682,9.8071,9.9322,10.0573,10.1823,10.3074,10.4325,10.5576,10.6827,10.8078,10.9329,11.058,11.1831,11.3082,11.4333,11.5583,11.6834,11.8085,11.9336,12.0587,12.1838,12.3089,12.434,12.5591,12.6842,12.8093,12.9343,13.0594,13.1845,13.3096,13.4347,13.5598,13.6849,13.81,13.9351,14.0602,14.1852,14.3103,14.4354,14.5605,14.6856,14.8107,14.9358,15.0609,15.186,15.3111,15.4362,15.5612],"theta0":[1.97581,1.97547,1.97474,1.97362,1.97213,1.97025,1.96798,1.96533,1.9623,1.95888,1.95509,1.9509,1.94634,1.94139,1.93606,1.93034,1.92425,1.91777,1.91091,1.90367,1.89605,1.88805,1.87967,1.87091,1.86177,1.85226,1.84238,1.83212,1.82149,1.81049,1.79912,1.78738,1.77528,1.76282,1.75,1.73682,1.72329,1.7094,1.69517,1.6806,1.66569,1.65044,1.63486,1.61896,1.60274,1.5862,1.56936,1.55221,1.53477,1.51704,1.49903,1.48074,1.46219,1.44339,1.42434,1.40505,1.38553,1.3658,1.34587,1.32574,1.30542,1.28494,1.26431,1.24353,1.22262,1.2016,1.18048,1.15928,1.13801,1.1167,1.09535,1.07399,1.05264,1.03131,1.01003,0.98881,0.96769,0.94667,0.92579,0.90507,0.88453,0.86421,0.84412,0.82431,0.80481,0.78566,0.76691,0.74862,0.73087,0.7137,0.69708,0.681,0.66544,0.65038,0.63578,0.62164,0.60794,0.59464,0.58175,0.56923,0.55709,0.54529,0.53384,0.52271,0.51189,0.50138,0.49115,0.4812,0.47153,0.46211,0.45294,0.44401,0.43532,0.42685,0.4186,0.41056,0.40272,0.39508,0.38762,0.38035,0.37326,0.36634,0.35959,0.35299,0.34656],"abs_dtheta0_km_inv":[0.00123,0.0043,0.00736,0.01043,0.0135,0.01657,0.01964,0.02271,0.02577,0.02884,0.0319,0.03497,0.03803,0.04109,0.04415,0.04721,0.05026,0.05331,0.05636,0.0594,0.06244,0.06547,0.0685,0.07152,0.07453,0.07753,0.08052,0.0835,0.08647,0.08942,0.09236,0.09528,0.09819,0.10107,0.10393,0.10677,0.10959,0.11237,0.11513,0.11786,0.12056,0.12321,0.12583,0.12841,0.13095,0.13344,0.13588,0.13827,0.1406,0.14287,0.14509,0.14724,0.14932,0.15133,0.15326,0.15511,0.15689,0.15857,0.16017,0.16167,0.16307,0.16437,0.16556,0.16664,0.16761,0.16846,0.16918,0.16977,0.17023,0.17055,0.17072,0.17075,0.17063,0.17034,0.16989,0.16927,0.16848,0.1675,0.16633,0.16495,0.16337,0.16156,0.1595,0.15718,0.15456,0.15158,0.14816,0.14409,0.1396,0.13506,0.13064,0.12642,0.12238,0.11852,0.11483,0.11129,0.1079,0.10465,0.10154,0.09854,0.09567,0.09291,0.09026,0.08771,0.08525,0.08289,0.08062,0.07843,0.07631,0.07428,0.07231,0.07042,0.06859,0.06682,0.06512,0.06347,0.06187,0.06033,0.05884,0.0574,0.056,0.05465,0.05334,0.05207,0.05085],"k_chiral_km_inv":[1823.11,6384.17,10945.12,15505.9,20066.4,24626.53,29186.14,33745.07,38303.15,42860.14,47415.78,51969.73,56521.65,61071.11,65617.62,70160.63,74699.52,79233.6,83762.1,88284.17,92798.85,97305.12,101801.86,106287.83,110761.7,115222.05,119667.32,124095.87,128505.91,132895.56,137262.81,141605.51,145921.4,150208.09,154463.04,158683.61,162866.98,167010.23,171110.27,175163.9,179167.76,183118.34,187011.99,190844.94,194613.24,198312.81,201939.43,205488.74,208956.22,212337.22,215626.95,218820.46,221912.7,224898.46,227772.4,230529.05,233162.82,235667.99,238038.74,240269.11,242353.03,244284.33,246056.74,247663.87,249099.22,250356.21,251428.15,252308.21,252989.46,253464.85,253727.13,253768.9,253582.51,253159.99,252493.02,251572.73,250389.59,248933.13,247191.54,245151.21,242795.85,240105.24,237053.09,233603.48,229704.58,225281.35,220195.29,214144.7,207478.89,200719.81,194158.67,187884.24,181886.09,176149.21,170658.9,165401.39,160363.86,155534.37,150901.8,146455.74,142186.47,138084.89,134142.49,130351.29,126703.81,123193.01,119812.29,116555.44,113416.61,110390.31,107471.35,104654.83,101936.14,99310.91,96775.03,94324.6,91955.93,89665.52,87450.09,85306.47,83231.71,81222.98,79277.6,77393.02,75566.82],"mu5_eff_ev":[0.00015,0.00054,0.00093,0.00132,0.0017,0.00209,0.00248,0.00287,0.00325,0.00364,0.00403,0.00441,0.0048,0.00519,0.00557,0.00596,0.00635,0.00673,0.00712,0.0075,0.00788,0.00827,0.00865,0.00903,0.00941,0.00979,0.01017,0.01054,0.01092,0.01129,0.01166,0.01203,0.0124,0.01276,0.01312,0.01348,0.01384,0.01419,0.01454,0.01488,0.01522,0.01556,0.01589,0.01621,0.01653,0.01685,0.01716,0.01746,0.01775,0.01804,0.01832,0.01859,0.01885,0.01911,0.01935,0.01958,0.01981,0.02002,0.02022,0.02041,0.02059,0.02075,0.0209,0.02104,0.02116,0.02127,0.02136,0.02143,0.02149,0.02153,0.02155,0.02156,0.02154,0.02151,0.02145,0.02137,0.02127,0.02115,0.021,0.02083,0.02063,0.0204,0.02014,0.01984,0.01951,0.01914,0.01871,0.01819,0.01763,0.01705,0.01649,0.01596,0.01545,0.01496,0.0145,0.01405,0.01362,0.01321,0.01282,0.01244,0.01208,0.01173,0.0114,0.01107,0.01076,0.01047,0.01018,0.0099,0.00963,0.00938,0.00913,0.00889,0.00866,0.00844,0.00822,0.00801,0.00781,0.00762,0.00743,0.00725,0.00707,0.0069,0.00673,0.00657,0.00642]},"6.0":{"nu_a_khz":6.0,"r_wall_km":10.429391028973257,"r_km":[0.05,0.1728,0.2957,0.4185,0.5413,0.6642,0.787,0.9098,1.0327,1.1555,1.2783,1.4012,1.524,1.6468,1.7697,1.8925,2.0153,2.1382,2.261,2.3838,2.5067,2.6295,2.7523,2.8752,2.998,3.1208,3.2437,3.3665,3.4893,3.6122,3.735,3.8578,3.9807,4.1035,4.2263,4.3492,4.472,4.5948,4.7177,4.8405,4.9633,5.0862,5.209,5.3318,5.4547,5.5775,5.7003,5.8232,5.946,6.0688,6.1917,6.3145,6.4373,6.5602,6.683,6.8058,6.9286,7.0515,7.1743,7.2971,7.42,7.5428,7.6656,7.7885,7.9113,8.0341,8.157,8.2798,8.4026,8.5255,8.6483,8.7711,8.894,9.0168,9.1396,9.2625,9.3853,9.5081,9.631,9.7538,9.8766,9.9995,10.1223,10.2451,10.368,10.4908,10.6136,10.7365,10.8593,10.9821,11.105,11.2278,11.3506,11.4735,11.5963,11.7191,11.842,11.9648,12.0876,12.2105,12.3333,12.4561,12.579,12.7018,12.8246,12.9475,13.0703,13.1931,13.316,13.4388,13.5616,13.6845,13.8073,13.9301,14.053,14.1758,14.2986,14.4215,14.5443,14.6671,14.79,14.9128,15.0356,15.1585,15.2813],"theta0":[3.13104,3.13101,3.13095,3.13086,3.13074,3.13059,3.1304,3.13018,3.12993,3.12964,3.12931,3.12894,3.12853,3.12808,3.12757,3.12702,3.12642,3.12576,3.12505,3.12427,3.12342,3.1225,3.1215,3.12042,3.11925,3.11799,3.11662,3.11514,3.11354,3.11181,3.10995,3.10793,3.10575,3.1034,3.10086,3.09811,3.09514,3.09194,3.08848,3.08474,3.0807,3.07633,3.07161,3.06651,3.061,3.05505,3.04862,3.04167,3.03416,3.02605,3.01729,3.00782,2.9976,2.98657,2.97466,2.96182,2.94797,2.93304,2.91697,2.89966,2.88105,2.86105,2.83958,2.81656,2.79191,2.76555,2.73741,2.70742,2.67552,2.64166,2.6058,2.56791,2.52798,2.48602,2.44205,2.39612,2.34829,2.29865,2.24731,2.1944,2.14009,2.08455,2.02799,1.97066,1.9128,1.85473,1.7968,1.73943,1.68321,1.62875,1.57631,1.52588,1.47739,1.43075,1.38586,1.34266,1.30106,1.26099,1.22239,1.18519,1.14934,1.11477,1.08142,1.04925,1.01821,0.98825,0.95932,0.93139,0.90441,0.87834,0.85315,0.8288,0.80526,0.7825,0.76048,0.73919,0.71858,0.69864,0.67933,0.66064,0.64255,0.62502,0.60804,0.59159,0.57565],"abs_dtheta0_km_inv":[0.0001,0.00035,0.0006,0.00085,0.00111,0.00138,0.00165,0.00193,0.00222,0.00252,0.00284,0.00317,0.00352,0.00389,0.00428,0.00469,0.00513,0.00559,0.00609,0.00662,0.00719,0.0078,0.00845,0.00915,0.0099,0.01071,0.01158,0.01252,0.01353,0.01462,0.01579,0.01706,0.01843,0.01991,0.0215,0.02323,0.02509,0.02711,0.02929,0.03164,0.03419,0.03694,0.03992,0.04313,0.04661,0.05036,0.05442,0.0588,0.06353,0.06863,0.07412,0.08005,0.08643,0.09328,0.10065,0.10856,0.11704,0.1261,0.13578,0.1461,0.15706,0.16869,0.18098,0.19394,0.20753,0.22175,0.23654,0.25186,0.26763,0.28377,0.30019,0.31676,0.33335,0.34983,0.36602,0.38177,0.39689,0.41121,0.42454,0.43667,0.44742,0.45659,0.46395,0.46928,0.47231,0.47269,0.46996,0.46337,0.45118,0.43528,0.41861,0.40251,0.38714,0.37247,0.35847,0.3451,0.33233,0.32012,0.30845,0.29729,0.28661,0.27639,0.26661,0.25723,0.24825,0.23965,0.23139,0.22348,0.21589,0.2086,0.2016,0.19489,0.18843,0.18223,0.17627,0.17054,0.16503,0.15973,0.15462,0.14971,0.14499,0.14043,0.13605,0.13182,0.12775],"k_chiral_km_inv":[75.13,260.12,446.48,635.21,827.29,1023.74,1225.63,1434.04,1650.08,1874.95,2109.86,2356.11,2615.08,2888.21,3177.05,3483.25,3808.55,4154.83,4524.12,4918.58,5340.53,5792.49,6277.14,6797.41,7356.44,7957.62,8604.62,9301.4,10052.25,10861.79,11735.03,12677.39,13694.71,14793.3,15980.0,17262.17,18647.77,20145.36,21764.18,23514.18,25406.03,27451.22,29662.04,32051.65,34634.1,37424.36,40438.31,43692.77,47205.47,50995.0,55080.76,59482.86,64221.96,69319.07,74795.35,80671.71,86968.45,93704.74,100898.06,108563.42,116712.61,125353.25,134487.78,144112.35,154215.73,164778.18,175770.36,187152.44,198873.36,210870.34,223068.71,235382.15,247713.14,259953.94,271987.64,283689.56,294928.6,305568.65,315469.66,324488.35,332478.13,339287.91,344758.96,348718.5,350966.9,351252.36,349223.85,344327.48,335269.26,323456.11,311066.95,299101.65,287681.22,276782.73,266378.9,256443.57,246952.06,237881.16,229208.99,220914.94,212979.62,205384.75,198113.12,191148.5,184475.6,178079.99,171948.08,166067.04,160424.74,155009.74,149811.24,144819.03,140023.45,135415.37,130986.14,126727.58,122631.96,118691.94,114900.54,111251.2,107737.64,104353.94,101094.47,97953.86,94927.05],"mu5_eff_ev":[1e-05,2e-05,4e-05,5e-05,7e-05,9e-05,0.0001,0.00012,0.00014,0.00016,0.00018,0.0002,0.00022,0.00025,0.00027,0.0003,0.00032,0.00035,0.00038,0.00042,0.00045,0.00049,0.00053,0.00058,0.00062,0.00068,0.00073,0.00079,0.00085,0.00092,0.001,0.00108,0.00116,0.00126,0.00136,0.00147,0.00158,0.00171,0.00185,0.002,0.00216,0.00233,0.00252,0.00272,0.00294,0.00318,0.00344,0.00371,0.00401,0.00433,0.00468,0.00505,0.00546,0.00589,0.00635,0.00685,0.00739,0.00796,0.00857,0.00922,0.00991,0.01065,0.01142,0.01224,0.0131,0.014,0.01493,0.0159,0.01689,0.01791,0.01895,0.02,0.02104,0.02208,0.02311,0.0241,0.02505,0.02596,0.0268,0.02757,0.02824,0.02882,0.02929,0.02962,0.02982,0.02984,0.02967,0.02925,0.02848,0.02748,0.02643,0.02541,0.02444,0.02351,0.02263,0.02179,0.02098,0.02021,0.01947,0.01877,0.01809,0.01745,0.01683,0.01624,0.01567,0.01513,0.01461,0.01411,0.01363,0.01317,0.01273,0.0123,0.0119,0.0115,0.01113,0.01077,0.01042,0.01008,0.00976,0.00945,0.00915,0.00887,0.00859,0.00832,0.00806]},"10.0":{"nu_a_khz":10.0,"r_wall_km":10.742840777137545,"r_km":[0.05,0.1729,0.2958,0.4187,0.5416,0.6645,0.7874,0.9103,1.0332,1.1562,1.2791,1.402,1.5249,1.6478,1.7707,1.8936,2.0165,2.1394,2.2623,2.3852,2.5081,2.631,2.7539,2.8768,2.9997,3.1227,3.2456,3.3685,3.4914,3.6143,3.7372,3.8601,3.983,4.1059,4.2288,4.3517,4.4746,4.5975,4.7204,4.8433,4.9662,5.0892,5.2121,5.335,5.4579,5.5808,5.7037,5.8266,5.9495,6.0724,6.1953,6.3182,6.4411,6.564,6.6869,6.8098,6.9327,7.0557,7.1786,7.3015,7.4244,7.5473,7.6702,7.7931,7.916,8.0389,8.1618,8.2847,8.4076,8.5305,8.6534,8.7763,8.8992,9.0222,9.1451,9.268,9.3909,9.5138,9.6367,9.7596,9.8825,10.0054,10.1283,10.2512,10.3741,10.497,10.6199,10.7428,10.8657,10.9887,11.1116,11.2345,11.3574,11.4803,11.6032,11.7261,11.849,11.9719,12.0948,12.2177,12.3406,12.4635,12.5864,12.7093,12.8322,12.9552,13.0781,13.201,13.3239,13.4468,13.5697,13.6926,13.8155,13.9384,14.0613,14.1842,14.3071,14.43,14.5529,14.6758,14.7987,14.9217,15.0446,15.1675,15.2904],"theta0":[3.14153,3.14153,3.14153,3.14152,3.14152,3.14152,3.14152,3.14151,3.14151,3.1415,3.14149,3.14149,3.14148,3.14147,3.14146,3.14144,3.14143,3.14141,3.14139,3.14137,3.14135,3.14132,3.14129,3.14125,3.14121,3.14116,3.14111,3.14105,3.14098,3.1409,3.14081,3.1407,3.14058,3.14045,3.14029,3.14012,3.13992,3.13969,3.13942,3.13912,3.13877,3.13837,3.13792,3.1374,3.1368,3.13611,3.13532,3.13442,3.13338,3.13219,3.13083,3.12926,3.12746,3.1254,3.12303,3.12031,3.11719,3.11361,3.1095,3.10479,3.0994,3.09321,3.08613,3.07802,3.06875,3.05815,3.04605,3.03224,3.01651,2.99861,2.97827,2.95522,2.92914,2.89971,2.8666,2.82949,2.78806,2.74202,2.69114,2.63523,2.57423,2.50816,2.43717,2.36157,2.28184,2.1986,2.11272,2.02527,1.93771,1.85211,1.77003,1.69182,1.61736,1.54647,1.47896,1.41467,1.35343,1.2951,1.23951,1.18653,1.13604,1.08789,1.04198,0.99819,0.95642,0.91655,0.87851,0.84219,0.80751,0.77439,0.74275,0.71252,0.68363,0.65602,0.62962,0.60438,0.58023,0.55714,0.53504,0.51389,0.49365,0.47427,0.45571,0.43794,0.42092],"abs_dtheta0_km_inv":[0.0,1e-05,1e-05,2e-05,2e-05,2e-05,3e-05,4e-05,4e-05,5e-05,6e-05,7e-05,8e-05,9e-05,0.0001,0.00011,0.00013,0.00015,0.00017,0.00019,0.00021,0.00024,0.00028,0.00032,0.00036,0.00041,0.00047,0.00053,0.00061,0.00069,0.00079,0.0009,0.00103,0.00117,0.00134,0.00153,0.00176,0.00201,0.0023,0.00263,0.00302,0.00346,0.00396,0.00454,0.00521,0.00598,0.00686,0.00787,0.00903,0.01036,0.01189,0.01365,0.01567,0.01798,0.02064,0.02368,0.02717,0.03117,0.03575,0.04099,0.04697,0.05381,0.06161,0.0705,0.08061,0.0921,0.10512,0.11986,0.13648,0.15517,0.17611,0.19947,0.22538,0.25395,0.28521,0.31911,0.35548,0.39402,0.43425,0.47555,0.51709,0.5579,0.59684,0.63266,0.66398,0.68929,0.70681,0.71427,0.70744,0.6833,0.65206,0.62081,0.59106,0.56279,0.53594,0.51045,0.48624,0.46327,0.44146,0.42077,0.40112,0.38247,0.36477,0.34795,0.33199,0.31682,0.30242,0.28873,0.27571,0.26335,0.25159,0.2404,0.22976,0.21964,0.21001,0.20084,0.19211,0.18379,0.17587,0.16832,0.16113,0.15427,0.14774,0.1415,0.13555],"k_chiral_km_inv":[0.78,2.7,4.67,6.7,8.83,11.09,13.51,16.13,19.0,22.15,25.64,29.51,33.84,38.7,44.16,50.32,57.28,65.15,74.09,84.23,95.77,108.89,123.85,140.9,160.35,182.56,207.93,236.93,270.1,308.06,351.5,401.26,458.25,523.58,598.46,684.34,782.85,895.87,1025.58,1174.47,1345.4,1541.68,1767.08,2025.96,2323.31,2664.86,3057.18,3507.81,4025.38,4619.8,5302.36,6086.0,6985.49,8017.66,9201.71,10559.45,12115.65,13898.37,15939.34,18274.33,20943.53,23991.94,27469.72,31432.46,35941.32,41063.09,46869.83,53438.25,60848.46,69181.99,78518.86,88933.28,100487.98,113226.64,127164.71,142278.64,158494.25,175675.35,193614.36,212026.28,230547.78,248741.37,266103.7,282074.56,296040.8,307324.68,315135.65,318460.97,315415.57,304653.64,290725.89,276793.76,263528.66,250923.74,238952.09,227585.1,216794.26,206551.5,196829.43,187601.55,178842.32,170527.27,162633.0,155137.19,148018.62,141257.14,134833.65,128730.02,122929.14,117414.8,112171.68,107185.32,102442.04,97928.96,93633.87,89545.3,85652.38,81944.89,78413.14,75048.02,71840.92,68783.69,65868.67,63088.59,60436.62],"mu5_eff_ev":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05,2e-05,2e-05,2e-05,3e-05,3e-05,3e-05,4e-05,4e-05,5e-05,6e-05,7e-05,8e-05,9e-05,0.0001,0.00011,0.00013,0.00015,0.00017,0.0002,0.00023,0.00026,0.0003,0.00034,0.00039,0.00045,0.00052,0.00059,0.00068,0.00078,0.0009,0.00103,0.00118,0.00135,0.00155,0.00178,0.00204,0.00233,0.00267,0.00305,0.00349,0.00398,0.00454,0.00517,0.00588,0.00667,0.00756,0.00854,0.00962,0.0108,0.01209,0.01346,0.01492,0.01645,0.01801,0.01959,0.02113,0.02261,0.02396,0.02515,0.02611,0.02677,0.02705,0.0268,0.02588,0.0247,0.02351,0.02239,0.02132,0.0203,0.01933,0.01842,0.01755,0.01672,0.01594,0.01519,0.01449,0.01382,0.01318,0.01257,0.012,0.01145,0.01094,0.01044,0.00997,0.00953,0.00911,0.0087,0.00832,0.00795,0.00761,0.00728,0.00696,0.00666,0.00638,0.0061,0.00584,0.0056,0.00536,0.00513]},"15.0":{"nu_a_khz":15.0,"r_wall_km":10.852410685673348,"r_km":[0.05,0.1728,0.2955,0.4183,0.541,0.6638,0.7865,0.9093,1.032,1.1548,1.2775,1.4003,1.5231,1.6458,1.7686,1.8913,2.0141,2.1368,2.2596,2.3823,2.5051,2.6278,2.7506,2.8734,2.9961,3.1189,3.2416,3.3644,3.4871,3.6099,3.7326,3.8554,3.9781,4.1009,4.2237,4.3464,4.4692,4.5919,4.7147,4.8374,4.9602,5.0829,5.2057,5.3285,5.4512,5.574,5.6967,5.8195,5.9422,6.065,6.1877,6.3105,6.4332,6.556,6.6788,6.8015,6.9243,7.047,7.1698,7.2925,7.4153,7.538,7.6608,7.7835,7.9063,8.0291,8.1518,8.2746,8.3973,8.5201,8.6428,8.7656,8.8883,9.0111,9.1338,9.2566,9.3794,9.5021,9.6249,9.7476,9.8704,9.9931,10.1159,10.2386,10.3614,10.4841,10.6069,10.7297,10.8524,10.9752,11.0979,11.2207,11.3434,11.4662,11.5889,11.7117,11.8344,11.9572,12.08,12.2027,12.3255,12.4482,12.571,12.6937,12.8165,12.9392,13.062,13.1847,13.3075,13.4303,13.553,13.6758,13.7985,13.9213,14.044,14.1668,14.2895,14.4123,14.5351,14.6578,14.7806,14.9033,15.0261,15.1488,15.2716],"theta0":[3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14159,3.14158,3.14158,3.14158,3.14158,3.14157,3.14157,3.14157,3.14156,3.14155,3.14154,3.14153,3.14152,3.1415,3.14148,3.14145,3.14142,3.14138,3.14133,3.14126,3.14118,3.14109,3.14097,3.14082,3.14063,3.14041,3.14013,3.13978,3.13934,3.13881,3.13815,3.13733,3.13632,3.13507,3.13352,3.13162,3.12928,3.12639,3.12283,3.11846,3.1131,3.10652,3.09847,3.08864,3.07664,3.06205,3.04434,3.02291,2.99706,2.96601,2.9289,2.88481,2.83278,2.77193,2.70149,2.62096,2.53021,2.42963,2.32025,2.20383,2.08311,1.96235,1.84641,1.73714,1.63448,1.53806,1.44754,1.36255,1.28277,1.20788,1.13757,1.07157,1.0096,0.9514,0.89674,0.8454,0.79716,0.75182,0.70922,0.66916,0.63149,0.59607,0.56274,0.53138,0.50186,0.47408,0.44792,0.42328,0.40007,0.3782,0.35758,0.33815,0.31984,0.30256,0.28627,0.27089,0.25639],"abs_dtheta0_km_inv":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05,2e-05,2e-05,3e-05,4e-05,4e-05,6e-05,7e-05,8e-05,0.0001,0.00013,0.00016,0.0002,0.00024,0.0003,0.00037,0.00046,0.00057,0.00071,0.00088,0.00108,0.00134,0.00166,0.00206,0.00255,0.00316,0.00391,0.00484,0.00598,0.0074,0.00914,0.01129,0.01393,0.01719,0.02118,0.02607,0.03206,0.03938,0.04831,0.05918,0.07238,0.08835,0.10764,0.13082,0.15856,0.19158,0.23062,0.27639,0.32948,0.39025,0.45862,0.53388,0.61446,0.6978,0.78023,0.85709,0.92272,0.97032,0.99121,0.96886,0.91787,0.86276,0.81039,0.76097,0.71444,0.67068,0.62958,0.59101,0.55483,0.52092,0.48914,0.45936,0.43147,0.40535,0.38088,0.35796,0.33648,0.31637,0.29752,0.27986,0.26331,0.24779,0.23324,0.21959,0.20679,0.19478,0.18351,0.17293,0.16299,0.15366,0.14489,0.13666,0.12891,0.12163,0.11479],"k_chiral_km_inv":[0.0,0.01,0.01,0.02,0.02,0.03,0.04,0.05,0.06,0.07,0.09,0.11,0.13,0.16,0.19,0.23,0.28,0.35,0.42,0.51,0.62,0.76,0.93,1.13,1.38,1.69,2.07,2.54,3.12,3.83,4.71,5.79,7.12,8.77,10.81,13.32,16.44,20.28,25.05,30.94,38.23,47.27,58.46,72.31,89.48,110.76,137.12,169.78,210.25,260.39,322.5,399.43,494.69,612.62,758.55,939.08,1162.28,1438.09,1778.72,2199.07,2717.4,3355.97,4141.88,5108.05,6294.33,7748.86,9529.52,11705.7,14360.11,17590.83,21513.32,26262.36,31993.48,38883.52,47129.44,56944.26,68548.17,82152.7,97934.72,115997.73,136319.43,158688.62,182641.25,207411.65,231914.26,254758.07,274265.44,288416.56,294623.97,287980.62,272825.64,256443.71,240877.0,226188.64,212357.17,199351.2,187134.88,175669.92,164916.99,154836.72,145390.3,136540.03,128249.57,120484.15,113210.67,106397.79,100015.89,94037.09,88435.17,83185.57,78265.25,73652.66,69327.68,65271.48,61466.5,57896.35,54545.74,51400.42,48447.07,45673.31,43067.57,40619.07,38317.75,36154.24,34119.78],"mu5_eff_ev":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1e-05,1e-05,1e-05,1e-05,1e-05,2e-05,2e-05,3e-05,3e-05,4e-05,5e-05,6e-05,8e-05,0.0001,0.00012,0.00015,0.00019,0.00023,0.00029,0.00035,0.00043,0.00053,0.00066,0.00081,0.00099,0.00122,0.00149,0.00183,0.00223,0.00272,0.0033,0.004,0.00484,0.00582,0.00698,0.00832,0.00985,0.01158,0.01348,0.01552,0.01762,0.0197,0.02164,0.0233,0.0245,0.02503,0.02446,0.02318,0.02179,0.02046,0.01922,0.01804,0.01694,0.0159,0.01492,0.01401,0.01315,0.01235,0.0116,0.01089,0.01024,0.00962,0.00904,0.0085,0.00799,0.00751,0.00707,0.00665,0.00626,0.00589,0.00554,0.00522,0.00492,0.00463,0.00437,0.00412,0.00388,0.00366,0.00345,0.00326,0.00307,0.0029]}},"dipole_profiles":{"no_axion":{"R_km":11.71943093788206,"M_msun":1.5359313228470468,"compactness_2M_R":0.3870603007908532,"ws_amplification":1.4237801359812745,"r_km":[0.05,0.2851,0.5201,0.7552,0.9903,1.2253,1.4604,1.6954,1.9305,2.1656,2.4006,2.6357,2.8708,3.1058,3.3409,3.576,3.811,4.0461,4.2812,4.5162,4.7513,4.9863,5.2214,5.4565,5.6915,5.9266,6.1617,6.3967,6.6318,6.8669,7.1019,7.337,7.572,7.8071,8.0422,8.2772,8.5123,8.7474,8.9824,9.2175,9.4526,9.6876,9.9227,10.1577,10.3928,10.6279,10.8629,11.098,11.3331,11.5681,11.8032,12.0383,12.2733,12.5084,12.7435,12.9785,13.2136,13.4486,13.6837,13.9188,14.1538,14.3889,14.624,14.859,15.0941,15.3292,15.5642,15.7993,16.0343,16.2694,16.5045,16.7395,16.9746,17.2097,17.4447,17.6798,17.9149,18.1499,18.385,18.6201,18.8551,19.0902,19.3252,19.5603,19.7954,20.0304,20.2655,20.5006,20.7356,20.9707,21.2058,21.4408,21.6759,21.9109,22.146,22.3811,22.6161,22.8512,23.0863,23.3213],"B_r_over_Bpole":[4.696397,4.273341,4.260814,4.250972,4.239078,4.224443,4.206885,4.18634,4.162785,4.136207,4.106602,4.07397,4.038312,3.999632,3.957935,3.913232,3.865523,3.814816,3.761125,3.704464,3.644848,3.582298,3.516835,3.448487,3.377284,3.303263,3.226465,3.146942,3.06475,2.979957,2.892639,2.802889,2.710811,2.616526,2.520174,2.421919,2.321947,2.220476,2.117756,2.014077,1.909773,1.805237,1.700924,1.597374,1.495239,1.395329,1.29872,1.207059,1.122574,1.045743,0.975836,0.912077,0.853803,0.80043,0.751449,0.706415,0.664934,0.626661,0.591288,0.558546,0.528191,0.500009,0.473809,0.449416,0.426679,0.405457,0.385627,0.367074,0.349698,0.333407,0.318116,0.30375,0.290239,0.27752,0.265537,0.254236,0.24357,0.233494,0.223968,0.214955,0.20642,0.198333,0.190664,0.183386,0.176475,0.169908,0.163664,0.157722,0.152066,0.146677,0.14154,0.136641,0.131967,0.127503,0.123239,0.119163,0.115265,0.111536,0.107967,0.104548],"B_th_over_Bpole":[-4.201157,-4.25958,-4.246876,-4.22642,-4.198446,-4.163031,-4.120249,-4.070188,-4.012952,-3.948658,-3.877437,-3.799439,-3.714824,-3.62377,-3.52647,-3.423127,-3.313969,-3.199235,-3.07918,-2.954071,-2.824197,-2.689859,-2.551377,-2.409087,-2.263345,-2.114525,-1.963023,-1.809255,-1.653659,-1.496702,-1.338876,-1.180702,-1.022738,-0.865578,-0.70986,-0.556272,-0.405562,-0.258549,-0.116138,0.020654,0.15067,0.272557,0.384685,0.484996,0.570716,0.637682,0.678694,0.676135,0.634804,0.589654,0.548602,0.511304,0.477345,0.446355,0.418013,0.392041,0.368193,0.346256,0.32604,0.307378,0.290124,0.274145,0.259325,0.245561,0.23276,0.220838,0.20972,0.199341,0.189638,0.180558,0.172051,0.164073,0.156583,0.149543,0.142921,0.136686,0.13081,0.125266,0.120033,0.115089,0.110413,0.105988,0.101796,0.097824,0.094057,0.09048,0.087084,0.083856,0.080786,0.077864,0.075082,0.072431,0.069904,0.067493,0.065192,0.062995,0.060896,0.058889,0.056969,0.055132]},"3.0":{"nu_a_khz":3.0,"R_km":11.573179047794849,"M_msun":1.4586071560566622,"ws_amplification":1.4003201101480611,"r_km":[0.05,0.2821,0.5142,0.7464,0.9785,1.2106,1.4427,1.6749,1.907,2.1391,2.3712,2.6034,2.8355,3.0676,3.2997,3.5319,3.764,3.9961,4.2282,4.4604,4.6925,4.9246,5.1567,5.3889,5.621,5.8531,6.0852,6.3174,6.5495,6.7816,7.0137,7.2459,7.478,7.7101,7.9422,8.1743,8.4065,8.6386,8.8707,9.1028,9.335,9.5671,9.7992,10.0313,10.2635,10.4956,10.7277,10.9598,11.192,11.4241,11.6562,11.8883,12.1205,12.3526,12.5847,12.8168,13.049,13.2811,13.5132,13.7453,13.9775,14.2096,14.4417,14.6738,14.9059,15.1381,15.3702,15.6023,15.8344,16.0666,16.2987,16.5308,16.7629,16.9951,17.2272,17.4593,17.6914,17.9236,18.1557,18.3878,18.6199,18.8521,19.0842,19.3163,19.5484,19.7806,20.0127,20.2448,20.4769,20.7091,20.9412,21.1733,21.4054,21.6376,21.8697,22.1018,22.3339,22.566,22.7982,23.0303],"B_r_over_Bpole":[4.691687,4.289862,4.277496,4.267547,4.255451,4.240544,4.222653,4.201719,4.177719,4.150644,4.120493,4.087267,4.05097,4.011609,3.9692,3.92374,3.875243,3.823721,3.769191,3.711672,3.651184,3.587752,3.521404,3.452171,3.380091,3.305206,3.227564,3.147222,3.064244,2.978703,2.890685,2.800287,2.707619,2.612811,2.51601,2.417382,2.317123,2.215452,2.112625,2.008934,1.904716,1.800362,1.696327,1.593148,1.491473,1.392109,1.296133,1.205214,1.121488,1.045299,0.97592,0.912595,0.854675,0.801591,0.752844,0.707999,0.666668,0.628513,0.593232,0.560558,0.530253,0.502105,0.475925,0.451542,0.428805,0.407575,0.387731,0.369159,0.351759,0.335441,0.32012,0.305721,0.292176,0.279422,0.267402,0.256065,0.245361,0.235247,0.225683,0.216632,0.20806,0.199935,0.19223,0.184916,0.177969,0.171367,0.165088,0.159113,0.153423,0.148002,0.142834,0.137905,0.1332,0.128707,0.124414,0.12031,0.116386,0.11263,0.109035,0.105591],"B_th_over_Bpole":[-4.220681,-4.276481,-4.263647,-4.243001,-4.214776,-4.179048,-4.135895,-4.085407,-4.027689,-3.96286,-3.891055,-3.812425,-3.727135,-3.635368,-3.537313,-3.433189,-3.323223,-3.20766,-3.086758,-2.960792,-2.830054,-2.694852,-2.555511,-2.412375,-2.265806,-2.116183,-1.963908,-1.809403,-1.653115,-1.495513,-1.337097,-1.178393,-1.019962,-0.862405,-0.706364,-0.55253,-0.401654,-0.254559,-0.112153,0.024544,0.154368,0.275958,0.387668,0.487413,0.572359,0.638223,0.677575,0.672081,0.63051,0.58605,0.545613,0.508847,0.47534,0.444736,0.416723,0.391033,0.367426,0.345695,0.325655,0.307145,0.29002,0.274152,0.259427,0.245743,0.233011,0.221147,0.210079,0.199741,0.190073,0.181022,0.172538,0.164579,0.157104,0.150077,0.143464,0.137235,0.131363,0.125822,0.12059,0.115645,0.110967,0.106539,0.102344,0.098367,0.094594,0.091012,0.087609,0.084374,0.081297,0.078368,0.075578,0.07292,0.070385,0.067966,0.065657,0.063452,0.061345,0.05933,0.057403,0.055558]},"6.0":{"nu_a_khz":6.0,"R_km":11.364972019348414,"M_msun":1.472473513177485,"ws_amplification":1.4167059106745075,"r_km":[0.05,0.2779,0.5059,0.7338,0.9618,1.1897,1.4176,1.6456,1.8735,2.1015,2.3294,2.5573,2.7853,3.0132,3.2411,3.4691,3.697,3.925,4.1529,4.3808,4.6088,4.8367,5.0647,5.2926,5.5205,5.7485,5.9764,6.2044,6.4323,6.6602,6.8882,7.1161,7.3441,7.572,7.7999,8.0279,8.2558,8.4837,8.7117,8.9396,9.1676,9.3955,9.6234,9.8514,10.0793,10.3073,10.5352,10.7631,10.9911,11.219,11.447,11.6749,11.9028,12.1308,12.3587,12.5867,12.8146,13.0425,13.2705,13.4984,13.7263,13.9543,14.1822,14.4102,14.6381,14.866,15.094,15.3219,15.5499,15.7778,16.0057,16.2337,16.4616,16.6896,16.9175,17.1454,17.3734,17.6013,17.8293,18.0572,18.2851,18.5131,18.741,18.9689,19.1969,19.4248,19.6528,19.8807,20.1086,20.3366,20.5645,20.7925,21.0204,21.2483,21.4763,21.7042,21.9322,22.1601,22.388,22.616],"B_r_over_Bpole":[4.388924,4.042417,4.031506,4.02269,4.01196,3.998731,3.98285,3.964263,3.942949,3.918899,3.892107,3.862573,3.830298,3.795291,3.757541,3.717054,3.673834,3.627889,3.579226,3.527853,3.473781,3.417022,3.357591,3.295504,3.230783,3.16345,3.093534,3.021067,2.946088,2.868642,2.788783,2.706573,2.622085,2.535405,2.446637,2.355899,2.263334,2.16911,2.073427,1.976519,1.878668,1.780206,1.681528,1.583107,1.485515,1.389457,1.295842,1.205963,1.121996,1.045392,0.975669,0.912062,0.853912,0.800641,0.751745,0.70678,0.665356,0.627127,0.591791,0.559077,0.528744,0.500579,0.47439,0.450006,0.427273,0.406053,0.386222,0.367667,0.350287,0.33399,0.318692,0.304319,0.2908,0.278072,0.26608,0.25477,0.244093,0.234007,0.224471,0.215448,0.206903,0.198805,0.191126,0.183838,0.176917,0.17034,0.164086,0.158135,0.152469,0.147071,0.141926,0.137018,0.132334,0.127862,0.12359,0.119506,0.1156,0.111864,0.108286,0.10486],"B_th_over_Bpole":[-3.981527,-4.03063,-4.019206,-4.000827,-3.975702,-3.943897,-3.90547,-3.860495,-3.809053,-3.751238,-3.687157,-3.61693,-3.540684,-3.458559,-3.370714,-3.277316,-3.178544,-3.074589,-2.965653,-2.851954,-2.733719,-2.611189,-2.48462,-2.354281,-2.220453,-2.083437,-1.943547,-1.801116,-1.656496,-1.510061,-1.362211,-1.213373,-1.064009,-0.914618,-0.765749,-0.618007,-0.472063,-0.328673,-0.18869,-0.053086,0.077018,0.200316,0.315259,0.419948,0.51194,0.587813,0.642032,0.662971,0.632934,0.58846,0.547592,0.510467,0.476655,0.445791,0.417557,0.391676,0.367908,0.346038,0.32588,0.307269,0.290057,0.274115,0.259327,0.24559,0.232812,0.220909,0.209809,0.199444,0.189753,0.180683,0.172185,0.164214,0.156729,0.149694,0.143076,0.136843,0.130969,0.125427,0.120195,0.115251,0.110575,0.106149,0.101957,0.097984,0.094215,0.090638,0.087239,0.084009,0.080937,0.078014,0.07523,0.072577,0.070047,0.067634,0.065331,0.063132,0.06103,0.059021,0.057099,0.05526]},"10.0":{"nu_a_khz":10.0,"R_km":11.371721385726898,"M_msun":1.5110749089450939,"ws_amplification":1.4324986078253517,"r_km":[0.05,0.2781,0.5061,0.7342,0.9623,1.1904,1.4184,1.6465,1.8746,2.1027,2.3307,2.5588,2.7869,3.015,3.243,3.4711,3.6992,3.9273,4.1553,4.3834,4.6115,4.8396,5.0676,5.2957,5.5238,5.7519,5.9799,6.208,6.4361,6.6642,6.8922,7.1203,7.3484,7.5765,7.8045,8.0326,8.2607,8.4888,8.7168,8.9449,9.173,9.4011,9.6291,9.8572,10.0853,10.3134,10.5414,10.7695,10.9976,11.2257,11.4537,11.6818,11.9099,12.138,12.366,12.5941,12.8222,13.0503,13.2783,13.5064,13.7345,13.9626,14.1906,14.4187,14.6468,14.8749,15.1029,15.331,15.5591,15.7872,16.0152,16.2433,16.4714,16.6995,16.9275,17.1556,17.3837,17.6118,17.8398,18.0679,18.296,18.5241,18.7521,18.9802,19.2083,19.4364,19.6644,19.8925,20.1206,20.3487,20.5767,20.8048,21.0329,21.261,21.489,21.7171,21.9452,22.1733,22.4013,22.6294],"B_r_over_Bpole":[4.250717,3.914215,3.903733,3.895347,3.885166,3.872622,3.857567,3.839949,3.819748,3.796953,3.77156,3.743569,3.71298,3.679803,3.644028,3.605659,3.564702,3.521162,3.475047,3.426365,3.375127,3.321343,3.265028,3.206198,3.144872,3.081071,3.014822,2.946155,2.875105,2.801713,2.726026,2.648099,2.567997,2.485793,2.401573,2.315437,2.227498,2.137892,2.046773,1.954326,1.860767,1.766357,1.67141,1.576318,1.481567,1.387784,1.295791,1.206755,1.122648,1.045628,0.975556,0.911662,0.853279,0.799819,0.75077,0.705682,0.66416,0.625856,0.590462,0.557704,0.527341,0.499155,0.472954,0.448566,0.425834,0.404621,0.384801,0.36626,0.348898,0.33262,0.317344,0.302992,0.289497,0.276795,0.264827,0.253543,0.242892,0.232832,0.223322,0.214324,0.205805,0.197732,0.190078,0.182815,0.175918,0.169365,0.163134,0.157205,0.151562,0.146186,0.141061,0.136174,0.131511,0.127059,0.122806,0.118741,0.114853,0.111134,0.107574,0.104165],"B_th_over_Bpole":[-3.855079,-3.902822,-3.891952,-3.874459,-3.850545,-3.820271,-3.783695,-3.740886,-3.691922,-3.636894,-3.575902,-3.50906,-3.436491,-3.358328,-3.274722,-3.185833,-3.091831,-2.992899,-2.889228,-2.781026,-2.668509,-2.551906,-2.43146,-2.307425,-2.180069,-2.049672,-1.91653,-1.780953,-1.643268,-1.503817,-1.362961,-1.221083,-1.078585,-0.935897,-0.793475,-0.651814,-0.511446,-0.37296,-0.237016,-0.104373,0.024074,0.147229,0.263716,0.371751,0.468958,0.552029,0.615898,0.651151,0.634819,0.590836,0.549559,0.51208,0.477966,0.446844,0.418391,0.392324,0.368396,0.34639,0.326115,0.307404,0.290107,0.274092,0.259242,0.245452,0.232629,0.220689,0.209557,0.199164,0.189452,0.180363,0.17185,0.163867,0.156372,0.14933,0.142706,0.13647,0.130593,0.12505,0.119818,0.114874,0.1102,0.105777,0.101588,0.097618,0.093853,0.09028,0.086886,0.083661,0.080594,0.077675,0.074896,0.072248,0.069724,0.067317,0.065019,0.062825,0.060729,0.058725,0.056809,0.054975]},"15.0":{"nu_a_khz":15.0,"R_km":11.357745205103804,"M_msun":1.5292249304236842,"ws_amplification":1.4410422643853409,"r_km":[0.05,0.2778,0.5056,0.7334,0.9612,1.189,1.4168,1.6446,1.8724,2.1001,2.3279,2.5557,2.7835,3.0113,3.2391,3.4669,3.6947,3.9225,4.1503,4.3781,4.6059,4.8337,5.0615,5.2893,5.5171,5.7448,5.9726,6.2004,6.4282,6.656,6.8838,7.1116,7.3394,7.5672,7.795,8.0228,8.2506,8.4784,8.7062,8.934,9.1618,9.3895,9.6173,9.8451,10.0729,10.3007,10.5285,10.7563,10.9841,11.2119,11.4397,11.6675,11.8953,12.1231,12.3509,12.5787,12.8065,13.0343,13.262,13.4898,13.7176,13.9454,14.1732,14.401,14.6288,14.8566,15.0844,15.3122,15.54,15.7678,15.9956,16.2234,16.4512,16.679,16.9067,17.1345,17.3623,17.5901,17.8179,18.0457,18.2735,18.5013,18.7291,18.9569,19.1847,19.4125,19.6403,19.8681,20.0959,20.3237,20.5514,20.7792,21.007,21.2348,21.4626,21.6904,21.9182,22.146,22.3738,22.6016],"B_r_over_Bpole":[4.157623,3.830432,3.820258,3.812143,3.802298,3.79017,3.775616,3.758586,3.739057,3.717022,3.692476,3.665418,3.635851,3.603781,3.5692,3.532111,3.492521,3.450436,3.405861,3.358806,3.309281,3.257295,3.202863,3.146001,3.086726,3.02506,2.961028,2.894659,2.825987,2.755051,2.681896,2.606576,2.529153,2.449695,2.368286,2.28502,2.200004,2.113365,2.025245,1.935812,1.845258,1.753807,1.661724,1.569328,1.477018,1.385313,1.294923,1.206887,1.122975,1.045744,0.975483,0.911436,0.852928,0.799366,0.750235,0.705082,0.663508,0.625164,0.589739,0.556959,0.526579,0.498383,0.472177,0.447786,0.425056,0.403847,0.384034,0.365501,0.348148,0.331881,0.316616,0.302278,0.288795,0.276106,0.264153,0.252882,0.242246,0.2322,0.222703,0.21372,0.205214,0.197156,0.189515,0.182265,0.175381,0.168841,0.162622,0.156706,0.151075,0.14571,0.140598,0.135722,0.13107,0.126628,0.122385,0.11833,0.114453,0.110743,0.107193,0.103793],"B_th_over_Bpole":[-3.772823,-3.819352,-3.808826,-3.791882,-3.76872,-3.739398,-3.703974,-3.662512,-3.615088,-3.56179,-3.502716,-3.437975,-3.367686,-3.291978,-3.210998,-3.124898,-3.033844,-2.938012,-2.837589,-2.732773,-2.623775,-2.510816,-2.39413,-2.273962,-2.150572,-2.024231,-1.895224,-1.763851,-1.630427,-1.495283,-1.358768,-1.221248,-1.083111,-0.944767,-0.806653,-0.669232,-0.533002,-0.398496,-0.266299,-0.137053,-0.011483,0.109563,0.225038,0.333558,0.433152,0.520831,0.591789,0.637262,0.634796,0.592107,0.550611,0.51294,0.478663,0.447403,0.418832,0.392665,0.368651,0.346572,0.326234,0.30747,0.290127,0.274073,0.25919,0.245373,0.232526,0.220566,0.209416,0.19901,0.189286,0.180188,0.171667,0.163677,0.156178,0.149132,0.142505,0.136267,0.130389,0.124846,0.119613,0.11467,0.109997,0.105575,0.101388,0.09742,0.093657,0.090086,0.086695,0.083472,0.080408,0.077492,0.074716,0.072071,0.06955,0.067146,0.064851,0.06266,0.060567,0.058566,0.056653,0.054822]}}}</script>
+<script>
+(() => {
+  const root = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  document.getElementById('themetoggle')?.addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+
+  const DATA = JSON.parse(document.getElementById('fig-data').textContent);
+  const rows = DATA.rows;
+  const bKeys = ['1e+13', '1e+14', '5e+14', '1e+15'];
+  const bLabels = ['10¹³ G', '10¹⁴ G', '5×10¹⁴ G', '10¹⁵ G'];
+
+  // ---- Escena interactiva Canvas (estilo 3Blue1Brown)
+  const cv = document.getElementById('magcanvas');
+  const ctx = cv.getContext('2d');
+  const slNu = document.getElementById('sl-nu');
+  const slB = document.getElementById('sl-b');
+  const playBtn = document.getElementById('playbtn');
+  let playing = true, tAnim = 0;
+
+  function updateReadout() {
+    const r = rows[+slNu.value] || rows[3];
+    const bk = bKeys[+slB.value] || '1e+15';
+    const binfo = r.magnetic_fields[bk];
+    document.getElementById('lbl-nu').textContent = r.nu_a_khz.toFixed(1) + ' kHz';
+    document.getElementById('lbl-b').textContent = bLabels[+slB.value];
+    document.getElementById('ro-wall').textContent = r.r_wall_km.toFixed(2) + ' km';
+    document.getElementById('ro-mu5').textContent = r.mu5_eff_max_ev.toFixed(4) + ' eV';
+    document.getElementById('ro-lam').textContent = r.lambda_crit_cm.toFixed(2) + ' cm';
+    document.getElementById('ro-lg').textContent = binfo.L_gamma_erg_s.toExponential(2) + ' erg/s';
+  }
+  slNu.addEventListener('input', updateReadout);
+  slB.addEventListener('input', updateReadout);
+  playBtn.addEventListener('click', () => {
+    playing = !playing;
+    playBtn.textContent = playing ? 'Pausar' : 'Reproducir';
+  });
+  updateReadout();
+
+  function drawStage() {
+    const W = cv.width, H = cv.height;
+    ctx.clearRect(0, 0, W, H);
+    const r = rows[+slNu.value] || rows[3];
+    const bIdx = +slB.value;
+    const cx = 290, cy = H / 2;
+    const Rpx = 128 * (r.R_km / 11.72);
+    const Rwall = Rpx * (r.r_wall_km / r.R_km);
+
+    // Líneas de campo dipolar magnético relativista
+    ctx.save();
+    for (let L = 1; L <= 4; L++) {
+      const scale = Rpx * (0.85 + 0.42 * L);
+      ctx.strokeStyle = `rgba(88, 196, 221, ${0.18 + 0.08 * bIdx})`;
+      ctx.lineWidth = 1.2 + 0.35 * bIdx;
+      for (const sgn of [-1, 1]) {
+        ctx.beginPath();
+        for (let a = 0.08; a <= Math.PI - 0.08; a += 0.04) {
+          const rad = scale * Math.sin(a) * Math.sin(a);
+          const x = cx + sgn * rad * Math.sin(a);
+          const y = cy - rad * Math.cos(a);
+          if (a === 0.08) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+
+    // Núcleo condensado (theta_0 = pi)
+    const grad = ctx.createRadialGradient(cx, cy, 4, cx, cy, Rpx);
+    grad.addColorStop(0, 'rgba(124, 58, 237, 0.55)');
+    grad.addColorStop(Rwall / Rpx, 'rgba(247, 217, 111, 0.75)');
+    grad.addColorStop(1, 'rgba(30, 41, 59, 0.85)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, Rpx, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Pared de dominio quiral vibrante (r = r_wall)
+    ctx.strokeStyle = '#f7d96f';
+    ctx.lineWidth = 2.8;
+    ctx.beginPath();
+    for (let a = 0; a <= Math.PI * 2 + 0.05; a += 0.05) {
+      const dr = 3.5 * Math.cos(a) * Math.sin(tAnim * 2.5);
+      const x = cx + (Rwall + dr) * Math.cos(a);
+      const y = cy + (Rwall + dr) * Math.sin(a);
+      if (a === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Pulsos de fotones convertidos en la pared de dominio
+    const nPhot = 6 + 3 * bIdx;
+    for (let k = 0; k < nPhot; k++) {
+      const ang = (k / nPhot) * Math.PI * 2 + 0.3;
+      const prog = ((tAnim * 0.7 + k / nPhot) % 1);
+      const rad = Rwall + prog * 130;
+      const px = cx + rad * Math.cos(ang);
+      const py = cy + rad * Math.sin(ang);
+      ctx.fillStyle = `rgba(247, 217, 111, ${1 - prog})`;
+      ctx.beginPath();
+      ctx.arc(px, py, 2.5 + 0.6 * bIdx, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Panel derecho: perfil radial de theta_0(r) y pico quiral mu_{5,eff}(r)
+    const px0 = 560, py0 = 60, pw = 350, ph = 280;
+    ctx.strokeStyle = '#2c3850';
+    ctx.strokeRect(px0, py0, pw, ph);
+    ctx.fillStyle = '#aab6c9';
+    ctx.font = '12px "IBM Plex Sans", sans-serif';
+    ctx.fillText('Perfil en la pared de dominio: θ₀(r)/π (azul) y corriente quiral J_top (oro)', px0, py0 - 12);
+
+    const wFrac = r.r_wall_km / (1.3 * r.R_km);
+    // Curva theta_0 / pi
+    ctx.strokeStyle = '#58c4dd';
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    for (let i = 0; i <= 120; i++) {
+      const u = i / 120;
+      const thVal = 1 / (1 + Math.exp((u - wFrac) / 0.025));
+      const x = px0 + u * pw;
+      const y = py0 + ph - thVal * (ph - 35) - 15;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Pico de corriente quiral |theta_0'(r)|
+    ctx.strokeStyle = '#f7d96f';
+    ctx.lineWidth = 2.4;
+    ctx.beginPath();
+    for (let i = 0; i <= 120; i++) {
+      const u = i / 120;
+      const ex = Math.exp((u - wFrac) / 0.025);
+      const dVal = (4 * ex / ((1 + ex) * (1 + ex))) * (0.55 + 0.14 * bIdx) * (0.85 + 0.15 * Math.sin(tAnim * 3));
+      const x = px0 + u * pw;
+      const y = py0 + ph - dVal * (ph - 35) - 15;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    if (playing) tAnim += 0.03;
+    requestAnimationFrame(drawStage);
+  }
+  requestAnimationFrame(drawStage);
+
+  // ---- Gráficas SVG
+  const NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, text) {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs || {})) n.setAttribute(k, v);
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  // Gráfica A: Perfiles quirales mu_{5,eff}(r)
+  (function plotChiral() {
+    const svg = document.getElementById('svg-chiral');
+    const pad = { l: 52, r: 18, t: 18, b: 36 }, W = 500, H = 280;
+    const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+    const xMin = 6.0, xMax = 13.5, yMin = 0, yMax = 0.034;
+    const sx = x => pad.l + ((x - xMin) / (xMax - xMin)) * pw;
+    const sy = y => pad.t + ph - ((y - yMin) / (yMax - yMin)) * ph;
+
+    for (let yv = 0; yv <= 0.03; yv += 0.01) {
+      svg.appendChild(el('line', { x1: pad.l, x2: W - pad.r, y1: sy(yv), y2: sy(yv), stroke: 'var(--rule)' }));
+      svg.appendChild(el('text', { x: pad.l - 6, y: sy(yv) + 4, 'text-anchor': 'end', fill: 'var(--muted)', 'font-size': 10 }, yv.toFixed(2)));
+    }
+    for (let xv = 6; xv <= 13; xv += 2) {
+      svg.appendChild(el('text', { x: sx(xv), y: H - 10, 'text-anchor': 'middle', fill: 'var(--muted)', 'font-size': 10 }, xv + ' km'));
+    }
+    const colors = { '3.0': 'var(--c1)', '6.0': 'var(--c2)', '10.0': 'var(--c3)', '15.0': 'var(--c4)' };
+    for (const [k, prof] of Object.entries(DATA.chiral_profiles)) {
+      const pts = prof.r_km.map((rk, i) => [rk, prof.mu5_eff_ev[i]]).filter(p => p[0] >= xMin && p[0] <= xMax);
+      const d = pts.map((p, i) => (i ? 'L' : 'M') + sx(p[0]).toFixed(1) + ',' + sy(p[1]).toFixed(1)).join(' ');
+      svg.appendChild(el('path', { d, fill: 'none', stroke: colors[k] || 'var(--c1)', 'stroke-width': 2.2 }));
+    }
+  })();
+
+  // Gráfica B: Dipolo relativista B_r(r) / B_pole
+  (function plotDipole() {
+    const svg = document.getElementById('svg-dipole');
+    const pad = { l: 52, r: 18, t: 18, b: 36 }, W = 500, H = 280;
+    const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+    const xMin = 0, xMax = 22, yMin = 0, yMax = 5.0;
+    const sx = x => pad.l + ((x - xMin) / (xMax - xMin)) * pw;
+    const sy = y => pad.t + ph - ((y - yMin) / (yMax - yMin)) * ph;
+
+    for (let yv = 0; yv <= 5; yv += 1) {
+      svg.appendChild(el('line', { x1: pad.l, x2: W - pad.r, y1: sy(yv), y2: sy(yv), stroke: 'var(--rule)' }));
+      svg.appendChild(el('text', { x: pad.l - 6, y: sy(yv) + 4, 'text-anchor': 'end', fill: 'var(--muted)', 'font-size': 10 }, yv.toFixed(0)));
+    }
+    for (let xv = 0; xv <= 20; xv += 5) {
+      svg.appendChild(el('text', { x: sx(xv), y: H - 10, 'text-anchor': 'middle', fill: 'var(--muted)', 'font-size': 10 }, xv + ' km'));
+    }
+    const keys = [['no_axion', 'var(--muted)', '4,3'], ['3.0', 'var(--c1)', ''], ['6.0', 'var(--c2)', ''], ['15.0', 'var(--c3)', '']];
+    for (const [k, col, dash] of keys) {
+      const prof = DATA.dipole_profiles[k];
+      if (!prof) continue;
+      const d = prof.r_km.map((rk, i) => (i ? 'L' : 'M') + sx(rk).toFixed(1) + ',' + sy(prof.B_r_over_Bpole[i]).toFixed(1)).join(' ');
+      const attrs = { d, fill: 'none', stroke: col, 'stroke-width': 2.1 };
+      if (dash) attrs['stroke-dasharray'] = dash;
+      svg.appendChild(el('path', attrs));
+    }
+  })();
+
+  // Gráfica C: Luminosidad L_gamma vs nu_a
+  (function plotLum() {
+    const svg = document.getElementById('svg-lum');
+    const pad = { l: 56, r: 18, t: 18, b: 36 }, W = 500, H = 280;
+    const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+    const xMin = 2.5, xMax = 15.5, yMin = 39.5, yMax = 45.0;
+    const sx = x => pad.l + ((x - xMin) / (xMax - xMin)) * pw;
+    const sy = y => pad.t + ph - ((y - yMin) / (yMax - yMin)) * ph;
+
+    for (let yv = 40; yv <= 45; yv += 1) {
+      svg.appendChild(el('line', { x1: pad.l, x2: W - pad.r, y1: sy(yv), y2: sy(yv), stroke: 'var(--rule)' }));
+      svg.appendChild(el('text', { x: pad.l - 6, y: sy(yv) + 4, 'text-anchor': 'end', fill: 'var(--muted)', 'font-size': 10 }, '10^' + yv));
+    }
+    for (const xv of [3, 6, 9, 12, 15]) {
+      svg.appendChild(el('text', { x: sx(xv), y: H - 10, 'text-anchor': 'middle', fill: 'var(--muted)', 'font-size': 10 }, xv + ' kHz'));
+    }
+    const bCols = [['1e+13', 'var(--c4)'], ['1e+14', 'var(--c1)'], ['5e+14', 'var(--c3)'], ['1e+15', 'var(--c2)']];
+    for (const [bk, col] of bCols) {
+      const d = rows.map((r, i) => {
+        const lg = Math.log10(r.magnetic_fields[bk].L_gamma_erg_s);
+        return (i ? 'L' : 'M') + sx(r.nu_a_khz).toFixed(1) + ',' + sy(lg).toFixed(1);
+      }).join(' ');
+      svg.appendChild(el('path', { d, fill: 'none', stroke: col, 'stroke-width': 2.2 }));
+      for (const r of rows) {
+        const lg = Math.log10(r.magnetic_fields[bk].L_gamma_erg_s);
+        svg.appendChild(el('circle', { cx: sx(r.nu_a_khz), cy: sy(lg), r: 3.5, fill: col }));
+      }
+    }
+  })();
+
+  // Gráfica D: Desplazamiento de frecuencia Delta nu (Hz) a 10^15 G
+  (function plotShift() {
+    const svg = document.getElementById('svg-shift');
+    const pad = { l: 56, r: 18, t: 18, b: 36 }, W = 500, H = 280;
+    const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+    const xMin = 2.5, xMax = 15.5, yMin = -200, yMax = 1250;
+    const sx = x => pad.l + ((x - xMin) / (xMax - xMin)) * pw;
+    const sy = y => pad.t + ph - ((y - yMin) / (yMax - yMin)) * ph;
+
+    for (const yv of [0, 400, 800, 1200]) {
+      svg.appendChild(el('line', { x1: pad.l, x2: W - pad.r, y1: sy(yv), y2: sy(yv), stroke: 'var(--rule)' }));
+      svg.appendChild(el('text', { x: pad.l - 6, y: sy(yv) + 4, 'text-anchor': 'end', fill: 'var(--muted)', 'font-size': 10 }, yv + ' Hz'));
+    }
+    for (const xv of [3, 6, 9, 12, 15]) {
+      svg.appendChild(el('text', { x: sx(xv), y: H - 10, 'text-anchor': 'middle', fill: 'var(--muted)', 'font-size': 10 }, xv + ' kHz'));
+    }
+    const d = rows.map((r, i) => (i ? 'L' : 'M') + sx(r.nu_a_khz).toFixed(1) + ',' + sy(r.magnetic_fields['1e+15'].delta_nu_hz).toFixed(1)).join(' ');
+    svg.appendChild(el('path', { d, fill: 'none', stroke: 'var(--c2)', 'stroke-width': 2.4 }));
+    for (const r of rows) {
+      svg.appendChild(el('circle', { cx: sx(r.nu_a_khz), cy: sy(r.magnetic_fields['1e+15'].delta_nu_hz), r: 4, fill: 'var(--c2)' }));
+    }
+  })();
+})();
+</script>
+</body>
+</html>

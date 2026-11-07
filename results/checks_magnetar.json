@@ -1,0 +1,118 @@
+{
+  "line": "Línea 3: Unificación Axión + Magnetar (acoplo de Chern-Simons, corriente quiral y oscilaciones magneto-axiónicas)",
+  "total_checks": 18,
+  "passed_checks": 18,
+  "negative_controls": 4,
+  "all_passed": true,
+  "elapsed_s": 15.3,
+  "checks": [
+    {
+      "id": "bianchi_em",
+      "kind": "symbolic",
+      "name": "Identidad de Bianchi electromagnética ∇_μ F̃^{μν} == 0 (ν = t, r, θ, φ)",
+      "passed": true
+    },
+    {
+      "id": "pontryagin_total_div",
+      "kind": "symbolic",
+      "name": "Identidad topológica ¼√(-g) F_μν F̃^{μν} - ½ ∂_μ(√(-g) A_ν F̃^{μν}) == 0",
+      "passed": true
+    },
+    {
+      "id": "euler_lagrange_mcfj",
+      "kind": "symbolic",
+      "name": "Euler-Lagrange de A_ν → Maxwell-Carroll-Field-Jackiw (1990) (4 componentes)",
+      "passed": true
+    },
+    {
+      "id": "euler_lagrange_kg_cs",
+      "kind": "symbolic",
+      "name": "Euler-Lagrange de a → □a + V'(a) + n ∂m*/∂a + ¼ g_{aγγ} F_μν F̃^{μν} == 0",
+      "passed": true
+    },
+    {
+      "id": "wasserman_shapiro_dipole",
+      "kind": "symbolic",
+      "name": "Dipolo magnético relativista A_φ = -a_φ(r) sin²θ → Wasserman & Shapiro (1983)",
+      "passed": true
+    },
+    {
+      "id": "dipole_flat_limit",
+      "kind": "symbolic",
+      "name": "Límite plano (Φ_0 = λ_0 = 0) de la ecuación dipolar: soluciones exactas a_φ ∝ r² y a_φ ∝ 1/r",
+      "passed": true
+    },
+    {
+      "id": "wasserman_shapiro_analytic_ext",
+      "kind": "symbolic",
+      "name": "Solución analítica exterior de Wasserman-Shapiro anula exactamente la EDO en Schwarzschild",
+      "passed": true
+    },
+    {
+      "id": "witten_topological_charge",
+      "kind": "symbolic",
+      "name": "Efecto Witten en la pared de dominio: ρ_top = -g_{aγγ} f_a θ_0' B^{r̂}_0 y F_0 F̃_0 == 0",
+      "passed": true
+    },
+    {
+      "id": "domain_wall_chiral_current",
+      "kind": "symbolic",
+      "name": "Corriente quiral en la pared de dominio J^φ_top y potencial efectivo μ_{5,eff} = (π/α_EM) g_{aγγ} f_a θ_0'",
+      "passed": true
+    },
+    {
+      "id": "dehman_pons_dispersion",
+      "kind": "symbolic",
+      "name": "Inestabilidad magnética quiral (Dehman & Pons 2024): k_crit = 2 k_chiral^{ax}, dγ/dk(k_max) == 0",
+      "passed": true
+    },
+    {
+      "id": "magneto_axionic_coupled_eqs",
+      "kind": "symbolic",
+      "name": "Sistema acoplado de oscilaciones magneto-axiónicas (δθ, E) frente a referencia",
+      "passed": true
+    },
+    {
+      "id": "magneto_axionic_hermitian_flux",
+      "kind": "symbolic",
+      "name": "Simetría hermítica de conversión axión-fotón: acoplos off-diagonal conjugados exactos",
+      "passed": true
+    },
+    {
+      "id": "neg_ctrl_cs_sign",
+      "kind": "negative_control",
+      "name": "Control negativo 1: cambio de signo +g_{aγγ} → -g_{aγγ} en MCFJ detectado (False)",
+      "passed": true
+    },
+    {
+      "id": "neg_ctrl_ws_metric",
+      "kind": "negative_control",
+      "name": "Control negativo 2: mutación métrica (Φ_0' - λ_0') → (Φ_0' + λ_0') en dipolo WS detectada (False)",
+      "passed": true
+    },
+    {
+      "id": "neg_ctrl_ws_multipole",
+      "kind": "negative_control",
+      "name": "Control negativo 3: mutación multipolar 2/r² → 6/r² (l=1 → l=2) en dipolo WS detectada (False)",
+      "passed": true
+    },
+    {
+      "id": "neg_ctrl_mu5_factor",
+      "kind": "negative_control",
+      "name": "Control negativo 4: mutación π/α_EM → 2π/α_EM en potencial quiral μ_{5,eff} detectada (False)",
+      "passed": true
+    },
+    {
+      "id": "num_dipole_ws_match",
+      "kind": "numerical",
+      "name": "Integrador dipolar compilado (lambdify+cse) coincide con Wasserman-Shapiro exterior (err = 5.11e-09)",
+      "passed": true
+    },
+    {
+      "id": "num_magneto_axionic_scaling",
+      "kind": "numerical",
+      "name": "Escala cuadrática L_γ(10¹⁵ G)/L_γ(10¹⁴ G) = 100.00 (esperado 100) y convergencia RK4 (diff = 4.65e-08)",
+      "passed": true
+    }
+  ]
+}

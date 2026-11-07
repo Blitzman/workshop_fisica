@@ -1,0 +1,104 @@
+{
+  "step11_gmodes": [
+    [
+      "Composición congelada: u^μ ∂_μ Y_p = 0  ⇒  ΔY_p = δY_p + ξ^r Y_p0' = 0",
+      true,
+      "transporte lagrangiano exacto desde la cuadrivelocidad perturbada u^μ"
+    ],
+    [
+      "Discriminante de Schwarzschild con axión A(r) = (ε' - p'/c_s^2 - n_b ∂m*/∂a a_0')/(ε+p)",
+      true,
+      "deducido simbólicamente desde la relación adiabática lagrangiana congelada"
+    ],
+    [
+      "Identidad termodinámica A(r) = (1/c_e^2 - 1/c_s^2) p'/(ε+p)",
+      true,
+      "separa la compresibilidad de equilibrio c_e^2 de la adiabática congelada c_s^2"
+    ],
+    [
+      "Gravedad efectiva con fuerza escalar: g_eff = Φ_0' + n_b(∂m*/∂a)a_0'/(ε+p) = -p'/(ε+p)",
+      true,
+      "identidad exacta módulo la ecuación hidrostática de fondo con axión"
+    ],
+    [
+      "Frecuencia de Brunt-Väisälä relativista N^2(r) = -g_eff(r) A(r) e^{2(Φ_0 - λ_0)}",
+      true,
+      "generalización de Reisenegger & Goldreich (1992) acoplada al condensado axiónico"
+    ],
+    [
+      "Relación euleriana δε = δp/c_s^2 - (ε+p)A(r)ξ^r + n_b(∂m*/∂a)δa y δn/n = δp/(c_s^2(ε+p)) - A(r)ξ^r",
+      true,
+      "término de flotabilidad -(ε+p)A(r)ξ^r y acoplo escalar n_b(∂m*/∂a)δa exactos"
+    ],
+    [
+      "(1) momento radial no barotrópico vs referencia de Reisenegger-Goldreich + axión",
+      true,
+      "residuo simbólico idénticamente nulo tras separación en Y_{lm}"
+    ],
+    [
+      "(2) bariones no barotrópico vs referencia de Reisenegger-Goldreich + axión",
+      true,
+      "residuo simbólico idénticamente nulo tras separación en Y_{lm}"
+    ],
+    [
+      "(3) momento angular no barotrópico vs referencia de Reisenegger-Goldreich + axión",
+      true,
+      "residuo simbólico idénticamente nulo tras separación en Y_{lm}"
+    ],
+    [
+      "(4) KG interior no barotrópico vs referencia de Reisenegger-Goldreich + axión",
+      true,
+      "residuo simbólico idénticamente nulo tras separación en Y_{lm}"
+    ],
+    [
+      "Límite barotrópico c_s^2 → c_e^2 (A(r) → 0): recupera exactamente Eqs. (8a)–(8d) del Paper II",
+      true,
+      "las 4 ecuaciones colapsan idénticamente a las del fluido barotrópico del Paper II"
+    ],
+    [
+      "Control negativo 1: invertir signo de flotabilidad A(r) → -A(r) en momento radial",
+      true,
+      "detectado (comparador devuelve False; cambiaría modos oscilatorios g por inestabilidad convectiva)"
+    ],
+    [
+      "Control negativo 2: omitir término de estratificación -A(r)(ε+p)W en continuidad bariónica",
+      true,
+      "detectado (comparador devuelve False; violaría la conservación covariante de bariones)"
+    ],
+    [
+      "Control negativo 3: omitir acoplo de flotabilidad -(n_b ∂m*/∂θ)A(r)ξ^r en Klein-Gordon",
+      true,
+      "detectado (comparador devuelve False; la fuente escalar depende de δn y por tanto de A(r)ξ^r)"
+    ],
+    [
+      "Control negativo 4: mutar l(l+1) → l^2 en el numerador de la relación de dispersión WKB",
+      true,
+      "detectado (comparador devuelve False)"
+    ],
+    [
+      "Regularidad en el origen r → 0: A(0) = 0, N^2(0) = 0, (N^2)'(0) = 0, δθ'(0) = 0 y Eq. (10a)",
+      true,
+      "el término de flotabilidad se anula como O(r^2) en el centro y preserva las condiciones iniciales"
+    ],
+    [
+      "Relación de dispersión WKB local ω^2 = l(l+1)N^2(r) / [k_r^2 r^2 e^{2λ_0} + l(l+1)]",
+      true,
+      "deducida del determinante principal en el régimen de baja frecuencia e incompresible"
+    ],
+    [
+      "Puente numérico directo sp.lambdify (cse=True) vs axstar._perturb_rhs en c_s^2 = c_e^2",
+      true,
+      "error relativo = 1.31e-17 en r = 6.0 km sobre BSk26 (ν_a = 6.0 kHz, l = 2)"
+    ],
+    [
+      "Perfil de Brunt-Väisälä N(r)/(2π) en BSk26: fondo 150–250 Hz y pico axiónico 500–900 Hz",
+      true,
+      "fondo nuclear = [169.4, 231.4] Hz; pico en r_wall = [509.7, 765.2] Hz"
+    ],
+    [
+      "Espectro (i_a, g_1, g_2, g_3), nodos (0, 1, 2, 3) y desfase resonante ΔΦ_GW en LIGO A+ / ET",
+      true,
+      "ν_a=6 kHz: ν(i_a)=210.2 Hz (f_GW=420.3 Hz, Q=1.57e-03, ΔΦ_GW=0.403 rad, SNR_LIGO=2.4, SNR_ET=39.7)"
+    ]
+  ]
+}
