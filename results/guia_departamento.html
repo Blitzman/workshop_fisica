@@ -215,10 +215,33 @@ table.pitfalls {
 
 .copybar {
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: -0.5rem;
+  margin-bottom: -0.4rem;
 }
+.tabs {
+  display: inline-flex;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--sheet);
+}
+.tabs button {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  padding: 0.42rem 0.75rem;
+  font: 500 0.8rem/1.2 var(--f-mono);
+  cursor: pointer;
+}
+.tabs button + button { border-left: 1px solid var(--rule); }
+.tabs button[aria-selected="true"] {
+  background: var(--accent);
+  color: #fff;
+}
+.tabpane[hidden] { display: none; }
 footer {
   font-size: 0.85rem;
   color: var(--muted);
@@ -243,8 +266,9 @@ footer {
       <a href="#reglas">5 reglas</a>
       <a href="#flujos">3 flujos</a>
       <a href="#trampas">Trampas y soluciones</a>
+      <a href="#tokens">Tokens y memoria</a>
       <a href="#kit">Kit del grupo</a>
-      <a href="#agents">AGENTS.md</a>
+      <a href="#agents">3 ficheros base</a>
     </div>
     <div class="actions">
       <a class="btn-link" href="informe_axiones.html" target="_blank" rel="noopener">Informe de Jose ↗</a>
@@ -418,6 +442,48 @@ footer {
     </div>
   </section>
 
+  <section class="stack wide" id="tokens">
+    <h2>Cómo ahorrar un 60–80 % de tokens y documentar hipótesis en vivo</h2>
+    <p class="muted">En un proyecto exploratorio es fácil quemar contexto y tiempo de CPU releyendo archivos grandes o repitiendo caminos muertos tras compactar la conversación (<code>/compact</code>). Estas cuatro prácticas lo evitan desde el primer día:</p>
+    <div class="grid3">
+      <article class="card">
+        <header>
+          <span class="chip chip-ok">Cómputo y contexto</span>
+          <h3>Caché en disco + modo <code>--fast</code></h3>
+        </header>
+        <ul>
+          <li><b>Serializar SymPy en disco:</b> Guardar en <code>.cache/</code> los tensores linealizados y las matrices de <code>lambdify</code> pasa cada iteración de minutos a milisegundos.</li>
+          <li><b>1 punto testigo para depurar:</b> Iterar sobre una sola estrella y una frecuencia (<code>ν_a = 6 kHz</code>, &lt; 3 s) y dejar el barrido de 36 modos para el final.</li>
+          <li><b>Cero volcados crudos:</b> Prohibir <code>print(expr)</code> de polinomios de 400 términos; imprimir solo qué coeficientes de perturbación no se anulan.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <header>
+          <span class="chip chip-ok">Notación fija</span>
+          <h3><code>CONVENTIONS.md</code> del grupo</h3>
+        </header>
+        <ul>
+          <li>Fija desde el minuto cero la signatura <code>(+,-,-,-)</code>, el factor <code>(r/R)^l</code>, el signo menos de <code>ξ^θ</code> y la definición de <code>X = -e^Φ Δp</code>.</li>
+          <li>Documenta los convenios implícitos de las referencias clásicas (p. ej. que en <code>p = κρ²</code> de LMI 97 y Yoshida–Kojima 97, <code>ρ</code> es la densidad de energía <code>ε</code>).</li>
+          <li>Se reutiliza intacto entre todos los artículos y tesis del grupo de Jose.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <header>
+          <span class="chip chip-obs">Memoria científica</span>
+          <h3><code>LAB_NOTEBOOK.md</code> en vivo</h3>
+        </header>
+        <ul>
+          <li><b>Hipótesis y refutaciones:</b> Antes de probar una idea, el agente la anota; si falla (p. ej. congelar la métrica en LD o apagar <code>δθ</code> violando Bianchi), queda registrada para no repetirla tras <code>/compact</code>.</li>
+          <li><b>Insights y erratas:</b> Cada hallazgo físico o discrepancia con el borrador se apunta al vuelo con enlace a <code>fichero:línea</code>.</li>
+          <li>Al terminar el cálculo, el informe para el grupo y la respuesta al referee salen directamente de este cuaderno.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
   <section class="stack" id="kit">
     <h2>Qué necesita el departamento para arrancar (en una mañana)</h2>
     <ol class="rules">
@@ -430,35 +496,113 @@ footer {
         <p>Añadir un módulo <code>eos_table.py</code> que lea las tablas numéricas exactas que usa el grupo de Jose (en lugar del ajuste analítico de Potekhin), manteniendo la misma interfaz <code>p(n), eps(n), cs2(n)</code>. Eso eliminará el 0,3 % de diferencia de base en las frecuencias sin axión.</p>
       </li>
       <li>
-        <h3>Incluir el fichero <code>AGENTS.md</code> / <code>CLAUDE.md</code> en la raíz del proyecto</h3>
-        <p>Es el fichero que lee el agente nada más abrir el proyecto y le transmite todas las convenciones físicas y reglas técnicas aprendidas para que no repita ningún tropiezo.</p>
+        <h3>Incluir los 3 ficheros de gobierno en la raíz (<code>AGENTS.md</code>, <code>CONVENTIONS.md</code>, <code>LAB_NOTEBOOK.md</code>)</h3>
+        <p>Ya están incluidos en la raíz de este repositorio y ocupan menos de 2.000 tokens en total. El agente los lee al arrancar cada sesión para conocer las reglas de verificación, la notación del grupo y las hipótesis ya probadas.</p>
       </li>
     </ol>
   </section>
 
-  <section class="stack" id="agents">
+  <section class="stack wide" id="agents">
     <div class="copybar">
-      <h2>Plantilla <code>CLAUDE.md</code> / <code>AGENTS.md</code> lista para el grupo</h2>
-      <button type="button" class="btn-theme" id="copybtn">Copiar plantilla</button>
+      <h2>Los 3 ficheros base (ya incluidos en el repositorio)</h2>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center">
+        <div class="tabs" role="tablist" aria-label="Ficheros base">
+          <button type="button" role="tab" aria-selected="true" data-tab="tab-agents">AGENTS.md</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="tab-conv">CONVENTIONS.md</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="tab-lab">LAB_NOTEBOOK.md</button>
+        </div>
+        <button type="button" class="btn-theme" id="copybtn">Copiar fichero activo</button>
+      </div>
     </div>
-    <p class="muted">Guardando este fichero en la raíz de cualquier repositorio del grupo, el agente seguirá automáticamente esta metodología desde el primer comando:</p>
-    <pre id="agentsmd"><code># Reglas para cálculo simbólico y numérico en astrofísica relativista
+    <p class="muted">Estos tres archivos en la raíz del proyecto guían al agente desde el primer comando, optimizan el consumo de tokens y mantienen el registro científico entre sesiones:</p>
 
-## 1. Principio de verificación
-- NUNCA deduzcas ecuaciones en texto libre: toda ecuación debe derivarse en SymPy partiendo de la acción o de las ecuaciones de campo en `geometry.py`.
-- Separa siempre el módulo que deriva (`model.py`) del módulo que transcribe las ecuaciones de referencia o del borrador LaTeX (`paper.py`).
-- Una ecuación solo pasa el test si su diferencia con la de referencia, módulo las ecuaciones de equilibrio de fondo (`compare.py`), se simplifica simbólicamente a `0` exacto.
-- Incluye siempre CONTROLES NEGATIVOS (errores de signo, factores 4π→8π, coeficientes l(l+1)) y comprueba que el comparador devuelve `False`.
+    <pre class="tabpane" id="tab-agents"><code># Protocolo agéntico para astrofísica relativista
 
-## 2. Convenios físicos por defecto
-- Signatura métrica: (+, -, -, -), unidades naturales c = ħ = 1 (salvo conversión explícita con CODATA vía `scipy.constants`).
-- Armónicos esféricos y gauge de Regge-Wheeler según la convención de Lindblom-Detweiler (1983) / Gómez-Bañón, Pnigouras &amp; Pons (2025, 2026).
+Antes de escribir código o lanzar cálculos, lee `CONVENTIONS.md` y el estado actual en `LAB_NOTEBOOK.md`.
 
-## 3. Reglas técnicas de SymPy y SciPy (evitar cuelgues)
-- PROHIBIDO llamar a `sympy.simplify()` o `sympy.trigsimp()` sobre expresiones tensoriales grandes con dependencia angular: depende de `PYTHONHASHSEED` y puede no terminar.
-- Para separar factores angulares Y_lm(θ, φ), usa división exacta de polinomios en (cos θ, sin θ) módulo cos²θ + sin²θ = 1 (`nonradial._divide`).
-- PROHIBIDO reescribir a mano las ecuaciones simbólicas al pasar al integrador numérico: construye la matriz del sistema directamente desde las expresiones de SymPy verificadas (como en `axgr.py`) o expórtalas con `ccode`/`fcode`.
-- En integraciones radiales desde r = 0 con modos acoplados rígidos, usa el desarrollo en serie analítico en el centro, integra con `BDF` el primer tramo (r &lt; 0.5 km) y continúa con `DOP853`.</code></pre>
+## 1. Reglas de verificación (cero alucinaciones)
+- **Todo desde la acción:** Ninguna ecuación intermedia se acepta sin deducirla en SymPy desde la acción (`axion_ns/model.py`) y reducir su diferencia con la referencia (`axion_ns/paper.py` o `axion_ns/nonradial.py`) a `0` exacto módulo las ecuaciones de fondo (`axion_ns/compare.py`).
+- **Separación estricta:** El fichero que deriva (`model.py`, `fullgr.py`) jamás importa ni conoce las ecuaciones transcritas del paper (`paper.py`).
+- **Controles negativos obligatorios:** Todo paso nuevo debe incluir al menos 2 mutaciones deliberadas (cambio de signo, `4π → 8π`, `2l → 2(l+1)`) y verificar que el comparador devuelve `False`.
+- **Puente numérico directo:** Prohibido transcribir ecuaciones a mano al integrador numérico; compílalas desde las expresiones de SymPy verificadas (`lambdify` con `cse=True`, `ccode` o `fcode`, como en `axion_ns/axgr.py`).
+
+## 2. Economía de tokens y tiempo de cómputo
+- **Prohibido imprimir expresiones de SymPy crudas:** Nunca hagas `print(expr)` de tensores o ecuaciones desplegadas en consola. Si una ecuación no anula, imprime solo la lista de variables cuyo coeficiente es no nulo (`[v for v in PERT if expr.coeff(v) != 0]`) o evalúa el residuo numérico en un punto fijo.
+- **Iterar en modo `--fast` (1 punto testigo):** Durante el desarrollo y depuración numérica, ejecuta una sola estrella y una sola frecuencia testigo (`ν_a = 6.0 kHz`, `l = 2`, &lt; 3 s). Solo lanza barridos completos (`run_all.py`) cuando el punto testigo ya pasa todos los tests.
+- **No releer `.tex` ni HTML completos:** Extrae las ecuaciones del LaTeX una sola vez a `paper.py`. Para editar informes, usa rangos de líneas (`StartLine`/`EndLine`).
+- **Prohibido `simplify()` / `trigsimp()` ciego:** En expresiones con armónicos esféricos depende de `PYTHONHASHSEED` y puede colgarse horas. Usa reducción polinómica exacta en `(cos θ, sin θ)` (`nonradial._divide`).
+
+## 3. Cuaderno de laboratorio (`LAB_NOTEBOOK.md`)
+- Antes de probar una idea no trivial (un límite, una aproximación o un cambio de integrador), anota la **Hipótesis** en `LAB_NOTEBOOK.md`.
+- Cuando obtengas el resultado, anota si fue **Confirmada** o **Refutada** (y por qué) para no repetir caminos muertos tras un `/compact`.
+- Cualquier discrepancia con el paper o comportamiento físico inesperado se registra en la sección **Insights y preguntas para el grupo** con enlace al fichero y línea.</code></pre>
+
+    <pre class="tabpane" id="tab-conv" hidden><code># Convenciones físicas y de notación del grupo (Gómez-Bañón, Pnigouras &amp; Pons)
+
+## 1. Métrica, signatura y tensores
+- **Signatura:** `(+1, -1, -1, -1)`.
+- **Métrica estática de fondo:** `ds² = e^{2Φ(r)} dt² - e^{2λ(r)} dr² - r² (dθ² + sin²θ dφ²)`, con `e^{-2λ} = 1 - 2GM(r)/r`.
+- **Convenio de curvatura (`axion_ns/geometry.py`):**
+  - `Γ^a_{bc} = ½ g^{ad}(∂_b g_{dc} + ∂_c g_{db} - ∂_d g_{bc})`
+  - `R^a_{bcd} = ∂_c Γ^a_{db} - ∂_d Γ^a_{cb} + Γ^a_{ce} Γ^e_{db} - Γ^a_{de} Γ^e_{cb}`, `R_{bd} = R^a_{bad}`
+  - Ecuaciones de Einstein: `G_{μν} = 8πG T_{μν}`
+- **Tensor energía-momento del fluido:** `T_{μν} = (ε + p) u_μ u_ν - p g_{μν}`.
+
+## 2. Perturbaciones no radiales (Cowling y Regge-Wheeler / Lindblom-Detweiler)
+- **Dependencia temporal y armónica:** `e^{-iωt} Y_{lm}(θ, φ)` (modo polar axisimétrico `m = 0`; las ecuaciones radiales no dependen de `m`).
+- **Factor radial extraído `(r/R)^l` (`axion_ns/nonradial.py`):**
+  - Axión: `a = a_0(r) + f_a (r/R)^l δθ(r) Y_{lm} e^{-iωt}`
+  - Bariones: `n_b = n_0(r) + (r/R)^l δn_b(r) Y_{lm} e^{-iωt}`
+  - Desplazamiento fluido: `ξ^r = (r/R)^l e^{-λ} (W(r)/r) Y_{lm} e^{-iωt}`, `ξ^θ = -(r/R)^l (V(r)/r²) ∂_θ Y_{lm} e^{-iωt}` (¡ojo al signo menos en `ξ^θ`!).
+- **Métrica perturbada (convenio Lindblom-Detweiler 1983, `axion_ns/fullgr.py`):**
+  `ds² = e^{2Φ}(1 + H_0 rY) dt² - 2iωr H_1 rY dt dr - e^{2λ}(1 - H_2 rY) dr² - r²(1 - K rY) dΩ²`, donde `rY = (r/R)^l Y_{lm} e^{-iωt}`.
+- **Variable de presión lagrangiana:** `X = -e^Φ Δp = -e^Φ (δp + ξ^r p')`.
+- **Modos cuasinormales:** `ω = ω_R + i ω_I` con `ω_I &lt; 0` para modos amortiguados (`e^{-iωt} = e^{-|ω_I|t} e^{-iω_R t}`, `1/τ = 2π |Im ν|`).
+
+## 3. Ecuación de estado (EOS) y unidades
+- **Unidades simbólicas:** `c = ħ = 1`, `G` explícita.
+- **Unidades en integradores numéricos (`axion_ns/axstar.py`, `axion_ns/axgr.py`):** Geométricas en kilómetros (`G = c = 1`, densidades y presiones en `km⁻²` vía `KGEO = 1.32379e-6 km⁻² / (MeV fm⁻³)`).
+- **Politropos de calibración (LMI 1997 / Yoshida-Kojima 1997):** En `p = κ ρ²`, `ρ` denota **densidad de energía `ε`**, NO densidad de masa en reposo `m_b n_b`.
+- **BSk26 y axión:** `ε(n, a) = ε_0(n) + n [m*(a) - m_N]`, por lo que `p = n ∂ε/∂n - ε = p_0(n)` no depende explícitamente de `a`. Escala axiónica fijada por `E_0 = ε m_π² f_π² = n_c σ_N`.</code></pre>
+
+    <pre class="tabpane" id="tab-lab" hidden><code># Cuaderno de laboratorio (Hipótesis, Refutaciones e Insights)
+
+Registro vivo de decisiones técnicas, hipótesis verificadas/refutadas y hallazgos físicos para mantener el contexto limpio entre sesiones.
+
+## 1. Hipótesis probadas (no repetir caminos refutados)
+
+- **[H1 · REFUTADA] «Si fijamos `H0 = H1 = K = 0` en el sistema final de Lindblom-Detweiler (`fullgr.EXT`), recuperamos las ecuaciones de Cowling»**
+  - *Prueba:* Se evaluó `fullgr.EXT` con perturbaciones métricas nulas en `axion_ns/step7_fullgr.py`.
+  - *Resultado:* Falla incluso sin axión.
+  - *Causa física:* Las ecuaciones de primer orden de LD ya han usado las ecuaciones de Einstein (`G_rr`, `G_tr`, `G_tθ`) para eliminar derivadas del fluido. En Cowling esas ecuaciones de Einstein no se imponen.
+  - *Regla:* El límite de Cowling debe tomarse en las ecuaciones de campo linealizadas antes de usar Einstein para despejar (`step7_fullgr.structure_checks`).
+
+- **[H2 · REFUTADA] «En el sistema con métrica dinámica podemos apagar `δθ = 0` para medir cuánto cambia el amortiguamiento `Im ν` solo por el cambio del fondo estático»**
+  - *Prueba:* Se integró `axion_ns/axgr.py` con `dyn=False` buscando `Im ν`.
+  - *Resultado:* `Im ν` carece de significado físico en esa variante.
+  - *Causa física:* Con `θ_0'(r) ≠ 0` y métrica dinámica, forzar `δθ = 0` viola la identidad de Bianchi (`∇_μ G^μν = 0`) porque el flujo axiónico entra en `K'` y `H0`. Solo `Re ν` sirve como referencia orientativa del efecto de fondo.
+
+- **[H3 · CONFIRMADA] «La rigidez (stiffness) de Klein-Gordon cerca de `r = 0` causa los 20 min por modo con `DOP853`»**
+  - *Solución:* Integrar `r ∈ [10⁻³ km, 0.5 km]` con método implícito `BDF` y `r ∈ [0.5 km, R]` con `DOP853` reduce el tiempo de ~20 min a ~0.4 s por integración sin perder precisión (`rtol=1e-10`).
+
+- **[H4 · REFUTADA] «La regla aditiva del Paper II (`1/τ_total ≈ 1/τ_GW + 1/τ_a` con el `τ_a` de Cowling) es precisa para todos los modos»**
+  - *Resultado (`axion_ns/step10_axion_gr.py`):* Solo acierta en orden de magnitud. En `p_2` a `8 kHz` falla por un factor 10 (`0.10 Hz` real vs `1.0 Hz` sumado) porque la oscilación métrica desplaza la posición de los ceros de `δθ(R)`.
+
+## 2. Insights físicos y preguntas abiertas para los autores
+
+- **[I1 · Punto de linealización en Sec. IV del Paper I (`axion_ns/step3_toy_model.py:112-128`)]**
+  - Las aproximaciones (4.1) usan `∂m*/∂a ≈ -βσ_N/(4f_a)` y `V'' + n m*'' ≈ m_a²(1 - α)`, que corresponden a `θ = 0` (máximo taquiónico si `α &gt; 1`).
+  - Sin embargo, en el condensado interior `θ_0 = π`, donde `∂m*/∂a = 0` (sin acoplo lineal en el bulto) y `m_eff² = m_a²(α - 1)/√(1 - β) &gt; 0`.
+  - En la estrella realista (y en el Paper II), el acoplo vive exclusivamente en la capa de transición donde `θ_0` baja de `π` a `0`.
+
+- **[I2 · Tres cifras del texto del Paper I (`axion_ns/step4_numerics.py:26-42`)]**
+  - `m_a R` para `3 kHz` y `12 km` es `2π ν R / c = 0.75` (el paper da `ν R / c = 0.12`, falta `2π`).
+  - `m_a² f_a² = ε β m_π² f_π² / 4 = ε × (4.4–4.8) MeV/fm³` (el paper da `ε × 13`; el Paper II usa `ε m_π² f_π² ≃ 2 MeV/fm³` para `ε = 0.1`, que nos da la razón).
+  - `λ²` sale `ε × 0.03` (el paper dice `ε × 0.02`, incoherente incluso con su `13/150 = 0.087`).
+
+- **[I3 · Erratas cazadas en la literatura de Lindblom-Detweiler (`axion_ns/fullgr.py:201-243`)]**
+  - Zhao &amp; Lattimer (2022, arXiv:2204.03037): signo de `2ω²W` cambiado en `X'` (desplaza el modo `f` un `-31 %`; corregido en Kunjipurayil et al. 2022).
+  - Burgio et al. (2011, arXiv:1106.2736): 5 erratas de transcripción en el Apéndice A (corregidas en Zhang et al. 2026, que introduce `ω³` por `ω²` en `V`).</code></pre>
   </section>
 
   <footer>
@@ -476,13 +620,23 @@ footer {
     root.setAttribute('data-theme', isDark ? 'light' : 'dark');
   });
 
+  const tabs = document.querySelectorAll('[role="tab"]');
+  const panes = document.querySelectorAll('.tabpane');
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(b => b.setAttribute('aria-selected', String(b === btn)));
+      panes.forEach(p => { p.hidden = p.id !== btn.dataset.tab; });
+    });
+  });
+
   const copyBtn = document.getElementById('copybtn');
   copyBtn?.addEventListener('click', async () => {
-    const text = document.getElementById('agentsmd')?.innerText || '';
+    const active = document.querySelector('.tabpane:not([hidden])');
+    const text = active?.innerText || '';
     try {
       await navigator.clipboard.writeText(text);
       copyBtn.textContent = '¡Copiado!';
-      setTimeout(() => { copyBtn.textContent = 'Copiar plantilla'; }, 1800);
+      setTimeout(() => { copyBtn.textContent = 'Copiar fichero activo'; }, 1800);
     } catch (_) {}
   });
 })();
