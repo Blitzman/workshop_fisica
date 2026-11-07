@@ -267,6 +267,7 @@ footer {
       <a href="#flujos">3 flujos</a>
       <a href="#trampas">Trampas y soluciones</a>
       <a href="#tokens">Tokens y memoria</a>
+      <a href="#local-llm">LLM local (Uni)</a>
       <a href="#kit">Kit del grupo</a>
       <a href="#agents">3 ficheros base</a>
     </div>
@@ -480,6 +481,28 @@ footer {
           <li><b>Insights y erratas:</b> Cada hallazgo físico o discrepancia con el borrador se apunta al vuelo con enlace a <code>fichero:línea</code>.</li>
           <li>Al terminar el cálculo, el informe para el grupo y la respuesta al referee salen directamente de este cuaderno.</li>
         </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="stack wide" id="local-llm">
+    <h2>Despliegue 100 % local en servidores de la Universidad (sin costes de API ni cesión de IP)</h2>
+    <p class="muted">Las universidades restringen el pago recurrente a grandes corporaciones y el envío de código o borradores inéditos a nubes externas por propiedad intelectual. La arquitectura de este proyecto (<strong>LLM como orquestador + SymPy/SciPy como verificador exacto</strong>) permite correr todo el flujo en un servidor interno del departamento con modelos abiertos de tamaño medio:</p>
+    <div class="grid-3">
+      <article class="card">
+        <span class="chip chip-ok">Por qué basta un modelo 32B local</span>
+        <h3>1. El LLM no hace el álgebra: la hace SymPy</h3>
+        <p>Un modelo pequeño intentando derivar tensores de memoria falla; pero aquí el modelo solo escribe 30 líneas de Python y el servidor comprueba <code>simplify(derivada - ref) == 0</code>. Para escribir SymPy y llamada a herramientas, los modelos abiertos actuales de <strong>32B a 70B parámetros</strong> (<code>Qwen-2.5-Coder-32B</code>, <code>DeepSeek-R1-Distill-32B</code>, <code>Llama-3.3-70B</code>) corren en <strong>1–2 GPUs locales</strong> (p. ej. 2× RTX 4090 o 1× A100/A6000 de 48–80 GB con <code>vLLM</code> u <code>Ollama</code>) sin que un solo byte salga de la red de la Universidad.</p>
+      </article>
+      <article class="card">
+        <span class="chip chip-new">Fase 1 · Coste cero de entrenamiento</span>
+        <h3>2. Contexto del grupo + códigos propios</h3>
+        <p>Antes de reentrenar pesos, el 80 % de la especialización se consigue inyectando al modelo local los tres ficheros de gobierno (<code>AGENTS.md</code>, <code>CONVENTIONS.md</code>, <code>LAB_NOTEBOOK.md</code>) junto con un índice local (RAG) de los papers del grupo y sus códigos Fortran/C/Python históricos. Esto unifica la notación del departamento desde el primer día sin coste de cómputo.</p>
+      </article>
+      <article class="card">
+        <span class="chip chip-warn">Fase 2 · Especialización propia</span>
+        <h3>3. Ajuste fino (LoRA) con trazas verificadas</h3>
+        <p>Cada proyecto como este genera automáticamente un conjunto de datos de oro libre de alucinaciones: pares <em>(enunciado físico → script SymPy → verificación algebraica = 0)</em>. Con unos pocos cientos de estas trazas verificadas del propio departamento se entrena un adaptador ligero (<code>QLoRA</code>) en pocas horas sobre una sola GPU local, creando un modelo especialista propio de la Universidad.</p>
       </article>
     </div>
   </section>
