@@ -1,0 +1,126 @@
+{
+ "turning": {
+  "p0_Mmax": 904.9564679547649,
+  "p0_wF2_zero": 904.8861114728913,
+  "Mmax_msun": 2.1694724950207496
+ },
+ "nu6": {
+  "M_msun": 1.4725178383709063,
+  "R_km": 11.364864951381225,
+  "alpha_g": 0.2747596256184816,
+  "F": 3.4561001870210086,
+  "F_fluid": 0.9763533050239983,
+  "ladder": [
+   {
+    "n": 2,
+    "nu": 5.945660315478928,
+    "n_eff": 2.0415263368819954
+   },
+   {
+    "n": 3,
+    "nu": 5.9752014388803225,
+    "n_eff": 3.0220406513130413
+   },
+   {
+    "n": 4,
+    "nu": 5.9859242377314485,
+    "n_eff": 4.011230156707824
+   },
+   {
+    "n": 5,
+    "nu": 5.990957168983894,
+    "n_eff": 5.0045073991392295
+   },
+   {
+    "n": 6,
+    "nu": 5.993708825333822,
+    "n_eff": 5.999950560534621
+   }
+  ],
+  "H1": [
+   8.132306778829465,
+   -0.003618328971460622
+  ],
+  "H1_fluid": 0.972851343041496,
+  "axion_res": [
+   6.584782131585213,
+   -0.5632227137498124
+  ],
+  "axion_res_fluid": 0.0001738582698348326
+ },
+ "nu35": {
+  "bound": [
+   3.4096569032220776,
+   3.459904077914469
+  ],
+  "fluid": [
+   0.21685985109933958,
+   0.7551390198714839
+  ]
+ },
+ "nu34": {
+  "F": [
+   3.4156614162609102,
+   -0.000548040716552459
+  ],
+  "fluid": 0.9688696803667427
+ },
+ "exterior": {
+  "cr_complex_ray": 0.0003257306951017693,
+  "cr_real_line": 2.0671376695331705,
+  "old_vs_new_strong": 2.0671376695331705,
+  "old_vs_new_weak": 0.00014298928823299324
+ },
+ "checks": [
+  {
+   "name": "Ecuaci\u00f3n exterior derivada (theta_0 = 0) = Ec. (3.7) del Paper I: error relativo 2.3e-16",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 1 (sin t\u00e9rmino de masa, el error real del 2026-11-07): error 2.67",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Sin axi\u00f3n (BSk26): masa m\u00e1xima 2.1695 M\u2609 en p_c = 905.0 MeV/fm\u00b3; \u03c9_F\u00b2 = 0 en p_c = 904.9 (diferencia 0.01 %)",
+   "ok": true,
+   "note": "criterio de Chandrasekhar/punto de retorno"
+  },
+  {
+   "name": "Exterior en el rayo complejo: cumple Cauchy-Riemann (desajuste 3.3e-04). El de la recta real (axstar.exterior_L) se desv\u00eda 207 % en la resonancia muy amortiguada, 1e-04 en un modo poco amortiguado y 3e-13 bajo el umbral",
+   "ok": true,
+   "note": "la onda saliente crece con r y la integraci\u00f3n hacia dentro es inestable; los pasos 9-10 (Im de pocos Hz) no se ven afectados"
+  },
+  {
+   "name": "\u03bd_a = 6 kHz: modo F en 3.4561 kHz < \u03bd_a, frecuencia real (|Im det|/|det| = 0e+00 en el eje), fracci\u00f3n fluida 0.976",
+   "ok": true,
+   "note": "H11(b)"
+  },
+  {
+   "name": "\u00c1tomo gravitatorio (\u03b1_g = 0.2748): n_eff = 2.042, 3.022, 4.011, 5.005, 6.000 para n = 2\u20266; car\u00e1cter axi\u00f3nico",
+   "ok": true,
+   "note": "H11(c)"
+  },
+  {
+   "name": "\u03bd_a = 6 kHz: H1 = 8.1323 -0.0036i kHz (fracci\u00f3n fluida 0.973); resonancia axi\u00f3nica 6.585 -0.563i kHz (fracci\u00f3n fluida 0.000)",
+   "ok": true,
+   "note": "H11(b) y H10"
+  },
+  {
+   "name": "Control negativo 2 (onda entrante): en la ra\u00edz H1 el determinante deja de anularse (|det|/escala = 1.5e-01)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "\u03bd_a = 3,5 kHz: dos ligados 3.4097 y 3.4599 kHz con car\u00e1cter mezclado (0.22 y 0.76 de fluido): cruce evitado F \u2013 \u00e1tomo n = 1",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "\u03bd_a = 3,4 kHz: F ya por encima del umbral, Re \u03bd = 3.4157 kHz e Im \u03bd = -0.55 Hz (fracci\u00f3n fluida 0.969)",
+   "ok": true,
+   "note": "el modo fluido pasa a cuasi-normal al cruzar \u03bd_a"
+  }
+ ]
+}

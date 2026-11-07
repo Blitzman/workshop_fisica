@@ -7,7 +7,8 @@ from pathlib import Path
 
 from . import (step1_background, step2_perturbations, step3_toy_model, step4_numerics, step5_nonradial,
                step6_nonradial_numerics, step7_fullgr, step8_numerics,
-               step9_axion_cowling, step10_axion_gr, step14_radial_branches)
+               step9_axion_cowling, step10_axion_gr, step14_radial_branches,
+               step15_radial_star)
 
 STEPS = [('Fondo (TOV + KG)', step1_background), ('Perturbaciones radiales', step2_perturbations),
          ('Modelo simplificado (Sec. IV)', step3_toy_model), ('Números y figura', step4_numerics),
@@ -17,7 +18,8 @@ STEPS = [('Fondo (TOV + KG)', step1_background), ('Perturbaciones radiales', ste
          ('Más allá de Cowling: números y figuras', step8_numerics),
          ('Con axión en Cowling: Tablas I, II y IV del Paper II', step9_axion_cowling),
          ('Con axión y métrica dinámica (nuevo)', step10_axion_gr),
-         ('Modos radiales: umbral y ramas (modelo simplificado)', step14_radial_branches)]
+         ('Modos radiales: umbral y ramas (modelo simplificado)', step14_radial_branches),
+         ('Modos radiales de la estrella con condensado (GR)', step15_radial_star)]
 
 
 def _cpu():

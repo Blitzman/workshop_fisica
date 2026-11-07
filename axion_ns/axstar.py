@@ -238,7 +238,7 @@ def surface_residual(st, l, omega, dyn=False):
     return delta_p(st, Rs, y).real
 
 
-def exterior_L(st, l, omega, r_stop=None):
+def exterior_L(st, l, omega, r_stop=None, full=False):
     """psi'/psi en R para psi = delta theta_ext, Ec. (13), con la condición de onda saliente
     (o ligada si Im k > 0) en r grande: psi ~ exp[i(k r + eta ln r)]/r, eta = M (2 w^2 - m_a^2)/k."""
     m2 = st.ma**2
@@ -273,6 +273,8 @@ def exterior_L(st, l, omega, r_stop=None):
     psi = np.exp(1j * (k * rinf + eta * np.log(rinf))) / rinf
     dpsi = psi * (1j * (k + eta / rinf) - 1 / rinf)
     s = solve_ivp(f, (rinf, r_stop), [psi / abs(psi), dpsi / abs(psi)], method='DOP853', rtol=1e-10, atol=1e-60)
+    if full:                      # (psi, psi') en r_stop, sin dividir: evita los polos de psi'/psi
+        return s.y[0, -1], s.y[1, -1]
     return s.y[1, -1] / s.y[0, -1]
 
 

@@ -65,6 +65,8 @@ svg .ref-line { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dash
 svg .s1-dot { fill: var(--s1); stroke: var(--sheet); stroke-width: 1.5; }
 svg .s2-dot { fill: var(--s2); stroke: var(--sheet); stroke-width: 1.5; }
 svg .s3-dot { fill: var(--s3); stroke: var(--sheet); stroke-width: 1.5; }
+svg .s1-ring { fill: var(--sheet); stroke: var(--s1); stroke-width: 2.5; }
+svg .s2-ring { fill: var(--sheet); stroke: var(--s2); stroke-width: 2.5; }
 svg .ref-dot { fill: var(--sheet); stroke: var(--muted); stroke-width: 1.5; }
 svg circle:hover { stroke: var(--ink); stroke-width: 2; }
 .tbl { overflow-x: auto; }
@@ -88,7 +90,7 @@ a { color: var(--accent); }
 </style>
 <div class="wrap">
 <header>
-  <div class="eyebrow">Workshop IA × física · paso 14 · modelo simplificado del Paper I</div>
+  <div class="eyebrow">Workshop IA × física · pasos 14–15 · modelos radiales del Paper I</div>
   <h1>Del modo cuasi-normal al modo ligado: el umbral axiónico en las oscilaciones radiales</h1>
   <p class="lede">Respuesta a la pregunta de José A. Pons: cómo pasa un modo radial de cuasi-normal a evanescente cuando su frecuencia cruza la masa del axión, y cómo se interpretan las distintas ramas del espectro. Hipótesis anotadas antes de calcular; todas las cifras salen de <code>results/radial_branches.json</code>.</p>
 </header>
@@ -101,6 +103,8 @@ a { color: var(--accent); }
     <li>Cerca del umbral, <code>|Im w| ∝ (Re w − 1)^0.46</code>, próximo a ½. El amortiguamiento no se anula exactamente en <code>ω = m_a</code>, sino a una distancia <code>∼ (Im k)²</code>.</li>
     <li>Las ramas fluida y axiónica no se cruzan: la separación mínima es lineal en el acoplo, con <code>Δw²_min/λ = 7.58–7.60</code> para λ² = 10⁻⁶…10⁻³.</li>
     <li>Hallazgo no previsto: linealizado en <code>θ = 0</code>, el modelo contiene un modo inestable (<code>w² = −6.18</code> con los parámetros de la figura), que no aparece en la ventana <code>Im w ≤ 0</code> habitual. Lo planteamos como pregunta abajo.</li>
+    <li><b>Estrella realista</b> (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua 3.6 Hz y la rama axiónica da resonancias muy amortiguadas. Justo bajo el umbral aparece una escalera de estados ligados del axión que sigue la ley hidrogenoide, con <code>n_eff</code> = 2.04, 3.02, 4.01, 5.00, 6.00: un «átomo gravitatorio».</li>
+    <li>En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con un cruce evitado con el nivel n = 1, y sale como cuasi-normal con un amortiguamiento muy pequeño (0.55 Hz a ν_a = 3,4 kHz).</li>
   </ul>
 </section>
 
@@ -165,23 +169,52 @@ a { color: var(--accent); }
   </div>
 </section>
 
+
 <section>
-  <h2>6. Siguiente paso: la estrella realista <span class="status pend">· pendiente</span></h2>
-  <p>Integraremos los modos radiales en relatividad general completa sobre la estrella BSk26 con condensado, a partir de las Ec. (3.3) del Paper I verificadas en el paso 2. Predicciones anotadas antes de calcular:</p>
-  <ol>
-    <li><b>Validación sin axión:</b> <code>ω_F² → 0</code> en la configuración de masa máxima (criterio de punto de retorno).</li>
-    <li>Con axión, <code>Im ν = 0</code> para los modos con <code>ν &lt; ν_a</code> e <code>Im ν &lt; 0</code> por encima.</li>
-    <li><b>Especulativa:</b> la gravedad exterior <code>1/r</code> crea una escalera hidrogenoide de estados axiónicos ligados que se acumula en el umbral, <code>ω_n ≈ m_a[1 − α_g²/(2n²)]</code>. El acoplo gravitatorio es <code>α_g = GMm_a ≈ 0.14</code> para 1,5 M☉ y 3 kHz (estimación a priori, no resultado).</li>
-    <li><b>Especulativa:</b> con ese potencial coulombiano el amortiguamiento cerca del umbral tendería a un valor finito (factor de Sommerfeld) en lugar de anularse como en la sección 3.</li>
-  </ol>
+  <h2>6. La estrella realista: BSk26 con condensado, en relatividad general completa</h2>
+  <p>Las ecuaciones radiales salen de la misma linealización de la acción que el paso 2 compara con la Ec. (3.3) del Paper I. Se convierten en el sistema <code>(ξ, Δp, δθ, δθ')</code> sin transcribir nada a mano (<code>axion_ns/radial.py</code>):</p>
+  <ul>
+    <li><code>δλ</code> y <code>δλ'</code> salen de <code>G_tr</code>, <code>δΦ'</code> de <code>G_rr</code> y <code>ξ'</code> de la conservación bariónica.</li>
+    <li>El condensado no se anula en la superficie, así que fuera de la estrella se sigue integrando el axión acoplado a la métrica hasta que la cola es despreciable.</li>
+    <li>Más allá, la onda exterior se integra en un rayo del plano r complejo donde la onda saliente decae. En la recta real, la integración hacia dentro es inestable para modos muy amortiguados: el método anterior (<code>axstar.exterior_L</code>) se desvía un 207 % en la resonancia axiónica, aunque solo 1e-04 en un modo poco amortiguado, así que los amortiguamientos de pocos Hz de los pasos 9–10 siguen siendo válidos.</li>
+  </ul>
+  <p><b>Validación sin axión.</b> El cuadrado de la frecuencia del modo F se anula en <code>p_c = 904.9</code> MeV/fm³ y la masa máxima (2.1695 M☉) está en <code>p_c = 905.0</code>. Coinciden, como exige el criterio del punto de retorno.</p>
+  <figure>
+    <div class="legend"><span><i class="sw s1"></i>modo fluido</span><span><i class="sw s2"></i>modo axiónico</span><span><i class="sw ref"></i>anillo: amortiguado</span></div>
+    <svg viewBox="0 0 720 230" role="img" aria-label="Espectro radial a nu_a = 6 kHz"><rect class="frame" x="20" y="16" width="680" height="168"/><text class="tick" x="20.0" y="202" text-anchor="middle">3</text><text class="tick" x="133.3" y="202" text-anchor="middle">4</text><text class="tick" x="246.7" y="202" text-anchor="middle">5</text><text class="tick" x="360.0" y="202" text-anchor="middle">6</text><text class="tick" x="473.3" y="202" text-anchor="middle">7</text><text class="tick" x="586.7" y="202" text-anchor="middle">8</text><text class="tick" x="700.0" y="202" text-anchor="middle">9</text><text class="axlabel" x="360.0" y="222" text-anchor="middle">Re ν (kHz)</text><line class="grid" x1="20" x2="700" y1="58.0" y2="58.0"/><line class="grid" x1="20" x2="700" y1="142.0" y2="142.0"/><line class="thr" x1="360.0" x2="360.0" y1="16" y2="184"/><text class="note" x="366.0" y="29.1" text-anchor="start">ν_a = 6 kHz</text><text class="zone" x="694.3" y="48.0" text-anchor="end">frecuencia real (atrapados)</text><text class="zone" x="25.7" y="128.0" text-anchor="start">amortiguados (Im ν &lt; 0)</text><circle class="s1-dot" cx="71.7" cy="58.0" r="6"><title>modo F: 3.4561 kHz, real</title></circle><circle class="s2-dot" cx="353.8" cy="58.0" r="4"><title>átomo gravitatorio: 5.94566 kHz</title></circle><circle class="s2-dot" cx="357.2" cy="58.0" r="4"><title>átomo gravitatorio: 5.97520 kHz</title></circle><circle class="s2-dot" cx="358.4" cy="58.0" r="4"><title>átomo gravitatorio: 5.98592 kHz</title></circle><circle class="s2-dot" cx="359.0" cy="58.0" r="4"><title>átomo gravitatorio: 5.99096 kHz</title></circle><circle class="s2-dot" cx="359.3" cy="58.0" r="4"><title>átomo gravitatorio: 5.99371 kHz</title></circle><circle class="s1-ring" cx="601.7" cy="142.0" r="6"><title>H1: 8.1323 -3.6i Hz</title></circle><circle class="s2-ring" cx="426.3" cy="142.0" r="6"><title>resonancia axiónica: 6.585 -563i Hz</title></circle><text class="note" x="71.7" y="82.0" text-anchor="middle">F 3.456</text><text class="note" x="343.8" y="62.0" text-anchor="end">átomo n ≥ 2</text><text class="note" x="601.7" y="164.0" text-anchor="middle">H1, Im ν = −3.6 Hz</text><text class="note" x="426.3" y="164.0" text-anchor="middle">axión, Im ν = −563 Hz</text></svg>
+    <figcaption>Espectro radial a ν_a = 6 kHz (M = 1.4725 M☉, R = 11.365 km). El carácter se mide con la fracción de energía en el fluido: F 0.98, H1 0.97, resonancia axiónica 0.00.</figcaption>
+  </figure>
+  <p>La estructura es la del modelo simplificado, con un añadido de la gravedad:</p>
+  <ul>
+    <li>Los modos fluidos por debajo del umbral tienen frecuencia real (F) y los de encima se amortiguan poco (H1).</li>
+    <li>La rama axiónica da resonancias muy amortiguadas.</li>
+    <li>Justo por debajo del umbral, el potencial gravitatorio exterior atrapa al axión en una <b>escalera hidrogenoide</b>: un «átomo gravitatorio».</li>
+  </ul>
+  <figure>
+    <svg viewBox="0 0 720 300" role="img" aria-label="Niveles del átomo gravitatorio frente a la ley hidrogenoide"><line class="grid" x1="62" x2="700" y1="254.0" y2="254.0"/><text class="tick" x="54" y="258.0" text-anchor="end">10⁻⁴</text><line class="grid" x1="62" x2="700" y1="135.0" y2="135.0"/><text class="tick" x="54" y="139.0" text-anchor="end">10⁻³</text><line class="grid" x1="62" x2="700" y1="16.0" y2="16.0"/><text class="tick" x="54" y="20.0" text-anchor="end">10⁻²</text><line class="grid" x1="125.8" x2="125.8" y1="16" y2="254"/><text class="tick" x="125.8" y="272" text-anchor="middle">2</text><line class="grid" x1="253.4" x2="253.4" y1="16" y2="254"/><text class="tick" x="253.4" y="272" text-anchor="middle">3</text><line class="grid" x1="381.0" x2="381.0" y1="16" y2="254"/><text class="tick" x="381.0" y="272" text-anchor="middle">4</text><line class="grid" x1="508.6" x2="508.6" y1="16" y2="254"/><text class="tick" x="508.6" y="272" text-anchor="middle">5</text><line class="grid" x1="636.2" x2="636.2" y1="16" y2="254"/><text class="tick" x="636.2" y="272" text-anchor="middle">6</text><rect class="frame" x="62" y="16" width="638" height="238"/><text class="axlabel" x="381.0" y="292" text-anchor="middle">n</text><text class="axlabel" transform="translate(16 135.0) rotate(-90)" text-anchor="middle">1 − ν/ν_a</text><path class="ref-line" d="M62.0,-10.7 L74.8,-4.1 L87.5,2.2 L100.3,8.1 L113.0,13.7 L125.8,19.0 L138.6,24.0 L151.3,28.8 L164.1,33.4 L176.8,37.8 L189.6,42.1 L202.4,46.1 L215.1,50.0 L227.9,53.8 L240.6,57.4 L253.4,60.9 L266.2,64.3 L278.9,67.6 L291.7,70.8 L304.4,73.8 L317.2,76.8 L330.0,79.8 L342.7,82.6 L355.5,85.3 L368.2,88.0 L381.0,90.6 L393.8,93.2 L406.5,95.7 L419.3,98.1 L432.0,100.5 L444.8,102.8 L457.6,105.1 L470.3,107.3 L483.1,109.5 L495.8,111.6 L508.6,113.7 L521.4,115.8 L534.1,117.8 L546.9,119.7 L559.6,121.7 L572.4,123.6 L585.2,125.4 L597.9,127.2 L610.7,129.0 L623.4,130.8 L636.2,132.6 L649.0,134.3 L661.7,135.9 L674.5,137.6 L687.2,139.2 L700.0,140.8"/><circle class="s2-dot" cx="125.8" cy="21.1" r="5"><title>n = 2: 1 − ν/ν_a = 9.057e-03</title></circle><circle class="s2-dot" cx="253.4" cy="61.7" r="5"><title>n = 3: 1 − ν/ν_a = 4.133e-03</title></circle><circle class="s2-dot" cx="381.0" cy="90.9" r="5"><title>n = 4: 1 − ν/ν_a = 2.346e-03</title></circle><circle class="s2-dot" cx="508.6" cy="113.8" r="5"><title>n = 5: 1 − ν/ν_a = 1.507e-03</title></circle><circle class="s2-dot" cx="636.2" cy="132.6" r="5"><title>n = 6: 1 − ν/ν_a = 1.049e-03</title></circle><text class="note" x="210.4" y="38.1" text-anchor="start">α_g²/(2n²), α_g = 0.2748</text></svg>
+    <figcaption>Energía de ligadura de los niveles axiónicos frente a la ley hidrogenoide <code>α_g²/(2n²)</code>, con <code>α_g = GMm_a</code> (sin ajuste). El nivel n = 1, cuya órbita se solapa con la estrella, se desvía; se trata en el cuaderno.</figcaption>
+  </figure>
+  <div class="tbl"><table><tr><th>n</th><th>ν (kHz)</th><th>n_eff = α_g/√(2(1 − ν/ν_a))</th></tr><tr><td>2</td><td>5.945660</td><td>2.042</td></tr><tr><td>3</td><td>5.975201</td><td>3.022</td></tr><tr><td>4</td><td>5.985924</td><td>4.011</td></tr><tr><td>5</td><td>5.990957</td><td>5.005</td></tr><tr><td>6</td><td>5.993709</td><td>6.000</td></tr></table></div>
+  <h3>Cómo cruza el modo F el umbral</h3>
+  <p>Al bajar ν_a, el umbral se acerca a F desde arriba, y el nivel n = 1 del átomo gravitatorio baja con él:</p>
+  <ul>
+    <li>En <b>ν_a = 3,5 kHz</b> hay dos estados ligados (3.4097 y 3.4599 kHz) con carácter mezclado (0.22 y 0.76 de fluido): un cruce evitado entre F y el átomo.</li>
+    <li>En <b>ν_a = 3,4 kHz</b>, F ya está por encima del umbral, en 3.4157 kHz, con un amortiguamiento de solo 0.55 Hz (fracción fluida 0.97).</li>
+  </ul>
+  <p>La transición cuasi-normal → ligado de la estrella realista no es un cruce limpio como en el modelo simplificado: el modo fluido atraviesa una escalera densa de estados del axión que se acumula en el umbral.</p>
+  <div class="callout">
+    <h3>Abierto</h3>
+    <p>No hemos podido decidir si el amortiguamiento tiende a cero o a un valor finito justo encima del umbral (factor de Sommerfeld del potencial 1/r). Los dos puntos disponibles apuntan a que cae deprisa, pero hace falta un barrido denso en ν_a.</p>
+  </div>
+  <ul class="checks"><li class="ok"><span class="pill">OK</span><span>Ecuación exterior derivada (theta_0 = 0) = Ec. (3.7) del Paper I: error relativo 2.3e-16</span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 1 (sin término de masa, el error real del 2026-11-07): error 2.67</span></li><li class="ok"><span class="pill">OK</span><span>Sin axión (BSk26): masa máxima 2.1695 M☉ en p_c = 905.0 MeV/fm³; ω_F² = 0 en p_c = 904.9 (diferencia 0.01 %) <em>(criterio de Chandrasekhar/punto de retorno)</em></span></li><li class="ok"><span class="pill">OK</span><span>Exterior en el rayo complejo: cumple Cauchy-Riemann (desajuste 3.3e-04). El de la recta real (axstar.exterior_L) se desvía 207 % en la resonancia muy amortiguada, 1e-04 en un modo poco amortiguado y 3e-13 bajo el umbral <em>(la onda saliente crece con r y la integración hacia dentro es inestable; los pasos 9-10 (Im de pocos Hz) no se ven afectados)</em></span></li><li class="ok"><span class="pill">OK</span><span>ν_a = 6 kHz: modo F en 3.4561 kHz &lt; ν_a, frecuencia real (|Im det|/|det| = 0e+00 en el eje), fracción fluida 0.976 <em>(H11(b))</em></span></li><li class="ok"><span class="pill">OK</span><span>Átomo gravitatorio (α_g = 0.2748): n_eff = 2.042, 3.022, 4.011, 5.005, 6.000 para n = 2…6; carácter axiónico <em>(H11(c))</em></span></li><li class="ok"><span class="pill">OK</span><span>ν_a = 6 kHz: H1 = 8.1323 -0.0036i kHz (fracción fluida 0.973); resonancia axiónica 6.585 -0.563i kHz (fracción fluida 0.000) <em>(H11(b) y H10)</em></span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 2 (onda entrante): en la raíz H1 el determinante deja de anularse (|det|/escala = 1.5e-01)</span></li><li class="ok"><span class="pill">OK</span><span>ν_a = 3,5 kHz: dos ligados 3.4097 y 3.4599 kHz con carácter mezclado (0.22 y 0.76 de fluido): cruce evitado F – átomo n = 1</span></li><li class="ok"><span class="pill">OK</span><span>ν_a = 3,4 kHz: F ya por encima del umbral, Re ν = 3.4157 kHz e Im ν = -0.55 Hz (fracción fluida 0.969) <em>(el modo fluido pasa a cuasi-normal al cruzar ν_a)</em></span></li></ul>
 </section>
 
 <section>
-  <h2>7. Verificación</h2>
+  <h2>7. Verificación del modelo simplificado</h2>
   <p><b>9/9</b> comprobaciones superadas en <code>axion_ns/step14_radial_branches.py</code> (unos 30 s, incluido en <code>run_all</code>). Los dos controles negativos cambian la física (onda entrante; signo de la masa interior) y deben romper el resultado.</p>
   <ul class="checks"><li class="ok"><span class="pill">OK</span><span>f(k) en la variable k coincide con f_toy(w) del paso 4 (Re w &gt; 1): diferencia relativa 7.5e-31</span></li><li class="ok"><span class="pill">OK</span><span>Modo fluido fundamental en x0 = 0.6: w = 1.43104-2.78e-03i (cuasi-normal, Im k = -0.0039 &lt; 0)</span></li><li class="ok"><span class="pill">OK</span><span>H9: par cuasi-normal k = ±a - ib (b ≈ 0.0079...0.0119) colisiona en el eje imaginario negativo en x0 ≈ 0.8525; en x0 = 0.86 queda un ligado (kappa = +0.1339, w = 0.99099 real) y un virtual (kappa = -0.1605)</span></li><li class="ok"><span class="pill">OK</span><span>H8: |Im w| ~ (Re w - 1)^0.457 cerca del umbral (λ² = 1e-4; ½ si Im k fuera constante, que varía ~18 % en el tramo) <em>(el amortiguamiento se anula al llegar al umbral)</em></span></li><li class="ok"><span class="pill">OK</span><span>H10: cruce evitado fluido-axión, Δw²_min/λ = 7.598, 7.598, 7.596, 7.577 para λ² = 1e-6…1e-3 (en x0 ≈ 1.073): separación ∝ λ</span></li><li class="ok"><span class="pill">OK</span><span>Modo inestable en theta = 0: aparece para x0 &gt; 0.10725 (analítico arctan(1/√(α-1))/√(α-1) = 0.10725); en los parámetros de la figura (x0 = 0.6) w² = -6.177 (crece como e^(2.49 m_a t)) <em>(el paso 4 no lo veía: buscaba solo Im w ≤ 0.01)</em></span></li><li class="ok"><span class="pill">OK</span><span>Variante theta = pi (m²_in = 25.6 m_a², sin acoplo): sin estados ligados ni inestables</span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 1 (onda entrante, i k -&gt; -i k): el estado ligado de x0 = 0.86 deja de estar en kappa &gt; 0 en la misma posición</span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 2 (m²_in = 1 - α -&gt; α - 1): desaparece el umbral de inestabilidad (x0_c = None)</span></li></ul>
   <div class="callout neutral">
-    <p><b>Límites.</b> La función de dispersión es la Ec. (4.13) tal como la transcribimos en el paso 4, no una compilación desde SymPy. Todo este paso es el modelo simplificado: no dice nada aún sobre la estrella realista.</p>
+    <p><b>Límites.</b> La función de dispersión es la Ec. (4.13) tal como la transcribimos en el paso 4, no una compilación desde SymPy. Las comprobaciones de la estrella realista están al final de la sección 6.</p>
   </div>
 </section>
 
@@ -192,5 +225,5 @@ a { color: var(--accent); }
   </div>
 </section>
 
-<footer>Generado por <code>report/build_radial.py</code> desde <code>results/radial_branches.json</code>. Referencia: A. Gómez-Bañón, P. Pnigouras y J. A. Pons, <a href="https://arxiv.org/abs/2510.16245">arXiv:2510.16245</a>.</footer>
+<footer>Generado por <code>report/build_radial.py</code> desde <code>results/radial_branches.json</code> (paso 14) y <code>results/radial_star.json</code> (paso 15). Referencia: A. Gómez-Bañón, P. Pnigouras y J. A. Pons, <a href="https://arxiv.org/abs/2510.16245">arXiv:2510.16245</a>.</footer>
 </div>

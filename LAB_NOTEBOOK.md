@@ -56,12 +56,43 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
   - *Prueba:* separación mínima frente a `λ` (pendiente 1 en log-log).
   - *Resultado (`step14`):* `Δw²_min/λ = 7,60 ± 0,01` para λ² = 10⁻⁶…10⁻³ (cruce en `x_0 ≈ 1,073`), así que la separación es lineal en λ. La rama axiónica es la escalera de estados pares del pozo taquiónico interior: el segundo se liga en el umbral cuando `k_a x_0 = π` con `k_a = √(1 + α − 1) = √10`, es decir `x_0 = π/√10 = 0,9935` (observado ≈ 0,99), baja, se repele con el fluido y cruza `w² = 0` en `x_0 ≈ 1,16`. Con acoplo, el ligado tarda algo más en aparecer (en `x_0 = 1,0` aún es virtual, `κ = −0,022`).
 
-- **[H11 · PENDIENTE] Estrella realista (BSk26, GR completa, ecuaciones (3.3) del Paper I ya verificadas en el paso 2)**
+- **[H11 · CONFIRMADA (a, b, c); (d) ABIERTA] Estrella realista (BSk26, GR completa, ecuaciones (3.3) del Paper I ya verificadas en el paso 2)**
   - *(a) Validación sin axión:* `ω_F² → 0` en la configuración de masa máxima de BSk26 (criterio de Chandrasekhar / punto de retorno), y frecuencias radiales coherentes con la literatura.
   - *(b)* Con axión, los modos con `ν < ν_a` tienen `Im ν = 0` a precisión numérica y los de `ν > ν_a` tienen `Im ν < 0`.
   - *(c) Especulativa:* la gravedad exterior (`1/r`) crea una escalera hidrogenoide infinita de estados axiónicos ligados que se acumulan en el umbral, `ω_n ≈ m_a [1 − α_g²/(2n²)]`, con `α_g = G M m_a` (≈ 0,14 a 3 kHz y 1,5 M☉).
   - *(d) Especulativa:* con el potencial coulombiano el amortiguamiento cerca del umbral tiende a un valor finito (factor de Sommerfeld) en lugar de anularse como `√`, de modo que H8 vale solo sin gravedad exterior.
   - *Prueba:* sigue a H8–H10. Contrastar con lo que dice el Paper I sobre su espectro radial antes de afirmar nada.
+  - *Avance (2026-11-07, `axion_ns/radial.py`):* el sistema `(ξ, Δp, δθ, δθ')` sale de `pipeline.linear_equations` sin transcribir nada a mano. Se usan `δλ, δλ'` de `G_tr`, `δΦ'` de `G_rr` y `ξ'` de la conservación bariónica. El `δΦ` sin derivar se anula módulo el fondo (se comprueba en el código). `T = p_0'` sale de la TOV, para evitar derivadas terceras de la EOS. Fuera de la estrella se sigue integrando `(δθ, δθ')` con la cola del condensado (`θ_0(R) ≈ 1,47` a 6 kHz) hasta `r_match`.
+  - *(a) CONFIRMADA (`step15`, afinado: masa máxima 2,1695 M☉ en `p_c = 905,0` y `ω_F² = 0` en `p_c = 904,9 MeV/fm³`, 0,01 %). Malla gruesa inicial:* sin axión, `ω_F²` cambia de signo entre `p_0 = 900` y `1000 MeV/fm³` (interpolado ≈ 905), y la masa máxima de BSk26 (2,1695 M☉, ajuste parabólico) está en `p_0 ≈ 911`. Queda pendiente afinarlo en el paso definitivo. Modos sin axión a `p_0 = 100`: F ≈ 3,18 kHz, H1 ≈ 7,36 kHz, H2 ≈ 10,14 kHz.
+  - *Resultados preliminares a `ν_a = 6 kHz` (punto testigo; M = 1,4725 M☉, R = 11,365 km):*
+    - Por debajo del umbral, el determinante es real y tiene tres raíces: 3,456 kHz (modo F, ligado: H11(b) se cumple para él), 5,811 y 5,946 kHz.
+    - Las dos últimas encajan con la escalera hidrogenoide H11(c): `α_g = G M m_a = 0,273` da `ν_n = ν_a[1 − α_g²/(2n²)]` = 5,776 (n = 1) y 5,944 (n = 2). El n = 2, cuyo radio de Bohr (~116 km) cae casi entero fuera de la estrella, coincide al 0,03 %. El n = 1 (radio ~29 km) se solapa con la estrella y se desvía. Falta comprobar n ≥ 3 (barrido fino entre 5,95 y 6 kHz).
+    - **H11(c) CONFIRMADA:** el barrido fino entre 5,95 y 6 kHz da la escalera completa. Con `n_eff = α_g/√(2(1 − ν/ν_a))` y `α_g = 0,2748` (masa total con la cola axiónica), sale n_eff = 1,095; 2,042; 3,022; 4,011; 5,005; 6,000; … 12,990. Son enteros con ±0,01 hasta n = 13. El defecto cuántico es mayor para n = 1, cuya órbita se solapa con la estrella, y decrece con n, como en un átomo con núcleo finito. Para n ≥ 14, n_eff deja de ser entero: es un límite numérico, porque el radio de Bohr (miles de km) se acerca a la longitud de integración exterior. Es el «átomo gravitatorio» del axión, conocido en agujeros negros.
+    - Por encima del umbral hay dos familias:
+      - **Rama axiónica** (mapa con `Im ∈ [−1,4; −0,05]`): resonancias muy amortiguadas y casi equiespaciadas en 6,585 − 0,563 i, 7,304 − 0,748 i, 8,142 − 0,884 i, 9,062 − 0,985 i y 10,039 − 1,058 i kHz.
+      - **Rama fluida** (barrido a `Im = −0,003`): un solo modo poco amortiguado entre 6 y 11 kHz, H1 = 8,1323 − 0,0036 i kHz (3,6 Hz). Sin axión, H1 = 7,36 kHz, pero en una estrella mayor (R = 11,72 frente a 11,37 km).
+      - La estructura es la del modelo simplificado (H10), más la escalera de la gravedad exterior.
+  - *Transición realista del modo F (barrido en `ν_a`, carácter por fracción de energía en el fluido; `radial.fluid_fraction`):*
+
+    | ν_a (kHz) | raíz (kHz) | fracción fluida | lectura |
+    |---|---|---|---|
+    | 6 | 3,4561 | 0,98 | F ligado |
+    | 6 | 5,811 / 5,946 | 0,004 | átomo n = 1, 2 |
+    | 6 | 8,1323 − 0,0036 i | 0,97 | H1 |
+    | 6 | 6,585 − 0,563 i | 0,00 | resonancia axiónica |
+    | 3,5 | 3,4097 / 3,4599 | 0,22 / 0,76 | cruce evitado F – átomo n = 1 |
+    | 3,45 | 3,4338 | 0,78 | F aún ligado, 0,016 kHz bajo el umbral |
+    | 3,45 | 3,3618 | 0,02 | n = 1 ya por debajo de F |
+    | 3,4 | 3,4157 − 0,00055 i | 0,97 | F cuasi-normal: 0,55 Hz de amortiguamiento a 0,46 % sobre el umbral |
+    | 3,0 | 3,2793 − 0,049 i | 0,37 | F amortiguado (49 Hz), mezclado con la rama axiónica |
+
+    - **H11(b) CONFIRMADA:** por debajo de `ν_a` los modos fluidos tienen frecuencia real y por encima se amortiguan.
+    - La transición pasa por un cruce evitado con el nivel n = 1 del átomo gravitatorio, que baja siguiendo al umbral.
+    - En `ν_a = 3,45` aparece, además del ligado, una raíz compleja de carácter fluido con `Re ν` justo bajo el umbral y `Re k ≪ |Im k|`. Es el compañero en la hoja no física, como el estado virtual del modelo simplificado (H9).
+  - **[H11(d) · NO CONFIRMADA, datos insuficientes]:** con dos puntos (0,55 Hz a 0,46 % sobre el umbral y 49 Hz a 9 %, ya mezclado), el amortiguamiento cae más rápido que `√`, lo contrario de un valor finito tipo Sommerfeld. Cerca del umbral el continuo se sustituye por la escalera densa de estados ligados, y el modo fluido puede mezclarse con niveles altos. Hace falta un barrido denso en `ν_a ∈ [3,0; 3,45]`.
+  - *Estado de H11 (`axion_ns/step15_radial_star.py`, 10 comprobaciones, 2 controles negativos, ~12 min):* (a), (b) y (c) confirmadas; (d) sin decidir.
+  - *Problema numérico encontrado (afecta a código anterior):* `axstar.exterior_L` integra hacia dentro sobre la recta real desde `r_inf = r + 40/|k|`. Para un modo muy amortiguado la onda saliente crece con r, y el error de la condición asintótica mezcla la onda entrante amplificada ~e⁸. El resultado no es analítico en ω (Cauchy–Riemann falla por un factor 5) y Muller converge solo linealmente. *Solución:* `radial.exterior_psi` integra la ecuación exterior derivada a lo largo del rayo complejo `r = r_m + s e^{i(π/2 − arg k)}`, donde la saliente decae. Cumple Cauchy–Riemann (2·10⁻⁴, del orden del paso) y coincide con el método anterior donde este es fiable: 12 cifras en el eje real por debajo del umbral y 4 cifras en `6,5 − 0,001 i`. *Consecuencia (medida en `step15`):* el método anterior se desvía un 207 % en la resonancia axiónica (`Im ν = −563 Hz`), pero solo ~10⁻⁴ en un modo con `Im ν = −3,6 Hz`. Los amortiguamientos de pocos Hz de los pasos 9–10 siguen siendo válidos.
+  - *Error cazado por una comprobación:* sustituir `V'(a_0) → −M1/f_a` antes que `V''` anulaba el término de masa, porque SymPy aplica la sustitución dentro de `V'' = d(V')/da`. Lo detectó la comparación de la ecuación exterior con la Ec. (3.7) en `θ_0 = 0` (error relativo 2,7; tras corregir, 2·10⁻¹⁶). *Regla:* sustituir siempre de la derivada más alta a la más baja.
 
 ## 2. Insights físicos y preguntas abiertas para los autores
 
