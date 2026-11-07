@@ -219,7 +219,7 @@ def main():
     guia_out.write_text((Path(__file__).parent / 'guia_departamento.html').read_text())
     print(out, f'{len(page) / 1e3:.0f} kB', f'{n_ok}/{n_tot}')
     print(guia_out, f'{guia_out.stat().st_size / 1e3:.0f} kB')
-    for extra in ('informe_gmodes.html', 'informe_rotacion.html', 'informe_magnetar.html'):
+    for extra in ('lineas_investigacion.html', 'informe_gmodes.html', 'informe_rotacion.html', 'informe_magnetar.html'):
         src = Path(__file__).parent / extra
         if src.exists():
             dst = RES / extra

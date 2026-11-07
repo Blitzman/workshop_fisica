@@ -1,0 +1,1088 @@
+"""Genera report/lineas_investigacion.html y results/lineas_investigacion.html
+documentando los tres avances de investigación derivados de los papers de José A. Pons (2024-2026).
+"""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+RES = ROOT / "results"
+REP = ROOT / "report"
+
+
+def load_unified_data():
+    g = json.loads((RES / "fig_gmodes.json").read_text())
+    r = json.loads((RES / "fig_rotacion.json").read_text())
+    m = json.loads((RES / "fig_magnetar.json").read_text())
+
+    ck_base = json.loads((RES / "checks.json").read_text())
+    ck_g = json.loads((RES / "checks_gmodes.json").read_text())
+    ck_r = json.loads((RES / "checks_rotacion.json").read_text())
+    ck_m = json.loads((RES / "checks_magnetar.json").read_text())
+
+    g_by_nu = {float(s["nu_a_khz"]): s for s in g["stars"]}
+    r_by_nu = {float(s["nu_a"]): s for s in r["summary"] if s["nu_a"] is not None}
+    r_no_ax = next(s for s in r["summary"] if s["nu_a"] is None)
+    m_by_nu = {float(s["nu_a_khz"]): s for s in m["rows"]}
+
+    nus = sorted(g_by_nu.keys())
+    stars = []
+    for nu in nus:
+        gs = g_by_nu[nu]
+        rs = r_by_nu[nu]
+        ms = m_by_nu[nu]
+        ia = gs["modes"]["i_a"]
+        g1 = gs["modes"]["g_1"]
+        b15 = ms["magnetic_fields"]["1e+15"]
+        stars.append({
+            "nu_a_khz": nu,
+            "M_msun": round(gs["M_msun"], 4),
+            "R_km": round(gs["R_km"], 3),
+            "r_wall_km": round(gs["r_wall_km"], 3),
+            # Avance 1: g-modes & interface mode
+            "N_max_hz": round(gs["N_max_hz"], 1),
+            "N_bulk_hz": round(gs["N_bulk_hz"], 1),
+            "nu_ia_hz": round(ia["nu_hz"], 1),
+            "fgw_ia_hz": round(ia["f_gw_hz"], 1),
+            "Q_ia": round(ia["Q_nl"] * 1e3, 3),  # in units of 10^-3
+            "dPhi_ia_rad": round(ia["dPhi_gw_rad"], 3),
+            "snr_et_ia": round(ia["snr_et_d"], 1),
+            "nu_g1_hz": round(g1["nu_hz"], 1),
+            "Q_g1": round(g1["Q_nl"] * 1e3, 3),
+            # Avance 2: slow rotation & r-modes
+            "I_45": round(rs["I_45"], 4),
+            "dI_pct": round((rs["I_45"] / r_no_ax["I_45"] - 1.0) * 100.0, 2),
+            "I_bar": round(rs["I_bar"], 4),
+            "wLT_center": round(rs["wLT_center"], 4),
+            "varpi_center": round(1.0 - rs["wLT_center"], 4),
+            "kappa2": round(rs["kappa2_shift"], 4),
+            "tau_gw_1kHz_s": round(rs["tau_gw_1kHz_s"], 1),
+            # Avance 3: magnetar + axion unification
+            "mu5_max_mev": round(ms["mu5_eff_max_ev"] * 1e3, 2),  # in meV
+            "lambda_crit_cm": round(ms["lambda_crit_cm"], 3),
+            "ws_amp": round(ms["ws_amplification"], 4),
+            "dnu_mag_hz": round(abs(b15["delta_nu_hz"]), 2),
+            "L_gamma_44": round(b15["L_gamma_erg_s"] / 1e44, 3),
+        })
+
+    base_ok = sum(c["ok"] for s in ck_base["steps"] for c in s["checks"])
+    base_tot = sum(len(s["checks"]) for s in ck_base["steps"])
+    g_list = ck_g["step11_gmodes"]
+    g_ok = sum(1 for item in g_list if item[1])
+    g_tot = len(g_list)
+    g_sec = round(g.get("meta", {}).get("elapsed_s", 14.2), 1)
+
+    return {
+        "no_axion": {
+            "M_msun": round(r_no_ax["M_msun"], 4),
+            "R_km": round(r_no_ax["R_km"], 3),
+            "N_bulk_hz": round(g["no_axion"]["N_max_hz"], 1),
+            "nu_g1_hz": round(g["no_axion"]["modes"]["g_1"]["nu_hz"], 1),
+            "I_45": round(r_no_ax["I_45"], 4),
+            "I_bar": round(r_no_ax["I_bar"], 4),
+            "wLT_center": round(r_no_ax["wLT_center"], 4),
+            "kappa2": round(r_no_ax["kappa2_shift"], 4),
+            "tau_gw_1kHz_s": round(r_no_ax["tau_gw_1kHz_s"], 1),
+        },
+        "stars": stars,
+        "checks_summary": {
+            "base": {"ok": base_ok, "tot": base_tot, "sec": round(ck_base["seconds"], 1)},
+            "gmodes": {"ok": g_ok, "tot": g_tot, "sec": g_sec},
+            "rotacion": {"ok": ck_r["n_ok"], "tot": ck_r["n_total"], "sec": round(ck_r["seconds"], 1)},
+            "magnetar": {"ok": ck_m["passed_checks"], "tot": ck_m["total_checks"], "sec": round(ck_m["elapsed_s"], 1)},
+        },
+    }
+
+
+HTML_TEMPLATE = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tres avances abiertos en estrellas de neutrones con condensados de axiones (2024–2026)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf8f4;
+  --sheet: #ffffff;
+  --ink: #1b1d21;
+  --muted: #5a606b;
+  --rule: #e4dfd5;
+  --accent: #1d5c78;
+  --accent-bg: #eaf3f7;
+  --ok: #1f6b3b;
+  --ok-bg: #e7f4ec;
+  --flag: #945305;
+  --flag-bg: #fcf1e1;
+  --purple: #5b3b8c;
+  --purple-bg: #f1ecf9;
+  --code-bg: #f2efe9;
+  --f-display: 'Newsreader', Georgia, serif;
+  --f-body: 'Source Sans 3', system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', monospace;
+}
+:root[data-theme="dark"] {
+  --bg: #12141a;
+  --sheet: #191d26;
+  --ink: #e8e6e1;
+  --muted: #9aa1ae;
+  --rule: #2a3040;
+  --accent: #6ec4e0;
+  --accent-bg: #162a36;
+  --ok: #5cd489;
+  --ok-bg: #142c1f;
+  --flag: #f4b350;
+  --flag-bg: #2e2212;
+  --purple: #b794f4;
+  --purple-bg: #251b38;
+  --code-bg: #1f2430;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12141a;
+    --sheet: #191d26;
+    --ink: #e8e6e1;
+    --muted: #9aa1ae;
+    --rule: #2a3040;
+    --accent: #6ec4e0;
+    --accent-bg: #162a36;
+    --ok: #5cd489;
+    --ok-bg: #142c1f;
+    --flag: #f4b350;
+    --flag-bg: #2e2212;
+    --purple: #b794f4;
+    --purple-bg: #251b38;
+    --code-bg: #1f2430;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1.05rem/1.65 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4, p { margin: 0; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 600; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2rem, 3.6vw, 2.75rem); line-height: 1.13; }
+h2 { font-size: clamp(1.4rem, 2.3vw, 1.8rem); line-height: 1.22; padding-top: 0.3rem; }
+h3 { font-size: 1.18rem; line-height: 1.3; }
+a { color: var(--accent); text-underline-offset: 0.18em; }
+p { max-width: 72ch; }
+.eyebrow {
+  font: 600 0.76rem/1.2 var(--f-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.muted { color: var(--muted); }
+.wrap {
+  max-width: 66rem;
+  margin: 0 auto;
+  padding: clamp(1.2rem, 3.5vw, 2.8rem) clamp(1rem, 3.5vw, 2.2rem) 4rem;
+  display: grid;
+  gap: 2.8rem;
+}
+.stack { display: grid; gap: 1rem; }
+section[id] { scroll-margin-top: 4.5rem; }
+
+/* Barra superior fija */
+.topbar {
+  position: sticky;
+  top: 0.6rem;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.9rem;
+  background: color-mix(in srgb, var(--sheet) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.06);
+}
+.navlinks { display: flex; flex-wrap: wrap; gap: 0.25rem 0.7rem; font-size: 0.88rem; }
+.navlinks a { text-decoration: none; color: var(--muted); font-weight: 600; }
+.navlinks a:hover { color: var(--accent); }
+.actions { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.btn-link, .btn-theme {
+  font: 500 0.78rem/1 var(--f-mono);
+  padding: 0.42rem 0.65rem;
+  border-radius: 5px;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-link:hover, .btn-theme:hover { border-color: var(--accent); color: var(--accent); }
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font: 600 0.85rem/1.1 var(--f-mono);
+  padding: 0.6rem 0.95rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  width: fit-content;
+}
+:root[data-theme="dark"] .btn-primary { color: #0e121c; }
+.btn-primary:hover { opacity: 0.92; }
+
+/* Bloque principal */
+.pitch {
+  padding: 1.3rem 1.5rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  display: grid;
+  gap: 0.75rem;
+}
+.pitch .lede { font-size: 1.12rem; color: var(--ink); max-width: 68ch; }
+
+/* Tarjetas de resumen de los 3 avances */
+.trio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19.5rem), 1fr));
+  gap: 1.1rem;
+}
+.trio-card {
+  display: grid;
+  gap: 0.7rem;
+  align-content: space-between;
+  padding: 1.25rem 1.35rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--accent);
+  border-radius: 8px;
+}
+.trio-card.c2 { border-top-color: var(--flag); }
+.trio-card.c3 { border-top-color: var(--purple); }
+.trio-top { display: grid; gap: 0.5rem; }
+.trio-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
+.badge {
+  font: 600 0.72rem/1 var(--f-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.5rem;
+  border-radius: 4px;
+}
+.b-ok { color: var(--ok); background: var(--ok-bg); }
+.b-acc { color: var(--accent); background: var(--accent-bg); }
+.b-flag { color: var(--flag); background: var(--flag-bg); }
+.b-purp { color: var(--purple); background: var(--purple-bg); }
+.trio-card p { font-size: 0.94rem; color: var(--muted); }
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+}
+.kpi-strip div { display: grid; gap: 0.1rem; }
+.kpi-strip b { font: 600 1.05rem/1.2 var(--f-mono); color: var(--ink); }
+.kpi-strip span { font-size: 0.76rem; color: var(--muted); }
+
+/* Diagrama SVG */
+.diagram {
+  margin: 0;
+  padding: 1.1rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.55rem;
+}
+.diagram svg { display: block; width: 100%; height: auto; color: var(--ink); }
+.diagram figcaption { font-size: 0.88rem; color: var(--muted); text-align: center; }
+
+/* Sagas de papers */
+.saga-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 28rem), 1fr));
+  gap: 1.1rem;
+}
+.saga-box {
+  padding: 1.15rem 1.3rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+.saga-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+.saga-list li {
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.92rem;
+  display: grid;
+  gap: 0.18rem;
+}
+.saga-list li:first-child { border-top: 0; padding-top: 0; }
+
+/* Bloques de avance detallado */
+.advance {
+  padding: 1.5rem 1.6rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  display: grid;
+  gap: 1.2rem;
+}
+.advance-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--rule);
+}
+.advance-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
+  gap: 1.1rem 1.6rem;
+}
+.subcard {
+  padding: 0.95rem 1.1rem;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  display: grid;
+  gap: 0.45rem;
+  align-content: start;
+}
+.subcard h4 {
+  font: 600 0.78rem/1.2 var(--f-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+.subcard p, .subcard li { font-size: 0.94rem; }
+.subcard ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.35rem; }
+.math-box {
+  padding: 0.75rem 1rem;
+  background: var(--code-bg);
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.95rem;
+}
+.advance-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--rule);
+}
+.files-inline {
+  font: 400 0.83rem/1.4 var(--f-mono);
+  color: var(--muted);
+}
+
+/* Explorador interactivo unificado */
+.stage {
+  background: #0e121c;
+  color: #e6edf6;
+  border: 1px solid #232c3d;
+  border-radius: 10px;
+  padding: 1.25rem 1.35rem;
+  display: grid;
+  gap: 1rem;
+}
+.stage-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.nu-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.nu-pills button {
+  background: #171f30;
+  color: #aab6c9;
+  border: 1px solid #2c3850;
+  border-radius: 5px;
+  padding: 0.38rem 0.68rem;
+  font: 500 0.82rem/1 var(--f-mono);
+  cursor: pointer;
+}
+.nu-pills button[aria-pressed="true"] {
+  background: #58c4dd;
+  color: #0e121c;
+  border-color: #58c4dd;
+  font-weight: 600;
+}
+.stage-ReadoutGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.75rem;
+}
+.s-box {
+  background: #151c2b;
+  border: 1px solid #253047;
+  border-radius: 7px;
+  padding: 0.8rem 0.95rem;
+  display: grid;
+  gap: 0.35rem;
+}
+.s-box h4 {
+  font: 600 0.73rem/1.2 var(--f-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #58c4dd;
+}
+.s-box.c2 h4 { color: #f6b95e; }
+.s-box.c3 h4 { color: #c49bff; }
+.s-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.87rem;
+  color: #aab6c9;
+  border-top: 1px solid #20293d;
+  padding-top: 0.28rem;
+}
+.s-metric:first-of-type { border-top: 0; padding-top: 0; }
+.s-metric b {
+  font: 600 0.93rem/1.2 var(--f-mono);
+  color: #ffffff;
+}
+
+/* Tabla comparativa */
+.tablewrap {
+  overflow-x: auto;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}
+table.comp {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.91rem;
+}
+.comp th, .comp td {
+  text-align: left;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.comp tr:last-child td { border-bottom: 0; }
+.comp th {
+  font: 600 0.76rem/1.2 var(--f-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: var(--code-bg);
+}
+.comp td.num, .comp th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--f-mono); }
+pre {
+  margin: 0;
+  padding: 0.9rem 1.1rem;
+  background: var(--code-bg);
+  border-radius: 6px;
+  overflow-x: auto;
+  font: 0.85rem/1.55 var(--f-mono);
+}
+footer {
+  font-size: 0.85rem;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  padding-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+@media (max-width: 640px) {
+  .topbar { position: static; }
+}
+</style>
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js" async></script>
+</head>
+<body>
+
+<main class="wrap">
+  <nav class="topbar" aria-label="Navegación rápida">
+    <div class="navlinks">
+      <a href="#resumen">Los 3 avances</a>
+      <a href="#papers">Mapa de papers</a>
+      <a href="#linea1">1. Modos g</a>
+      <a href="#linea2">2. Rotación</a>
+      <a href="#linea3">3. Magnetar</a>
+      <a href="#explorador">Explorador BSk26</a>
+      <a href="#verificacion">Verificación</a>
+    </div>
+    <div class="actions">
+      <a class="btn-link" href="informe_axiones.html">Informe base ↗</a>
+      <a class="btn-link" href="informe_gmodes.html">1. Modos g ↗</a>
+      <a class="btn-link" href="informe_rotacion.html">2. Rotación ↗</a>
+      <a class="btn-link" href="informe_magnetar.html">3. Magnetar ↗</a>
+      <a class="btn-link" href="guia_departamento.html">Guía dpto ↗</a>
+      <button type="button" class="btn-theme" id="themetoggle">Tema</button>
+    </div>
+  </nav>
+
+  <header class="stack">
+    <p class="eyebrow">Programa de investigación agéntico · Trabajos de José A. Pons y colaboradores (2024–2026)</p>
+    <h1>Tres nuevas líneas abiertas desde la acción: estratificación (\(g\)-modes), rotación lenta (\(r\)-modes) y unificación Axión–Magnetar</h1>
+    <div class="pitch">
+      <p class="lede">Tras rederivar en SymPy los dos artículos de condensados de axiones de Gómez-Bañón, Pnigouras y Pons (<a href="https://arxiv.org/abs/2510.16245">arXiv:2510.16245</a> y <a href="https://arxiv.org/abs/2610.37308">arXiv:2610.37308</a>) y levantar la aproximación de Cowling en el <a href="informe_axiones.html">informe principal</a>, hemos atacado las <b>tres grandes preguntas físicas abiertas</b> en las publicaciones recientes del grupo de Alicante (2024–2026), dedicando a cada una un módulo simbólico/numérico propio y un informe interactivo independiente.</p>
+      <p>En las tres líneas se mantiene la misma disciplina de <b>cero alucinaciones</b>: toda ecuación se deduce simbólicamente en SymPy desde la acción covariante, se contrasta con su límite analítico publicado en un módulo de referencia separado (con controles negativos obligatorios) y se compila con <code>lambdify(..., cse=True)</code> para integrarla sobre la misma estrella realista BSk26 (\(p_c = 100\text{ MeV/fm}^3\)).</p>
+    </div>
+  </header>
+
+  <section class="stack" id="resumen">
+    <p class="eyebrow">Vista rápida</p>
+    <h2>Qué tres ideas físicas hemos perseguido y qué ha salido</h2>
+
+    <div class="trio-grid">
+      <article class="trio-card">
+        <div class="trio-top">
+          <div class="trio-head">
+            <span class="badge b-acc">Avance 1 · LIGO / ET</span>
+            <span class="badge b-ok">20/20 checks</span>
+          </div>
+          <h3>Estratificación no barotrópica (\(c_s^2 \neq c_e^2\)), modos \(g\) y modo de interfaz \(i_a\)</h3>
+          <p>Al congelar la fracción de protones \(Y_p\) durante la oscilación, el salto del ~32 % en la masa nucleónica \(m_N^*(\theta)\) dentro de la pared de dominio del axión crea una boya interna que atrapa un <b>modo de interfaz sin nodos (\(i_a\))</b> justo en la banda de máxima sensibilidad de LIGO y Einstein Telescope.</p>
+        </div>
+        <div class="kpi-strip">
+          <div><b>285–655 Hz</b><span>Frecuencia GW \(2\nu(i_a)\)</span></div>
+          <div><b>0.25–0.82 rad</b><span>Desfase marea \(|\Delta\Phi_{\text{GW}}|\)</span></div>
+        </div>
+        <a class="btn-primary" href="informe_gmodes.html">Abrir Informe 1 (Modos g) →</a>
+      </article>
+
+      <article class="trio-card c2">
+        <div class="trio-top">
+          <div class="trio-head">
+            <span class="badge b-flag">Avance 2 · Púlsares / CFS</span>
+            <span class="badge b-ok">18/18 checks</span>
+          </div>
+          <h3>Rotación lenta \(\mathcal{O}(\Omega)\), arrastre de Lense–Thirring y modos \(r\) axiales</h3>
+          <p>Extendiendo la estrella a la métrica de Hartle–Thorne, demostramos que aunque \(T^t{}_\phi[a]=0\), la energía cinética espacial de la pared \((a_0')^2\) añade un término fuente exacto al arrastre de marcos, reduce \(I\) hasta un 12.7 % y desplaza la ventana de inestabilidad CFS de los modos \(r\).</p>
+        </div>
+        <div class="kpi-strip">
+          <div><b>−12.7 %</b><span>Cambio máx. en \(I\)</span></div>
+          <div><b>+15.5 %</b><span>Alargamiento de \(|\tau_{\text{GW}}^{(r)}|\)</span></div>
+        </div>
+        <a class="btn-primary" href="informe_rotacion.html">Abrir Informe 2 (Rotación) →</a>
+      </article>
+
+      <article class="trio-card c3">
+        <div class="trio-top">
+          <div class="trio-head">
+            <span class="badge b-purp">Avance 3 · Unificación</span>
+            <span class="badge b-ok">18/18 checks</span>
+          </div>
+          <h3>Unificación Axión + Magnetar: Chern–Simons y corriente quiral \(\mu_{5,\text{eff}}\)</h3>
+          <p>Conectamos la saga de axiones (2024–2026) con la saga de anomalía quiral en magnetares de Dehman y Pons (2024–2025): el gradiente de la pared \(a_0'(r)\) induce exactamente la corriente magnética quiral con un potencial efectivo \(\mu_{5,\text{eff}}(r)\) topológicamente permanente.</p>
+        </div>
+        <div class="kpi-strip">
+          <div><b>21.6–30.5 meV</b><span>Potencial quiral \(\mu_{5,\text{eff}}^{\max}\)</span></div>
+          <div><b>0.87–1.24 cm</b><span>Escala crítica \(\lambda_{\text{crit}}\)</span></div>
+        </div>
+        <a class="btn-primary" href="informe_magnetar.html">Abrir Informe 3 (Magnetar) →</a>
+      </article>
+    </div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 820 265" role="img" aria-label="Arquitectura de las líneas de investigación abiertas desde la acción común de Einstein-Fluido-Axión">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="14" y="68" width="215" height="125" rx="8" stroke-width="2"/>
+          <rect x="295" y="12" width="235" height="54" rx="6" stroke-dasharray="4 3"/>
+          <rect x="295" y="78" width="235" height="54" rx="6" style="stroke: var(--accent)" stroke-width="1.8"/>
+          <rect x="295" y="144" width="235" height="54" rx="6" style="stroke: var(--flag)" stroke-width="1.8"/>
+          <rect x="295" y="210" width="235" height="46" rx="6" style="stroke: var(--purple)" stroke-width="1.8"/>
+
+          <rect x="585" y="12" width="220" height="54" rx="6"/>
+          <rect x="585" y="78" width="220" height="54" rx="6"/>
+          <rect x="585" y="144" width="220" height="54" rx="6"/>
+          <rect x="585" y="210" width="220" height="46" rx="6"/>
+
+          <path d="M229,105 L293,39" marker-end="url(#arrow)"/>
+          <path d="M229,120 L293,105" marker-end="url(#arrow)"/>
+          <path d="M229,140 L293,171" marker-end="url(#arrow)"/>
+          <path d="M229,158 L293,233" marker-end="url(#arrow)"/>
+
+          <line x1="530" y1="39" x2="583" y2="39" marker-end="url(#arrow)"/>
+          <line x1="530" y1="105" x2="583" y2="105" marker-end="url(#arrow)"/>
+          <line x1="530" y1="171" x2="583" y2="171" marker-end="url(#arrow)"/>
+          <line x1="530" y1="233" x2="583" y2="233" marker-end="url(#arrow)"/>
+        </g>
+        <g fill="currentColor" font-size="11.5">
+          <text x="121" y="92" text-anchor="middle" font-weight="600" font-size="12.5">Tronco común verificado</text>
+          <text x="121" y="113" text-anchor="middle" fill-opacity="0.8">Acción \(S_{\text{EH}} + S_{\text{fluido}} + S_a\)</text>
+          <text x="121" y="132" text-anchor="middle" fill-opacity="0.8">Fondo BSk26 (\(p_c = 100\text{ MeV/fm}^3\))</text>
+          <text x="121" y="151" text-anchor="middle" fill-opacity="0.8">Pared axiónica \(\theta_0: \pi \to 0\)</text>
+          <text x="121" y="174" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.2" style="fill: var(--ok)">SymPy → lambdify(cse=True)</text>
+
+          <text x="412" y="34" text-anchor="middle" font-weight="600">Línea 0 · Métrica dinámica (\(\delta g_{\mu\nu}\neq 0\))</text>
+          <text x="412" y="52" text-anchor="middle" font-size="10.5" fill-opacity="0.75">Lindblom–Detweiler + axión (modos \(f, p_1, p_2\))</text>
+
+          <text x="412" y="100" text-anchor="middle" font-weight="600" style="fill: var(--accent)">Avance 1 · Composición congelada (\(c_s^2 \neq c_e^2\))</text>
+          <text x="412" y="118" text-anchor="middle" font-size="10.5" fill-opacity="0.75">Flotabilidad de Brunt–Väisälä \(N^2(r)\) en la pared</text>
+
+          <text x="412" y="166" text-anchor="middle" font-weight="600" style="fill: var(--flag)">Avance 2 · Rotación lenta \(\mathcal{O}(\Omega)\) (Hartle–Thorne)</text>
+          <text x="412" y="184" text-anchor="middle" font-size="10.5" fill-opacity="0.75">Arrastre Lense–Thirring \(\varpi(r)\) y modos axiales \(r\)</text>
+
+          <text x="412" y="229" text-anchor="middle" font-weight="600" style="fill: var(--purple)">Avance 3 · Sector Maxwell–Chern–Simons</text>
+          <text x="412" y="246" text-anchor="middle" font-size="10.5" fill-opacity="0.75">\(-\frac{1}{4}g_{a\gamma\gamma}a F\tilde{F}\) + dipolo relativista \(B_0\)</text>
+
+          <text x="695" y="34" text-anchor="middle" font-weight="600">informe_axiones.html</text>
+          <text x="695" y="52" text-anchor="middle" font-size="10.5" fill-opacity="0.75">128/131 checks · \(\tau_{\text{GW+axión}}\)</text>
+
+          <text x="695" y="100" text-anchor="middle" font-weight="600">informe_gmodes.html</text>
+          <text x="695" y="118" text-anchor="middle" font-size="10.5" fill-opacity="0.75">Modo interfaz \(i_a\) · \(\Delta\Phi_{\text{GW}}\) en LIGO/ET</text>
+
+          <text x="695" y="166" text-anchor="middle" font-weight="600">informe_rotacion.html</text>
+          <text x="695" y="184" text-anchor="middle" font-size="10.5" fill-opacity="0.75">\(\Delta I = -12.7\%\) · Ventana CFS en LMXB</text>
+
+          <text x="695" y="229" text-anchor="middle" font-weight="600">informe_magnetar.html</text>
+          <text x="695" y="246" text-anchor="middle" font-size="10.5" fill-opacity="0.75">Unificación con Dehman &amp; Pons (\(\mu_{5,\text{eff}}\))</text>
+        </g>
+      </svg>
+      <figcaption>Cómo el mismo núcleo simbólico-numérico se ramifica para atacar las tres líneas abiertas en los artículos recientes del grupo.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stack" id="papers">
+    <p class="eyebrow">Contexto bibliográfico</p>
+    <h2>Las dos sagas recientes del grupo de José A. Pons (2024–2026) que conectamos</h2>
+    <p>Al revisar la producción reciente de José A. Pons en la Universitat d'Alacant aparecen dos líneas muy activas que hasta ahora habían discurrido en paralelo. Los tres informes construidos aquí extienden la primera hacia detectores interferométricos y púlsares en rotación (Avances 1 y 2) y tienden un puente matemático exacto entre ambas sagas (Avance 3):</p>
+
+    <div class="saga-grid">
+      <div class="saga-box">
+        <span class="badge b-acc" style="width:fit-content">Saga A · Condensados de axiones ligeros en estrellas de neutrones</span>
+        <ul class="saga-list">
+          <li>
+            <b>1. Enfriamiento térmico y envoltura (PRL 2024)</b>
+            <span>A. Gómez-Bañón, K. Bartnick, K. Springmann y J. A. Pons, <i>Constraining Light QCD Axions with Isolated Neutron Star Cooling</i>, Phys. Rev. Lett. <b>133</b>, 251002 (2024), <a href="https://arxiv.org/abs/2408.13247">arXiv:2408.13247</a>.</span>
+          </li>
+          <li>
+            <b>2. Estructura hidrostática y modos radiales (Paper I, 2025)</b>
+            <span>A. Gómez-Bañón, P. Pnigouras y J. A. Pons, <i>Axion condensates in neutron stars and radial oscillation modes</i>, <a href="https://arxiv.org/abs/2510.16245">arXiv:2510.16245</a>.</span>
+          </li>
+          <li>
+            <b>3. Modos no radiales \(l=2\) en Cowling (Paper II, oct. 2026)</b>
+            <span>A. Gómez-Bañón, P. Pnigouras y J. A. Pons, <i>Nonradial oscillation modes of axion condensed neutron stars in the Cowling approximation</i>, <a href="https://arxiv.org/abs/2610.37308">arXiv:2610.37308</a>.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="saga-box">
+        <span class="badge b-purp" style="width:fit-content">Saga B · Magnetares, anomalía quiral y evolución rotacional</span>
+        <ul class="saga-list">
+          <li>
+            <b>4. Inestabilidad magnética quiral en la corteza (ApJL 2024)</b>
+            <span>C. Dehman y J. A. Pons, <i>On the Origin of Magnetar Fields: Chiral Magnetic Instability in Neutron Star Crusts</i>, <a href="https://arxiv.org/abs/2408.05281">arXiv:2408.05281</a>.</span>
+          </li>
+          <li>
+            <b>5. Dinámica 3D, helicidad magnética y anomalías quirales (2025)</b>
+            <span>C. Dehman y J. A. Pons, <i>Magnetar field dynamics shaped by chiral anomalies and helicity</i>, <a href="https://arxiv.org/abs/2505.06196">arXiv:2505.06196</a>.</span>
+          </li>
+          <li>
+            <b>6. Magnetares tardíos y evolución magneto-rotacional (2025)</b>
+            <span>A. G. Suvorov, C. Dehman y J. A. Pons, <a href="https://arxiv.org/abs/2505.05373">arXiv:2505.05373</a>; J. A. Pons, C. Dehman y D. Viganò, <i>Living Reviews</i>, <a href="https://arxiv.org/abs/2509.06699">arXiv:2509.06699</a>.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== AVANCE 1 ==================== -->
+  <section class="advance" id="linea1">
+    <div class="advance-header">
+      <div class="stack" style="gap:0.35rem">
+        <span class="eyebrow">Avance 1 · Estratificación y ondas gravitacionales en inspirals</span>
+        <h2>Modos de gravedad (\(g\)-modes) y el modo de interfaz axiónica \(i_a\) en la banda de LIGO y Einstein Telescope</h2>
+      </div>
+      <span class="badge b-ok">20 / 20 comprobaciones SymPy + SciPy</span>
+    </div>
+
+    <div class="advance-cols">
+      <div class="subcard">
+        <h4>1. Qué asumían los papers y qué idea perseguimos</h4>
+        <p>En los Papers I y II se impone la relación barotrópica \(\delta p = c_e^2\,\delta\varepsilon_{\text{nuc}}\): cada elemento de fluido desplazado reajusta instantáneamente su equilibrio beta. Eso restringe el espectro a los modos acústicos \(f\) y \(p_k\) a \(2\text{–}12\text{ kHz}\), donde el ruido cuántico de los interferómetros degrada la sensibilidad.</p>
+        <p><b>La idea física:</b> Como el periodo de oscilación (\(\sim 1\text{–}10\text{ ms}\)) es órdenes de magnitud más corto que las reacciones Urca (\(\tau_{\text{Urca}} \gg 1\text{ s}\)), la fracción de protones \(Y_p\) permanece congelada (\(\Delta Y_p = 0\)) y la velocidad del sonido adiabática supera a la de equilibrio (\(c_s^2 > c_e^2\)). En la pared de dominio del axión (\(r_{\text{wall}} \in [8.93, 10.74]\text{ km}\)), donde \(m_N^*(\theta)\) salta un ~32 % en \(\Delta r \sim 0.3\text{ km}\), esa estratificación debería actuar como una cavidad de flotabilidad extrema.</p>
+      </div>
+
+      <div class="subcard">
+        <h4>2. Deducción simbólica desde la acción en SymPy</h4>
+        <p>Partiendo de \(\nabla_\mu T^{\mu\nu} = 0\) junto con \(\Delta p = c_s^2\Delta\varepsilon_{\text{nuc}}\) y la dependencia explícita \(\varepsilon(n_b, Y_p, a)\), deducimos en SymPy el sistema no barotrópico acoplado al axión y aislamos el <b>discriminante relativista de Schwarzschild</b> \(A(r)\) y la <b>frecuencia de Brunt–Väisälä</b> \(N^2(r)\) mediante descomposición en serie de Laurent en \(\omega^2\):</p>
+        <div class="math-box">
+          \[A(r) = \frac{1}{\varepsilon + p}\left(\frac{d\varepsilon}{dr} - \frac{1}{c_s^2}\frac{dp}{dr} - n_b\frac{\partial m^*}{\partial a}\frac{da_0}{dr}\right), \qquad N^2(r) = -g_{\text{eff}}(r)\,A(r)\,e^{2(\Phi-\lambda)}.\]
+        </div>
+        <p>El polo \(\propto \omega^{-2}\) en la ecuación radial demuestra simbólicamente que cuando \(A(r) < 0\) se abre el espectro de baja frecuencia (\(\omega^2 \sim N^2\)), que desaparece idénticamente en el límite barotrópico \(c_s^2 \to c_e^2\).</p>
+      </div>
+
+      <div class="subcard">
+        <h4>3. Descubrimiento cuantitativo sobre BSk26</h4>
+        <ul>
+          <li><b>Pico gigante de flotabilidad en la pared:</b> Mientras que la estratificación nuclear \(npe\mu\) genera una meseta de \(N_{\text{comp}}/(2\pi) \in [169, 231]\text{ Hz}\), la pared de dominio axiónica dispara un pico agudo de \(N_{\max}/(2\pi) \in [509.7, 765.2]\text{ Hz}\).</li>
+          <li><b>Nuevo modo de interfaz sin nodos (\(i_a\)):</b> Aparece un modo fundamental atrapado en la pared (\(n=0\) nodos radiales) a \(\nu(i_a) \in [142.5, 327.7]\text{ Hz}\), cuya emisión gravitacional cuadrupolar cae en \(f_{\text{GW}} = 2\nu(i_a) \in [285, 655]\text{ Hz}\), por encima de la escalera \(g_1\) (\(99\text{–}217\text{ Hz}\)), \(g_2\) (\(67\text{–}163\text{ Hz}\)) y \(g_3\) (\(50\text{–}131\text{ Hz}\)).</li>
+          <li><b>Resonancia de marea en binarias (LIGO A+ / ET-D):</b> El solapamiento cuadrupolar del modo de interfaz \(Q_{i_a} \approx (1.25\text{–}1.62)\times 10^{-3}\) es <b>\(\sim 7\) veces mayor</b> que el de \(g_1\), produciendo un desfase acumulado en la fase gravitacional \(|\Delta\Phi_{\text{GW}}(i_a)| \in [0.25, 0.82]\text{ rad}\) (\(\text{SNR}_{\text{ET-D}} \approx 40\) a \(\nu_a = 6\text{ kHz}\)).</li>
+        </ul>
+      </div>
+
+      <div class="subcard">
+        <h4>4. Controles negativos y validación</h4>
+        <ul>
+          <li>Reducción exacta a las ecuaciones de Reisenegger y Goldreich (1992) / Finn (1987) al apagar el axión (\(a_0 \to 0\)).</li>
+          <li>Recuperación exacta de las Ecs. (8a)–(8d) del Paper II en el límite barotrópico \(A(r) \to 0\).</li>
+          <li><b>4 controles negativos deliberados</b> (invertir el signo de \(A(r)\), omitir \(A(r)\) en \(W'\), cambiar \(g_{\text{eff}}/c_s^2\) en \(p_{\text{hat}}'\) y sustituir \(l(l+1) \to l^2\)) detectados al 100 % por el comparador simbólico.</li>
+          <li>Ortogonalidad relativista \(\langle \xi_n, \xi_m \rangle < 10^{-4}\) verificada numéricamente con RK4 + reortogonalización de Gram–Schmidt.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="advance-footer">
+      <div class="files-inline">Código: <code>axion_ns/gmodes.py</code> · <code>axion_ns/gmodes_ref.py</code> · <code>axion_ns/step11_gmodes.py</code> · Datos: <code>results/fig_gmodes.json</code></div>
+      <a class="btn-primary" href="informe_gmodes.html">Explorar Informe 1 completo (interactivo) →</a>
+    </div>
+  </section>
+
+  <!-- ==================== AVANCE 2 ==================== -->
+  <section class="advance" id="linea2">
+    <div class="advance-header">
+      <div class="stack" style="gap:0.35rem">
+        <span class="eyebrow">Avance 2 · Relatividad general en rotación lenta (\(\mathcal{O}(\Omega)\))</span>
+        <h2>Arrastre de marcos de Lense–Thirring, momento de inercia y modos \(r\) axiales con condensado de axiones</h2>
+      </div>
+      <span class="badge b-ok">18 / 18 comprobaciones SymPy + SciPy</span>
+    </div>
+
+    <div class="advance-cols">
+      <div class="subcard">
+        <h4>1. Qué asumían los papers y qué idea perseguimos</h4>
+        <p>Los Papers I y II trabajan sobre un fondo esférico estático (\(\Omega = 0\)) y solo analizan perturbaciones polares (esferoidales). En las conclusiones de ambos artículos se señala la rotación como paso imprescindible para conectar con observaciones de púlsares.</p>
+        <p><b>La idea física:</b> Al introducir rotación lenta a orden \(\mathcal{O}(\Omega)\) sobre la métrica de Hartle–Thorne (\(g_{t\phi} = -\omega_{\text{LT}}(r) r^2\sin^2\theta\)), el espacio-tiempo sufre arrastre de marcos (\(\varpi(r) = \Omega - \omega_{\text{LT}}(r)\)) y la fuerza de Coriolis despierta los <b>modos \(r\) axiales</b> (\(\sigma \simeq -\frac{2m\Omega}{l(l+1)}\)), responsables de frenar estrellas de neutrones calientes mediante la inestabilidad de Chandrasekhar–Friedman–Schutz (CFS).</p>
+      </div>
+
+      <div class="subcard">
+        <h4>2. Deducción simbólica desde la acción en SymPy</h4>
+        <p>Evaluando el tensor energía-impulso del axión sobre la métrica de Hartle–Thorne demostramos en SymPy que \(T^t{}_{\phi,\text{axión}} \equiv 0\) idénticamente para un condensado estático \(a_0(r)\). Sin embargo, al escribir la ecuación de Einstein \(G^t{}_\phi = 8\pi G T^t{}_\phi\) con el factor \(j(r) = e^{-(\Phi_0+\lambda_0)}\), la ecuación de fondo \(\Phi_0'+\lambda_0' = 4\pi G r e^{2\lambda_0}(\varepsilon + p + e^{-2\lambda_0}a_0'^2)\) introduce un <b>término fuente cinético exacto</b> de la pared de dominio:</p>
+        <div class="math-box">
+          \[\frac{1}{r^4}\frac{d}{dr}\!\left(r^4 j(r)\frac{d\varpi}{dr}\right) + \frac{4}{r}\frac{dj}{dr}\varpi = -16\pi G\,j(r)\,(a_0')^2\,\varpi.\]
+        </div>
+        <p>Además, deducimos la ecuación maestra de Kojima (1998) para las perturbaciones axiales (\(h_0, h_1, U\)) con \(l=m=2\) acopladas al fondo con condensado.</p>
+      </div>
+
+      <div class="subcard">
+        <h4>3. Descubrimiento cuantitativo sobre BSk26</h4>
+        <ul>
+          <li><b>Momento de inercia \(I(\nu_a)\):</b> El ablandamiento de la ecuación de estado por el condensado reduce el momento de inercia total hasta un <b>\(-12.7\,\%\)</b> (de \(1.586\times 10^{45}\) a \(1.384\times 10^{45}\text{ g cm}^2\) a \(\nu_a = 3\text{ kHz}\)), mientras que el momento adimensional \(I/(MR^2)\) sube un \(+5.4\,\%\) (de \(0.3782\) a \(0.3988\)).</li>
+          <li><b>Arrastre de Lense–Thirring y espectro de Kojima:</b> El arrastre relativo en el centro \(\varpi_c/\Omega\) aumenta un \(+7.3\,\%\) y el factor relativista de los modos \(r\) pasa de \(\kappa_2 = 0.2678\) a \(0.2738\).</li>
+          <li><b>Ventana de inestabilidad CFS en LMXB:</b> La menor compacidad debilita el multipolo de corriente gravitacional \(J_{22}\), alargando el tiempo de crecimiento \(|\tau_{\text{GW}}^{(r)}|(1\text{ kHz})\) un <b>\(+15.5\,\%\)</b> (de \(23.5\text{ s}\) a \(27.2\text{ s}\)) y elevando la frecuencia crítica de espín en estrellas en acreción (\(T \sim 2\text{–}5\times 10^8\text{ K}\)) hasta \(671\text{–}867\text{ Hz}\).</li>
+        </ul>
+      </div>
+
+      <div class="subcard">
+        <h4>4. Controles negativos y validación</h4>
+        <ul>
+          <li>Coincidencia a precisión de máquina (\(\Delta I / I = 5.3\times 10^{-12}\)) entre el momento de inercia extraído de la asíntota exterior \(J/\Omega = \frac{1}{6}R^4\varpi'(R)\) y la integral de volumen de Hartle.</li>
+          <li>Recuperación exacta de la Ec. (43) de Hartle (1967) y de las Ecs. (20) y (25) de Kojima (1998) al anular el axión.</li>
+          <li><b>3 controles negativos deliberados</b> (mutar el coeficiente \(4/r \to 2/r\) en Hartle, cambiar \(l(l+1)-2 \to l(l+1)\) en la ligadura de Kojima y duplicar el potencial de dispersión axial) detectados por el arnés de pruebas.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="advance-footer">
+      <div class="files-inline">Código: <code>axion_ns/rotation.py</code> · <code>axion_ns/rotation_ref.py</code> · <code>axion_ns/step12_rotation.py</code> · Datos: <code>results/fig_rotacion.json</code></div>
+      <a class="btn-primary" href="informe_rotacion.html">Explorar Informe 2 completo (interactivo) →</a>
+    </div>
+  </section>
+
+  <!-- ==================== AVANCE 3 ==================== -->
+  <section class="advance" id="linea3">
+    <div class="advance-header">
+      <div class="stack" style="gap:0.35rem">
+        <span class="eyebrow">Avance 3 · Síntesis de las dos líneas de Alicante (2024–2026)</span>
+        <h2>Unificación Axión + Magnetar: acoplo de Chern–Simons, potencial quiral efectivo \(\mu_{5,\text{eff}}\) y conversión resonante</h2>
+      </div>
+      <span class="badge b-ok">18 / 18 comprobaciones SymPy + SciPy</span>
+    </div>
+
+    <div class="advance-cols">
+      <div class="subcard">
+        <h4>1. Qué asumían los papers y qué idea perseguimos</h4>
+        <p>En Dehman y Pons (<a href="https://arxiv.org/abs/2408.05281">arXiv:2408.05281</a>, <a href="https://arxiv.org/abs/2505.06196">arXiv:2505.06196</a>) se estudia cómo una asimetría quiral electrónica \(\mu_5 = (\mu_R - \mu_L)/2\) genera una corriente paralela al campo magnético (\(\mathbf{J}_{\text{CME}} = \frac{\alpha_{\text{EM}}}{\pi}\mu_5\mathbf{B}\)) capaz de amplificar campos de magnetar, pero limitada por el borrado rápido de \(\mu_5\) mediante dispersión de Rutherford (*spin-flip*).</p>
+        <p><b>La idea física:</b> Si añadimos a la estrella con condensado axiónico el término de Chern–Simons electromagnético \(-\frac{1}{4}g_{a\gamma\gamma}a F_{\mu\nu}\tilde{F}^{\mu\nu}\), el fuerte gradiente espacial de la pared de dominio \(a_0'(r) = f_a\theta_0'(r)\) actúa como un fondo pseudoescalar inhomogéneo. ¿Es esa pared axiónica matemáticamente equivalente al potencial químico quiral \(\mu_5\) de Dehman y Pons, pero inmune al borrado por *spin-flip*?</p>
+      </div>
+
+      <div class="subcard">
+        <h4>2. Deducción simbólica desde la acción en SymPy</h4>
+        <p>Variando en SymPy la acción covariante de Einstein–Maxwell–Axión en espacio-tiempo curvo deducimos las ecuaciones de Maxwell–Carroll–Field–Jackiw y Klein–Gordon acopladas. Al proyectar la corriente topológica \(J^\nu_{\text{top}} = -g_{a\gamma\gamma}(\partial_\mu a)\tilde{F}^{\mu\nu}\) sobre la pared de dominio estática \(a_0(r)\) e igualarla con la corriente de anomalía quiral de Dehman y Pons, obtenemos la <b>identidad exacta de unificación</b>:</p>
+        <div class="math-box">
+          \[\mu_{5,\text{eff}}(r) = \frac{\pi}{\alpha_{\text{EM}}}\,g_{a\gamma\gamma}\,f_a\,\frac{d\theta_0}{dr}, \qquad k_{\text{crit}}(r) = g_{a\gamma\gamma}\,f_a\,\left|\frac{d\theta_0}{dr}\right| = \frac{\alpha_{\text{EM}}}{\pi}|\mu_{5,\text{eff}}(r)|.\]
+        </div>
+        <p>Además, deducimos la ecuación de Grad–Shafranov relativista de Wasserman y Shapiro (1983) para el dipolo magnético de fondo \(\Psi(r)\) y el sistema de ecuaciones acopladas para las oscilaciones magneto-axiónicas \((s(r), \delta\theta(r))\).</p>
+      </div>
+
+      <div class="subcard">
+        <h4>3. Descubrimiento cuantitativo sobre BSk26</h4>
+        <ul>
+          <li><b>Potencial quiral topológicamente protegido:</b> Para \(g_{a\gamma\gamma} = 10^{-11}\text{ GeV}^{-1}\), la pared de dominio (\(r_{\text{wall}} \in [8.87, 10.74]\text{ km}\)) sostiene un potencial quiral efectivo permanente \(\mu_{5,\text{eff}}^{\max} \in [21.6, 30.5]\text{ meV}\), que alimenta modos magnéticos helicoidales con longitud de onda crítica \(\lambda_{\text{crit}} = 2\pi/k_{\text{crit}} \in [0.87, 1.24]\text{ cm}\).</li>
+          <li><b>Amplificación relativista del dipolo (Wasserman–Shapiro):</b> La curvatura de la estrella amplifica el campo magnético polar un factor \(1.40\text{–}1.42\) respecto a la estimación plana.</li>
+          <li><b>Conversión resonante en magnetares (\(B_0 = 10^{15}\text{ G}\)):</b> El acoplamiento dipolar en la pared de dominio desplaza las frecuencias magneto-axiónicas en \(|\Delta\nu| \in [84.9, 365.4]\text{ Hz}\) y genera una luminosidad electromagnética dipolar \(L_\gamma \propto B_0^2 g_{a\gamma\gamma}^2 \in [0.70, 4.30]\times 10^{44}\text{ erg/s}\).</li>
+        </ul>
+      </div>
+
+      <div class="subcard">
+        <h4>4. Controles negativos y validación</h4>
+        <ul>
+          <li>Verificación simbólica de la identidad de Bianchi \(\nabla_\mu\tilde{F}^{\mu\nu} \equiv 0\) y de que la densidad de Pontryagin \(F_{\mu\nu}\tilde{F}^{\mu\nu} = 2\nabla_\mu(\epsilon^{\mu\nu\alpha\beta}A_\nu\partial_\alpha A_\beta)\) es una divergencia total exacta.</li>
+          <li>Recuperación del efecto Witten para la carga inducida por un monopolo y de la solución analítica exterior de Wasserman–Shapiro en términos de \(Q_1^1\).</li>
+          <li><b>4 controles negativos deliberados</b> (invertir el signo de Chern–Simons, alterar el factor métrico \(e^{2\lambda}\) en Wasserman–Shapiro, factor 2 en \(\mu_{5,\text{eff}}\) y suprimir el acoplo cruzado \(B_0\)) detectados al 100 %.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="advance-footer">
+      <div class="files-inline">Código: <code>axion_ns/magnetar.py</code> · <code>axion_ns/magnetar_ref.py</code> · <code>axion_ns/step13_magnetar.py</code> · Datos: <code>results/fig_magnetar.json</code></div>
+      <a class="btn-primary" href="informe_magnetar.html">Explorar Informe 3 completo (interactivo) →</a>
+    </div>
+  </section>
+
+  <!-- ==================== EXPLORADOR UNIFICADO ==================== -->
+  <section class="stack" id="explorador">
+    <p class="eyebrow">Síntesis numérica interactiva</p>
+    <h2>La misma estrella BSk26 (\(p_c = 100\text{ MeV/fm}^3\)) vista a través de los tres avances</h2>
+    <p>Selecciona la frecuencia de masa del axión \(\nu_a = m_a c^2 / h\) para inspeccionar simultáneamente cómo evoluciona la estructura de la pared de dominio y qué predicciones cuantitativas arrojan los tres nuevos módulos sobre esa misma estrella:</p>
+
+    <div class="stage">
+      <div class="stage-bar">
+        <div>
+          <span style="font:600 0.78rem/1 var(--f-mono); color:#58c4dd; text-transform:uppercase; letter-spacing:0.06em;">Frecuencia del axión \(\nu_a\)</span>
+          <div style="font-size:0.86rem; color:#aab6c9; margin-top:0.2rem;" id="star-subtitle">Cargando estrella...</div>
+        </div>
+        <div class="nu-pills" id="nu-buttons" role="group" aria-label="Frecuencia del axión en kHz"></div>
+      </div>
+
+      <div class="stage-ReadoutGrid">
+        <div class="s-box">
+          <h4>0. Estructura de fondo y pared</h4>
+          <div class="s-metric"><span>Masa \(M\)</span><b id="val-M">—</b></div>
+          <div class="s-metric"><span>Radio \(R\)</span><b id="val-R">—</b></div>
+          <div class="s-metric"><span>Radio pared \(r_{\text{wall}}\)</span><b id="val-rwall">—</b></div>
+          <div class="s-metric"><span>Sin axión (\(M_0, R_0\))</span><b>1.536 M☉ · 11.72 km</b></div>
+        </div>
+
+        <div class="s-box">
+          <h4>1. Modos g y marea (LIGO / ET)</h4>
+          <div class="s-metric"><span>Pico Brunt–Väisälä \(N_{\max}/2\pi\)</span><b id="val-Nmax">—</b></div>
+          <div class="s-metric"><span>Modo interfaz \(\nu(i_a)\) / \(f_{\text{GW}}\)</span><b id="val-ia">—</b></div>
+          <div class="s-metric"><span>Acoplo marea \(Q_{i_a}\) vs \(Q_{g_1}\)</span><b id="val-Qia">—</b></div>
+          <div class="s-metric"><span>Desfase \(|\Delta\Phi_{\text{GW}}(i_a)|\) (ET)</span><b id="val-dPhi">—</b></div>
+        </div>
+
+        <div class="s-box c2">
+          <h4>2. Rotación lenta y modos r</h4>
+          <div class="s-metric"><span>Momento inercia \(I_{45}\) (\(\Delta I\))</span><b id="val-I">—</b></div>
+          <div class="s-metric"><span>Fracción adimensional \(I/MR^2\)</span><b id="val-Ibar">—</b></div>
+          <div class="s-metric"><span>Arrastre centro \(\omega_{\text{LT}}(0)/\Omega\)</span><b id="val-wLT">—</b></div>
+          <div class="s-metric"><span>Crecimiento CFS \(|\tau_{\text{GW}}^{(r)}|(1\text{ kHz})\)</span><b id="val-tauR">—</b></div>
+        </div>
+
+        <div class="s-box c3">
+          <h4>3. Unificación Axión–Magnetar</h4>
+          <div class="s-metric"><span>Potencial quiral \(\mu_{5,\text{eff}}^{\max}\)</span><b id="val-mu5">—</b></div>
+          <div class="s-metric"><span>Escala inestabilidad \(\lambda_{\text{crit}}\)</span><b id="val-lcrit">—</b></div>
+          <div class="s-metric"><span>Desplazamiento \(|\Delta\nu|(10^{15}\text{ G})\)</span><b id="val-dnumag">—</b></div>
+          <div class="s-metric"><span>Luminosidad \(L_\gamma(10^{15}\text{ G})\)</span><b id="val-Lgamma">—</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TABLA COMPARATIVA Y VERIFICACIÓN ==================== -->
+  <section class="stack" id="verificacion">
+    <p class="eyebrow">Tabla comparativa y reproducibilidad</p>
+    <h2>Resumen de los cuatro informes del repositorio (184 / 187 comprobaciones automáticas)</h2>
+
+    <div class="tablewrap">
+      <table class="comp">
+        <thead>
+          <tr>
+            <th>Informe</th>
+            <th>Hipótesis levantada / Física nueva</th>
+            <th>Módulos SymPy + SciPy</th>
+            <th class="num">Checks</th>
+            <th class="num">Tiempo</th>
+            <th>Enlace</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>0. Informe base (Paper I + II + Sin Cowling)</b></td>
+            <td>Métrica dinámica \(\delta g_{\mu\nu} \neq 0\) (Lindblom–Detweiler extendido con axión) para modos \(f, p_1, p_2\)</td>
+            <td><code>model.py</code>, <code>nonradial.py</code>, <code>fullgr.py</code>, <code>axgr.py</code></td>
+            <td class="num">128 / 131</td>
+            <td class="num">{{SEC_BASE}} s</td>
+            <td><a href="informe_axiones.html">Abrir ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>1. Estratificación y modos \(g\) / interfaz \(i_a\)</b></td>
+            <td>Composición congelada (\(c_s^2 \neq c_e^2\)), pico de Brunt–Väisälä en la pared axiónica y resonancia de marea en LIGO/ET</td>
+            <td><code>gmodes.py</code>, <code>gmodes_ref.py</code>, <code>step11_gmodes.py</code></td>
+            <td class="num">{{OK_G}} / {{TOT_G}}</td>
+            <td class="num">{{SEC_G}} s</td>
+            <td><a href="informe_gmodes.html">Abrir ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>2. Rotación lenta \(\mathcal{O}(\Omega)\) y modos \(r\)</b></td>
+            <td>Arrastre de marcos de Hartle–Thorne con pared axiónica (\(-16\pi G j(a_0')^2\varpi\)), \(I(\nu_a)\) y modos \(r\) de Kojima / ventana CFS</td>
+            <td><code>rotation.py</code>, <code>rotation_ref.py</code>, <code>step12_rotation.py</code></td>
+            <td class="num">{{OK_R}} / {{TOT_R}}</td>
+            <td class="num">{{SEC_R}} s</td>
+            <td><a href="informe_rotacion.html">Abrir ↗</a></td>
+          </tr>
+          <tr>
+            <td><b>3. Unificación Axión + Magnetar</b></td>
+            <td>Acoplo de Chern–Simons \(g_{a\gamma\gamma}a F\tilde{F}\), equivalencia exacta con el potencial quiral \(\mu_5\) de Dehman y Pons (2024/25) y dipolo relativista</td>
+            <td><code>magnetar.py</code>, <code>magnetar_ref.py</code>, <code>step13_magnetar.py</code></td>
+            <td class="num">{{OK_M}} / {{TOT_M}}</td>
+            <td class="num">{{SEC_M}} s</td>
+            <td><a href="informe_magnetar.html">Abrir ↗</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Cómo reproducir los tres nuevos avances desde la terminal</h3>
+    <pre><code># 1. Estratificación no barotrópica y modos g / de interfaz (20/20 checks)
+.venv/bin/python -m axion_ns.step11_gmodes
+
+# 2. Rotación lenta O(Omega), arrastre de Lense-Thirring y modos r (18/18 checks)
+.venv/bin/python -m axion_ns.step12_rotation
+
+# 3. Unificación Axión + Magnetar y corriente quiral efectiva (18/18 checks)
+.venv/bin/python -m axion_ns.step13_magnetar
+
+# 4. Regenerar todos los informes HTML en results/
+.venv/bin/python report/build_lineas.py &amp;&amp; .venv/bin/python report/build.py</code></pre>
+  </section>
+
+  <footer>
+    <span>Documentación de avances abiertos · Grupo de Astrofísica Relativista (Universitat d'Alacant)</span>
+    <span><a href="informe_axiones.html">Informe base</a> · <a href="informe_gmodes.html">Modos g</a> · <a href="informe_rotacion.html">Rotación</a> · <a href="informe_magnetar.html">Magnetar</a> · <a href="guia_departamento.html">Guía departamento</a></span>
+  </footer>
+</main>
+
+<script>
+const DATA = {{JSON_DATA}};
+
+(function initTheme() {
+  const btn = document.getElementById('themetoggle');
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  btn.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+})();
+
+(function initExplorer() {
+  const wrap = document.getElementById('nu-buttons');
+  const stars = DATA.stars;
+  function selectStar(idx) {
+    const s = stars[idx];
+    wrap.querySelectorAll('button').forEach((b, i) => {
+      b.setAttribute('aria-pressed', i === idx ? 'true' : 'false');
+    });
+    document.getElementById('star-subtitle').textContent =
+      `Estrella BSk26 con condensado axiónico a ν_a = ${s.nu_a_khz.toFixed(0)} kHz (pared de dominio en r_wall = ${s.r_wall_km.toFixed(2)} km)`;
+    document.getElementById('val-M').textContent = `${s.M_msun.toFixed(3)} M☉`;
+    document.getElementById('val-R').textContent = `${s.R_km.toFixed(2)} km`;
+    document.getElementById('val-rwall').textContent = `${s.r_wall_km.toFixed(2)} km`;
+
+    document.getElementById('val-Nmax').textContent = `${s.N_max_hz.toFixed(1)} Hz (núcleo: ${s.N_bulk_hz.toFixed(0)} Hz)`;
+    document.getElementById('val-ia').textContent = `${s.nu_ia_hz.toFixed(1)} Hz → f_GW = ${s.fgw_ia_hz.toFixed(0)} Hz`;
+    document.getElementById('val-Qia').textContent = `${s.Q_ia.toFixed(2)}×10⁻³ vs ${s.Q_g1.toFixed(2)}×10⁻³`;
+    document.getElementById('val-dPhi').textContent = `${s.dPhi_ia_rad.toFixed(3)} rad (SNR ET: ${s.snr_et_ia.toFixed(1)})`;
+
+    document.getElementById('val-I').textContent = `${s.I_45.toFixed(3)} (${s.dI_pct.toFixed(1)} %)`;
+    document.getElementById('val-Ibar').textContent = `${s.I_bar.toFixed(4)} (sin axión: 0.3782)`;
+    document.getElementById('val-wLT').textContent = `${s.wLT_center.toFixed(4)} (ϖ_c/Ω = ${s.varpi_center.toFixed(4)})`;
+    document.getElementById('val-tauR').textContent = `${s.tau_gw_1kHz_s.toFixed(1)} s (sin axión: 23.5 s)`;
+
+    document.getElementById('val-mu5').textContent = `${s.mu5_max_mev.toFixed(2)} meV`;
+    document.getElementById('val-lcrit').textContent = `${s.lambda_crit_cm.toFixed(2)} cm`;
+    document.getElementById('val-dnumag').textContent = `${s.dnu_mag_hz.toFixed(1)} Hz`;
+    document.getElementById('val-Lgamma').textContent = `${s.L_gamma_44.toFixed(2)} × 10⁴⁴ erg/s`;
+  }
+
+  stars.forEach((s, idx) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = `${s.nu_a_khz.toFixed(0)} kHz`;
+    b.setAttribute('aria-pressed', s.nu_a_khz === 6.0 ? 'true' : 'false');
+    b.addEventListener('click', () => selectStar(idx));
+    wrap.appendChild(b);
+  });
+
+  const defaultIdx = stars.findIndex(s => s.nu_a_khz === 6.0);
+  selectStar(defaultIdx >= 0 ? defaultIdx : 0);
+})();
+</script>
+</body>
+</html>
+"""
+
+
+def main():
+    data = load_unified_data()
+    cs = data["checks_summary"]
+    page = (
+        HTML_TEMPLATE
+        .replace("{{JSON_DATA}}", json.dumps(data, separators=(",", ":")))
+        .replace("{{SEC_BASE}}", str(cs["base"]["sec"]))
+        .replace("{{OK_G}}", str(cs["gmodes"]["ok"]))
+        .replace("{{TOT_G}}", str(cs["gmodes"]["tot"]))
+        .replace("{{SEC_G}}", str(cs["gmodes"]["sec"]))
+        .replace("{{OK_R}}", str(cs["rotacion"]["ok"]))
+        .replace("{{TOT_R}}", str(cs["rotacion"]["tot"]))
+        .replace("{{SEC_R}}", str(cs["rotacion"]["sec"]))
+        .replace("{{OK_M}}", str(cs["magnetar"]["ok"]))
+        .replace("{{TOT_M}}", str(cs["magnetar"]["tot"]))
+        .replace("{{SEC_M}}", str(cs["magnetar"]["sec"]))
+    )
+    assert "{{" not in page
+    for dst in (REP / "lineas_investigacion.html", RES / "lineas_investigacion.html"):
+        dst.write_text(page)
+        print(dst, f"{dst.stat().st_size / 1e3:.1f} kB")
+
+
+if __name__ == "__main__":
+    main()
