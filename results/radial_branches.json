@@ -42,6 +42,21 @@
    "note": ""
   },
   {
+   "name": "Identidad Im w = +Re k\u00b7Im k/Re w (de w\u00b2 = 1 + k\u00b2): residuo 0.0e+00; con el signo \u2212 que escribimos por error en el informe: 5.6e-03",
+   "ok": true,
+   "note": "errata se\u00f1alada por la revisi\u00f3n"
+  },
+  {
+   "name": "Ninguna ra\u00edz reportada es un cero espurio de D (min |D| = 21.4)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "M\u00e9todo independiente (principio del argumento sobre f/\u221aD, sin Muller): par cuasi-normal, x0 = 0.80, Re k > 0: 1.00 (esperado 1); par completo, x0 = 0.80: 2.00 (esperado 2); ligado, x0 = 0.86: 1.00 (esperado 1); virtual, x0 = 0.86: 1.00 (esperado 1); inestable, x0 = 0.6: 1.00 (esperado 1)",
+   "ok": true,
+   "note": "H14"
+  },
+  {
    "name": "Control negativo 1 (onda entrante, i k -> -i k): el estado ligado de x0 = 0.86 deja de estar en kappa > 0 en la misma posici\u00f3n",
    "ok": true,
    "note": ""
@@ -1495,5 +1510,32 @@
   }
  ],
  "x0_unstable": 0.10725018479888074,
- "x0_unstable_analytic": 0.10725018479888072
+ "x0_unstable_analytic": 0.10725018479888072,
+ "winding": [
+  {
+   "box": "par cuasi-normal, x0 = 0.80, Re k > 0",
+   "count": 1.0000000000000002,
+   "expected": 1
+  },
+  {
+   "box": "par completo, x0 = 0.80",
+   "count": 2.0,
+   "expected": 2
+  },
+  {
+   "box": "ligado, x0 = 0.86",
+   "count": 1.0000000000000002,
+   "expected": 1
+  },
+  {
+   "box": "virtual, x0 = 0.86",
+   "count": 1.0,
+   "expected": 1
+  },
+  {
+   "box": "inestable, x0 = 0.6",
+   "count": 1.0,
+   "expected": 1
+  }
+ ]
 }

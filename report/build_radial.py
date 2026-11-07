@@ -206,6 +206,17 @@ if S:
         f'<li class="{"ok" if c["ok"] else "bad"}"><span class="pill">{"OK" if c["ok"] else "FALLA"}</span>'
         f'<span>{html.escape(c["name"])}{(" <em>(" + html.escape(c["note"]) + ")</em>") if c["note"] else ""}</span></li>'
         for c in st_checks)
+    rob = S.get('robustness', {})
+    rob_rows = ''
+    for lab, r_ in rob.items():
+        for k, v_ in r_.items():
+            rob_rows += f'<tr><td>{lab}</td><td>{html.escape(k)}</td><td>{v_[0]:.6f}</td><td>{v_[1] * 1e3:.4f}</td></tr>'
+    stab = S.get('stability', {})
+    rob_html = (f"""
+  <h3>Robustez numérica y estabilidad</h3>
+  <p>Los amortiguamientos de unos pocos Hz son lo más delicado del cálculo. Los recalculamos variando la tolerancia del integrador, el radio inicial, la longitud de la integración exterior y el radio donde se empalma con la solución exterior. Solo este último importa, y por debajo del 1 %:</p>
+  <div class="tbl"><table><tr><th>modo</th><th>variante</th><th>Re ν (kHz)</th><th>Im ν (Hz)</th></tr>{rob_rows}</table></div>
+  <p>Estabilidad: en el eje imaginario <code>ω = iγ</code> (γ entre 0,01 y 10 kHz) el determinante no cambia de signo ni a 6 ni a 3,4 kHz ({', '.join(f"{v_['sign_changes']}" for v_ in stab.values())} cambios). No hay modos radiales que crezcan en ese rango: el estado condensado es estable frente a perturbaciones radiales. Esto no dice nada sobre perturbaciones no radiales.</p>""" if rob else '')
     star_html = f"""
 <section>
   <h2>6. La estrella realista: BSk26 con condensado, en relatividad general completa</h2>
@@ -239,6 +250,7 @@ if S:
     <li>En <b>ν_a = 3,4 kHz</b>, F ya está por encima del umbral, en {fnum(n34['F'][0], 4)} kHz, con un amortiguamiento de solo {fnum(-n34['F'][1] * 1e3, 2)} Hz (fracción fluida {fnum(n34['fluid'], 2)}).</li>
   </ul>
   <p>La transición cuasi-normal → ligado de la estrella realista no es un cruce limpio como en el modelo simplificado: el modo fluido atraviesa una escalera densa de estados del axión que se acumula en el umbral.</p>
+{rob_html}
   <div class="callout">
     <h3>Abierto</h3>
     <p>No hemos podido decidir si el amortiguamiento tiende a cero o a un valor finito justo encima del umbral (factor de Sommerfeld del potencial 1/r). Los dos puntos disponibles apuntan a que cae deprisa, pero hace falta un barrido denso en ν_a.</p>
@@ -262,6 +274,25 @@ PENDING = f'''<section>
     <li><b>Especulativa:</b> con ese potencial coulombiano el amortiguamiento cerca del umbral tendería a un valor finito (factor de Sommerfeld) en lugar de anularse como en la sección 3.</li>
   </ol>
 </section>'''
+
+# ------------------------------------------------------------------ ficheros para reproducir (se publican junto a la página)
+import shutil
+FILES = ['axion_ns/model.py', 'axion_ns/geometry.py', 'axion_ns/compare.py', 'axion_ns/pipeline.py', 'axion_ns/nonradial.py',
+         'axion_ns/fullgr.py', 'axion_ns/bsk26.py', 'axion_ns/axstar.py', 'axion_ns/axgr.py', 'axion_ns/radial.py',
+         'axion_ns/step2_perturbations.py', 'axion_ns/step4_numerics.py', 'axion_ns/step14_radial_branches.py',
+         'axion_ns/step15_radial_star.py', 'report/build_radial.py', 'pyproject.toml', 'uv.lock']
+DATA = ['results/radial_branches.json', 'results/radial_star.json']
+FD = ROOT / 'report' / 'radial_files'
+FD.mkdir(exist_ok=True)
+published = {}
+for f in FILES + DATA:
+    src = ROOT / f
+    if not src.exists():
+        continue
+    name = f.replace('/', '__') + ('.txt' if not f.endswith(('.json', '.txt')) else '')
+    shutil.copy(src, FD / name)
+    published[f'radial_files/{name}'] = f'report/radial_files/{name}'
+(ROOT / 'report' / 'radial_files.json').write_text(json.dumps(published, indent=1))
 
 page = f'''<title>Umbral axiónico radial</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -349,6 +380,10 @@ th {{ font-weight: 600; color: var(--muted); font-size: 12px; letter-spacing: .0
 .bad .pill {{ background: var(--bad-bg); color: var(--bad); }}
 .status {{ font: 600 12px var(--f-mono); color: var(--ok); }}
 .status.pend {{ color: var(--flag); }}
+pre.code {{ background: var(--code-bg); padding: 12px 14px; border-radius: 6px; overflow-x: auto; font: 13px/1.5 var(--f-mono); margin: 0; }}
+pre.code code {{ background: none; padding: 0; }}
+.files {{ columns: 2 220px; margin: 0; padding-left: 18px; font-size: 13px; }}
+.small {{ font-size: 13px; color: var(--muted); }}
 footer {{ font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; }}
 a {{ color: var(--accent); }}
 :focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
@@ -363,7 +398,7 @@ a {{ color: var(--accent); }}
 <section class="sheet summary">
   <h3>Resumen</h3>
   <ul>
-    <li>Para <code>l = 0</code> no hay radiación gravitatoria, así que el único canal de pérdida es la emisión de axiones, con <code>k_out² = ω² − m_a²</code>. Escrita en la variable <code>k = k_out</code>, la función de dispersión del modelo (Ec. 4.13) es univaluada y no hay que elegir hoja.</li>
+    <li>Para <code>l = 0</code> no hay radiación gravitatoria, así que el único canal de pérdida es la emisión de axiones, con <code>k_out² = ω² − m_a²</code>. Escrita en la variable <code>k = k_out</code>, la función de dispersión del modelo (Ec. 4.13) no tiene la ambigüedad de hoja del umbral exterior.</li>
     <li>La transición sigue la secuencia típica de onda con umbral: el par cuasi-normal <code>k = ±a − ib</code> colisiona en el eje imaginario negativo (entre <code>x₀ = {fnum(x_prev, 4)}</code> y <code>{fnum(x_coll, 4)}</code>) y se separa en un <b>estado ligado</b> (<code>Im k &gt; 0</code>, frecuencia real) y un <b>estado virtual</b> (<code>Im k &lt; 0</code>, frecuencia real pero no físico).</li>
     <li>Cerca del umbral, <code>|Im w| ∝ (Re w − 1)^{fnum(s_fit, 2)}</code>, próximo a ½. El amortiguamiento no se anula exactamente en <code>ω = m_a</code>, sino a una distancia <code>∼ (Im k)²</code>.</li>
     <li>Las ramas fluida y axiónica no se cruzan: la separación mínima es lineal en el acoplo, con <code>Δw²_min/λ = {fnum(min(ratios), 2)}–{fnum(max(ratios), 2)}</code> para λ² = 10⁻⁶…10⁻³.</li>
@@ -374,7 +409,7 @@ a {{ color: var(--accent); }}
 <section>
   <h2>1. Planteamiento</h2>
   <p>Usamos el modelo simplificado de la Sec. IV del Paper I (Ec. 4.13, ya reproducido en el paso 4): fondo homogéneo, simetría plana, sin perturbación métrica, con <code>w = ω/m_a</code> y <code>x₀ = m_a R</code>. Los parámetros son los de la Fig. 3: <code>α = {fnum(alpha, 0)}</code>, <code>c_s² = {fnum(D["params"]["cs2"], 1)}</code> y <code>λ² = 10⁻³</code>. Para mover un modo fluido a través del umbral variamos <code>x₀</code>, lo que equivale a cambiar <code>m_a R</code>.</p>
-  <p>La función depende de <code>ω</code> solo a través de <code>w²</code>, salvo el término de onda exterior <code>i k_out</code>. Con <code>w² = 1 + k²</code> queda como función entera de <code>k</code>, y cada raíz se clasifica sin ambigüedad:</p>
+  <p>La función depende de <code>ω</code> solo a través de <code>w²</code>, salvo el término de onda exterior <code>i k_out</code>. Con <code>w² = 1 + k²</code> desaparece la raíz cuadrada del umbral exterior y cada raíz se clasifica sin ambigüedad. Hay una sutileza que nos señaló la revisión: la función contiene además <code>√D</code> (Ec. 4.13) y es impar en ella. Lo que es entero en <code>k</code> es <code>f/√D</code>, y <code>f</code> tiene ceros espurios donde <code>D = 0</code>. Comprobamos que ninguna raíz de este informe está ahí (<code>|D| ≥ 21</code>):</p>
   <div class="tbl"><table>
     <tr><th>Posición de la raíz en el plano k</th><th>Onda exterior</th><th>Interpretación</th></tr>
     <tr><td><code>Re k &gt; 0</code>, <code>Im k &lt; 0</code></td><td>saliente, crece con r</td><td>modo cuasi-normal (amortiguado)</td></tr>
@@ -400,7 +435,7 @@ a {{ color: var(--accent); }}
     {fig3}
     <figcaption>Tasa de amortiguamiento frente a la distancia al umbral (λ² = {D["params"]["lam2_damping"]:.0e}), en la zona asintótica <code>Re k &gt; 5|Im k|</code>. Ajuste: exponente {fnum(s_fit, 3)}; la línea discontinua es la pendiente ½ como referencia.</figcaption>
   </figure>
-  <p>La identidad exacta <code>Im w = −Re k · Im k / Re w</code> explica el comportamiento: con <code>Im k</code> casi constante, la tasa es proporcional a <code>k_out ∝ √(ω² − m_a²)</code>, el espacio de fases de la onda emitida. El exponente ajustado queda algo por debajo de ½ porque <code>Im k</code> varía un ~18 % en el tramo. La ley se rompe cuando <code>Re k ∼ |Im k|</code>: ahí se produce la colisión, a una distancia del umbral de orden <code>(Im k)²</code>, minúscula con acoplo débil.</p>
+  <p>La identidad exacta <code>Im w = Re k · Im k / Re w</code> (de <code>w² = 1 + k²</code>; la primera versión de este informe tenía el signo cambiado) explica el comportamiento: con <code>Im k</code> casi constante, la tasa es proporcional a <code>k_out ∝ √(ω² − m_a²)</code>, el espacio de fases de la onda emitida. El exponente ajustado queda algo por debajo de ½ porque <code>Im k</code> varía un ~18 % en el tramo. La ley se rompe cuando <code>Re k ∼ |Im k|</code>: ahí se produce la colisión, a una distancia del umbral de orden <code>(Im k)²</code>, minúscula con acoplo débil.</p>
 </section>
 
 <section>
@@ -441,6 +476,17 @@ a {{ color: var(--accent); }}
   <div class="callout neutral">
     <p><b>Límites.</b> La función de dispersión es la Ec. (4.13) tal como la transcribimos en el paso 4, no una compilación desde SymPy. Las comprobaciones de la estrella realista están al final de la sección 6.</p>
   </div>
+</section>
+
+<section>
+  <h2>8. Reproducirlo</h2>
+  <p>El código y los datos están publicados junto a esta página (los <code>.py</code> van como <code>.py.txt</code>). Con el repositorio y <a href="https://docs.astral.sh/uv/">uv</a>:</p>
+  <pre class="code"><code>uv run python -m axion_ns.step2_perturbations     # ecuaciones (3.3) desde la acción (paso 2)
+uv run python -m axion_ns.step14_radial_branches  # modelo simplificado  (~40 s)
+uv run python -m axion_ns.step15_radial_star      # estrella realista en GR (~15 min)
+uv run python report/build_radial.py              # esta página, desde los JSON</code></pre>
+  <ul class="files">{"".join(f'<li><a href="{k}"><code>{k.split("/", 1)[1].replace("__", "/").removesuffix(".txt")}</code></a></li>' for k in sorted(published))}</ul>
+  <p class="small">La tabla de la EOS BSk26 la genera <code>axion_ns/bsk26.py</code> a partir de los ajustes analíticos publicados; no hace falta ningún fichero externo.</p>
 </section>
 
 <section>

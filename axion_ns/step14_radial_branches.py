@@ -66,6 +66,34 @@ def axis_roots(pars, kmax=1.0, n=1500, **kw):
     return out
 
 
+def D_k(k, lam2, alpha, cs2, x0, mass2_in=None):
+    """Discriminante D de la Ec. (4.13): f es impar en sqrt(D), así que f/sqrt(D) es la función entera de k
+    y f tiene ceros espurios donde D = 0 (hay que comprobar que ninguna raíz cae ahí)."""
+    if mass2_in is None:
+        mass2_in = 1 - alpha
+    w2 = 1 + k**2
+    ka2, ks2 = w2 - mass2_in, w2 / cs2
+    A = alpha**2 * lam2
+    return (ka2 - ks2 + A)**2 + 4 * A * ks2
+
+
+def g_k(k, *pars, **kw):
+    return f_k(k, *pars, **kw) / mp.sqrt(D_k(k, *pars, **{x: v for x, v in kw.items() if x == 'mass2_in'}))
+
+
+def winding(pars, re, im, n=600):
+    """Número de ceros de f/sqrt(D) dentro del rectángulo (principio del argumento), sin buscador de raíces."""
+    (a, b), (c, d) = re, im
+    path = ([complex(a + (b - a) * t, c) for t in np.linspace(0, 1, n, endpoint=False)]
+            + [complex(b, c + (d - c) * t) for t in np.linspace(0, 1, n, endpoint=False)]
+            + [complex(b - (b - a) * t, d) for t in np.linspace(0, 1, n, endpoint=False)]
+            + [complex(a, d - (d - c) * t) for t in np.linspace(0, 1, n, endpoint=False)])
+    vals = [complex(g_k(mp.mpc(z), *pars)) for z in path] 
+    vals.append(vals[0])
+    dph = np.angle(np.array(vals[1:]) / np.array(vals[:-1]))
+    return float(np.sum(dph) / (2 * np.pi)), float(np.max(np.abs(dph)))
+
+
 # ------------------------------------------------------------------ H8 + H9: paso por el umbral
 def threshold_track(lam2=1e-3, x_lo=0.80, x_hi=0.8525, dx=0.0025, **kw):
     k = root(0.37599 - 0.00786j, (lam2, ALPHA, CS2, x_lo), **kw)
@@ -165,6 +193,24 @@ def run():
     st_pi = [x for x in axis_roots((0.0, ALPHA, CS2, 0.6), kmax=4.0, n=2000, mass2_in=m2pi) if x > 0]
     res.append((f'Variante theta = pi (m²_in = {m2pi:.1f} m_a², sin acoplo): sin estados ligados ni inestables', not st_pi, ''))
 
+    # 5b. Revisión externa (2026-11-08): identidad Im w con el signo correcto, ceros espurios D = 0, método independiente
+    id_plus = abs(wf.imag - kf.real * kf.imag / wf.real)
+    id_minus = abs(wf.imag + kf.real * kf.imag / wf.real)
+    res.append((f'Identidad Im w = +Re k·Im k/Re w (de w² = 1 + k²): residuo {id_plus:.1e}; con el signo − que escribimos '
+                f'por error en el informe: {id_minus:.1e}', id_plus < 1e-12 and id_minus > 1e-4, 'errata señalada por la revisión'))
+    roots_all = [(kf, 0.6), *[(k, x0) for x0, k in tr], (1j * bound[0], 0.86), (1j * virt[0], 0.86), (1j * un[0], 0.6)]
+    dmin = min(abs(complex(D_k(mp.mpc(k), 1e-3, ALPHA, CS2, x0))) for k, x0 in roots_all)
+    res.append((f'Ninguna raíz reportada es un cero espurio de D (min |D| = {dmin:.1f})', dmin > 1, ''))
+    boxes = [('par cuasi-normal, x0 = 0.80, Re k > 0', (1e-3, ALPHA, CS2, 0.80), (0.05, 0.6), (-0.05, 0.02), 1),
+             ('par completo, x0 = 0.80', (1e-3, ALPHA, CS2, 0.80), (-0.6, 0.6), (-0.05, -0.002), 2),
+             ('ligado, x0 = 0.86', (1e-3, ALPHA, CS2, 0.86), (-0.05, 0.05), (0.05, 0.25), 1),
+             ('virtual, x0 = 0.86', (1e-3, ALPHA, CS2, 0.86), (-0.05, 0.05), (-0.25, -0.05), 1),
+             ('inestable, x0 = 0.6', (1e-3, ALPHA, CS2, 0.6), (-0.1, 0.1), (2.4, 2.9), 1)]
+    wres = [(lab, *winding(pp, re_, im_), exp) for lab, pp, re_, im_, exp in boxes]
+    ok_w = all(abs(nw - exp) < 0.05 and mx < 1.0 for _, nw, mx, exp in wres)
+    res.append(('Método independiente (principio del argumento sobre f/√D, sin Muller): ' +
+                '; '.join(f'{lab}: {nw:.2f} (esperado {exp})' for lab, nw, _, exp in wres), ok_w, 'H14'))
+
     # 6. Controles negativos
     ax_mut = axis_roots((1e-3, ALPHA, CS2, 0.86), kmax=0.4, n=800, sign_out=-1)
     neg1 = not (len([x for x in ax_mut if x > 0]) == 1 and abs([x for x in ax_mut if x > 0][0] - bound[0]) < 1e-6)
@@ -195,6 +241,7 @@ def run():
         'damping_exponent': s,
         'gaps': [{'lam2': l2, 'gap_w2': g, 'x0': x} for l2, g, x in gaps],
         'x0_unstable': xc, 'x0_unstable_analytic': float(xc_an),
+        'winding': [{'box': lab, 'count': nw, 'expected': exp} for lab, nw, _, exp in wres],
     }, indent=1))
     return report('Paso 14: modos radiales, umbral cuasi-normal/evanescente y ramas (modelo simplificado)', res)
 

@@ -4,6 +4,70 @@
   "p0_wF2_zero": 904.8861114728913,
   "Mmax_msun": 2.1694724950207496
  },
+ "stability": {
+  "6": {
+   "sign_changes": 0,
+   "im_rel": 0.0
+  },
+  "3.4": {
+   "sign_changes": 0,
+   "im_rel": 0.0
+  }
+ },
+ "robustness": {
+  "H1 (6 kHz)": {
+   "base": [
+    8.132306778829465,
+    -0.003618328971460622
+   ],
+   "rtol 1e-12": [
+    8.13230675750951,
+    -0.0036183316295246275
+   ],
+   "r0 1e-4 km": [
+    8.132314491475539,
+    -0.003618249037594836
+   ],
+   "exterior \u00d71,5": [
+    8.132306758237418,
+    -0.003618332246023865
+   ],
+   "empalme |\u03b80|<1e-05 (84 km)": [
+    8.132306961887531,
+    -0.0035981475912325923
+   ],
+   "empalme |\u03b80|<1e-06 (101 km)": [
+    8.13232657910834,
+    -0.003607909345299595
+   ]
+  },
+  "F (3,4 kHz)": {
+   "base": [
+    3.4156614162609102,
+    -0.000548040716552459
+   ],
+   "rtol 1e-12": [
+    3.4156614154904807,
+    -0.0005480409331097395
+   ],
+   "r0 1e-4 km": [
+    3.4156635767299695,
+    -0.0005480653621918873
+   ],
+   "exterior \u00d71,5": [
+    3.415661415846381,
+    -0.0005480409870910749
+   ],
+   "empalme |\u03b80|<1e-05 (131 km)": [
+    3.4156975766197655,
+    -0.0005629089058568061
+   ],
+   "empalme |\u03b80|<1e-06 (160 km)": [
+    3.4156839651234203,
+    -0.0005489857672454438
+   ]
+  }
+ },
  "nu6": {
   "M_msun": 1.4725178383709063,
   "R_km": 11.364864951381225,
@@ -121,6 +185,16 @@
    "name": "\u03bd_a = 3,4 kHz: F ya por encima del umbral, Re \u03bd = 3.4157 kHz e Im \u03bd = -0.55 Hz (fracci\u00f3n fluida 0.969)",
    "ok": true,
    "note": "el modo fluido pasa a cuasi-normal al cruzar \u03bd_a"
+  },
+  {
+   "name": "Estabilidad radial: sin ra\u00edces en \u03c9 = i\u03b3, \u03b3 \u2208 [0,01; 10] kHz, para \u03bd_a = 6 y 3,4 kHz (6: 0 cambios de signo, 3.4: 0 cambios de signo)",
+   "ok": true,
+   "note": "H12; un barrido de signo puede no ver pares de ra\u00edces muy pr\u00f3ximas"
+  },
+  {
+   "name": "Robustez de Im \u03bd: rtol, r0 y longitud exterior cambian como mucho un 0.004 %; el radio de empalme (\u00faltimo paso hacia fuera) un 0.29 % en H1 (6 kHz), 0.17 % en F (3,4 kHz)",
+   "ok": true,
+   "note": "H13; el radio de empalme es la incertidumbre dominante"
   }
  ]
 }

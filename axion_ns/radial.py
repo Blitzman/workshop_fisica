@@ -188,15 +188,16 @@ def outward(st, omega, y_R, rm, rtol=1e-10, r_eval=None):
                      (st.R, rm), y_R, method='DOP853', rtol=rtol, atol=1e-40, t_eval=r_eval)
 
 
-def det(st, omega, rm=None, sheet=1):
+def det(st, omega, rm=None, sheet=1, rtol=1e-10, r0=1e-3, n_decay=40.0):
     """Determinante de Delta p(R) = 0 y del empalme con la onda exterior (saliente o ligada) en r_m.
-    sheet = -1 es la mutación «onda entrante» (control negativo)."""
+    sheet = -1 es la mutación «onda entrante» (control negativo). rtol, r0, n_decay: estudio de robustez."""
     rm = rm or AG.r_match(st)
     cols = []
     for seed in ('fluid', 'axion'):
-        s = interior(st, omega, seed)
-        cols.append((s.y[1, -1], outward(st, omega, s.y[2:, -1], rm).y[:, -1]))
-    ps, dps = exterior_psi(omega, st.sol.y[0, -1], rm, st.ma, np.sqrt(st.fa2), st.E0, sheet=sheet)
+        s = interior(st, omega, seed, r0=r0, rtol=rtol)
+        cols.append((s.y[1, -1], outward(st, omega, s.y[2:, -1], rm, rtol=rtol).y[:, -1]))
+    ps, dps = exterior_psi(omega, st.sol.y[0, -1], rm, st.ma, np.sqrt(st.fa2), st.E0, sheet=sheet,
+                           n_decay=n_decay, rtol=min(rtol, 1e-11))
     L = dps / ps
     (a, ya), (c, yc) = cols
     return a * (yc[1] - L * yc[0]) - c * (ya[1] - L * ya[0])

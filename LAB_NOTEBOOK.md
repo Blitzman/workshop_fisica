@@ -94,6 +94,27 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
   - *Problema numérico encontrado (afecta a código anterior):* `axstar.exterior_L` integra hacia dentro sobre la recta real desde `r_inf = r + 40/|k|`. Para un modo muy amortiguado la onda saliente crece con r, y el error de la condición asintótica mezcla la onda entrante amplificada ~e⁸. El resultado no es analítico en ω (Cauchy–Riemann falla por un factor 5) y Muller converge solo linealmente. *Solución:* `radial.exterior_psi` integra la ecuación exterior derivada a lo largo del rayo complejo `r = r_m + s e^{i(π/2 − arg k)}`, donde la saliente decae. Cumple Cauchy–Riemann (2·10⁻⁴, del orden del paso) y coincide con el método anterior donde este es fiable: 12 cifras en el eje real por debajo del umbral y 4 cifras en `6,5 − 0,001 i`. *Consecuencia (medida en `step15`):* el método anterior se desvía un 207 % en la resonancia axiónica (`Im ν = −563 Hz`), pero solo ~10⁻⁴ en un modo con `Im ν = −3,6 Hz`. Los amortiguamientos de pocos Hz de los pasos 9–10 siguen siendo válidos.
   - *Error cazado por una comprobación:* sustituir `V'(a_0) → −M1/f_a` antes que `V''` anulaba el término de masa, porque SymPy aplica la sustitución dentro de `V'' = d(V')/da`. Lo detectó la comparación de la ecuación exterior con la Ec. (3.7) en `θ_0 = 0` (error relativo 2,7; tras corregir, 2·10⁻¹⁶). *Regla:* sustituir siempre de la derivada más alta a la más baja.
 
+### Respuesta a la revisión externa del informe radial (2026-11-08)
+
+- **Errores aceptados:**
+  - (1) El informe escribía `Im w = −Re k·Im k/Re w`; lo correcto es **`+`** (de `w² = 1 + k²`, `2 Re w Im w = 2 Re k Im k`). El código no usaba esa fórmula. Comprobado: con el `+` sale −0,0027817, que coincide con la raíz.
+  - (2) «f es entera en k» era impreciso: `f` es impar en `√D`, así que es `f/√D` la que es entera. `f` tiene **ceros espurios en `D = 0`**. Ninguna raíz reportada está ahí (`min |D| = 21`).
+- **[H12 · CONFIRMADA en el rango explorado] La estrella con condensado es estable frente a perturbaciones radiales (`ν_a = 6` y `3,4 kHz`)**
+  - *Predicción:* el determinante no tiene ceros en el eje imaginario `ω = iγ`, donde `ω² < 0` y la exterior es evanescente, de modo que el determinante es real.
+  - *Prueba:* barrido en γ ∈ [0,01; 10] kHz buscando cambios de signo.
+  - *Resultado:* 0 cambios de signo en ambas estrellas, con el determinante real en el eje (`|Im|/|det| = 0`). *Límite:* un barrido de signo no ve pares de raíces muy próximas, y no dice nada de perturbaciones no radiales.
+- **[H13 · CONFIRMADA con matiz] Los amortiguamientos de la estrella (3,6 Hz en H1 a 6 kHz; 0,55 Hz en F a 3,4 kHz) son robustos a los parámetros numéricos**
+  - *Predicción:* `Im ν` cambia menos de un 1 % al variar `rtol` (10⁻¹⁰ → 10⁻¹²), `r_0` (10⁻³ → 10⁻⁴ km), la longitud exterior (40 → 60 longitudes de decaimiento) y `r_match` (×1,3).
+  - *Resultado:*
+    - `rtol`, `r_0` y la longitud exterior cambian `Im ν` menos de un 0,01 %.
+    - **Error mío en la variante `r_match ×1,3`:** el fondo termina justo en `r_match` (el disparo se detiene allí), así que más allá `sol.sol` extrapola el polinomio de salida densa. Aquella variante (3 % de cambio) era un artefacto. La prueba correcta empalma más dentro (`|θ_0| < 10⁻⁴, 10⁻⁵, 10⁻⁶`).
+    - H1 (6 kHz): `Im ν` entre −3,598 y −3,620 Hz sin tendencia (±0,3 %). Encaja con un pequeño error de fase que oscila con el radio, porque el exterior usa la masa total.
+    - F (3,4 kHz): converge al alejar el empalme (−0,581 → −0,563 → −0,549 → −0,548 Hz).
+    - Valores: **H1 = −3,61 ± 0,02 Hz** y **F(3,4) = −0,55 ± 0,01 Hz**.
+- **[H14 · CONFIRMADA] Método independiente para el modelo simplificado**
+  - *Predicción:* el principio del argumento aplicado a `f/√D` en cajas del plano `k` cuenta exactamente las raíces que encuentra Muller, sin usar Muller.
+  - *Resultado (`step14`, 12/12):* cuenta 1,00; 2,00; 1,00; 1,00; 1,00 en las cinco cajas (par cuasi-normal, par completo, ligado, virtual e inestable), como se esperaba.
+
 ## 2. Insights físicos y preguntas abiertas para los autores
 
 - **[I1 · Punto de linealización en Sec. IV del Paper I (`axion_ns/step3_toy_model.py:112-128`)]**

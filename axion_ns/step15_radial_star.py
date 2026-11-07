@@ -139,7 +139,37 @@ def run():
                 f'(fracción fluida {fF34:.3f})',
                 rF34 < 1e-11 and F34.real > 3.4 and F34.imag < 0 and fF34 > 0.9, 'el modo fluido pasa a cuasi-normal al cruzar ν_a'))
 
+    # 8. Revisión externa (2026-11-08): estabilidad radial (H12) y robustez numérica de los amortiguamientos (H13)
+    stab = {}
+    for lab, st_, rm_ in (('6', st6, rm6), ('3.4', st34, rm34)):
+        gs = np.geomspace(0.01, 10, 40)
+        v = [RD.det(st_, AX.omega_of(1j * g), rm_) for g in gs]
+        stab[lab] = {'sign_changes': int(sum(v[i].real * v[i + 1].real < 0 for i in range(len(gs) - 1))),
+                     'im_rel': float(max(abs(x.imag) / abs(x) for x in v))}
+    res.append(('Estabilidad radial: sin raíces en ω = iγ, γ ∈ [0,01; 10] kHz, para ν_a = 6 y 3,4 kHz (' +
+                ', '.join(f'{k}: {v_["sign_changes"]} cambios de signo' for k, v_ in stab.items()) + ')',
+                all(v_['sign_changes'] == 0 and v_['im_rel'] < 1e-10 for v_ in stab.values()),
+                'H12; un barrido de signo puede no ver pares de raíces muy próximas'))
+    robust = {}
+    for lab, st_, rm_, z0 in (('H1 (6 kHz)', st6, rm6, H1), ('F (3,4 kHz)', st34, rm34, F34)):
+        rr = np.linspace(st_.R, rm_, 4000)
+        th = np.abs(st_.sol.sol(rr)[3])
+        rows = {'base': z0}
+        for name, kw in (('rtol 1e-12', {'rtol': 1e-12}), ('r0 1e-4 km', {'r0': 1e-4}), ('exterior ×1,5', {'n_decay': 60.0})):
+            rows[name] = RD.muller(lambda nu: RD.det(st_, AX.omega_of(nu), rm_, **kw), z0)
+        for tol in (1e-5, 1e-6):
+            r2 = float(rr[np.argmax(th < tol)])
+            rows[f'empalme |θ0|<{tol:g} ({r2:.0f} km)'] = RD.muller(lambda nu: RD.det(st_, AX.omega_of(nu), r2), z0)
+        robust[lab] = {k: [v_.real, v_.imag] for k, v_ in rows.items()}
+    num = max(abs(v_[1] - r_['base'][1]) / abs(r_['base'][1]) for r_ in robust.values()
+              for k, v_ in r_.items() if k in ('rtol 1e-12', 'r0 1e-4 km', 'exterior ×1,5'))
+    emp = {lab: abs(list(r_.values())[-1][1] - r_['base'][1]) / abs(r_['base'][1]) for lab, r_ in robust.items()}
+    res.append((f'Robustez de Im ν: rtol, r0 y longitud exterior cambian como mucho un {num * 100:.3f} %; el radio de empalme '
+                '(último paso hacia fuera) un ' + ', '.join(f'{v_ * 100:.2f} % en {k}' for k, v_ in emp.items()),
+                num < 5e-4 and all(v_ < 0.01 for v_ in emp.values()), 'H13; el radio de empalme es la incertidumbre dominante'))
+
     out.update({
+        'stability': stab, 'robustness': robust,
         'nu6': {'M_msun': st6.M / MSUN_KM, 'R_km': st6.R, 'alpha_g': alpha_g, 'F': F6, 'F_fluid': fF6,
                 'ladder': [{'n': n, 'nu': z, 'n_eff': ne} for n, z, ne, _ in ladder],
                 'H1': [H1.real, H1.imag], 'H1_fluid': fH1, 'axion_res': [Ra.real, Ra.imag], 'axion_res_fluid': fRa},
