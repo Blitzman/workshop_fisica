@@ -18,3 +18,10 @@ Antes de escribir código o lanzar cálculos, lee `CONVENTIONS.md` y el estado a
 - Antes de probar una idea no trivial (un límite, una aproximación o un cambio de integrador), anota la **Hipótesis** en `LAB_NOTEBOOK.md`.
 - Cuando obtengas el resultado, anota si fue **Confirmada** o **Refutada** (y por qué) para no repetir caminos muertos tras un `/compact`.
 - Cualquier discrepancia con el paper o comportamiento físico inesperado se registra en la sección **Insights y preguntas para el grupo** con enlace al fichero y línea.
+
+## 4. Reglas añadidas tras el caso del informe fabricado (`LAB_NOTEBOOK.md` §3)
+- **Validación externa antes que el axión:** ningún resultado nuevo cuenta como validado si no reproduce primero, con el axión apagado, un resultado publicado por otros autores. Un `*_ref.py` escrito en la misma sesión no es una referencia independiente.
+- **Cero constantes libres en los integradores:** prohibido introducir coeficientes de ajuste (`CHI_*`, factores de escala, fórmulas de sensibilidad «aproximadas»). Toda magnitud sale de una ecuación derivada en SymPy o de un dato publicado con cita exacta, y el valor del código debe coincidir con el de la cita.
+- **Deducir, no definir:** una «identidad» solo cuenta si sale de una resta que da `0`. Escribir `x = f(y)` y llamarlo «identificación» no la demuestra.
+- **Cifras del informe generadas desde los datos:** todo número del HTML o del cuaderno se inserta desde `results/*.json` en el script de build. No se teclean a mano.
+- **Premisa física revisada por el grupo:** antes de escribir código para una línea nueva, se anota en `LAB_NOTEBOOK.md` la premisa y su orden de magnitud y se valida con José. El lenguaje es el de resultados preliminares («obtenemos», «sugiere»), no el de descubrimientos.
