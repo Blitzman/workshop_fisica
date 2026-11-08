@@ -178,6 +178,23 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
   - *Argumento físico de apoyo, no demostrado aquí:* si el sistema es autoadjunto con condición de decaimiento, que es lo esperable porque sale de una acción, ω² es real y las inestabilidades solo pueden estar en el eje imaginario. Es lo que se ve en los dos controles.
   - *Código:* `axion_ns/step16_radial_stability.py`, `radial.det_entire`, `radial.winding`.
 
+- **[H19 · CONFIRMADA] Validación externa de los modos radiales en GR sin axión (crítica C de la tercera revisión; regla del §4).**
+  - *Referencia:* Font et al. 2002, PRD 65, 084024 (arXiv:gr-qc/0110047), Tabla 2. Politropo N = 1 (Γ = 2), K = 100 (G = c = M☉ = 1), ρ_c = 1,28·10⁻³ en densidad de masa en reposo, M = 1,4 M☉, R = 14,15 km. Frecuencias de la teoría de perturbaciones en evolución acoplada (métrica dinámica): F = 1,442, H1 = 3,955, H2 = 5,916 y H3 = 7,776 kHz.
+  - *Segunda fuente:* la tabla de Garching (wwwmpa.mpa-garching.mpg.de/rel_hydro/rotating_neutron_stars/tables.shtml, modelo B0 = A0 = BU0) da F = 1,458 y H1 = 3,971 kHz, sin decir de qué cálculo salen. Difiere un 1,1 % de Font et al. en F.
+  - *Ecuación de estado:* p = Kρ², ε = ρ + p (Γ − 1 = 1). Perturbaciones adiabáticas con Γ₁ = Γ, así que c_s² = Γp/(ε+p) = dp/dε. En nuestras unidades K = 100·M☉²·KGEO (km², convertido a MeV/fm³).
+  - *Predicción:*
+    - (a) El fondo sale con M = 1,400 M☉ y R = 14,15 km (±0,01 km).
+    - (b) `radial.interior` sin axión, sin cambiar nada, da F, H1, H2 y H3 dentro del 0,1 % de Font et al., que es el redondeo de sus cuatro cifras.
+    - (c) Frente a Garching, F difiere un ~1 %. Si fuera así, su tabla probablemente viene de una evolución no lineal.
+  - *Controles negativos:* Γ₁ = 2,1 en vez de 2 en las perturbaciones, y ε = ρ sin la energía interna en el fondo; los dos deben sacar F del margen.
+  - *Si (b) falla,* las ecuaciones radiales en GR de `radial.py` (o su paso a números) tienen un error que el punto de retorno no veía, y todo el paso 15 queda en cuestión.
+  - *Resultado (paso 17, 5/5):*
+    - (a) M = 1,4002 M☉, R = 14,155 km.
+    - (b) F = 1,4425, H1 = 3,9540, H2 = 5,9149, H3 = 7,7737 kHz: +0,034, −0,025, −0,019 y −0,029 % frente a Font et al., dentro del redondeo de sus cuatro cifras.
+    - (c) Frente a Garching: F −1,06 % y H1 −0,43 %. Coincidimos con el cálculo de perturbaciones, no con esa tabla.
+    - Controles negativos: Γ₁ = 2,1 mueve F un +12,2 %, y ε = ρ un −8,6 %.
+  - *Qué valida y qué no:* valida el sistema radial en GR derivado desde la acción (`radial.interior`: ξ, Δp, δλ y δΦ), su paso a números y las condiciones en el centro y en la superficie, con el axión apagado. No valida los términos del axión ni el empalme exterior con la cola del condensado, que no tienen referencia publicada. Eso sigue siendo lo que el grupo debería revisar.
+
 ## 2. Insights físicos y preguntas abiertas para los autores
 
 - **[I1 · Punto de linealización en Sec. IV del Paper I (`axion_ns/step3_toy_model.py:112-128`)]**

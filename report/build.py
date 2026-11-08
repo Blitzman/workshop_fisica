@@ -151,6 +151,7 @@ PRETTY = [
     None,
     None,
     None,
+    None,
 ]
 
 RADIAL_URL = 'https://claude.ai/artifact/9XoYYWX9wvNUKoav2HmQbB'
@@ -370,7 +371,7 @@ def main():
     ok4, tot4 = per_step[7]
     ok5, tot5 = per_step[8]
     ok6, tot6 = per_step[9]
-    ok7, tot7 = (sum(x[i] for x in per_step[10:13]) for i in (0, 1))
+    ok7, tot7 = (sum(x[i] for x in per_step[10:14]) for i in (0, 1))
     figdata = json.dumps({k: json.loads((RES / f'fig_{f}.json').read_text())
                           for k, f in [('toy', 'toy'), ('levels', 'levels'), ('modes', 'modes'), ('meff', 'meff'),
                                        ('background', 'background'), ('axcow', 'axcow'), ('axgr', 'axgr')]}, separators=(',', ':')).replace('</', '<\\/')

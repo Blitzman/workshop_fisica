@@ -1,5 +1,5 @@
 {
- "seconds": 10115,
+ "seconds": 10354,
  "env": {
   "python": "3.14.4",
   "platform": "Linux x86_64",
@@ -915,6 +915,38 @@
      "name": "nu_a = 3.4 kHz: ningún cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [1, 0, 0], [0, 0]]; 1950 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 1e-14",
      "ok": true,
      "note": "H18(a)"
+    }
+   ]
+  },
+  {
+   "step": "Modos radiales sin axión: validación externa (Font et al. 2002)",
+   "module": "step17_radial_validation",
+   "seconds": 239.0,
+   "checks": [
+    {
+     "name": "Fondo: M = 1.4002 M_sun, R = 14.155 km (Font et al.: 1.4, 14.15)",
+     "ok": true,
+     "note": "H19(a)"
+    },
+    {
+     "name": "Modos radiales sin axión frente a Font et al. 2002, Tabla 2: F = 1.4425 kHz (ref. 1.442, +0.034 %), H1 = 3.9540 kHz (ref. 3.955, -0.025 %), H2 = 5.9149 kHz (ref. 5.916, -0.019 %), H3 = 7.7737 kHz (ref. 7.776, -0.029 %)",
+     "ok": true,
+     "note": "H19(b)"
+    },
+    {
+     "name": "Frente a la tabla de Garching (modelo B0): F -1.06 %, H1 -0.43 % (método no indicado en la tabla)",
+     "ok": true,
+     "note": "H19(c)"
+    },
+    {
+     "name": "Control negativo 1: Gamma_1 = 2.1 en las perturbaciones mueve F un +12.25 %",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: eps = rho (sin energía interna) mueve F un -8.63 %",
+     "ok": true,
+     "note": ""
     }
    ]
   }

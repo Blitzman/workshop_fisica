@@ -174,6 +174,18 @@ SP = ROOT / 'results' / 'radial_star.json'
 S = json.loads(SP.read_text()) if SP.exists() else None
 STP = ROOT / 'results' / 'radial_stability.json'
 STB = json.loads(STP.read_text()) if STP.exists() else None
+VLP = ROOT / 'results' / 'radial_validation.json'
+VAL = json.loads(VLP.read_text()) if VLP.exists() else None
+if VAL:
+    _vrows = ''.join(f'<tr><td>{k}</td><td>{VAL["modes"][k]:.4f}</td><td>{VAL["font"][k]}</td><td>{VAL["dev_font_pct"][k]:+.3f} %</td></tr>'
+                     for k in VAL['font'])
+    val_html = f"""
+  <h3>Validación externa sin axión (paso 17)</h3>
+  <p>El mismo código, sin cambiar nada y con el axión apagado, aplicado al politropo de referencia de Font et al. (2002, PRD 65, 084024, Tabla 2): <code>p = Kρ²</code>, <code>K = 100</code>, <code>ρ_c = 1,28·10⁻³</code> (G = c = M☉ = 1). El fondo sale con M = {fnum(VAL['M'], 4)} M☉ y R = {fnum(VAL['R'], 3)} km (ellos: 1,4 y 14,15). Sus frecuencias son las de la teoría de perturbaciones con la métrica dinámica:</p>
+  <div class="tbl"><table><tr><th>modo</th><th>este cálculo (kHz)</th><th>Font et al. (kHz)</th><th>diferencia</th></tr>{_vrows}</table></div>
+  <p>Las cuatro coinciden dentro del redondeo de sus cuatro cifras. Los controles negativos comprueban que la comparación distingue: con Γ₁ = 2,1 en las perturbaciones, F se mueve un {VAL['neg_gamma1']:+.1f} %, y sin la energía interna en el fondo, un {VAL['neg_no_internal']:+.1f} %. La tabla del grupo de Garching para el mismo modelo da F = {VAL['garching']['F']} kHz, un {abs(VAL['dev_garching_pct']['F']):.1f} % por encima de nosotros y de Font et al.; no indica el método.</p>"""
+else:
+    val_html = ''
 if S:
     s6 = S['nu6']
     # Figura 4: espectro a nu_a = 6 kHz en dos filas (frecuencia real / amortiguados)
@@ -261,6 +273,7 @@ if S:
     <li>Más allá, la onda exterior se integra en un rayo del plano r complejo donde la onda saliente decae. En la recta real, la integración hacia dentro es inestable para modos muy amortiguados: el método anterior (<code>axstar.exterior_L</code>) se desvía un {fnum(S['exterior']['old_vs_new_strong'] * 100, 0)} % en un punto muy amortiguado (6,585 − 0,563i kHz), aunque solo {S['exterior']['old_vs_new_weak']:.0e} en un modo poco amortiguado, así que los amortiguamientos de pocos Hz de los pasos 9–10 siguen siendo válidos.</li>
   </ul>
   <p><b>Validación sin axión.</b> El cuadrado de la frecuencia del modo F se anula en <code>p_c = {fnum(t['p0_wF2_zero'], 1)}</code> MeV/fm³ y la masa máxima ({fnum(t['Mmax_msun'], 4)} M☉) está en <code>p_c = {fnum(t['p0_Mmax'], 1)}</code>. Coinciden, como exige el criterio del punto de retorno.</p>
+{val_html}
   <figure>
     <div class="legend"><span><i class="sw s1"></i>modo fluido</span><span><i class="sw s2"></i>modo axiónico</span><span><i class="sw ref"></i>anillo: amortiguado</span></div>
     {fig4}
@@ -292,7 +305,11 @@ if S:
   </div>
   <ul class="checks">{st_rows}</ul>
 </section>"""
+    val_li = (f"<li><b>Validación externa:</b> sin axión, el mismo código reproduce las frecuencias radiales F, H1, H2 y H3 "
+              f"del politropo de referencia de Font et al. (2002) con una diferencia máxima del "
+              f"{max(abs(v) for v in VAL['dev_font_pct'].values()):.2f} %, dentro del redondeo de sus cifras.</li>") if VAL else ''
     star_summary = f"""
+    {val_li}
     <li><b>Estrella realista</b> (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua {fnum(-s6['H1'][1] * 1e3, 1)} Hz. Justo bajo el umbral aparece una escalera de estados ligados del axión que sigue la ley hidrogenoide, con <code>n_eff</code> = {', '.join(f"{l['n_eff']:.2f}" for l in s6['ladder'])}: un «átomo gravitatorio».</li>
     <li>En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con un cruce evitado con el nivel n = 1, y sale como cuasi-normal con un amortiguamiento muy pequeño ({fnum(-n34['F'][1] * 1e3, 2)} Hz a ν_a = 3,4 kHz).</li>"""
 else:
@@ -315,9 +332,11 @@ import shutil
 FILES = ['axion_ns/model.py', 'axion_ns/geometry.py', 'axion_ns/compare.py', 'axion_ns/pipeline.py', 'axion_ns/nonradial.py',
          'axion_ns/fullgr.py', 'axion_ns/bsk26.py', 'axion_ns/axstar.py', 'axion_ns/axgr.py', 'axion_ns/radial.py',
          'axion_ns/step2_perturbations.py', 'axion_ns/step4_numerics.py', 'axion_ns/step14_radial_branches.py',
-         'axion_ns/step15_radial_star.py', 'axion_ns/step16_radial_stability.py', 'report/build_radial.py',
+         'axion_ns/step15_radial_star.py', 'axion_ns/step16_radial_stability.py', 'axion_ns/step17_radial_validation.py',
+         'report/build_radial.py',
          'pyproject.toml', 'uv.lock']
-DATA = ['results/radial_branches.json', 'results/radial_star.json', 'results/radial_stability.json']
+DATA = ['results/radial_branches.json', 'results/radial_star.json', 'results/radial_stability.json',
+        'results/radial_validation.json']
 FD = ROOT / 'report' / 'radial_files'
 FD.mkdir(exist_ok=True)
 published = {}

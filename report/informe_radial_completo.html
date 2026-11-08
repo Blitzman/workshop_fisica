@@ -118,6 +118,7 @@ a { color: var(--accent); }
     <li>Cerca del umbral, <code>|Im w| ∝ (Re w − 1)^0.46</code>, próximo a ½. El amortiguamiento no se anula exactamente en <code>ω = m_a</code>, sino a una distancia <code>∼ (Im k)²</code>.</li>
     <li>Las ramas fluida y axiónica no se cruzan: la separación mínima es lineal en el acoplo, con <code>Δw²_min/λ = 7.58–7.60</code> para λ² = 10⁻⁶…10⁻³.</li>
     <li>Hallazgo no previsto: linealizado en <code>θ = 0</code>, el modelo contiene un modo inestable (<code>w² = −6.18</code> con los parámetros de la figura), que no aparece en la ventana <code>Im w ≤ 0</code> habitual. Lo planteamos como pregunta abajo.</li>
+    <li><b>Validación externa:</b> sin axión, el mismo código reproduce las frecuencias radiales F, H1, H2 y H3 del politropo de referencia de Font et al. (2002) con una diferencia máxima del 0.03 %, dentro del redondeo de sus cifras.</li>
     <li><b>Estrella realista</b> (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua 3.6 Hz. Justo bajo el umbral aparece una escalera de estados ligados del axión que sigue la ley hidrogenoide, con <code>n_eff</code> = 2.01, 2.99, 3.98, 4.97, 5.97: un «átomo gravitatorio».</li>
     <li>En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con un cruce evitado con el nivel n = 1, y sale como cuasi-normal con un amortiguamiento muy pequeño (0.58 Hz a ν_a = 3,4 kHz).</li>
   </ul>
@@ -194,6 +195,11 @@ a { color: var(--accent); }
     <li>Más allá, la onda exterior se integra en un rayo del plano r complejo donde la onda saliente decae. En la recta real, la integración hacia dentro es inestable para modos muy amortiguados: el método anterior (<code>axstar.exterior_L</code>) se desvía un 207 % en un punto muy amortiguado (6,585 − 0,563i kHz), aunque solo 1e-04 en un modo poco amortiguado, así que los amortiguamientos de pocos Hz de los pasos 9–10 siguen siendo válidos.</li>
   </ul>
   <p><b>Validación sin axión.</b> El cuadrado de la frecuencia del modo F se anula en <code>p_c = 904.9</code> MeV/fm³ y la masa máxima (2.1695 M☉) está en <code>p_c = 905.0</code>. Coinciden, como exige el criterio del punto de retorno.</p>
+
+  <h3>Validación externa sin axión (paso 17)</h3>
+  <p>El mismo código, sin cambiar nada y con el axión apagado, aplicado al politropo de referencia de Font et al. (2002, PRD 65, 084024, Tabla 2): <code>p = Kρ²</code>, <code>K = 100</code>, <code>ρ_c = 1,28·10⁻³</code> (G = c = M☉ = 1). El fondo sale con M = 1.4002 M☉ y R = 14.155 km (ellos: 1,4 y 14,15). Sus frecuencias son las de la teoría de perturbaciones con la métrica dinámica:</p>
+  <div class="tbl"><table><tr><th>modo</th><th>este cálculo (kHz)</th><th>Font et al. (kHz)</th><th>diferencia</th></tr><tr><td>F</td><td>1.4425</td><td>1.442</td><td>+0.034 %</td></tr><tr><td>H1</td><td>3.9540</td><td>3.955</td><td>-0.025 %</td></tr><tr><td>H2</td><td>5.9149</td><td>5.916</td><td>-0.019 %</td></tr><tr><td>H3</td><td>7.7737</td><td>7.776</td><td>-0.029 %</td></tr></table></div>
+  <p>Las cuatro coinciden dentro del redondeo de sus cuatro cifras. Los controles negativos comprueban que la comparación distingue: con Γ₁ = 2,1 en las perturbaciones, F se mueve un +12.2 %, y sin la energía interna en el fondo, un -8.6 %. La tabla del grupo de Garching para el mismo modelo da F = 1.458 kHz, un 1.1 % por encima de nosotros y de Font et al.; no indica el método.</p>
   <figure>
     <div class="legend"><span><i class="sw s1"></i>modo fluido</span><span><i class="sw s2"></i>modo axiónico</span><span><i class="sw ref"></i>anillo: amortiguado</span></div>
     <svg viewBox="0 0 720 230" role="img" aria-label="Espectro radial a nu_a = 6 kHz"><rect class="frame" x="20" y="16" width="680" height="168"/><text class="tick" x="20.0" y="202" text-anchor="middle">3</text><text class="tick" x="133.3" y="202" text-anchor="middle">4</text><text class="tick" x="246.7" y="202" text-anchor="middle">5</text><text class="tick" x="360.0" y="202" text-anchor="middle">6</text><text class="tick" x="473.3" y="202" text-anchor="middle">7</text><text class="tick" x="586.7" y="202" text-anchor="middle">8</text><text class="tick" x="700.0" y="202" text-anchor="middle">9</text><text class="axlabel" x="360.0" y="222" text-anchor="middle">Re ν (kHz)</text><line class="grid" x1="20" x2="700" y1="58.0" y2="58.0"/><line class="grid" x1="20" x2="700" y1="142.0" y2="142.0"/><line class="thr" x1="360.0" x2="360.0" y1="16" y2="184"/><text class="note" x="366.0" y="29.1" text-anchor="start">ν_a = 6 kHz</text><text class="zone" x="694.3" y="48.0" text-anchor="end">frecuencia real (atrapados)</text><text class="zone" x="25.7" y="128.0" text-anchor="start">amortiguados (Im ν &lt; 0)</text><circle class="s1-dot" cx="71.1" cy="58.0" r="6"><title>modo F: 3.4505 kHz, real</title></circle><circle class="s2-dot" cx="353.7" cy="58.0" r="4"><title>átomo gravitatorio: 5.94407 kHz</title></circle><circle class="s2-dot" cx="357.1" cy="58.0" r="4"><title>átomo gravitatorio: 5.97467 kHz</title></circle><circle class="s2-dot" cx="358.4" cy="58.0" r="4"><title>átomo gravitatorio: 5.98569 kHz</title></circle><circle class="s2-dot" cx="359.0" cy="58.0" r="4"><title>átomo gravitatorio: 5.99084 kHz</title></circle><circle class="s2-dot" cx="359.3" cy="58.0" r="4"><title>átomo gravitatorio: 5.99364 kHz</title></circle><circle class="s1-ring" cx="600.2" cy="142.0" r="6"><title>H1: 8.1192 -3.6i Hz</title></circle><text class="note" x="71.1" y="82.0" text-anchor="middle">F 3.451</text><text class="note" x="343.7" y="62.0" text-anchor="end">átomo n ≥ 2</text><text class="note" x="600.2" y="164.0" text-anchor="middle">H1, Im ν = −3.6 Hz</text></svg>
@@ -2485,6 +2491,100 @@ def run():
 
 if __name__ == &#x27;__main__&#x27;:
     run()
+</code></pre></details><details class="src"><summary><code>axion_ns/step17_radial_validation.py</code> <span class="small">(94 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 17: validación externa de los modos radiales en GR sin axión (hipótesis H19, regla del §4 de AGENTS.md).
+
+Referencia: Font et al. 2002, PRD 65, 084024 (arXiv:gr-qc/0110047), Tabla 2: politropo N = 1, K = 100
+(G = c = M_sun = 1), rho_c = 1.28e-3 (densidad de masa en reposo), M = 1.4 M_sun, R = 14.15 km (Sec. IV.1);
+frecuencias de la teoría de perturbaciones lineales en evolución acoplada: F, H1, H2, H3 = 1.442, 3.955, 5.916,
+7.776 kHz. Segunda fuente: tabla del grupo de Garching (rel_hydro/rotating_neutron_stars/tables.shtml), modelo B0:
+F = 1.458, H1 = 3.971 kHz, sin indicar el método.
+
+Se usa radial.interior sin tocarlo (con nu_a = None no hay axión): los modos son los ceros de Delta p(R)(omega^2).
+&quot;&quot;&quot;
+import json
+from pathlib import Path
+
+import numpy as np
+from scipy.optimize import brentq
+
+from . import axstar as AX
+from . import radial as RD
+from .pipeline import report
+
+OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
+FONT = {&#x27;F&#x27;: 1.442, &#x27;H1&#x27;: 3.955, &#x27;H2&#x27;: 5.916, &#x27;H3&#x27;: 7.776}          # kHz, Tabla 2
+GARCHING = {&#x27;F&#x27;: 1.458, &#x27;H1&#x27;: 3.971}                                 # kHz, modelo B0
+K_CODE, RHO_C, GAMMA = 100.0, 1.28e-3, 2.0
+M_REF, R_REF = 1.4, 14.15                                            # M_sun, km (Sec. IV.1)
+
+
+class Poly:
+    &quot;&quot;&quot;p = K rho^2, eps = rho + p/(Gamma - 1), en MeV/fm^3. gamma1: índice adiabático de las perturbaciones
+    (Gamma salvo en el control negativo). internal=False: eps = rho (control negativo).&quot;&quot;&quot;
+    p_min = 1e-12
+
+    def __init__(self, gamma1=GAMMA, internal=True):
+        self.Km = K_CODE * AX.MSUN**2 * AX.KGEO                      # (MeV/fm^3)^-1
+        self.gamma1, self.internal = gamma1, internal
+
+    def rho(self, p):
+        return np.sqrt(p / self.Km)
+
+    def eps(self, p):
+        return self.rho(p) + (p / (GAMMA - 1) if self.internal else 0.0)
+
+    def nb(self, p):
+        return self.rho(p)
+
+    def cs2(self, p):
+        return self.gamma1 * p / (self.eps(p) + p)
+
+
+def p_central():
+    rho_geo = RHO_C / AX.MSUN**2                                     # km^-2
+    return K_CODE * AX.MSUN**2 * rho_geo**2 / AX.KGEO                # MeV/fm^3
+
+
+def modes(eos, numax=8.5, n=4):
+    keep, AX._eos = AX._eos, eos
+    try:
+        st = AX.Star(None, p0=p_central())
+        g = lambda nu: RD.interior(st, AX.omega_of(nu), &#x27;fluid&#x27;).y[1, -1].real
+        nus = np.linspace(0.3, numax, 140)
+        v = [g(x) for x in nus]
+        roots = [brentq(g, nus[i], nus[i + 1], xtol=1e-10) for i in range(len(nus) - 1) if v[i] * v[i + 1] &lt; 0]
+        return st.M / AX.MSUN, st.R, roots[:n]
+    finally:
+        AX._eos = keep
+
+
+def run():
+    res = []
+    M, R, nu = modes(Poly())
+    res.append((f&#x27;Fondo: M = {M:.4f} M_sun, R = {R:.3f} km (Font et al.: 1.4, 14.15)&#x27;,
+                abs(M - M_REF) &lt; 0.005 and abs(R - R_REF) &lt; 0.01, &#x27;H19(a)&#x27;))
+    dev = {k: 100 * (v / FONT[k] - 1) for k, v in zip(FONT, nu)}
+    res.append((&#x27;Modos radiales sin axión frente a Font et al. 2002, Tabla 2: &#x27; +
+                &#x27;, &#x27;.join(f&#x27;{k} = {v:.4f} kHz (ref. {FONT[k]}, {dev[k]:+.3f} %)&#x27; for k, v in zip(FONT, nu)),
+                len(nu) == 4 and all(abs(d) &lt; 0.1 for d in dev.values()), &#x27;H19(b)&#x27;))
+    dg = {k: 100 * (v / GARCHING[k] - 1) for k, v in zip(GARCHING, nu)}
+    res.append((&#x27;Frente a la tabla de Garching (modelo B0): &#x27; +
+                &#x27;, &#x27;.join(f&#x27;{k} {dg[k]:+.2f} %&#x27; for k in GARCHING) + &#x27; (método no indicado en la tabla)&#x27;, True, &#x27;H19(c)&#x27;))
+    _, _, nu_g = modes(Poly(gamma1=2.1), n=1)
+    _, _, nu_e = modes(Poly(internal=False), n=1)
+    d1, d2 = 100 * (nu_g[0] / FONT[&#x27;F&#x27;] - 1), 100 * (nu_e[0] / FONT[&#x27;F&#x27;] - 1)
+    res.append((f&#x27;Control negativo 1: Gamma_1 = 2.1 en las perturbaciones mueve F un {d1:+.2f} %&#x27;, abs(d1) &gt; 0.1, &#x27;&#x27;))
+    res.append((f&#x27;Control negativo 2: eps = rho (sin energía interna) mueve F un {d2:+.2f} %&#x27;, abs(d2) &gt; 0.1, &#x27;&#x27;))
+    out = {&#x27;M&#x27;: M, &#x27;R&#x27;: R, &#x27;modes&#x27;: dict(zip(FONT, nu)), &#x27;font&#x27;: FONT, &#x27;garching&#x27;: GARCHING, &#x27;dev_font_pct&#x27;: dev,
+           &#x27;dev_garching_pct&#x27;: dg, &#x27;neg_gamma1&#x27;: d1, &#x27;neg_no_internal&#x27;: d2,
+           &#x27;checks&#x27;: [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]}
+    OUT.mkdir(exist_ok=True)
+    (OUT / &#x27;radial_validation.json&#x27;).write_text(json.dumps(out, indent=1))
+    return report(&#x27;Paso 17: validación externa de los modos radiales (Font et al. 2002)&#x27;, res)
+
+
+if __name__ == &#x27;__main__&#x27;:
+    run()
 </code></pre></details><details class="src"><summary><code>axion_ns/step2_perturbations.py</code> <span class="small">(59 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 2: perturbaciones radiales lineales y comparación con Ec. (3.3) y (3.7).&quot;&quot;&quot;
 import sympy as sp
 
@@ -2710,7 +2810,7 @@ dependencies = [
     &quot;scipy&gt;=1.18.1&quot;,
     &quot;sympy&gt;=1.14.0&quot;,
 ]
-</code></pre></details><details class="src"><summary><code>report/build_radial.py</code> <span class="small">(541 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Genera report/informe_radial.html (y la copia en results/) desde results/radial_branches.json.
+</code></pre></details><details class="src"><summary><code>report/build_radial.py</code> <span class="small">(560 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Genera report/informe_radial.html (y la copia en results/) desde results/radial_branches.json.
 
 Regla (AGENTS.md §4): ninguna cifra se teclea a mano; todas salen del JSON que escribe
 axion_ns/step14_radial_branches.py.
@@ -2886,6 +2986,18 @@ SP = ROOT / &#x27;results&#x27; / &#x27;radial_star.json&#x27;
 S = json.loads(SP.read_text()) if SP.exists() else None
 STP = ROOT / &#x27;results&#x27; / &#x27;radial_stability.json&#x27;
 STB = json.loads(STP.read_text()) if STP.exists() else None
+VLP = ROOT / &#x27;results&#x27; / &#x27;radial_validation.json&#x27;
+VAL = json.loads(VLP.read_text()) if VLP.exists() else None
+if VAL:
+    _vrows = &#x27;&#x27;.join(f&#x27;&lt;tr&gt;&lt;td&gt;{k}&lt;/td&gt;&lt;td&gt;{VAL[&quot;modes&quot;][k]:.4f}&lt;/td&gt;&lt;td&gt;{VAL[&quot;font&quot;][k]}&lt;/td&gt;&lt;td&gt;{VAL[&quot;dev_font_pct&quot;][k]:+.3f} %&lt;/td&gt;&lt;/tr&gt;&#x27;
+                     for k in VAL[&#x27;font&#x27;])
+    val_html = f&quot;&quot;&quot;
+  &lt;h3&gt;Validación externa sin axión (paso 17)&lt;/h3&gt;
+  &lt;p&gt;El mismo código, sin cambiar nada y con el axión apagado, aplicado al politropo de referencia de Font et al. (2002, PRD 65, 084024, Tabla 2): &lt;code&gt;p = Kρ²&lt;/code&gt;, &lt;code&gt;K = 100&lt;/code&gt;, &lt;code&gt;ρ_c = 1,28·10⁻³&lt;/code&gt; (G = c = M☉ = 1). El fondo sale con M = {fnum(VAL[&#x27;M&#x27;], 4)} M☉ y R = {fnum(VAL[&#x27;R&#x27;], 3)} km (ellos: 1,4 y 14,15). Sus frecuencias son las de la teoría de perturbaciones con la métrica dinámica:&lt;/p&gt;
+  &lt;div class=&quot;tbl&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;th&gt;modo&lt;/th&gt;&lt;th&gt;este cálculo (kHz)&lt;/th&gt;&lt;th&gt;Font et al. (kHz)&lt;/th&gt;&lt;th&gt;diferencia&lt;/th&gt;&lt;/tr&gt;{_vrows}&lt;/table&gt;&lt;/div&gt;
+  &lt;p&gt;Las cuatro coinciden dentro del redondeo de sus cuatro cifras. Los controles negativos comprueban que la comparación distingue: con Γ₁ = 2,1 en las perturbaciones, F se mueve un {VAL[&#x27;neg_gamma1&#x27;]:+.1f} %, y sin la energía interna en el fondo, un {VAL[&#x27;neg_no_internal&#x27;]:+.1f} %. La tabla del grupo de Garching para el mismo modelo da F = {VAL[&#x27;garching&#x27;][&#x27;F&#x27;]} kHz, un {abs(VAL[&#x27;dev_garching_pct&#x27;][&#x27;F&#x27;]):.1f} % por encima de nosotros y de Font et al.; no indica el método.&lt;/p&gt;&quot;&quot;&quot;
+else:
+    val_html = &#x27;&#x27;
 if S:
     s6 = S[&#x27;nu6&#x27;]
     # Figura 4: espectro a nu_a = 6 kHz en dos filas (frecuencia real / amortiguados)
@@ -2973,6 +3085,7 @@ if S:
     &lt;li&gt;Más allá, la onda exterior se integra en un rayo del plano r complejo donde la onda saliente decae. En la recta real, la integración hacia dentro es inestable para modos muy amortiguados: el método anterior (&lt;code&gt;axstar.exterior_L&lt;/code&gt;) se desvía un {fnum(S[&#x27;exterior&#x27;][&#x27;old_vs_new_strong&#x27;] * 100, 0)} % en un punto muy amortiguado (6,585 − 0,563i kHz), aunque solo {S[&#x27;exterior&#x27;][&#x27;old_vs_new_weak&#x27;]:.0e} en un modo poco amortiguado, así que los amortiguamientos de pocos Hz de los pasos 9–10 siguen siendo válidos.&lt;/li&gt;
   &lt;/ul&gt;
   &lt;p&gt;&lt;b&gt;Validación sin axión.&lt;/b&gt; El cuadrado de la frecuencia del modo F se anula en &lt;code&gt;p_c = {fnum(t[&#x27;p0_wF2_zero&#x27;], 1)}&lt;/code&gt; MeV/fm³ y la masa máxima ({fnum(t[&#x27;Mmax_msun&#x27;], 4)} M☉) está en &lt;code&gt;p_c = {fnum(t[&#x27;p0_Mmax&#x27;], 1)}&lt;/code&gt;. Coinciden, como exige el criterio del punto de retorno.&lt;/p&gt;
+{val_html}
   &lt;figure&gt;
     &lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;sw s1&quot;&gt;&lt;/i&gt;modo fluido&lt;/span&gt;&lt;span&gt;&lt;i class=&quot;sw s2&quot;&gt;&lt;/i&gt;modo axiónico&lt;/span&gt;&lt;span&gt;&lt;i class=&quot;sw ref&quot;&gt;&lt;/i&gt;anillo: amortiguado&lt;/span&gt;&lt;/div&gt;
     {fig4}
@@ -3004,7 +3117,11 @@ if S:
   &lt;/div&gt;
   &lt;ul class=&quot;checks&quot;&gt;{st_rows}&lt;/ul&gt;
 &lt;/section&gt;&quot;&quot;&quot;
+    val_li = (f&quot;&lt;li&gt;&lt;b&gt;Validación externa:&lt;/b&gt; sin axión, el mismo código reproduce las frecuencias radiales F, H1, H2 y H3 &quot;
+              f&quot;del politropo de referencia de Font et al. (2002) con una diferencia máxima del &quot;
+              f&quot;{max(abs(v) for v in VAL[&#x27;dev_font_pct&#x27;].values()):.2f} %, dentro del redondeo de sus cifras.&lt;/li&gt;&quot;) if VAL else &#x27;&#x27;
     star_summary = f&quot;&quot;&quot;
+    {val_li}
     &lt;li&gt;&lt;b&gt;Estrella realista&lt;/b&gt; (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua {fnum(-s6[&#x27;H1&#x27;][1] * 1e3, 1)} Hz. Justo bajo el umbral aparece una escalera de estados ligados del axión que sigue la ley hidrogenoide, con &lt;code&gt;n_eff&lt;/code&gt; = {&#x27;, &#x27;.join(f&quot;{l[&#x27;n_eff&#x27;]:.2f}&quot; for l in s6[&#x27;ladder&#x27;])}: un «átomo gravitatorio».&lt;/li&gt;
     &lt;li&gt;En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con un cruce evitado con el nivel n = 1, y sale como cuasi-normal con un amortiguamiento muy pequeño ({fnum(-n34[&#x27;F&#x27;][1] * 1e3, 2)} Hz a ν_a = 3,4 kHz).&lt;/li&gt;&quot;&quot;&quot;
 else:
@@ -3027,9 +3144,11 @@ import shutil
 FILES = [&#x27;axion_ns/model.py&#x27;, &#x27;axion_ns/geometry.py&#x27;, &#x27;axion_ns/compare.py&#x27;, &#x27;axion_ns/pipeline.py&#x27;, &#x27;axion_ns/nonradial.py&#x27;,
          &#x27;axion_ns/fullgr.py&#x27;, &#x27;axion_ns/bsk26.py&#x27;, &#x27;axion_ns/axstar.py&#x27;, &#x27;axion_ns/axgr.py&#x27;, &#x27;axion_ns/radial.py&#x27;,
          &#x27;axion_ns/step2_perturbations.py&#x27;, &#x27;axion_ns/step4_numerics.py&#x27;, &#x27;axion_ns/step14_radial_branches.py&#x27;,
-         &#x27;axion_ns/step15_radial_star.py&#x27;, &#x27;axion_ns/step16_radial_stability.py&#x27;, &#x27;report/build_radial.py&#x27;,
+         &#x27;axion_ns/step15_radial_star.py&#x27;, &#x27;axion_ns/step16_radial_stability.py&#x27;, &#x27;axion_ns/step17_radial_validation.py&#x27;,
+         &#x27;report/build_radial.py&#x27;,
          &#x27;pyproject.toml&#x27;, &#x27;uv.lock&#x27;]
-DATA = [&#x27;results/radial_branches.json&#x27;, &#x27;results/radial_star.json&#x27;, &#x27;results/radial_stability.json&#x27;]
+DATA = [&#x27;results/radial_branches.json&#x27;, &#x27;results/radial_star.json&#x27;, &#x27;results/radial_stability.json&#x27;,
+        &#x27;results/radial_validation.json&#x27;]
 FD = ROOT / &#x27;report&#x27; / &#x27;radial_files&#x27;
 FD.mkdir(exist_ok=True)
 published = {}
@@ -5183,6 +5302,64 @@ print(&#x27;informe_radial.html:&#x27;, len(page) // 1024, &#x27;KB;&#x27;, n_ok
    &quot;name&quot;: &quot;Robustez de Im \u03bd: rtol, r0 y longitud exterior cambian como mucho un 0.004 %; el radio de empalme (\u00faltimo paso hacia fuera) un 0.00 % en H1 (6 kHz), 0.00 % en F (3,4 kHz)&quot;,
    &quot;ok&quot;: true,
    &quot;note&quot;: &quot;H13; el radio de empalme es la incertidumbre dominante&quot;
+  }
+ ]
+}</code></pre></details><details class="src"><summary><code>results/radial_validation.json</code> <span class="small">(59 líneas)</span></summary><pre class="code"><code>{
+ &quot;M&quot;: 1.4001597295165404,
+ &quot;R&quot;: 14.15479812381404,
+ &quot;modes&quot;: {
+  &quot;F&quot;: 1.442490557866566,
+  &quot;H1&quot;: 3.9539947583225303,
+  &quot;H2&quot;: 5.9148514974708615,
+  &quot;H3&quot;: 7.773742686387281
+ },
+ &quot;font&quot;: {
+  &quot;F&quot;: 1.442,
+  &quot;H1&quot;: 3.955,
+  &quot;H2&quot;: 5.916,
+  &quot;H3&quot;: 7.776
+ },
+ &quot;garching&quot;: {
+  &quot;F&quot;: 1.458,
+  &quot;H1&quot;: 3.971
+ },
+ &quot;dev_font_pct&quot;: {
+  &quot;F&quot;: 0.03401926952608658,
+  &quot;H1&quot;: -0.02541698299544093,
+  &quot;H2&quot;: -0.01941349778801227,
+  &quot;H3&quot;: -0.02902923884670061
+ },
+ &quot;dev_garching_pct&quot;: {
+  &quot;F&quot;: -1.0637477457773548,
+  &quot;H1&quot;: -0.42823575113245527
+ },
+ &quot;neg_gamma1&quot;: 12.248031404338565,
+ &quot;neg_no_internal&quot;: -8.634086883104564,
+ &quot;checks&quot;: [
+  {
+   &quot;name&quot;: &quot;Fondo: M = 1.4002 M_sun, R = 14.155 km (Font et al.: 1.4, 14.15)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;H19(a)&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Modos radiales sin axi\u00f3n frente a Font et al. 2002, Tabla 2: F = 1.4425 kHz (ref. 1.442, +0.034 %), H1 = 3.9540 kHz (ref. 3.955, -0.025 %), H2 = 5.9149 kHz (ref. 5.916, -0.019 %), H3 = 7.7737 kHz (ref. 7.776, -0.029 %)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;H19(b)&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Frente a la tabla de Garching (modelo B0): F -1.06 %, H1 -0.43 % (m\u00e9todo no indicado en la tabla)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;H19(c)&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Control negativo 1: Gamma_1 = 2.1 en las perturbaciones mueve F un +12.25 %&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Control negativo 2: eps = rho (sin energ\u00eda interna) mueve F un -8.63 %&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
   }
  ]
 }</code></pre></details></div>
