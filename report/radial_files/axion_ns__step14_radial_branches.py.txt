@@ -172,8 +172,13 @@ def run():
 
     # 3. H8: |Im w| ∝ (Re w - 1)^s cerca del umbral
     s, damp_pts = damping_exponent()
-    res.append((f'H8: |Im w| ~ (Re w - 1)^{s:.3f} cerca del umbral (λ² = 1e-4; ½ si Im k fuera constante, '
-                f'que varía ~18 % en el tramo)', 0.40 < s < 0.52, 'el amortiguamiento se anula al llegar al umbral'))
+    fit = (damp_pts[:, 2] > 5 * damp_pts[:, 3]) & (damp_pts[:, 0] < 0.02)
+    imk = damp_pts[fit, 3]
+    coll = damp_pts[-1, 0]                          # Re w - 1 del último punto antes de la colisión
+    res.append((f'H8: |Im w| ~ (Re w - 1)^{s:.3f} en el tramo intermedio Re k > 5|Im k| (λ² = 1e-4; ½ si Im k '
+                f'fuera constante, que varía un {100 * (imk.max() / imk.min() - 1):.0f} % en el tramo)', 0.40 < s < 0.52,
+                f'ajuste en un tramo finito, no una ley asintótica: más cerca del umbral domina la colisión de polos, '
+                f'y el amortiguamiento se anula en Re w - 1 = {coll:.1e}, antes de llegar a ω = m_a'))
 
     # 4. H10: separación mínima del cruce evitado lineal en lambda
     gaps = [(l2, *min_gap(l2)) for l2 in (1e-6, 1e-5, 1e-4, 1e-3)]

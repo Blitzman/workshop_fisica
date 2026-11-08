@@ -758,9 +758,9 @@
      "note": ""
     },
     {
-     "name": "H8: |Im w| ~ (Re w - 1)^0.457 cerca del umbral (λ² = 1e-4; ½ si Im k fuera constante, que varía ~18 % en el tramo)",
+     "name": "H8: |Im w| ~ (Re w - 1)^0.457 en el tramo intermedio Re k > 5|Im k| (λ² = 1e-4; ½ si Im k fuera constante, que varía un 19 % en el tramo)",
      "ok": true,
-     "note": "el amortiguamiento se anula al llegar al umbral"
+     "note": "ajuste en un tramo finito, no una ley asintótica: más cerca del umbral domina la colisión de polos, y el amortiguamiento se anula en Re w - 1 = 2.6e-05, antes de llegar a ω = m_a"
     },
     {
      "name": "H10: cruce evitado fluido-axión, Δw²_min/λ = 7.598, 7.598, 7.596, 7.577 para λ² = 1e-6…1e-3 (en x0 ≈ 1.073): separación ∝ λ",

@@ -5,6 +5,7 @@ axion_ns/step14_radial_branches.py.
 """
 import html
 import json
+import cmath
 import math
 from pathlib import Path
 
@@ -125,6 +126,12 @@ fig2 = p2.svg('Estados ligados frente a x0, con y sin acoplo')
 # ------------------------------------------------------------------ Figura 3: amortiguamiento cerca del umbral
 dp = D['damping_points']
 s_fit = D['damping_exponent']
+# Im k en el tramo del ajuste (Re k > 5|Im k|), desde w = 1 + x - i y con k = √(w² − 1), Re k > 0
+_ks = [cmath.sqrt(complex(1 + x, -y) ** 2 - 1) for x, y in dp]
+_ks = [k if k.real > 0 else -k for k in _ks]
+_imk = [-k.imag for (x, _), k in zip(dp, _ks) if k.real > 5 * -k.imag and x < 0.02]
+imk_var = 100 * (max(_imk) / min(_imk) - 1)
+coll_x = min(x for x, _ in dp)
 xmin, xmax = min(a for a, _ in dp), max(a for a, _ in dp)
 ymin, ymax = min(b for _, b in dp), max(b for _, b in dp)
 p3 = Plot((10 ** math.floor(math.log10(xmin)), 10 ** math.ceil(math.log10(xmax))),
@@ -209,10 +216,12 @@ if S:
     for lab, r_ in rob.items():
         for k, v_ in r_.items():
             rob_rows += f'<tr><td>{lab}</td><td>{html.escape(k)}</td><td>{v_[0]:.6f}</td><td>{v_[1] * 1e3:.4f}</td></tr>'
+    _dev = [(abs(v_[0] / r_['base'][0] - 1), abs(v_[1] / r_['base'][1] - 1)) for r_ in rob.values() for v_ in r_.values()]
+    rob_re, rob_im = (max(d[0] for d in _dev), 100 * max(d[1] for d in _dev)) if _dev else (0, 0)
     stab = S.get('stability', {})
     rob_html = (f"""
   <h3>Robustez numérica y estabilidad</h3>
-  <p>Los amortiguamientos de unos pocos Hz son lo más delicado del cálculo. Los recalculamos variando la tolerancia del integrador, el radio inicial, la longitud de la integración exterior y el radio donde se empalma con la solución exterior. Solo este último importa, y por debajo del 1 %:</p>
+  <p>Los amortiguamientos de unos pocos Hz son lo más delicado del cálculo. Los recalculamos variando la tolerancia del integrador, el radio inicial, la longitud de la integración exterior y el radio donde se empalma con la solución exterior. Ninguna variante mueve Re ν más de un {rob_re:.0e} relativo ni Im ν más de un {rob_im:.3f} %:</p>
   <div class="tbl"><table><tr><th>modo</th><th>variante</th><th>Re ν (kHz)</th><th>Im ν (Hz)</th></tr>{rob_rows}</table></div>
   <p>Estabilidad: en el eje imaginario <code>ω = iγ</code> (γ entre 0,01 y 10 kHz) el determinante no cambia de signo ni a 6 ni a 3,4 kHz ({', '.join(f"{v_['sign_changes']}" for v_ in stab.values())} cambios). No hemos detectado modos radiales que crezcan en ese rango. Un barrido de signo no es una demostración, porque puede no ver pares de raíces próximas ni raíces fuera del eje, y nada de esto dice algo sobre perturbaciones no radiales. Una prueba más completa sería el principio del argumento en el semiplano superior; está pendiente.</p>""" if rob else '')
     art = S.get('artifact')
@@ -235,7 +244,7 @@ if S:
   <figure>
     <div class="legend"><span><i class="sw s1"></i>modo fluido</span><span><i class="sw s2"></i>modo axiónico</span><span><i class="sw ref"></i>anillo: amortiguado</span></div>
     {fig4}
-    <figcaption>Espectro radial a ν_a = 6 kHz (M = {fnum(s6['M_msun'], 4)} M☉, R = {fnum(s6['R_km'], 3)} km). El carácter se mide con la fracción de energía en el fluido: F {fnum(s6['F_fluid'], 2)}, H1 {fnum(s6['H1_fluid'], 2)}.</figcaption>
+    <figcaption>Espectro radial a ν_a = 6 kHz (M = {fnum(s6['M_msun'], 4)} M☉, R = {fnum(s6['R_km'], 3)} km). El carácter se mide con la fracción fluida: F {fnum(s6['F_fluid'], 2)}, H1 {fnum(s6['H1_fluid'], 2)}. Es un diagnóstico, no una energía conservada: pesa <code>|ξ|²</code> con <code>(ε+p)</code> y <code>|δθ|²</code> con <code>f_a²</code> hasta el radio de empalme. Para un modo cuasi-normal, cuya autofunción crece hacia fuera, la cifra depende de ese corte. Sirve para distinguir «casi todo fluido» de «casi todo axión», no para medir mezclas finas.</figcaption>
   </figure>
   <p>La estructura es la del modelo simplificado, con un añadido de la gravedad:</p>
   <ul>
@@ -441,7 +450,7 @@ a {{ color: var(--accent); }}
     {fig3}
     <figcaption>Tasa de amortiguamiento frente a la distancia al umbral (λ² = {D["params"]["lam2_damping"]:.0e}), en la zona asintótica <code>Re k &gt; 5|Im k|</code>. Ajuste: exponente {fnum(s_fit, 3)}; la línea discontinua es la pendiente ½ como referencia.</figcaption>
   </figure>
-  <p>La identidad exacta <code>Im w = Re k · Im k / Re w</code> (de <code>w² = 1 + k²</code>; la primera versión de este informe tenía el signo cambiado) explica el comportamiento: con <code>Im k</code> casi constante, la tasa es proporcional a <code>k_out ∝ √(ω² − m_a²)</code>, el espacio de fases de la onda emitida. El exponente ajustado queda algo por debajo de ½ porque <code>Im k</code> varía un ~18 % en el tramo. La ley se rompe cuando <code>Re k ∼ |Im k|</code>: ahí se produce la colisión, a una distancia del umbral de orden <code>(Im k)²</code>, minúscula con acoplo débil.</p>
+  <p>La identidad exacta <code>Im w = Re k · Im k / Re w</code> (de <code>w² = 1 + k²</code>; la primera versión de este informe tenía el signo cambiado) explica el comportamiento: con <code>Im k</code> casi constante, la tasa es proporcional a <code>k_out ∝ √(ω² − m_a²)</code>, el espacio de fases de la onda emitida. El exponente ajustado queda algo por debajo de ½ porque <code>Im k</code> varía un {imk_var:.0f} % en el tramo. Es una ley de <b>tramo intermedio</b>, ajustada en un intervalo finito, no una ley asintótica: se rompe cuando <code>Re k ∼ |Im k|</code>. Ahí manda la colisión de los dos polos, a una distancia del umbral de orden <code>(Im k)²</code>, minúscula con acoplo débil. En esta figura el último punto con <code>Re k &gt; 0</code> está en <code>Re w − 1 = {coll_x:.1e}</code>: el amortiguamiento se anula ahí, antes de llegar a <code>ω = m_a</code>.</p>
 </section>
 
 <section>
