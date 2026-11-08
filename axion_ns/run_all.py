@@ -9,7 +9,8 @@ from . import (step1_background, step2_perturbations, step3_toy_model, step4_num
                step6_nonradial_numerics, step7_fullgr, step8_numerics,
                step9_axion_cowling, step10_axion_gr, step14_radial_branches,
                step15_radial_star, step16_radial_stability,
-               step17_radial_validation, step18_rydberg)
+               step17_radial_validation, step18_rydberg,
+               step19_avoided_crossing, step20_damped_count)
 
 STEPS = [('Fondo (TOV + KG)', step1_background), ('Perturbaciones radiales', step2_perturbations),
          ('Modelo simplificado (Sec. IV)', step3_toy_model), ('Números y figura', step4_numerics),
@@ -23,7 +24,9 @@ STEPS = [('Fondo (TOV + KG)', step1_background), ('Perturbaciones radiales', ste
          ('Modos radiales de la estrella con condensado (GR)', step15_radial_star),
          ('Estabilidad radial: principio del argumento', step16_radial_stability),
          ('Modos radiales sin axión: validación externa (Font et al. 2002)', step17_radial_validation),
-         ('Átomo gravitatorio: ley de Rydberg', step18_rydberg)]
+         ('Átomo gravitatorio: ley de Rydberg', step18_rydberg),
+         ('Cruce evitado F - átomo gravitatorio', step19_avoided_crossing),
+         ('Recuento en el semiplano amortiguado', step20_damped_count)]
 
 
 def _cpu():

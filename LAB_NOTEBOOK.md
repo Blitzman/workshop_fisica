@@ -146,7 +146,7 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
     - La fracción fluida queda descrita como diagnóstico, no como energía conservada: para un modo cuasi-normal depende del corte en r_m.
     - El principio del argumento para la estrella realista, que reclamaban las tres revisiones, ya está hecho: H18 y paso 16. Sigue pendiente una comprobación independiente de las ecuaciones radiales en GR (por ejemplo, frente a un código publicado de modos radiales sin axión, más allá del punto de retorno).
     - El defecto cuántico de la escalera ya está explicado (H20, paso 18): es una ley de Rydberg con δ ≈ 0,056.
-    - En `build_radial.py` quedan cifras tecleadas en el recuadro de la corrección (~0,16 %, ~0,5 %, 1,6·10⁻³). Para el informe radial faltan además: la estabilidad con el principio del argumento en el semiplano superior (crítica A), el barrido denso en el umbral (D), redactar como «no detectamos inestabilidades» y no como «es estable», y separar mejor lo demostrado de lo que es hipótesis.
+    - Las cifras del recuadro de la corrección ya salen de los datos (paso 20 y figuras del paso 10). Para el informe radial faltan además: la estabilidad con el principio del argumento en el semiplano superior (crítica A), el barrido denso en el umbral (D), redactar como «no detectamos inestabilidades» y no como «es estable», y separar mejor lo demostrado de lo que es hipótesis.
   - `axstar.Phi_shift` ajusta Φ a Schwarzschild en R con `m(R)`, pero la cola del condensado fuera de la estrella lleva un 0,5 % de la masa. Lejos, `Φ − ½ ln(1 − 2M_t/r) = +1,6·10⁻³` (a 6 y a 3,4 kHz), en vez de 0.
   - *Predicción:* normalizando con `M_t` al final de la integración del fondo, (i) la dependencia de `Im ν` con el radio de empalme cae a ≲0,1 % y (ii) todas las frecuencias con axión se desplazan ~0,16 %.
   - *Afecta a código compartido:* los pasos 9 (Cowling, tablas del Paper II) y 10 (GR no radial) usan el mismo `Phi_shift`.
@@ -207,6 +207,29 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
     - El defecto cuántico es «casi constante».
     - La robustez numérica no es incertidumbre física.
   - *Lección:* una cifra «donde ocurre X» no se lee de un barrido; se resuelve la condición de X. Y una frase añadida para responder a una crítica necesita la misma verificación que el resto.
+
+- **[H21 · CONFIRMADA] Cruce evitado entre F y el nivel n = 1 del átomo gravitatorio en la estrella realista.**
+  - *Lo que hay:* a ν_a = 3,5 kHz, dos ligados (3,4040 y 3,4544 kHz) con carácter mezclado (0,22 y 0,75 de fluido). Un solo valor de ν_a no demuestra nada (cuarta revisión).
+  - *Método:* para ν_a en una malla de ~3,46 a 3,70 kHz, los dos ligados más bajos, como raíces reales de det bajo el umbral (cambio de signo + brentq), y la fracción fluida de cada uno.
+  - *Predicción:*
+    - (a) La separación Δν(ν_a) tiene un mínimo > 0 cerca de 3,5 kHz, de unas decenas de Hz, que no baja al refinar la malla.
+    - (b) Los caracteres se intercambian a través del mínimo. Con ν_a por encima del cruce, el inferior es F (fluido, > 0,5) y el superior el átomo; por debajo, al revés, porque el nivel n = 1 sigue a ν_a y F casi no se mueve.
+    - (c) Lejos del cruce, uno sigue al nivel n = 1 (ν ≈ ν_a − cte·α²) y el otro a F (casi independiente de ν_a).
+  - *Si (a) o (b) fallan,* «cruce evitado» se retira del informe.
+  - *Resultado (paso 19, 2/2):* en 15 valores de ν_a (malla refinada), la separación mínima es de 49,4 Hz en ν_a = 3,511 kHz. El carácter se intercambia de forma continua: a 3,46 kHz, 0,04 / 0,93 de fluido; a 3,70 kHz, 0,89 / 0,07. La mezcla 50/50 está hacia 3,534 kHz, algo por encima del mínimo, porque F también sube con ν_a. Es un cruce evitado.
+
+- **[H22 · CONFIRMADA en la región explorada] ¿Hay una familia física de resonancias axiónicas muy amortiguadas? Recuento en el semiplano amortiguado (ν_a = 6 kHz).**
+  - *Método:* principio del argumento sobre det, sin polos (Ψ normalizada en el infinito, integrando las semillas hacia fuera, que es lo estable para Im ω < 0, con el rayo complejo para la onda saliente), en piezas de Re ν ∈ [6,05; 12] y Im ν ∈ [−1,5; −0,002] kHz. Índice convergido al doblar el muestreo.
+  - *Predicción:*
+    - (a) El índice es igual al número de modos fluidos cuasi-normales de esa región que encuentra Muller (H1 en 8,119 − 0,0036 i y los sobretonos que caigan dentro), sin ceros adicionales: no hay familia axiónica en esa región.
+    - (b) *Control positivo:* con la normalización antigua del lapso (Φ desplazado 1,6·10⁻³), el índice sube en el número de resonancias de cavidad que vimos (6,585 − 0,563 i, 7,304 − 0,748 i, …). Es decir, el recuento detecta resonancias muy amortiguadas cuando existen, aunque sean artefactos.
+  - *Si (b) falla,* el recuento no es sensible a esa familia y (a) no prueba nada.
+  - *Resultado (paso 20, 2/2):*
+    - (a) Índice 2 (piezas 1, 1, 0, 0, convergidas): H1 = 8,1192 kHz − 3,60 Hz i (fluido 0,97) y H2 = 11,6786 kHz − 21,70 Hz i (fluido 0,88). Ningún cero más: no hay familia axiónica en Re ν ∈ [6,05; 12], Im ν ∈ [−1,5; 0) kHz.
+    - (b) Con la normalización antigua, el índice sube a 8: +6 en las piezas muy amortiguadas, las resonancias de cavidad.
+  - *Fuera de la región* (|Im ν| > 1,5 kHz o Re ν > 12 kHz) no hemos mirado.
+  - *De paso,* el paso 20 guarda Φ(∞) = 1,61·10⁻³ con la normalización antigua y la fracción de masa de la cola, 0,485 %. Ya no hay cifras tecleadas en el recuadro de la corrección.
+  - *El «~0,16 %» de desplazamiento por la corrección* salía de un solo modo. Con los datos va del 0,03 % al 0,19 % (mediana ~0,1 %) en las 36 frecuencias del paso 10, y así lo dice ahora el informe.
 
 - **[H20 · CONFIRMADA] El «defecto cuántico» de la escalera del átomo gravitatorio (ν_a = 6 kHz, paso 15).**
   - *Observación:* n − n_eff = −0,012; 0,010; 0,021; 0,028; 0,033 para n = 2…6, con `n_eff = α_g/√(2(1 − ν/ν_a))`, la fórmula hidrogenoide no relativista.

@@ -1,0 +1,88 @@
+{
+ "nu6": {
+  "per_tile": [
+   1,
+   1,
+   0,
+   0
+  ],
+  "tried": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "points": 1542,
+  "total": 2,
+  "fluid_modes": [
+   [
+    8.119208560535224,
+    -0.0036022951762564844
+   ],
+   [
+    11.678582442957348,
+    -0.021698874475199526
+   ]
+  ],
+  "fluid_fraction": [
+   0.9729218057823246,
+   0.879037707074947
+  ]
+ },
+ "lapse": {
+  "phi_inf_old": 0.0016128417713554555,
+  "tail_mass_frac": 0.0048506092429300065
+ },
+ "old_lapse": {
+  "per_tile": [
+   1,
+   1,
+   3,
+   3
+  ],
+  "tried": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "points": 1542,
+  "total": 8
+ },
+ "checks": [
+  {
+   "name": "H22(a): nu_a = 6 kHz, \u00edndice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ah\u00ed: 8.1192-3.60i (fluido 0.97), 11.6786-21.70i (fluido 0.88)",
+   "ok": true,
+   "note": "sin ceros adicionales: ninguna familia axi\u00f3nica en esa regi\u00f3n"
+  },
+  {
+   "name": "H22(b), control positivo: con la normalizaci\u00f3n antigua del lapso el \u00edndice sube a 8 (piezas [1, 1, 3, 3]): el recuento ve las resonancias de cavidad",
+   "ok": true,
+   "note": ""
+  }
+ ]
+}

@@ -120,7 +120,7 @@ a { color: var(--accent); }
     <li>Hallazgo no previsto: con la masa efectiva taquiónica <code>m_a²(1 − α)</code> del modelo simplificado, este contiene un modo inestable (<code>w² = −6.18</code> con los parámetros de la figura), que no aparece en la ventana <code>Im w ≤ 0</code> habitual. Lo planteamos como pregunta abajo.</li>
     <li><b>Validación externa:</b> sin axión, el mismo código reproduce las frecuencias radiales F, H1, H2 y H3 del politropo de referencia de Font et al. (2002) con una diferencia máxima del 0.034 % (sector fluido sin axión).</li>
     <li><b>Estrella realista</b> (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua 3.6 Hz. Justo bajo el umbral aparece una escalera de estados ligados del axión, un «átomo gravitatorio», que sigue una ley de Rydberg con un defecto cuántico casi constante, δ ≈ 0.056.</li>
-    <li>En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con lo que parece un cruce evitado con el nivel n = 1, y sale como cuasi-normal con un amortiguamiento muy pequeño (0.58 Hz a ν_a = 3,4 kHz).</li>
+    <li>En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con un cruce evitado con el nivel n = 1 (separación mínima 49 Hz), y sale como cuasi-normal con un amortiguamiento muy pequeño (0.58 Hz a ν_a = 3,4 kHz).</li>
   </ul>
 </section>
 
@@ -221,9 +221,16 @@ a { color: var(--accent); }
   <h3>Cómo cruza el modo F el umbral</h3>
   <p>Al bajar ν_a, el umbral se acerca a F desde arriba, y el nivel n = 1 del átomo gravitatorio baja con él:</p>
   <ul>
-    <li>En <b>ν_a = 3,5 kHz</b> hay dos estados ligados (3.4040 y 3.4544 kHz) con carácter mezclado (0.22 y 0.75 de fluido). Sugiere un cruce evitado entre F y el átomo; para demostrarlo hay que seguir las dos ramas al variar ν_a, y eso no está hecho.</li>
+    <li>En <b>ν_a = 3,5 kHz</b> hay dos estados ligados (3.4040 y 3.4544 kHz) con carácter mezclado (0.22 y 0.75 de fluido): el cruce evitado de la figura siguiente.</li>
     <li>En <b>ν_a = 3,4 kHz</b>, F ya está por encima del umbral, en 3.4103 kHz, con un amortiguamiento de solo 0.58 Hz (fracción fluida 0.97).</li>
   </ul>
+  
+  <figure>
+    <div class="legend"><span><i class="sw s1"></i>carácter fluido (&gt; 50 %)</span><span><i class="sw s2"></i>carácter axiónico</span></div>
+    <svg viewBox="0 0 720 330" role="img" aria-label="Cruce evitado entre F y el nivel n = 1 del átomo gravitatorio"><line class="grid" x1="62" x2="700" y1="281.6" y2="281.6"/><text class="tick" x="54" y="285.6" text-anchor="end">3.35</text><line class="grid" x1="62" x2="700" y1="238.3" y2="238.3"/><text class="tick" x="54" y="242.3" text-anchor="end">3.40</text><line class="grid" x1="62" x2="700" y1="195.0" y2="195.0"/><text class="tick" x="54" y="199.0" text-anchor="end">3.45</text><line class="grid" x1="62" x2="700" y1="151.7" y2="151.7"/><text class="tick" x="54" y="155.7" text-anchor="end">3.50</text><line class="grid" x1="62" x2="700" y1="108.4" y2="108.4"/><text class="tick" x="54" y="112.4" text-anchor="end">3.55</text><line class="grid" x1="62" x2="700" y1="65.1" y2="65.1"/><text class="tick" x="54" y="69.1" text-anchor="end">3.60</text><line class="grid" x1="62" x2="700" y1="21.8" y2="21.8"/><text class="tick" x="54" y="25.8" text-anchor="end">3.65</text><line class="grid" x1="62.0" x2="62.0" y1="16" y2="284"/><text class="tick" x="62.0" y="302" text-anchor="middle">3.45</text><line class="grid" x1="184.7" x2="184.7" y1="16" y2="284"/><text class="tick" x="184.7" y="302" text-anchor="middle">3.50</text><line class="grid" x1="307.4" x2="307.4" y1="16" y2="284"/><text class="tick" x="307.4" y="302" text-anchor="middle">3.55</text><line class="grid" x1="430.1" x2="430.1" y1="16" y2="284"/><text class="tick" x="430.1" y="302" text-anchor="middle">3.60</text><line class="grid" x1="552.8" x2="552.8" y1="16" y2="284"/><text class="tick" x="552.8" y="302" text-anchor="middle">3.65</text><line class="grid" x1="675.5" x2="675.5" y1="16" y2="284"/><text class="tick" x="675.5" y="302" text-anchor="middle">3.70</text><rect class="frame" x="62" y="16" width="638" height="268"/><text class="axlabel" x="381.0" y="322" text-anchor="middle">ν_a (kHz)</text><text class="axlabel" transform="translate(16 150.0) rotate(-90)" text-anchor="middle">ν (kHz)</text><path class="ref-line" d="M62.0,195.0 L569.2,16.0"/><path class="ref-line" d="M86.5,266.7 L135.6,249.5 L184.7,234.8 L198.7,231.1 L212.7,227.7 L226.8,224.5 L233.8,223.1 L240.8,221.6 L254.8,219.0 L268.8,216.5 L282.8,214.3 L356.5,204.9 L430.1,198.2 L552.8,189.8 L675.5,183.4"/><circle class="s1-dot" cx="268.8" cy="216.5" r="5"><title>ν_a = 3.534, ν = 3.42510 kHz</title></circle><circle class="s1-dot" cx="282.8" cy="214.3" r="5"><title>ν_a = 3.540, ν = 3.42769 kHz</title></circle><circle class="s1-dot" cx="356.5" cy="204.9" r="5"><title>ν_a = 3.570, ν = 3.43847 kHz</title></circle><circle class="s1-dot" cx="430.1" cy="198.2" r="5"><title>ν_a = 3.600, ν = 3.44626 kHz</title></circle><circle class="s1-dot" cx="552.8" cy="189.8" r="5"><title>ν_a = 3.650, ν = 3.45597 kHz</title></circle><circle class="s1-dot" cx="675.5" cy="183.4" r="5"><title>ν_a = 3.700, ν = 3.46340 kHz</title></circle><circle class="s2-dot" cx="86.5" cy="266.7" r="5"><title>ν_a = 3.460, ν = 3.36717 kHz</title></circle><circle class="s2-dot" cx="135.6" cy="249.5" r="5"><title>ν_a = 3.480, ν = 3.38703 kHz</title></circle><circle class="s2-dot" cx="184.7" cy="234.8" r="5"><title>ν_a = 3.500, ν = 3.40404 kHz</title></circle><circle class="s2-dot" cx="198.7" cy="231.1" r="5"><title>ν_a = 3.506, ν = 3.40827 kHz</title></circle><circle class="s2-dot" cx="212.7" cy="227.7" r="5"><title>ν_a = 3.511, ν = 3.41220 kHz</title></circle><circle class="s2-dot" cx="226.8" cy="224.5" r="5"><title>ν_a = 3.517, ν = 3.41584 kHz</title></circle><circle class="s2-dot" cx="233.8" cy="223.1" r="5"><title>ν_a = 3.520, ν = 3.41755 kHz</title></circle><circle class="s2-dot" cx="240.8" cy="221.6" r="5"><title>ν_a = 3.523, ν = 3.41919 kHz</title></circle><circle class="s2-dot" cx="254.8" cy="219.0" r="5"><title>ν_a = 3.529, ν = 3.42227 kHz</title></circle><path class="ref-line" d="M86.5,208.2 L135.6,200.4 L184.7,191.2 L198.7,188.1 L212.7,184.9 L226.8,181.5 L233.8,179.7 L240.8,177.9 L254.8,174.1 L268.8,170.2 L282.8,166.1 L356.5,142.9 L430.1,118.1 L552.8,75.8 L675.5,33.3"/><circle class="s1-dot" cx="86.5" cy="208.2" r="5"><title>ν_a = 3.460, ν = 3.43469 kHz</title></circle><circle class="s1-dot" cx="135.6" cy="200.4" r="5"><title>ν_a = 3.480, ν = 3.44374 kHz</title></circle><circle class="s1-dot" cx="184.7" cy="191.2" r="5"><title>ν_a = 3.500, ν = 3.45440 kHz</title></circle><circle class="s1-dot" cx="198.7" cy="188.1" r="5"><title>ν_a = 3.506, ν = 3.45788 kHz</title></circle><circle class="s1-dot" cx="212.7" cy="184.9" r="5"><title>ν_a = 3.511, ν = 3.46159 kHz</title></circle><circle class="s1-dot" cx="226.8" cy="181.5" r="5"><title>ν_a = 3.517, ν = 3.46553 kHz</title></circle><circle class="s1-dot" cx="233.8" cy="179.7" r="5"><title>ν_a = 3.520, ν = 3.46758 kHz</title></circle><circle class="s1-dot" cx="240.8" cy="177.9" r="5"><title>ν_a = 3.523, ν = 3.46968 kHz</title></circle><circle class="s1-dot" cx="254.8" cy="174.1" r="5"><title>ν_a = 3.529, ν = 3.47404 kHz</title></circle><circle class="s2-dot" cx="268.8" cy="170.2" r="5"><title>ν_a = 3.534, ν = 3.47860 kHz</title></circle><circle class="s2-dot" cx="282.8" cy="166.1" r="5"><title>ν_a = 3.540, ν = 3.48333 kHz</title></circle><circle class="s2-dot" cx="356.5" cy="142.9" r="5"><title>ν_a = 3.570, ν = 3.51015 kHz</title></circle><circle class="s2-dot" cx="430.1" cy="118.1" r="5"><title>ν_a = 3.600, ν = 3.53876 kHz</title></circle><circle class="s2-dot" cx="552.8" cy="75.8" r="5"><title>ν_a = 3.650, ν = 3.58760 kHz</title></circle><circle class="s2-dot" cx="675.5" cy="33.3" r="5"><title>ν_a = 3.700, ν = 3.63668 kHz</title></circle><text class="note" x="154.2" y="152.3" text-anchor="end">umbral ν = ν_a</text></svg>
+    <figcaption>Los dos estados ligados más bajos frente a ν_a (paso 19). El color indica el carácter, medido con la fracción fluida. Las ramas no se cortan: la separación mínima es de 49.4 Hz en ν_a = 3.511 kHz, y el carácter pasa de un estado al otro.</figcaption>
+  </figure>
+  <p><b>Es un cruce evitado (paso 19).</b> Seguimos los dos estados ligados más bajos en 15 valores de ν_a, con la malla refinada alrededor del mínimo. La separación nunca baja de 49.4 Hz. El carácter se intercambia de forma continua: a ν_a = 3.46 kHz el inferior es axiónico (0.04 de fluido) y el superior es F (0.93); a 3.70 kHz, al revés (0.89 y 0.07). La mezcla 50/50 está hacia ν_a = 3.534 kHz, algo por encima del mínimo de separación, porque F también se mueve con ν_a. La fracción fluida es un diagnóstico (ver la figura del espectro), no una energía conservada.</p>
   <p>La transición cuasi-normal → ligado de la estrella realista no es un cruce limpio como en el modelo simplificado: el modo fluido atraviesa una escalera densa de estados del axión que se acumula en el umbral.</p>
 
   <h3>Robustez numérica y estabilidad</h3>
@@ -238,10 +245,14 @@ a { color: var(--accent); }
   <ul class="checks"><li class="ok"><span class="pill">OK</span><span>Control positivo sin axión: índice 1 más allá de la masa máxima (p_c = 1000) y 0 antes (p_c = 800) <em>(H18(b))</em></span></li><li class="ok"><span class="pill">OK</span><span>Control positivo con axión (nu_a = 6 kHz, p_c = 1000): índice 1; cambio de signo en el eje imaginario en gamma = 0.58 kHz <em>(H18(c))</em></span></li><li class="ok"><span class="pill">OK</span><span>nu_a = 6.0 kHz: ningún cero de F con |Re nu| &lt;= 12, 0.05 &lt;= Im nu &lt;= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [0, 0], [0, 0]]; 1545 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 1e-14 <em>(H18(a))</em></span></li><li class="ok"><span class="pill">OK</span><span>Robustez (6 kHz, franja central baja): índice 0 con 192 puntos por lado y 0 con eps/2 <em>(H18(d))</em></span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 1: sin quitar el factor e^(i k r_m) y con muestreo grueso, el contorno pierde vueltas (índice 3 en vez de 0)</span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 2: con la rama principal de k también para Re omega &lt; 0, la simetría F(-w*) = F(w)* se rompe (1.0e+00 frente a 1e-14)</span></li><li class="ok"><span class="pill">OK</span><span>nu_a = 3.4 kHz: ningún cero de F con |Re nu| &lt;= 12, 0.05 &lt;= Im nu &lt;= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [1, 0, 0], [0, 0]]; 1950 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 1e-14 <em>(H18(a))</em></span></li></ul>
   <div class="callout">
     <h3>Corrección: un artefacto retirado</h3>
-    <p>La versión anterior de este informe mostraba una «rama axiónica» de resonancias muy amortiguadas en la estrella realista (6,585 − 0,563i kHz y otras casi equiespaciadas). Era un artefacto. Normalizábamos el lapso Φ en la superficie con la masa encerrada allí, sin contar la nube del axión fuera de la estrella (~0,5 % de la masa). Eso dejaba Φ(∞) = 1,6·10⁻³ en vez de 0, y el coeficiente <code>ω² e^(−2Φ)</code> daba un salto en el punto de empalme con la solución exterior. Ese salto refleja parte de la onda y forma una cavidad entre la superficie y el empalme.</p>
-    <p>Con la normalización antigua, la «resonancia» se mueve de 6.585 −0.563i a 6.236 −0.712i kHz al mover el empalme de 117 a 84 km, algo imposible para un modo físico. Con la corrección no queda ninguna raíz en esa región. Eso retira esas resonancias concretas, pero no establece si existe o no una familia física de resonancias axiónicas muy amortiguadas: para eso habría que contar raíces en el semiplano amortiguado, y no lo hemos hecho.</p>
-    <p>La corrección desplaza todas las frecuencias con axión un ~0,16 % y elimina la dependencia del radio de empalme. También mejora el acuerdo con las tablas del Paper II en nuestro paso 9 (el detalle está en el cuaderno de laboratorio). Lo detectó una revisión externa que señaló que la tabla de robustez no respaldaba nuestro «por debajo del 1 %».</p>
+    <p>La versión anterior de este informe mostraba una «rama axiónica» de resonancias muy amortiguadas en la estrella realista (6,585 − 0,563i kHz y otras casi equiespaciadas). Era un artefacto. Normalizábamos el lapso Φ en la superficie con la masa encerrada allí, sin contar la nube del axión fuera de la estrella (0.49 % de la masa). Eso dejaba Φ(∞) = 1,6·10⁻³ en vez de 0, y el coeficiente <code>ω² e^(−2Φ)</code> daba un salto en el punto de empalme con la solución exterior. Ese salto refleja parte de la onda y forma una cavidad entre la superficie y el empalme.</p>
+    <p>Con la normalización antigua, la «resonancia» se mueve de 6.585 −0.563i a 6.236 −0.712i kHz al mover el empalme de 117 a 84 km, algo imposible para un modo físico. Con la corrección no queda ninguna raíz en esa región. Eso retira esas resonancias concretas, pero no establece si existe o no una familia física de resonancias axiónicas muy amortiguadas: para eso hay que contar raíces en el semiplano amortiguado (lo hace el paso 20, más abajo: con la normalización antigua el recuento sube de 2 a 8).</p>
+    <p>La corrección desplaza las frecuencias con axión entre un 0.03 % y un 0.19 % (mediana 0.10 %, en las 36 frecuencias del paso 10) y elimina la dependencia del radio de empalme. También mejora el acuerdo con las tablas del Paper II en nuestro paso 9 (el detalle está en el cuaderno de laboratorio). Lo detectó una revisión externa que señaló que la tabla de robustez no respaldaba nuestro «por debajo del 1 %».</p>
   </div>
+  
+  <h3>¿Hay resonancias axiónicas muy amortiguadas? (paso 20)</h3>
+  <p>Contamos con el principio del argumento los modos en <code>6,05 ≤ Re ν ≤ 12</code> kHz, <code>−1,5 ≤ Im ν &lt; 0</code> (ν_a = 6 kHz), con la condición saliente. Cada pieza del contorno se acepta solo si su índice no cambia al doblar el muestreo. Resultado: <b>2 modos</b>, y son los dos fluidos que encuentra Muller (Re ν = 8.1192 kHz con Im ν = −3.60 Hz, Re ν = 11.6786 kHz con Im ν = −21.70 Hz; fracción fluida 0.97, 0.88). En esa región <b>no hay ninguna familia axiónica</b>.</p>
+  <p>El control positivo comprueba que el recuento ve resonancias muy amortiguadas cuando existen: con la normalización antigua del lapso, el índice sube a 8 (piezas [1, 1, 3, 3]), con las resonancias de cavidad que mostraba la versión anterior. Fuera de esa región (amortiguamientos mayores que 1,5 kHz o frecuencias por encima de 12 kHz) no hemos mirado.</p>
   <div class="callout">
     <h3>Abierto</h3>
     <p>No hemos podido decidir si el amortiguamiento tiende a cero o a un valor finito justo encima del umbral (factor de Sommerfeld del potencial 1/r). Los dos puntos disponibles apuntan a que cae deprisa, pero hace falta un barrido denso en ν_a.</p>
@@ -2693,6 +2704,157 @@ def run():
 
 if __name__ == &#x27;__main__&#x27;:
     run()
+</code></pre></details><details class="src"><summary><code>axion_ns/step19_avoided_crossing.py</code> <span class="small">(70 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 19: ¿cruce evitado entre el modo F y el nivel n = 1 del átomo gravitatorio? (hipótesis H21).
+
+Para cada nu_a de una malla, los dos estados ligados más bajos de la estrella realista (raíces reales de
+radial.det_entire bajo el umbral, que es real y sin polos en el eje real con la rama decreciente) y la fracción
+fluida de cada uno. Cruce evitado = separación con un mínimo &gt; 0 que no baja al refinar + intercambio de carácter.
+&quot;&quot;&quot;
+import json
+import multiprocessing as mp
+from pathlib import Path
+
+import numpy as np
+from scipy.optimize import brentq
+
+from . import axstar as AX
+from . import radial as RD
+from .pipeline import report
+
+OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
+NU_A = [3.46, 3.48, 3.50, 3.52, 3.54, 3.57, 3.60, 3.65, 3.70]
+
+
+def two_lowest(nu_a, lo=3.25, step=0.002):
+    st = AX.Star(nu_a)
+    f = lambda nu: RD.det_entire(st, AX.omega_of(nu)).real
+    grid = np.arange(lo, nu_a - 0.004, step)
+    v = [f(x) for x in grid]
+    roots = []
+    for i in range(len(grid) - 1):
+        if v[i] * v[i + 1] &lt; 0:
+            roots.append(brentq(f, grid[i], grid[i + 1], xtol=1e-9))
+            if len(roots) == 2:
+                break
+    fr = [RD.fluid_fraction(st, AX.omega_of(r)) for r in roots]
+    return {&#x27;nu_a&#x27;: nu_a, &#x27;roots&#x27;: roots, &#x27;fluid&#x27;: fr, &#x27;M&#x27;: st.M}
+
+
+def run(nus=NU_A):
+    with mp.get_context(&#x27;fork&#x27;).Pool(6) as pool:
+        rows = sorted(pool.map(two_lowest, nus), key=lambda r: r[&#x27;nu_a&#x27;])
+    ok_rows = [r for r in rows if len(r[&#x27;roots&#x27;]) == 2]
+    gap = [(r[&#x27;nu_a&#x27;], r[&#x27;roots&#x27;][1] - r[&#x27;roots&#x27;][0]) for r in ok_rows]
+    i = int(np.argmin([g for _, g in gap]))
+    # refinamiento alrededor del mínimo
+    if 0 &lt; i &lt; len(gap) - 1:
+        fine = list(np.linspace(gap[i - 1][0], gap[i + 1][0], 8)[1:-1])
+        with mp.get_context(&#x27;fork&#x27;).Pool(6) as pool:
+            rows = sorted(rows + pool.map(two_lowest, fine), key=lambda r: r[&#x27;nu_a&#x27;])
+        ok_rows = [r for r in rows if len(r[&#x27;roots&#x27;]) == 2]
+        gap = [(r[&#x27;nu_a&#x27;], r[&#x27;roots&#x27;][1] - r[&#x27;roots&#x27;][0]) for r in ok_rows]
+        i = int(np.argmin([g for _, g in gap]))
+    nu_min, g_min = gap[i]
+    interior = 0 &lt; i &lt; len(gap) - 1
+    lo_side, hi_side = ok_rows[0], ok_rows[-1]
+    swap = (lo_side[&#x27;fluid&#x27;][0] &lt; 0.5 &lt; lo_side[&#x27;fluid&#x27;][1]) and (hi_side[&#x27;fluid&#x27;][0] &gt; 0.5 &gt; hi_side[&#x27;fluid&#x27;][1])
+    res = [
+        (f&#x27;H21(a): separación de los dos ligados más bajos con mínimo {1e3 * g_min:.1f} Hz en nu_a = {nu_min:.3f} kHz &#x27;
+         f&#x27;(interior a la malla, refinada; {len(gap)} valores de nu_a)&#x27;, interior and g_min &gt; 0, &#x27;&#x27;),
+        (f&#x27;H21(b): intercambio de carácter: a nu_a = {lo_side[&quot;nu_a&quot;]:.2f} kHz fracción fluida {lo_side[&quot;fluid&quot;][0]:.2f} &#x27;
+         f&#x27;(inferior) y {lo_side[&quot;fluid&quot;][1]:.2f} (superior); a {hi_side[&quot;nu_a&quot;]:.2f} kHz, {hi_side[&quot;fluid&quot;][0]:.2f} y &#x27;
+         f&#x27;{hi_side[&quot;fluid&quot;][1]:.2f}&#x27;, swap, &#x27;&#x27;),
+    ]
+    out = {&#x27;rows&#x27;: rows, &#x27;gap_min_khz&#x27;: g_min, &#x27;nu_a_min&#x27;: nu_min,
+           &#x27;checks&#x27;: [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]}
+    OUT.mkdir(exist_ok=True)
+    (OUT / &#x27;radial_crossing.json&#x27;).write_text(json.dumps(out, indent=1))
+    return report(&#x27;Paso 19: cruce evitado F - átomo gravitatorio&#x27;, res)
+
+
+if __name__ == &#x27;__main__&#x27;:
+    run()
+</code></pre></details><details class="src"><summary><code>axion_ns/step20_damped_count.py</code> <span class="small">(81 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 20: recuento de modos en el semiplano amortiguado de la estrella realista (hipótesis H22).
+
+¿Existe una familia física de resonancias axiónicas muy amortiguadas? Las que mostraba una versión anterior eran
+artefactos del lapso (paso 15, H17), pero eso no prueba que no exista ninguna. Aquí se cuentan los ceros de
+F(omega) = radial.det_entire(inward=False, sheet=1) en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz
+(nu_a = 6 kHz): onda saliente (rama principal, Re k &gt; 0, Im k &lt; 0), semillas integradas hacia fuera (lo estable
+cuando la solución exterior crece) y Psi normalizada en el infinito (analítica, sin polos). Cada índice se acepta
+solo si no cambia al doblar el muestreo.
+Control positivo: con la normalización antigua del lapso, las resonancias de cavidad (artefactos) deben aparecer
+en el recuento.
+&quot;&quot;&quot;
+import json
+import multiprocessing as mp
+from pathlib import Path
+
+import numpy as np
+
+from . import axstar as AX
+from . import radial as RD
+from .pipeline import report
+
+OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
+TILES = [(6.05, 9.0, -0.3, -0.002), (9.0, 12.0, -0.3, -0.002), (6.05, 9.0, -1.5, -0.3), (9.0, 12.0, -1.5, -0.3)]
+_S = {}
+
+
+def _F(nu):
+    return complex(RD.det_entire(_S[&#x27;st&#x27;], AX.omega_of(nu), inward=False, sheet=1))
+
+
+def _corners(b):
+    x0, x1, y0, y1 = b
+    return [complex(x0, y0), complex(x1, y0), complex(x1, y1), complex(x0, y1)]
+
+
+def count(st):
+    _S[&#x27;st&#x27;] = st
+    with mp.get_context(&#x27;fork&#x27;).Pool(6) as pool:
+        w = [RD.winding_converged(_F, _corners(b), pool=pool) for b in TILES]
+    return {&#x27;per_tile&#x27;: [x[0] for x in w], &#x27;tried&#x27;: [x[4] for x in w], &#x27;points&#x27;: sum(x[2] for x in w),
+            &#x27;total&#x27;: sum(x[0] for x in w) if all(x[0] is not None for x in w) else None}
+
+
+def run():
+    res, out = [], {}
+    st = AX.Star(6.0)
+    c = count(st)
+    # los modos fluidos cuasi-normales de la región (semillas: H1 del paso 15 y sus sobretonos sin axión)
+    found = []
+    for seed in (8.119 - 0.0036j, 10.6 - 0.01j, 11.7 - 0.01j):
+        try:
+            z = RD.muller(_F, seed, tol=1e-9)
+            if 6.05 &lt; z.real &lt; 12 and -1.5 &lt; z.imag &lt; -0.002 and all(abs(z - y) &gt; 1e-3 for y in found):
+                found.append(complex(z))
+        except RuntimeError:
+            pass
+    fr = [RD.fluid_fraction(st, AX.omega_of(z)) for z in found]
+    out[&#x27;nu6&#x27;] = {**c, &#x27;fluid_modes&#x27;: [[z.real, z.imag] for z in found], &#x27;fluid_fraction&#x27;: fr}
+    res.append((f&#x27;H22(a): nu_a = 6 kHz, índice {c[&quot;total&quot;]} en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz &#x27;
+                f&#x27;(piezas {c[&quot;per_tile&quot;]}, convergidas {c[&quot;tried&quot;]}); Muller encuentra {len(found)} modos fluidos ahí: &#x27;
+                + &#x27;, &#x27;.join(f&#x27;{z.real:.4f}{z.imag * 1e3:+.2f}i (fluido {f:.2f})&#x27; for z, f in zip(found, fr)),
+                c[&#x27;total&#x27;] == len(found), &#x27;sin ceros adicionales: ninguna familia axiónica en esa región&#x27;))
+    # control positivo: normalización antigua del lapso (Phi ajustado en R con m(R), sin la cola)
+    m_R, Phi_R = st.sol.sol(st.R)[0], st.sol.sol(st.R)[2]
+    Ps_new = st.Phi_shift
+    st._Ps = 0.5 * np.log(1 - 2 * m_R / st.R) - Phi_R
+    M_tot = st.sol.y[0, -1]
+    out[&#x27;lapse&#x27;] = {&#x27;phi_inf_old&#x27;: float(st._Ps - Ps_new), &#x27;tail_mass_frac&#x27;: float((M_tot - m_R) / M_tot)}
+    co = count(st)
+    out[&#x27;old_lapse&#x27;] = co
+    res.append((f&#x27;H22(b), control positivo: con la normalización antigua del lapso el índice sube a {co[&quot;total&quot;]} &#x27;
+                f&#x27;(piezas {co[&quot;per_tile&quot;]}): el recuento ve las resonancias de cavidad&#x27;, co[&#x27;total&#x27;] is not None
+                and c[&#x27;total&#x27;] is not None and co[&#x27;total&#x27;] &gt;= c[&#x27;total&#x27;] + 3, &#x27;&#x27;))
+    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
+    OUT.mkdir(exist_ok=True)
+    (OUT / &#x27;radial_damped.json&#x27;).write_text(json.dumps(out, indent=1))
+    return report(&#x27;Paso 20: recuento en el semiplano amortiguado&#x27;, res)
+
+
+if __name__ == &#x27;__main__&#x27;:
+    run()
 </code></pre></details><details class="src"><summary><code>axion_ns/step2_perturbations.py</code> <span class="small">(59 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 2: perturbaciones radiales lineales y comparación con Ec. (3.3) y (3.7).&quot;&quot;&quot;
 import sympy as sp
 
@@ -2918,7 +3080,7 @@ dependencies = [
     &quot;scipy&gt;=1.18.1&quot;,
     &quot;sympy&gt;=1.14.0&quot;,
 ]
-</code></pre></details><details class="src"><summary><code>report/build_radial.py</code> <span class="small">(584 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Genera report/informe_radial.html (y la copia en results/) desde results/radial_branches.json.
+</code></pre></details><details class="src"><summary><code>report/build_radial.py</code> <span class="small">(634 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Genera report/informe_radial.html (y la copia en results/) desde results/radial_branches.json.
 
 Regla (AGENTS.md §4): ninguna cifra se teclea a mano; todas salen del JSON que escribe
 axion_ns/step14_radial_branches.py.
@@ -3096,6 +3258,10 @@ SP = ROOT / &#x27;results&#x27; / &#x27;radial_star.json&#x27;
 S = json.loads(SP.read_text()) if SP.exists() else None
 STP = ROOT / &#x27;results&#x27; / &#x27;radial_stability.json&#x27;
 STB = json.loads(STP.read_text()) if STP.exists() else None
+CRP = ROOT / &#x27;results&#x27; / &#x27;radial_crossing.json&#x27;
+CRS = json.loads(CRP.read_text()) if CRP.exists() else None
+DMP = ROOT / &#x27;results&#x27; / &#x27;radial_damped.json&#x27;
+DMD = json.loads(DMP.read_text()) if DMP.exists() else None
 RYP = ROOT / &#x27;results&#x27; / &#x27;radial_rydberg.json&#x27;
 RYD = json.loads(RYP.read_text()) if RYP.exists() else None
 VLP = ROOT / &#x27;results&#x27; / &#x27;radial_validation.json&#x27;
@@ -3131,6 +3297,33 @@ if S:
     p4.text(min(lad), 0.8, &#x27;átomo n ≥ 2&#x27;, anchor=&#x27;end&#x27;, dx=-10, dy=4)
     p4.text(s6[&#x27;H1&#x27;][0], -0.8, f&#x27;H1, Im ν = {fnum(s6[&quot;H1&quot;][1] * 1e3, 1)} Hz&#x27;, anchor=&#x27;middle&#x27;, dy=22)
     fig4 = p4.svg(&#x27;Espectro radial a nu_a = 6 kHz&#x27;)
+    # Figura 6: cruce evitado (paso 19)
+    if CRS:
+        rows_ = [r for r in CRS[&#x27;rows&#x27;] if len(r[&#x27;roots&#x27;]) == 2]
+        xa = [r[&#x27;nu_a&#x27;] for r in rows_]
+        ya = [v for r in rows_ for v in r[&#x27;roots&#x27;]]
+        p6 = Plot((min(xa) - 0.01, max(xa) + 0.01), (min(ya) - 0.02, max(ya) + 0.02), h=330)
+        p6.axes([3.45, 3.5, 3.55, 3.6, 3.65, 3.7], [3.35, 3.4, 3.45, 3.5, 3.55, 3.6, 3.65], &#x27;ν_a (kHz)&#x27;, &#x27;ν (kHz)&#x27;,
+                lambda v: fnum(v, 2), lambda v: fnum(v, 2))
+        p6.path([(x, x) for x in (min(xa) - 0.01, max(ya) + 0.02)], &#x27;ref-line&#x27;)
+        for j in (0, 1):
+            p6.path([(r[&#x27;nu_a&#x27;], r[&#x27;roots&#x27;][j]) for r in rows_], &#x27;ref-line&#x27;)
+            for cls, cond in ((&#x27;s1-dot&#x27;, lambda f: f &gt;= 0.5), (&#x27;s2-dot&#x27;, lambda f: f &lt; 0.5)):
+                p6.dots([(r[&#x27;nu_a&#x27;], r[&#x27;roots&#x27;][j]) for r in rows_ if cond(r[&#x27;fluid&#x27;][j])], cls,
+                        lambda x, y: f&#x27;ν_a = {x:.3f}, ν = {y:.5f} kHz&#x27;, r=5)
+        p6.text(min(xa) + 0.03, min(xa) + 0.03, &#x27;umbral ν = ν_a&#x27;, anchor=&#x27;end&#x27;, dx=-6, dy=-8)
+        fig6 = p6.svg(&#x27;Cruce evitado entre F y el nivel n = 1 del átomo gravitatorio&#x27;)
+        gmin, numin = CRS[&#x27;gap_min_khz&#x27;], CRS[&#x27;nu_a_min&#x27;]
+        half = min(rows_, key=lambda r: abs(r[&#x27;fluid&#x27;][0] - 0.5))
+        cross_html = f&#x27;&#x27;&#x27;
+  &lt;figure&gt;
+    &lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;sw s1&quot;&gt;&lt;/i&gt;carácter fluido (&amp;gt; 50 %)&lt;/span&gt;&lt;span&gt;&lt;i class=&quot;sw s2&quot;&gt;&lt;/i&gt;carácter axiónico&lt;/span&gt;&lt;/div&gt;
+    {fig6}
+    &lt;figcaption&gt;Los dos estados ligados más bajos frente a ν_a (paso 19). El color indica el carácter, medido con la fracción fluida. Las ramas no se cortan: la separación mínima es de {1e3 * gmin:.1f} Hz en ν_a = {fnum(numin, 3)} kHz, y el carácter pasa de un estado al otro.&lt;/figcaption&gt;
+  &lt;/figure&gt;
+  &lt;p&gt;&lt;b&gt;Es un cruce evitado (paso 19).&lt;/b&gt; Seguimos los dos estados ligados más bajos en {len(rows_)} valores de ν_a, con la malla refinada alrededor del mínimo. La separación nunca baja de {1e3 * gmin:.1f} Hz. El carácter se intercambia de forma continua: a ν_a = {fnum(rows_[0][&#x27;nu_a&#x27;], 2)} kHz el inferior es axiónico ({rows_[0][&#x27;fluid&#x27;][0]:.2f} de fluido) y el superior es F ({rows_[0][&#x27;fluid&#x27;][1]:.2f}); a {fnum(rows_[-1][&#x27;nu_a&#x27;], 2)} kHz, al revés ({rows_[-1][&#x27;fluid&#x27;][0]:.2f} y {rows_[-1][&#x27;fluid&#x27;][1]:.2f}). La mezcla 50/50 está hacia ν_a = {fnum(half[&#x27;nu_a&#x27;], 3)} kHz, algo por encima del mínimo de separación, porque F también se mueve con ν_a. La fracción fluida es un diagnóstico (ver la figura del espectro), no una energía conservada.&lt;/p&gt;&#x27;&#x27;&#x27;
+    else:
+        cross_html = &#x27;&#x27;
     # Figura 5: escalera hidrogenoide
     ag = s6[&#x27;alpha_g&#x27;]
     p5 = Plot((1.5, 6.5), (1e-4, 1e-2), h=300, ylog=True)
@@ -3199,11 +3392,26 @@ if S:
   &lt;div class=&quot;tbl&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;th&gt;modo&lt;/th&gt;&lt;th&gt;variante&lt;/th&gt;&lt;th&gt;Re ν (kHz)&lt;/th&gt;&lt;th&gt;Im ν (Hz)&lt;/th&gt;&lt;/tr&gt;{rob_rows}&lt;/table&gt;&lt;/div&gt;
 {stab_html}&quot;&quot;&quot; if rob else &#x27;&#x27;)
     art = S.get(&#x27;artifact&#x27;)
+    _o = json.loads((ROOT / &#x27;report&#x27; / &#x27;baseline_v1&#x27; / &#x27;fig_axgr.json&#x27;).read_text())
+    _n = json.loads((ROOT / &#x27;results&#x27; / &#x27;fig_axgr.json&#x27;).read_text())
+    _d = sorted(100 * abs(b / a - 1) for mo, mn in zip(_o[&#x27;modes&#x27;], _n[&#x27;modes&#x27;]) for a, b in zip(mo[&#x27;re&#x27;], mn[&#x27;re&#x27;]))
+    shift_txt = f&quot;entre un {fnum(_d[0], 2)} % y un {fnum(_d[-1], 2)} % (mediana {fnum(_d[len(_d) // 2], 2)} %, en las {len(_d)} frecuencias del paso 10)&quot;
+    lap = DMD[&#x27;lapse&#x27;] if DMD else None
+    if DMD:
+        _fm = DMD[&#x27;nu6&#x27;][&#x27;fluid_modes&#x27;]
+        damped_html = f&#x27;&#x27;&#x27;
+  &lt;h3&gt;¿Hay resonancias axiónicas muy amortiguadas? (paso 20)&lt;/h3&gt;
+  &lt;p&gt;Contamos con el principio del argumento los modos en &lt;code&gt;6,05 ≤ Re ν ≤ 12&lt;/code&gt; kHz, &lt;code&gt;−1,5 ≤ Im ν &amp;lt; 0&lt;/code&gt; (ν_a = 6 kHz), con la condición saliente. Cada pieza del contorno se acepta solo si su índice no cambia al doblar el muestreo. Resultado: &lt;b&gt;{DMD[&#x27;nu6&#x27;][&#x27;total&#x27;]} modos&lt;/b&gt;, y son los dos fluidos que encuentra Muller ({&#x27;, &#x27;.join(f&quot;Re ν = {fnum(z[0], 4)} kHz con Im ν = {fnum(z[1] * 1e3, 2)} Hz&quot; for z in _fm)}; fracción fluida {&#x27;, &#x27;.join(fnum(f, 2) for f in DMD[&#x27;nu6&#x27;][&#x27;fluid_fraction&#x27;])}). En esa región &lt;b&gt;no hay ninguna familia axiónica&lt;/b&gt;.&lt;/p&gt;
+  &lt;p&gt;El control positivo comprueba que el recuento ve resonancias muy amortiguadas cuando existen: con la normalización antigua del lapso, el índice sube a {DMD[&#x27;old_lapse&#x27;][&#x27;total&#x27;]} (piezas {DMD[&#x27;old_lapse&#x27;][&#x27;per_tile&#x27;]}), con las resonancias de cavidad que mostraba la versión anterior. Fuera de esa región (amortiguamientos mayores que 1,5 kHz o frecuencias por encima de 12 kHz) no hemos mirado.&lt;/p&gt;&#x27;&#x27;&#x27;
+    else:
+        damped_html = &#x27;&#x27;
+    tail_txt = f&quot;{fnum(100 * lap[&#x27;tail_mass_frac&#x27;], 2)} % de la masa&quot; if lap else &quot;una fracción pequeña de la masa&quot;
+    phi_txt = sci(lap[&#x27;phi_inf_old&#x27;], 1) if lap else &quot;un valor distinto de 0&quot;
     art_html = (f&quot;&quot;&quot;&lt;div class=&quot;callout&quot;&gt;
     &lt;h3&gt;Corrección: un artefacto retirado&lt;/h3&gt;
-    &lt;p&gt;La versión anterior de este informe mostraba una «rama axiónica» de resonancias muy amortiguadas en la estrella realista (6,585 − 0,563i kHz y otras casi equiespaciadas). Era un artefacto. Normalizábamos el lapso Φ en la superficie con la masa encerrada allí, sin contar la nube del axión fuera de la estrella (~0,5 % de la masa). Eso dejaba Φ(∞) = 1,6·10⁻³ en vez de 0, y el coeficiente &lt;code&gt;ω² e^(−2Φ)&lt;/code&gt; daba un salto en el punto de empalme con la solución exterior. Ese salto refleja parte de la onda y forma una cavidad entre la superficie y el empalme.&lt;/p&gt;
-    &lt;p&gt;Con la normalización antigua, la «resonancia» se mueve de {fnum(art[&#x27;old_rm&#x27;][0], 3)} {fnum(art[&#x27;old_rm&#x27;][1], 3)}i a {fnum(art[&#x27;old_r84&#x27;][0], 3)} {fnum(art[&#x27;old_r84&#x27;][1], 3)}i kHz al mover el empalme de {fnum(art[&#x27;rm&#x27;], 0)} a {fnum(art[&#x27;r84&#x27;], 0)} km, algo imposible para un modo físico. Con la corrección no queda ninguna raíz en esa región. Eso retira esas resonancias concretas, pero no establece si existe o no una familia física de resonancias axiónicas muy amortiguadas: para eso habría que contar raíces en el semiplano amortiguado, y no lo hemos hecho.&lt;/p&gt;
-    &lt;p&gt;La corrección desplaza todas las frecuencias con axión un ~0,16 % y elimina la dependencia del radio de empalme. También mejora el acuerdo con las tablas del Paper II en nuestro paso 9 (el detalle está en el cuaderno de laboratorio). Lo detectó una revisión externa que señaló que la tabla de robustez no respaldaba nuestro «por debajo del 1 %».&lt;/p&gt;
+    &lt;p&gt;La versión anterior de este informe mostraba una «rama axiónica» de resonancias muy amortiguadas en la estrella realista (6,585 − 0,563i kHz y otras casi equiespaciadas). Era un artefacto. Normalizábamos el lapso Φ en la superficie con la masa encerrada allí, sin contar la nube del axión fuera de la estrella ({tail_txt}). Eso dejaba Φ(∞) = {phi_txt} en vez de 0, y el coeficiente &lt;code&gt;ω² e^(−2Φ)&lt;/code&gt; daba un salto en el punto de empalme con la solución exterior. Ese salto refleja parte de la onda y forma una cavidad entre la superficie y el empalme.&lt;/p&gt;
+    &lt;p&gt;Con la normalización antigua, la «resonancia» se mueve de {fnum(art[&#x27;old_rm&#x27;][0], 3)} {fnum(art[&#x27;old_rm&#x27;][1], 3)}i a {fnum(art[&#x27;old_r84&#x27;][0], 3)} {fnum(art[&#x27;old_r84&#x27;][1], 3)}i kHz al mover el empalme de {fnum(art[&#x27;rm&#x27;], 0)} a {fnum(art[&#x27;r84&#x27;], 0)} km, algo imposible para un modo físico. Con la corrección no queda ninguna raíz en esa región. Eso retira esas resonancias concretas, pero no establece si existe o no una familia física de resonancias axiónicas muy amortiguadas: para eso hay que contar raíces en el semiplano amortiguado{(f&quot; (lo hace el paso 20, más abajo: con la normalización antigua el recuento sube de {DMD[&#x27;nu6&#x27;][&#x27;total&#x27;]} a {DMD[&#x27;old_lapse&#x27;][&#x27;total&#x27;]})&quot;) if DMD else &quot;, y no lo hemos hecho&quot;}.&lt;/p&gt;
+    &lt;p&gt;La corrección desplaza las frecuencias con axión {shift_txt} y elimina la dependencia del radio de empalme. También mejora el acuerdo con las tablas del Paper II en nuestro paso 9 (el detalle está en el cuaderno de laboratorio). Lo detectó una revisión externa que señaló que la tabla de robustez no respaldaba nuestro «por debajo del 1 %».&lt;/p&gt;
   &lt;/div&gt;&quot;&quot;&quot; if art else &#x27;&#x27;)
     star_html = f&quot;&quot;&quot;
 &lt;section&gt;
@@ -3236,12 +3444,14 @@ if S:
   &lt;h3&gt;Cómo cruza el modo F el umbral&lt;/h3&gt;
   &lt;p&gt;Al bajar ν_a, el umbral se acerca a F desde arriba, y el nivel n = 1 del átomo gravitatorio baja con él:&lt;/p&gt;
   &lt;ul&gt;
-    &lt;li&gt;En &lt;b&gt;ν_a = 3,5 kHz&lt;/b&gt; hay dos estados ligados ({fnum(n35[&#x27;bound&#x27;][0], 4)} y {fnum(n35[&#x27;bound&#x27;][1], 4)} kHz) con carácter mezclado ({fnum(n35[&#x27;fluid&#x27;][0], 2)} y {fnum(n35[&#x27;fluid&#x27;][1], 2)} de fluido). Sugiere un cruce evitado entre F y el átomo; para demostrarlo hay que seguir las dos ramas al variar ν_a, y eso no está hecho.&lt;/li&gt;
+    &lt;li&gt;En &lt;b&gt;ν_a = 3,5 kHz&lt;/b&gt; hay dos estados ligados ({fnum(n35[&#x27;bound&#x27;][0], 4)} y {fnum(n35[&#x27;bound&#x27;][1], 4)} kHz) con carácter mezclado ({fnum(n35[&#x27;fluid&#x27;][0], 2)} y {fnum(n35[&#x27;fluid&#x27;][1], 2)} de fluido){&#x27;: el cruce evitado de la figura siguiente&#x27; if CRS else &#x27;. Sugiere un cruce evitado; falta seguir las ramas&#x27;}.&lt;/li&gt;
     &lt;li&gt;En &lt;b&gt;ν_a = 3,4 kHz&lt;/b&gt;, F ya está por encima del umbral, en {fnum(n34[&#x27;F&#x27;][0], 4)} kHz, con un amortiguamiento de solo {fnum(-n34[&#x27;F&#x27;][1] * 1e3, 2)} Hz (fracción fluida {fnum(n34[&#x27;fluid&#x27;], 2)}).&lt;/li&gt;
   &lt;/ul&gt;
+  {cross_html}
   &lt;p&gt;La transición cuasi-normal → ligado de la estrella realista no es un cruce limpio como en el modelo simplificado: el modo fluido atraviesa una escalera densa de estados del axión que se acumula en el umbral.&lt;/p&gt;
 {rob_html}
   {art_html}
+  {damped_html}
   &lt;div class=&quot;callout&quot;&gt;
     &lt;h3&gt;Abierto&lt;/h3&gt;
     &lt;p&gt;No hemos podido decidir si el amortiguamiento tiende a cero o a un valor finito justo encima del umbral (factor de Sommerfeld del potencial 1/r). Los dos puntos disponibles apuntan a que cae deprisa, pero hace falta un barrido denso en ν_a.&lt;/p&gt;
@@ -3254,7 +3464,7 @@ if S:
     star_summary = f&quot;&quot;&quot;
     {val_li}
     &lt;li&gt;&lt;b&gt;Estrella realista&lt;/b&gt; (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua {fnum(-s6[&#x27;H1&#x27;][1] * 1e3, 1)} Hz. Justo bajo el umbral aparece una escalera de estados ligados del axión, un «átomo gravitatorio»{(f&quot;, que sigue una ley de Rydberg con un defecto cuántico casi constante, δ ≈ {RYD[&#x27;ritz&#x27;][&#x27;delta0&#x27;]:.3f}&quot; if RYD else &quot;&quot;)}.&lt;/li&gt;
-    &lt;li&gt;En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con lo que parece un cruce evitado con el nivel n = 1, y sale como cuasi-normal con un amortiguamiento muy pequeño ({fnum(-n34[&#x27;F&#x27;][1] * 1e3, 2)} Hz a ν_a = 3,4 kHz).&lt;/li&gt;&quot;&quot;&quot;
+    &lt;li&gt;En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con un cruce evitado con el nivel n = 1{f&quot; (separación mínima {1e3 * CRS[&#x27;gap_min_khz&#x27;]:.0f} Hz)&quot; if CRS else &quot;&quot;}, y sale como cuasi-normal con un amortiguamiento muy pequeño ({fnum(-n34[&#x27;F&#x27;][1] * 1e3, 2)} Hz a ν_a = 3,4 kHz).&lt;/li&gt;&quot;&quot;&quot;
 else:
     star_html = None
     star_summary = &#x27;&#x27;
@@ -3275,11 +3485,13 @@ import shutil
 FILES = [&#x27;axion_ns/model.py&#x27;, &#x27;axion_ns/geometry.py&#x27;, &#x27;axion_ns/compare.py&#x27;, &#x27;axion_ns/pipeline.py&#x27;, &#x27;axion_ns/nonradial.py&#x27;,
          &#x27;axion_ns/fullgr.py&#x27;, &#x27;axion_ns/bsk26.py&#x27;, &#x27;axion_ns/axstar.py&#x27;, &#x27;axion_ns/axgr.py&#x27;, &#x27;axion_ns/radial.py&#x27;,
          &#x27;axion_ns/step2_perturbations.py&#x27;, &#x27;axion_ns/step4_numerics.py&#x27;, &#x27;axion_ns/step14_radial_branches.py&#x27;,
-         &#x27;axion_ns/step15_radial_star.py&#x27;, &#x27;axion_ns/step16_radial_stability.py&#x27;, &#x27;axion_ns/step17_radial_validation.py&#x27;, &#x27;axion_ns/step18_rydberg.py&#x27;,
+         &#x27;axion_ns/step15_radial_star.py&#x27;, &#x27;axion_ns/step16_radial_stability.py&#x27;, &#x27;axion_ns/step17_radial_validation.py&#x27;, &#x27;axion_ns/step18_rydberg.py&#x27;, &#x27;axion_ns/step19_avoided_crossing.py&#x27;,
+         &#x27;axion_ns/step20_damped_count.py&#x27;,
          &#x27;report/build_radial.py&#x27;,
          &#x27;pyproject.toml&#x27;, &#x27;uv.lock&#x27;]
 DATA = [&#x27;results/radial_branches.json&#x27;, &#x27;results/radial_star.json&#x27;, &#x27;results/radial_stability.json&#x27;,
-        &#x27;results/radial_validation.json&#x27;, &#x27;results/radial_rydberg.json&#x27;]
+        &#x27;results/radial_validation.json&#x27;, &#x27;results/radial_rydberg.json&#x27;,
+        &#x27;results/radial_crossing.json&#x27;, &#x27;results/radial_damped.json&#x27;]
 FD = ROOT / &#x27;report&#x27; / &#x27;radial_files&#x27;
 FD.mkdir(exist_ok=True)
 published = {}
@@ -5064,6 +5276,290 @@ print(&#x27;informe_radial.html:&#x27;, len(page) // 1024, &#x27;KB;&#x27;, n_ok
    &quot;box&quot;: &quot;inestable, x0 = 0.6&quot;,
    &quot;count&quot;: 1.0,
    &quot;expected&quot;: 1
+  }
+ ]
+}</code></pre></details><details class="src"><summary><code>results/radial_crossing.json</code> <span class="small">(198 líneas)</span></summary><pre class="code"><code>{
+ &quot;rows&quot;: [
+  {
+   &quot;nu_a&quot;: 3.46,
+   &quot;roots&quot;: [
+    3.367173154560057,
+    3.434694004030983
+   ],
+   &quot;fluid&quot;: [
+    0.035066620443024145,
+    0.9301195699728526
+   ],
+   &quot;M&quot;: 2.097205851370285
+  },
+  {
+   &quot;nu_a&quot;: 3.48,
+   &quot;roots&quot;: [
+    3.387034745236262,
+    3.4437410551779744
+   ],
+   &quot;fluid&quot;: [
+    0.09843509017733999,
+    0.8753982645757773
+   ],
+   &quot;M&quot;: 2.0969238688884193
+  },
+  {
+   &quot;nu_a&quot;: 3.5,
+   &quot;roots&quot;: [
+    3.404036880172732,
+    3.454399551334509
+   ],
+   &quot;fluid&quot;: [
+    0.2176037236983594,
+    0.7548547020402088
+   ],
+   &quot;M&quot;: 2.0967369165424006
+  },
+  {
+   &quot;nu_a&quot;: 3.505714285714286,
+   &quot;roots&quot;: [
+    3.4082683402979184,
+    3.457884702747409
+   ],
+   &quot;fluid&quot;: [
+    0.26242867821135807,
+    0.7129480788547067
+   ],
+   &quot;M&quot;: 2.0966999035313387
+  },
+  {
+   &quot;nu_a&quot;: 3.5114285714285716,
+   &quot;roots&quot;: [
+    3.4122029924906774,
+    3.461592372147897
+   ],
+   &quot;fluid&quot;: [
+    0.30985710410328987,
+    0.6641338302856632
+   ],
+   &quot;M&quot;: 2.096669872787558
+  },
+  {
+   &quot;nu_a&quot;: 3.5171428571428573,
+   &quot;roots&quot;: [
+    3.4158414696435604,
+    3.4655258548529897
+   ],
+   &quot;fluid&quot;: [
+    0.3592666832143849,
+    0.6160669740457246
+   ],
+   &quot;M&quot;: 2.096646662037896
+  },
+  {
+   &quot;nu_a&quot;: 3.52,
+   &quot;roots&quot;: [
+    3.417551949491696,
+    3.4675761009330817
+   ],
+   &quot;fluid&quot;: [
+    0.3837537714705976,
+    0.5895854892255024
+   ],
+   &quot;M&quot;: 2.096637564347142
+  },
+  {
+   &quot;nu_a&quot;: 3.5228571428571427,
+   &quot;roots&quot;: [
+    3.419192065122672,
+    3.46968044171856
+   ],
+   &quot;fluid&quot;: [
+    0.40820104979843364,
+    0.5642028410139833
+   ],
+   &quot;M&quot;: 2.0966301122929965
+  },
+  {
+   &quot;nu_a&quot;: 3.5285714285714285,
+   &quot;roots&quot;: [
+    3.422269921008748,
+    3.4740443053842163
+   ],
+   &quot;fluid&quot;: [
+    0.4556405896786404,
+    0.5129108081068624
+   ],
+   &quot;M&quot;: 2.096620067822837
+  },
+  {
+   &quot;nu_a&quot;: 3.5342857142857143,
+   &quot;roots&quot;: [
+    3.425095277478834,
+    3.478600255079206
+   ],
+   &quot;fluid&quot;: [
+    0.5012748192494552,
+    0.46961160064300567
+   ],
+   &quot;M&quot;: 2.0966163760900933
+  },
+  {
+   &quot;nu_a&quot;: 3.54,
+   &quot;roots&quot;: [
+    3.427691373310983,
+    3.483327906480444
+   ],
+   &quot;fluid&quot;: [
+    0.5427544065432031,
+    0.42374510047603253
+   ],
+   &quot;M&quot;: 2.096618887733779
+  },
+  {
+   &quot;nu_a&quot;: 3.57,
+   &quot;roots&quot;: [
+    3.438470301647793,
+    3.5101519072917484
+   ],
+   &quot;fluid&quot;: [
+    0.7020307134395483,
+    0.25661189051119493
+   ],
+   &quot;M&quot;: 2.0967281766818013
+  },
+  {
+   &quot;nu_a&quot;: 3.6,
+   &quot;roots&quot;: [
+    3.4462597264260872,
+    3.538755726982252
+   ],
+   &quot;fluid&quot;: [
+    0.7867111600988704,
+    0.1686572362453465
+   ],
+   &quot;M&quot;: 2.096984778213299
+  },
+  {
+   &quot;nu_a&quot;: 3.65,
+   &quot;roots&quot;: [
+    3.4559673132626747,
+    3.5876009254353436
+   ],
+   &quot;fluid&quot;: [
+    0.85425613176287,
+    0.09942802172867375
+   ],
+   &quot;M&quot;: 2.097692659350431
+  },
+  {
+   &quot;nu_a&quot;: 3.7,
+   &quot;roots&quot;: [
+    3.463401928544348,
+    3.6366781244634745
+   ],
+   &quot;fluid&quot;: [
+    0.8862703729061886,
+    0.06717077606159592
+   ],
+   &quot;M&quot;: 2.0986911490873177
+  }
+ ],
+ &quot;gap_min_khz&quot;: 0.04938937965721957,
+ &quot;nu_a_min&quot;: 3.5114285714285716,
+ &quot;checks&quot;: [
+  {
+   &quot;name&quot;: &quot;H21(a): separaci\u00f3n de los dos ligados m\u00e1s bajos con m\u00ednimo 49.4 Hz en nu_a = 3.511 kHz (interior a la malla, refinada; 15 valores de nu_a)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
+  },
+  {
+   &quot;name&quot;: &quot;H21(b): intercambio de car\u00e1cter: a nu_a = 3.46 kHz fracci\u00f3n fluida 0.04 (inferior) y 0.93 (superior); a 3.70 kHz, 0.89 y 0.07&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
+  }
+ ]
+}</code></pre></details><details class="src"><summary><code>results/radial_damped.json</code> <span class="small">(88 líneas)</span></summary><pre class="code"><code>{
+ &quot;nu6&quot;: {
+  &quot;per_tile&quot;: [
+   1,
+   1,
+   0,
+   0
+  ],
+  &quot;tried&quot;: [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  &quot;points&quot;: 1542,
+  &quot;total&quot;: 2,
+  &quot;fluid_modes&quot;: [
+   [
+    8.119208560535224,
+    -0.0036022951762564844
+   ],
+   [
+    11.678582442957348,
+    -0.021698874475199526
+   ]
+  ],
+  &quot;fluid_fraction&quot;: [
+   0.9729218057823246,
+   0.879037707074947
+  ]
+ },
+ &quot;lapse&quot;: {
+  &quot;phi_inf_old&quot;: 0.0016128417713554555,
+  &quot;tail_mass_frac&quot;: 0.0048506092429300065
+ },
+ &quot;old_lapse&quot;: {
+  &quot;per_tile&quot;: [
+   1,
+   1,
+   3,
+   3
+  ],
+  &quot;tried&quot;: [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  &quot;points&quot;: 1542,
+  &quot;total&quot;: 8
+ },
+ &quot;checks&quot;: [
+  {
+   &quot;name&quot;: &quot;H22(a): nu_a = 6 kHz, \u00edndice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ah\u00ed: 8.1192-3.60i (fluido 0.97), 11.6786-21.70i (fluido 0.88)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;sin ceros adicionales: ninguna familia axi\u00f3nica en esa regi\u00f3n&quot;
+  },
+  {
+   &quot;name&quot;: &quot;H22(b), control positivo: con la normalizaci\u00f3n antigua del lapso el \u00edndice sube a 8 (piezas [1, 1, 3, 3]): el recuento ve las resonancias de cavidad&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
   }
  ]
 }</code></pre></details><details class="src"><summary><code>results/radial_rydberg.json</code> <span class="small">(65 líneas)</span></summary><pre class="code"><code>{

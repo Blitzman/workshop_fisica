@@ -16,6 +16,8 @@
  "radial_files/axion_ns__step16_radial_stability.py.txt": "report/radial_files/axion_ns__step16_radial_stability.py.txt",
  "radial_files/axion_ns__step17_radial_validation.py.txt": "report/radial_files/axion_ns__step17_radial_validation.py.txt",
  "radial_files/axion_ns__step18_rydberg.py.txt": "report/radial_files/axion_ns__step18_rydberg.py.txt",
+ "radial_files/axion_ns__step19_avoided_crossing.py.txt": "report/radial_files/axion_ns__step19_avoided_crossing.py.txt",
+ "radial_files/axion_ns__step20_damped_count.py.txt": "report/radial_files/axion_ns__step20_damped_count.py.txt",
  "radial_files/report__build_radial.py.txt": "report/radial_files/report__build_radial.py.txt",
  "radial_files/pyproject.toml.txt": "report/radial_files/pyproject.toml.txt",
  "radial_files/uv.lock.txt": "report/radial_files/uv.lock.txt",
@@ -23,5 +25,7 @@
  "radial_files/results__radial_star.json": "report/radial_files/results__radial_star.json",
  "radial_files/results__radial_stability.json": "report/radial_files/results__radial_stability.json",
  "radial_files/results__radial_validation.json": "report/radial_files/results__radial_validation.json",
- "radial_files/results__radial_rydberg.json": "report/radial_files/results__radial_rydberg.json"
+ "radial_files/results__radial_rydberg.json": "report/radial_files/results__radial_rydberg.json",
+ "radial_files/results__radial_crossing.json": "report/radial_files/results__radial_crossing.json",
+ "radial_files/results__radial_damped.json": "report/radial_files/results__radial_damped.json"
 }
