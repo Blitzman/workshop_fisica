@@ -174,6 +174,8 @@ SP = ROOT / 'results' / 'radial_star.json'
 S = json.loads(SP.read_text()) if SP.exists() else None
 STP = ROOT / 'results' / 'radial_stability.json'
 STB = json.loads(STP.read_text()) if STP.exists() else None
+RYP = ROOT / 'results' / 'radial_rydberg.json'
+RYD = json.loads(RYP.read_text()) if RYP.exists() else None
 VLP = ROOT / 'results' / 'radial_validation.json'
 VAL = json.loads(VLP.read_text()) if VLP.exists() else None
 if VAL:
@@ -217,7 +219,25 @@ if S:
             lambda x, y: f'n = {round(x)}: 1 − ν/ν_a = {y:.3e}', r=5)
     p5.text(2.6, ag**2 / (2 * 2.6**2), f'α_g²/(2n²), α_g = {fnum(ag, 4)}', dx=8, dy=-8)
     fig5 = p5.svg('Niveles del átomo gravitatorio frente a la ley hidrogenoide')
-    lad_rows = ''.join(f'<tr><td>{l["n"]}</td><td>{l["nu"]:.6f}</td><td>{l["n_eff"]:.3f}</td></tr>' for l in s6['ladder'])
+    if RYD:
+        lad_rows = ''.join(f'<tr><td>{l["n"]}</td><td>{l["nu"]:.6f}</td><td>{l["n_eff"]:.4f}</td><td>{l["n"] - (RYD["n"][i] - RYD["n_minus_kappa"][i]):.4f}</td></tr>'
+                           for i, l in enumerate(s6['ladder']))
+        lad_head = '<tr><th>n</th><th>ν (kHz)</th><th>n_eff = α_g/√(2(1 − ν/ν_a))</th><th>n − κ (Whittaker)</th></tr>'
+        rz = RYD['ritz']
+        nk = RYD['n_minus_kappa']
+        ryd_html = (f'<p><b>Una ley de Rydberg, no hidrogenoide pura (paso 18).</b> Con la fórmula no relativista, <code>n − n_eff</code> '
+                    f'parecía crecer con n (de {min(RYD["n_minus_neff"]):+.3f} a {max(RYD["n_minus_neff"]):+.3f}). Pero la ecuación exterior, '
+                    f'reducida a la de Whittaker en el paso 5 (Ec. A14 de la secuela), tiene su propio parámetro de Coulomb relativista, '
+                    f'<code>κ = α_g(1 − 2q²)/q</code>, con <code>q² = 1 − (ν/ν_a)²</code>. Con él, <code>n − κ</code> es constante: '
+                    f'{", ".join(f"{v:.4f}" for v in nk)}, dentro de {max(nk) - min(nk):.4f}, sin ajustar nada. Es un <b>defecto cuántico</b>, '
+                    f'como en los átomos alcalinos: la región interior (la estrella y el campo fuerte) añade un desfase que no depende de la '
+                    f'energía. Con la corrección de Ritz, <code>δ_n = δ₀ + δ₂/(n − δ₀)²</code>, sale δ₀ = {rz["delta0"]:.4f} y '
+                    f'δ₂ = {rz["delta2"]:.4f}, con un residuo de {rz["resid"]:.0e}. Para l = 0, el término 1/r² del desarrollo asintótico es '
+                    f'supercrítico, así que δ no sale de ese desarrollo: lo fija el interior.</p>')
+    else:
+        lad_rows = ''.join(f'<tr><td>{l["n"]}</td><td>{l["nu"]:.6f}</td><td>{l["n_eff"]:.3f}</td></tr>' for l in s6['ladder'])
+        lad_head = '<tr><th>n</th><th>ν (kHz)</th><th>n_eff = α_g/√(2(1 − ν/ν_a))</th></tr>'
+        ryd_html = ''
     t = S['turning']
     n35, n34 = S['nu35'], S['nu34']
     st_checks = S.get('checks', [])
@@ -289,7 +309,8 @@ if S:
     {fig5}
     <figcaption>Energía de ligadura de los niveles axiónicos frente a la ley hidrogenoide <code>α_g²/(2n²)</code>, con <code>α_g = GMm_a</code> (sin ajuste). El nivel n = 1, cuya órbita se solapa con la estrella, se desvía; se trata en el cuaderno.</figcaption>
   </figure>
-  <div class="tbl"><table><tr><th>n</th><th>ν (kHz)</th><th>n_eff = α_g/√(2(1 − ν/ν_a))</th></tr>{lad_rows}</table></div>
+  <div class="tbl"><table>{lad_head}{lad_rows}</table></div>
+  {ryd_html}
   <h3>Cómo cruza el modo F el umbral</h3>
   <p>Al bajar ν_a, el umbral se acerca a F desde arriba, y el nivel n = 1 del átomo gravitatorio baja con él:</p>
   <ul>
@@ -310,7 +331,7 @@ if S:
               f"{max(abs(v) for v in VAL['dev_font_pct'].values()):.2f} %, dentro del redondeo de sus cifras.</li>") if VAL else ''
     star_summary = f"""
     {val_li}
-    <li><b>Estrella realista</b> (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua {fnum(-s6['H1'][1] * 1e3, 1)} Hz. Justo bajo el umbral aparece una escalera de estados ligados del axión que sigue la ley hidrogenoide, con <code>n_eff</code> = {', '.join(f"{l['n_eff']:.2f}" for l in s6['ladder'])}: un «átomo gravitatorio».</li>
+    <li><b>Estrella realista</b> (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua {fnum(-s6['H1'][1] * 1e3, 1)} Hz. Justo bajo el umbral aparece una escalera de estados ligados del axión, un «átomo gravitatorio»{(f", que sigue una ley de Rydberg con defecto cuántico constante, δ = {RYD['ritz']['delta0']:.3f}" if RYD else "")}.</li>
     <li>En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con un cruce evitado con el nivel n = 1, y sale como cuasi-normal con un amortiguamiento muy pequeño ({fnum(-n34['F'][1] * 1e3, 2)} Hz a ν_a = 3,4 kHz).</li>"""
 else:
     star_html = None
@@ -332,11 +353,11 @@ import shutil
 FILES = ['axion_ns/model.py', 'axion_ns/geometry.py', 'axion_ns/compare.py', 'axion_ns/pipeline.py', 'axion_ns/nonradial.py',
          'axion_ns/fullgr.py', 'axion_ns/bsk26.py', 'axion_ns/axstar.py', 'axion_ns/axgr.py', 'axion_ns/radial.py',
          'axion_ns/step2_perturbations.py', 'axion_ns/step4_numerics.py', 'axion_ns/step14_radial_branches.py',
-         'axion_ns/step15_radial_star.py', 'axion_ns/step16_radial_stability.py', 'axion_ns/step17_radial_validation.py',
+         'axion_ns/step15_radial_star.py', 'axion_ns/step16_radial_stability.py', 'axion_ns/step17_radial_validation.py', 'axion_ns/step18_rydberg.py',
          'report/build_radial.py',
          'pyproject.toml', 'uv.lock']
 DATA = ['results/radial_branches.json', 'results/radial_star.json', 'results/radial_stability.json',
-        'results/radial_validation.json']
+        'results/radial_validation.json', 'results/radial_rydberg.json']
 FD = ROOT / 'report' / 'radial_files'
 FD.mkdir(exist_ok=True)
 published = {}

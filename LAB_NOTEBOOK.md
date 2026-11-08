@@ -145,7 +145,7 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
     - El «~18 %» de variación de Im k estaba tecleado a mano; el valor real es 19 %. Ahora se calcula.
     - La fracción fluida queda descrita como diagnóstico, no como energía conservada: para un modo cuasi-normal depende del corte en r_m.
     - El principio del argumento para la estrella realista, que reclamaban las tres revisiones, ya está hecho: H18 y paso 16. Sigue pendiente una comprobación independiente de las ecuaciones radiales en GR (por ejemplo, frente a un código publicado de modos radiales sin axión, más allá del punto de retorno).
-    - El defecto cuántico negativo de la escalera (n_eff = 5,967 en n = 6) sigue sin explicar.
+    - El defecto cuántico de la escalera ya está explicado (H20, paso 18): es una ley de Rydberg con δ ≈ 0,056.
     - En `build_radial.py` quedan cifras tecleadas en el recuadro de la corrección (~0,16 %, ~0,5 %, 1,6·10⁻³). Para el informe radial faltan además: la estabilidad con el principio del argumento en el semiplano superior (crítica A), el barrido denso en el umbral (D), redactar como «no detectamos inestabilidades» y no como «es estable», y separar mejor lo demostrado de lo que es hipótesis.
   - `axstar.Phi_shift` ajusta Φ a Schwarzschild en R con `m(R)`, pero la cola del condensado fuera de la estrella lleva un 0,5 % de la masa. Lejos, `Φ − ½ ln(1 − 2M_t/r) = +1,6·10⁻³` (a 6 y a 3,4 kHz), en vez de 0.
   - *Predicción:* normalizando con `M_t` al final de la integración del fondo, (i) la dependencia de `Im ν` con el radio de empalme cae a ≲0,1 % y (ii) todas las frecuencias con axión se desplazan ~0,16 %.
@@ -194,6 +194,21 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
     - (c) Frente a Garching: F −1,06 % y H1 −0,43 %. Coincidimos con el cálculo de perturbaciones, no con esa tabla.
     - Controles negativos: Γ₁ = 2,1 mueve F un +12,2 %, y ε = ρ un −8,6 %.
   - *Qué valida y qué no:* valida el sistema radial en GR derivado desde la acción (`radial.interior`: ξ, Δp, δλ y δΦ), su paso a números y las condiciones en el centro y en la superficie, con el axión apagado. No valida los términos del axión ni el empalme exterior con la cola del condensado, que no tienen referencia publicada. Eso sigue siendo lo que el grupo debería revisar.
+
+- **[H20 · CONFIRMADA] El «defecto cuántico» de la escalera del átomo gravitatorio (ν_a = 6 kHz, paso 15).**
+  - *Observación:* n − n_eff = −0,012; 0,010; 0,021; 0,028; 0,033 para n = 2…6, con `n_eff = α_g/√(2(1 − ν/ν_a))`, la fórmula hidrogenoide no relativista.
+  - *Hipótesis:* la dependencia en n es un artefacto de esa fórmula. El parámetro de la ecuación de Whittaker exterior, ya derivado y verificado en el paso 5 (Ec. A14), es `κ = α(1 − 2q²)/q`, con `q² = 1 − x²` y `x = ν/ν_a`. Con κ, los niveles siguen una ley de Rydberg `κ_n = n − δ` con δ casi constante. El desfase δ lo fija la región interior (la estrella y el campo fuerte); para l = 0 el término 1/r² del desarrollo es supercrítico (μ_W² = ¼ − 8α² < 0), así que no lo da el desarrollo asintótico.
+  - *Predicción:*
+    - (a) n − κ_n es constante dentro de ±0,005 para n = 2…6. Hecha a mano con los n_eff: ≈ 0,057.
+    - (b) Lo que queda sigue Rydberg–Ritz: `δ_n = δ₀ + δ₂/(n − δ₀)²`, con |δ₂| pequeño.
+  - *Contraste:* con n_eff, la misma prueba de constancia falla (rango de 0,045).
+  - *No se ajusta nada:* α_g y ν_n salen de `results/radial_star.json`.
+  - *Resultado (paso 18, 4/4):*
+    - (a) n − κ_n = 0,0579; 0,0570; 0,0568; 0,0566; 0,0565: constante dentro de 0,0013, sin ajuste.
+    - (b) Ritz: δ₀ = 0,0564, δ₂ = 0,0055, residuo 1·10⁻⁵.
+    - Controles negativos: con n_eff hidrogenoide el rango es 0,045; con el Coulomb newtoniano α/q, 0,048.
+  - *Conclusión:* la escalera no tiene ninguna anomalía. Es un átomo de Rydberg con defecto cuántico δ ≈ 0,056 que pone el interior. La «desviación creciente» venía de usar la fórmula no relativista con un α_g = 0,27 que no es pequeño.
+  - *Abierto:* predecir δ₀ desde el interior (fase de dispersión de onda s en la región de campo fuerte) y ver cómo cambia con ν_a. Antes de la corrección del lapso, δ ≈ 0,025: el desfase es sensible a cómo se empalma el interior, y por eso sirve como diagnóstico.
 
 ## 2. Insights físicos y preguntas abiertas para los autores
 

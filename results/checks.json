@@ -949,6 +949,33 @@
      "note": ""
     }
    ]
+  },
+  {
+   "step": "Átomo gravitatorio: ley de Rydberg",
+   "module": "step18_rydberg",
+   "seconds": 0.5,
+   "checks": [
+    {
+     "name": "H20(a): con el kappa de Whittaker (Ec. A14), n - kappa_n = 0.0579, 0.0570, 0.0568, 0.0566, 0.0565 para n = 2…6: constante dentro de 0.0013",
+     "ok": true,
+     "note": "sin ajuste"
+    },
+    {
+     "name": "H20(b): Rydberg-Ritz delta_n = delta_0 + delta_2/(n - delta_0)^2 con delta_0 = 0.0564, delta_2 = 0.0055; residuo máximo 1e-05",
+     "ok": true,
+     "note": "2 parámetros, 5 niveles"
+    },
+    {
+     "name": "Control negativo 1: con la fórmula hidrogenoide no relativista, n - n_eff varía 0.045 (lo que parecía un defecto creciente)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: con el Coulomb newtoniano alpha/q (sin el factor 2 omega^2 - m_a^2), n - kappa varía 0.048",
+     "ok": true,
+     "note": ""
+    }
+   ]
   }
  ]
 }
