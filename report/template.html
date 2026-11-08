@@ -19,6 +19,7 @@
   --bad: #a3262f;
   --bad-bg: #fbe5e6;
   --code-bg: #eaeef4;
+  --new: #6b4e00; --new-bg: #fff1a6;
   --c1: #2b4bb3; --c2: #c2410c; --c3: #7c3aed;
   --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
   --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
@@ -29,14 +30,14 @@
     --paper: #0d121b; --sheet: #141b27; --ink: #e3e8f1; --muted: #98a3b7; --rule: #263042;
     --accent: #93a8ff; --ok: #62c99c; --ok-bg: #12291f; --flag: #f1a84d; --flag-bg: #2b2112;
     --bad: #f08a90; --bad-bg: #2d1518; --code-bg: #1b2433; color-scheme: dark;
-    --c1: #6283ee; --c2: #d9733a; --c3: #a174ec;
+    --c1: #6283ee; --c2: #d9733a; --c3: #a174ec; --new: #f7e38a; --new-bg: #3b3311;
   }
 }
 :root[data-theme="dark"] {
   --paper: #0d121b; --sheet: #141b27; --ink: #e3e8f1; --muted: #98a3b7; --rule: #263042;
   --accent: #93a8ff; --ok: #62c99c; --ok-bg: #12291f; --flag: #f1a84d; --flag-bg: #2b2112;
   --bad: #f08a90; --bad-bg: #2d1518; --code-bg: #1b2433; color-scheme: dark;
-    --c1: #6283ee; --c2: #d9733a; --c3: #a174ec;
+    --c1: #6283ee; --c2: #d9733a; --c3: #a174ec; --new: #f7e38a; --new-bg: #3b3311;
 }
 body {
   background: var(--paper); color: var(--ink);
@@ -197,6 +198,16 @@ figcaption { font-size: 0.92rem; color: var(--muted); max-width: 72ch; }
 .chip-ok { color: var(--ok); background: var(--ok-bg); }
 .chip-obs { color: var(--flag); background: var(--flag-bg); }
 .chip-bad { color: var(--bad); background: var(--bad-bg); }
+.chip-new { color: var(--new); background: var(--new-bg); }
+.chips { display: grid; gap: 0.3rem; justify-items: start; }
+mark.nuevo { background: var(--new-bg); color: var(--new); padding: 0 0.2em; border-radius: 3px; font-weight: 600; }
+mark.nuevo .antes { font: 400 0.8em var(--f-body); margin-left: 0.35em; opacity: 0.85; text-decoration: line-through; }
+.cambios { padding: 1.1rem 1.3rem; border-left: 4px solid var(--new); background: var(--new-bg); border-radius: 0 6px 6px 0; color: var(--ink); }
+.cambios h2 { font-size: 1.25rem; margin: 0 0 0.4rem; }
+.cambios table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 0.6rem; }
+.cambios th, .cambios td { text-align: left; padding: 0.3rem 0.5rem; border-top: 1px solid var(--rule); vertical-align: top; }
+.cambios td.num { font-family: var(--f-mono); white-space: nowrap; }
+.cambios .tw { overflow-x: auto; }
 
 /* código */
 pre { margin: 0; padding: 0.9rem 1rem; background: var(--code-bg); border-radius: 6px; overflow-x: auto; font: 0.86rem/1.55 var(--f-mono); }
@@ -244,6 +255,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
     <h1>Condensados axiónicos, rederivados desde la acción</h1>
   </header>
 
+{{CAMBIOS}}
+
   <nav class="toc" aria-label="Contenido">
     <p class="eyebrow">Contenido</p>
     <div class="toccols">
@@ -277,14 +290,12 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
         </ol>
       </div>
       <div>
-        <h3>Nuevas líneas abiertas (2024–2026)</h3>
+        <h3>Otros informes</h3>
         <ol>
-          <li><a href="lineas_investigacion.html"><b>Mapa general de los 3 nuevos avances ↗</b></a></li>
-          <li><a href="informe_gmodes.html">Línea 1: Estratificación y modos \(g\) / interfaz \(i_a\) ↗</a></li>
-          <li><a href="informe_rotacion.html">Línea 2: Rotación lenta \(\mathcal{O}(\Omega)\) y modos \(r\) ↗</a></li>
-          <li><a href="informe_magnetar.html">Línea 3: Unificación Axión + Magnetar ↗</a></li>
+          <li><a href="{{RADIAL_URL}}">Modos radiales: umbral, ramas y estrella realista (pasos 14–15) ↗</a></li>
           <li><a href="guia_departamento.html">Guía de implantación para el Departamento ↗</a></li>
         </ol>
+        <p class="muted">Las tres «líneas abiertas» que enlazaba la versión anterior (modos \(g\), rotación lenta, axión + magnetar) se han retirado: el informe que las sostenía no resistió la auditoría (cuaderno de laboratorio, §3).</p>
       </div>
     </div>
   </nav>
@@ -306,7 +317,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
       <li><h3>Paper II: modos no radiales en Cowling</h3><p class="refs">Pasos 5–6. Las ecuaciones de perturbación con la métrica congelada, las condiciones en el centro y fuera de la estrella, los apéndices y las tablas cruzadas entre sí. {{N_OK2}}/{{N_TOT2}}, sin discrepancias; la Tabla IV sale igual por un camino independiente.</p></li>
       <li><h3>Trabajo nuevo: más allá de Cowling</h3><p class="refs">Paso 7. Se perturba también la métrica y salen las ecuaciones de Lindblom y Detweiler extendidas con el axión, que no estaban publicadas. {{N_OK3}}/{{N_TOT3}} comprobaciones de límites: con la métrica congelada se recupera el Paper II, y sin axión, las ecuaciones de LD.</p></li>
       <li><h3>Comprobación con números</h3><p class="refs">Paso 8. Integradas sin axión, las ecuaciones nuevas dan las frecuencias publicadas de un politropo con todas sus cifras ({{N_OK4}}/{{N_TOT4}}).</p></li>
-      <li><h3>Con axión, en Cowling</h3><p class="refs">Paso 9. Una estrella realista (BSk26) con su condensado de axiones, y sus modos con la perturbación del axión: las Tablas I, II y IV de la secuela salen dentro del 0.5 % ({{N_OK5}}/{{N_TOT5}}). Es la base de la última etapa.</p></li>
+      <li><h3>Con axión, en Cowling</h3><p class="refs">Paso 9. Una estrella realista (BSk26) con su condensado de axiones, y sus modos con la perturbación del axión: las Tablas I, II y IV de la secuela salen dentro de {{V:c9_tmax}} puntos porcentuales ({{N_OK5}}/{{N_TOT5}}). Es la base de la última etapa.</p></li>
       <li><h3>Con axión, sin Cowling</h3><p class="refs">Paso 10. Las ecuaciones de la etapa 3, integradas con el axión encendido sobre esa estrella: el resultado que la secuela deja abierto ({{N_OK6}}/{{N_TOT6}}). Sin referencia publicada; el programa se comprueba con el caso sin axión.</p></li>
     </ol>
     <p class="muted">Todo se reproduce con un comando en unos {{MINS}} minutos; el código está en <a href="#reproducirlo">GitHub</a>.</p>
@@ -371,8 +382,9 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
       <li><b>Primer paper:</b> una pregunta sobre el punto en que se linealiza el modelo simplificado de la Sec. IV (\(\theta=0\) frente a \(\theta=\pi\)), tres cifras del texto que no cuadran y dos detalles menores. <a href="#observaciones">Ver las observaciones</a>.</li>
       <li><b>Secuela:</b> {{N_OK2}}/{{N_TOT2}} comprobaciones, sin ninguna discrepancia. Su Tabla IV sale igual con un cálculo independiente, y su descripción del fondo (\(\theta\simeq\pi\) dentro de la estrella) refuerza la pregunta sobre el modelo simplificado. <a href="#secuela">Ver la secuela</a>.</li>
       <li><b>Más allá de Cowling (nuevo):</b> las ecuaciones de perturbación con la métrica también perturbada, es decir, las de Lindblom y Detweiler extendidas con el axión, y sus condiciones en el centro. Pasan {{N_OK3}}/{{N_TOT3}} comprobaciones de límites y de consistencia, y, integradas sin axión, reproducen las frecuencias publicadas de un politropo con sus cinco cifras ({{N_OK4}}/{{N_TOT4}} comprobaciones numéricas). De paso, aparecieron erratas en dos transcripciones de las ecuaciones de LD; trabajos posteriores ya las escriben corregidas. <a href="#cowling">Ver el cálculo</a>.</li>
-      <li><b>Con axión, en Cowling (nuevo):</b> una estrella realista con su condensado y sus modos con la perturbación del axión. Reproducen las Tablas I, II y IV de la secuela dentro del 0.5 % ({{N_OK5}}/{{N_TOT5}}). Es la base para el paso siguiente. <a href="#conaxion">Ver los resultados</a>.</li>
-      <li><b>Con axión, sin Cowling (nuevo, sin publicar):</b> los modos con la métrica también perturbada. El axión sube el modo \(f\) más que en Cowling (hasta un 7.7 %, frente a 5.4 %), los modos \(p\) se mueven igual, y la regla de sumar amortiguamientos de la secuela solo acierta en orden de magnitud ({{N_OK6}}/{{N_TOT6}}). <a href="#etapaB">Ver los resultados</a>.</li>
+      <li><b>Con axión, en Cowling (nuevo):</b> una estrella realista con su condensado y sus modos con la perturbación del axión. Reproducen las Tablas I, II y IV de la secuela dentro de {{V:c9_tmax}} puntos porcentuales ({{N_OK5}}/{{N_TOT5}}). Es la base para el paso siguiente. <a href="#conaxion">Ver los resultados</a>.</li>
+      <li><b>Con axión, sin Cowling (nuevo, sin publicar):</b> los modos con la métrica también perturbada. El axión sube el modo \(f\) más que en Cowling (hasta un {{V:c10_fmax}}, frente a {{V:c9_fmax}}), los modos \(p\) se mueven igual, y la regla de sumar amortiguamientos de la secuela solo acierta en orden de magnitud ({{N_OK6}}/{{N_TOT6}}). <a href="#etapaB">Ver los resultados</a>.</li>
+      <li><b>Modos radiales (nuevo):</b> el paso de modos ligados a cuasinormales al cruzar el umbral \(\nu=\nu_a\), primero en el modelo simplificado y después en la estrella realista con la métrica dinámica ({{N_OK7}}/{{N_TOT7}}). <a href="{{RADIAL_URL}}">Ver el informe de modos radiales ↗</a>.</li>
     </ul>
     <p class="muted">Las discrepancias se plantean como preguntas: puede haber un convenio o un contexto que el cálculo no ve.</p>
   </section>
@@ -415,7 +427,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
   <section class="stack" id="limites">
     <h2>Lo que todavía no demuestra</h2>
     <p>En los dos papers el camino ya estaba recorrido: se sabía a qué ecuaciones había que llegar. La tercera parte es distinta: ahí no hay respuesta publicada. Sin axión, las ecuaciones ya están comprobadas también con números. Los términos nuevos, en cambio, se anulan en todos los límites conocidos: solo los comprueban la derivación desde la acción y los controles negativos, porque ninguna referencia externa los contiene. Integradas con axión (quinta parte), dan las primeras frecuencias sin Cowling, pero sin nada publicado con qué compararlas: el programa está comprobado con el caso sin axión, y el fondo y la parte axiónica, con las Tablas I, II y IV de la secuela (cuarta parte). Si un término nuevo estuviera mal, esas comprobaciones no lo verían. La Tabla III, la de los modos axiónicos muy amortiguados, sigue sin recalcular.</p>
-    <p class="next"><b>Siguiente paso propuesto:</b> que el grupo revise los términos nuevos del sistema extendido y, si puede, repita con su código uno de los números de la quinta parte (por ejemplo, el modo \(f\) a 6 kHz: 2.105 kHz). Comparar con sus propios cálculos, si ya han empezado este, sería la mejor prueba de las ecuaciones.</p>
+    <p class="next"><b>Siguiente paso propuesto:</b> que el grupo revise los términos nuevos del sistema extendido y, si puede, repita con su código uno de los números de la quinta parte (por ejemplo, el modo \(f\) a 6 kHz: {{V:c10_f6}}). Comparar con sus propios cálculos, si ya han empezado este, sería la mejor prueba de las ecuaciones.</p>
   </section>
 
   <section class="stack part">
@@ -650,8 +662,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
       <div class="charts"><div class="chart" data-chart="ax_f"></div><div class="chart" data-chart="ax_p1"></div><div class="chart" data-chart="ax_p2"></div><div class="chart" data-chart="ax_im"></div></div>
       <figcaption><b>El fondo axiónico sube las frecuencias, y la perturbación del axión compensa parte de la subida.</b> Las tres primeras gráficas muestran el desplazamiento de \(f\), \(p_1\) y \(p_2\) con \(l=2\) frente a la masa del axión: en naranja, solo el fondo con axión (Tabla I); en azul, con \(\delta\theta\) (Tabla II). Líneas: este cálculo; anillos: la secuela. La cuarta muestra el amortiguamiento por emisión de axiones, \(|\mathrm{Im}\,\nu|\), en escala logarítmica: los modos por debajo del umbral \(\nu_a\) no radian y no aparecen.</figcaption>
     </figure>
-    <p><b>{{N_OK5}}/{{N_TOT5}} comprobaciones.</b> Sin axión, la estrella sale con 1.536 \(M_\odot\) y 11.72 km, y sus modos en 2.429, 7.171 y 10.194 kHz, frente a 2.43, 7.15 y 10.18. El condensado aparece entre 2.5 y 2.8 kHz, como dice el primer paper. Las masas de la Tabla IV coinciden dentro del 0.35 %. Los 24 desplazamientos de la Tabla I y los 36 de la Tabla II coinciden dentro de 0.55 puntos porcentuales; los del modo \(f\), dentro de 0.33. Los modos que radian son los mismos, salvo \(p_1\) a 8 kHz, cuya parte real cae a un 0.1 % del umbral: en nuestro cálculo queda justo por encima. El amortiguamiento coincide en orden de magnitud: los once valores de al menos 1 Hz, dentro de un factor 2, y el tiempo más corto, 12.4 ms frente a 12.</p>
-    <p class="muted">El margen de 0.6 puntos se fijó después de ver los datos y es mayor que el redondeo de las tablas (0.2 puntos para \(f\)); la diferencia que queda, de hasta un 0.5 %, tiene el mismo tamaño que la de las frecuencias sin axión y es coherente con usar otra representación de BSk26. El amortiguamiento depende de \(\delta\theta(R)\), que la secuela muestra que pasa por ceros casi exactos según \(\nu_a\), así que es muy sensible al fondo.</p>
+    <p><b>{{N_OK5}}/{{N_TOT5}} comprobaciones.</b> Sin axión, la estrella sale con 1.536 \(M_\odot\) y 11.72 km, y sus modos en 2.429, 7.171 y 10.194 kHz, frente a 2.43, 7.15 y 10.18. El condensado aparece entre 2.5 y 2.8 kHz, como dice el primer paper. Las masas de la Tabla IV coinciden dentro del {{V:c9_t4}}. Los 24 desplazamientos de la Tabla I coinciden dentro de {{V:c9_t1}} puntos porcentuales y los 36 de la Tabla II, dentro de {{V:c9_t2}}; los del modo \(f\), dentro de {{V:c9_t2f}}. {{V:c9_edge}} El amortiguamiento coincide en orden de magnitud: los {{V:c9_nratio}} valores de al menos 1 Hz, dentro de un factor 2 (cociente {{V:c9_ratio}}), y el tiempo más corto, {{V:c9_tau}} frente a 12 ms.</p>
+    <p class="muted">El margen de 0.6 puntos se fijó después de ver los datos y es mayor que el redondeo de las tablas (0.2 puntos para \(f\)); la diferencia que queda, de hasta {{V:c9_tmax}} puntos, tiene el mismo tamaño que la de las frecuencias sin axión y es coherente con usar otra representación de BSk26. El amortiguamiento depende de \(\delta\theta(R)\), que la secuela muestra que pasa por ceros casi exactos según \(\nu_a\), así que es muy sensible al fondo.</p>
     <p class="next"><b>Etapa B:</b> con este fondo y esta parte axiónica comprobados, la quinta parte integra el sistema extendido de la tercera parte con el axión encendido, con emisión de axiones y de ondas gravitacionales a la vez.</p>
   </section>
 
@@ -674,15 +686,15 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
       </div>
       <figcaption><b>Anatomía de un modo, con los números de los pasos 9 y 10.</b> Corte meridional de la estrella (\(l=2\), \(m=0\)) con la deformación exagerada. Dentro, el color marca \(\theta_0/\pi\): el núcleo condensado y la capa de transición, con el perfil calculado para cada \(\nu_a\). A la izquierda, la onda gravitacional (\(\propto\sin^2\vartheta\)), que no existe en Cowling; a la derecha, \(\delta\theta\) (\(\propto P_2(\cos\vartheta)\)), que se propaga si \(\nu>\nu_a\) y decae exponencialmente si no. Fuera de la estrella las distancias están comprimidas, pero la razón entre las longitudes de onda gravitacional y axiónica es la real. Las frecuencias y amortiguamientos son los calculados; los perfiles radiales del desplazamiento son ilustrativos.</figcaption>
     </figure>
-    <p><b>{{N_OK6}}/{{N_TOT6}} comprobaciones.</b> No hay resultado publicado con el que comparar, así que se comprueba el programa. Con el axión apagado convierte las ecuaciones igual que el del paso 8, a \(10^{-15}\). Las sustituciones del axión dan las cantidades del Paper II. Y, de principio a fin, reproduce el modo \(f\) del politropo de Lindblom, Mendell e Ipser: 1.20162 frente a 1.2016, con el amortiguamiento al 0.2 %. Los resultados no cambian con la tolerancia, el radio de empalme ni la distancia de extracción: menos de \(10^{-6}\) en la frecuencia y del 0.3 % en el amortiguamiento.</p>
+    <p><b>{{N_OK6}}/{{N_TOT6}} comprobaciones.</b> No hay resultado publicado con el que comparar, así que se comprueba el programa. Con el axión apagado convierte las ecuaciones igual que el del paso 8, a \(10^{-15}\). Las sustituciones del axión dan las cantidades del Paper II. Y, de principio a fin, reproduce el modo \(f\) del politropo de Lindblom, Mendell e Ipser: 1.20162 frente a 1.2016, con el amortiguamiento al 0.2 %. Los resultados no cambian con la tolerancia, el radio de empalme ni la distancia de extracción: como mucho {{V:c10_conv_re}} en la frecuencia y un {{V:c10_conv_im}} en el amortiguamiento.</p>
     <figure class="wide">
       <div class="charts"><div class="chart" data-chart="gr_f"></div><div class="chart" data-chart="gr_p1"></div><div class="chart" data-chart="gr_p2"></div><div class="chart" data-chart="gr_im"></div></div>
       <figcaption><b>Con la métrica dinámica, el axión desplaza las frecuencias como en Cowling, salvo la del modo \(f\).</b> Desplazamiento de cada frecuencia respecto a la misma estrella sin axión, también con la métrica dinámica. Azul: el cálculo completo; naranja: con \(\delta\theta\) apagado (solo el fondo); gris discontinuo: Cowling con \(\delta\theta\) (paso 9). La última gráfica muestra el amortiguamiento total, ondas gravitacionales más axiones (puntos), junto al de solo axiones en Cowling (anillos).</figcaption>
     </figure>
     <ul class="points">
-      <li><b>El modo \(f\) sube más que en Cowling:</b> hasta un 7.7 % a 5 kHz (Cowling: 5.4 %) y un 5.9 % a 15 kHz (Cowling: 2.7 %). La perturbación del axión vuelve a compensar buena parte de la subida que produce el fondo, como en la secuela, pero deja más. Como no radia axiones (\(\nu_f<\nu_a\)), su amortiguamiento es solo gravitacional, y se acelera de 0.174 s sin axión a unos 0.13 s.</li>
-      <li><b>Los modos \(p\) apenas cambian respecto a Cowling:</b> sus desplazamientos coinciden dentro de un punto porcentual. Con la métrica dinámica las frecuencias son más bajas (\(p_1\), un 8 %), así que el umbral \(\nu_a\) les llega antes: \(p_1\) deja de radiar a 8 kHz, donde en nuestro Cowling (paso 9) aún radia un poco.</li>
-      <li><b>El amortiguamiento máximo no cambia:</b> \(p_2\) a 5 kHz, 12.8 Hz (\(\tau_a\approx12\) ms), igual que en Cowling. Pero la suma \(1/\tau_{GW}+1/\tau_a\) que propone la secuela, con el \(\tau_a\) de Cowling, solo acierta en orden de magnitud. Falla hasta un factor 10 donde el amortiguamiento por axiones pasa por un mínimo, como \(p_2\) a 8 kHz (0.10 Hz frente a 1.0): esos mínimos se desplazan cuando la métrica oscila.</li>
+      <li><b>El modo \(f\) sube más que en Cowling:</b> hasta un {{V:c10_fmax}} a {{V:c10_fmax_nu}} (Cowling: {{V:c9_fmax}}) y un {{V:c10_f15}} a 15 kHz (Cowling: {{V:c9_f15}}). La perturbación del axión vuelve a compensar buena parte de la subida que produce el fondo, como en la secuela, pero deja más. Como no radia axiones (\(\nu_f<\nu_a\)), su amortiguamiento es solo gravitacional, y se acelera de {{V:c10_tau0}} sin axión a {{V:c10_tau15}} a 15 kHz.</li>
+      <li><b>Los modos \(p\) apenas cambian respecto a Cowling:</b> sus desplazamientos coinciden dentro de {{V:c10_pdiff}} puntos porcentuales. Con la métrica dinámica las frecuencias son más bajas (\(p_1\), un 8 %), así que el umbral \(\nu_a\) les llega antes. {{V:c10_edge}}</li>
+      <li><b>El amortiguamiento máximo no cambia:</b> \(p_2\) a {{V:c10_p2nu}}, {{V:c10_p2}} (\(\tau_a\) = {{V:c10_p2tau}}), frente a {{V:c9_p2}} en Cowling. Pero la suma \(1/\tau_{GW}+1/\tau_a\) que propone la secuela, con el \(\tau_a\) de Cowling, solo acierta en orden de magnitud. Falla hasta un factor 10 donde el amortiguamiento por axiones pasa por un mínimo, como \(p_2\) a 8 kHz ({{V:c10_p2_8}} frente a {{V:c9_p2_8}}): esos mínimos se desplazan cuando la métrica oscila.</li>
     </ul>
     <p class="muted">Cuidado con dos cosas. Con \(\delta\theta\) apagado, el sistema con métrica dinámica deja de ser coherente (las ligaduras de Einstein incluyen al axión) y no conserva la energía; de esa variante solo se muestran las frecuencias, que sirven para separar el efecto del fondo del de la onda. Y todo esto descansa en los términos nuevos de la tercera parte, que nadie ha revisado: los comprueban la derivación desde la acción y los controles negativos, no un cálculo independiente.</p>
   </section>

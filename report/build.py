@@ -1,6 +1,8 @@
 """Genera results/informe_axiones.html a partir de results/checks.json y las figuras."""
 import html
 import json
+import math
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -44,7 +46,7 @@ PRETTY = [
      r'\(m_a = 3\) kHz \(\leftrightarrow\) 12.4 peV (paper: 12 peV)',
      r'\(m_a R\) para 3 kHz y 12 km: 0.75 (paper: 0.12)',
      r'\(m_a^2 f_a^2\): \(\epsilon\times\)4.4–4.8 MeV/fm³ (paper: \(\epsilon\times\)13)',
-     r'\(\lambda^2\) con \((\varepsilon+p)=500\) MeV/fm³, \(c_s^2=0.3\): \(\epsilon\times\)0.03 (paper: \(\epsilon\times\)0.02)',
+     r'\(\lambda^2\) con \((\varepsilon+p)=500\) MeV/fm³, \(c_s^2=0.3\): \(\epsilon\times\)(0.029–0.032) (paper: \(\epsilon\times\)0.02)',
      r'\(n_c(\epsilon=1) = 0.40\) fm\(^{-3}\) \(\approx 2.5\,n_\mathrm{sat}\) (paper: ~2 \(n_\mathrm{sat}\))',
      r'Fig. 3 reproducida: 10 modos fluidos + 5 axiónicos en las mismas posiciones',
      (r'Variante en \(\theta=\pi\): modos fluidos sin amortiguar', 'obs'),
@@ -130,34 +132,196 @@ PRETTY = [
     [r'Fondo BSk26 sin axión, \(p_c = 100\) MeV/fm³: \(M = 1.536\,M_\odot\), \(R = 11.72\) km (Paper I: 1.53 y 11.7)',
      r'Cowling sin axión: \(f, p_1, p_2\) = 2.429, 7.171, 10.194 kHz frente a 2.43, 7.15, 10.18 (máx. 0.29 %)',
      r'Umbral del condensado: no hay a 2.5 kHz y sí a 2.8 kHz, como en el Paper I',
-     r'Tabla IV: masas de las estrellas con axión de 8 a 15 kHz, dentro del 0.35 %',
-     r'Tabla I (solo fondo): los 24 desplazamientos \(\nu/\nu_0-1\), dentro de 0.55 puntos',
-     r'Tabla II (acoplado), parte real: los 36 desplazamientos dentro de 0.53 puntos; el modo \(f\), de 0.33',
-     (r'Tabla II: los mismos modos amortiguados, salvo \(p_1\) a 8 kHz, que cae justo en el umbral', 'obs'),
-     r'Tabla II, amortiguamiento: los 11 valores \(\geq 1\) Hz dentro de un factor 2; \(\tau_a\) mínimo 12.4 ms (paper: 12 ms)'],
+     r'Tabla IV: masas de las estrellas con axión de 8 a 15 kHz, dentro del {{V:c9_t4}}',
+     r'Tabla I (solo fondo): los 24 desplazamientos \(\nu/\nu_0-1\), dentro de {{V:c9_t1}} puntos',
+     r'Tabla II (acoplado), parte real: los 36 desplazamientos dentro de {{V:c9_t2}} puntos; el modo \(f\), de {{V:c9_t2f}}',
+     ('{{V:c9_lbl6}}', '{{K:c9_lbl6}}'),
+     r'Tabla II, amortiguamiento: los {{V:c9_nratio}} valores \(\geq 1\) Hz dentro de un factor 2; \(\tau_a\) mínimo {{V:c9_tau}} (paper: 12 ms)'],
     # ---- Paso 10: con axión y métrica dinámica (etapa B)
     [r'Conversión del sistema extendido a números: sin axión, igual que la del paso 8 (\(10^{-15}\))',
      r'Sustituciones del axión: las 8 cantidades del Paper II (\(n\,\partial m^*/\partial\theta\), \(m_\mathrm{eff}^2\), \(\varepsilon(n,\theta)\), \(c_s^2\)…)',
-     r'Todo el programa, sin axión, con el politropo de LMI: Re \(\omega\) = 1.20162 (LMI: 1.2016), Im dentro del 0.2 %',
-     r'Convergencia del modo \(f\) a 6 kHz: Re \(\nu\) estable a \(3\times10^{-7}\), Im \(\nu\) al 0.3 %',
+     r'Todo el programa, sin axión, con el politropo de LMI: Re \(\omega\) = 1.20162 (LMI: 1.2016), Im \(\omega\) = 3.944\(\times10^{-4}\) (LMI: 3.95\(\times10^{-4}\))',
+     r'Convergencia del modo \(f\) a 6 kHz: Re \(\nu\) estable a {{V:c10_conv_re}}, Im \(\nu\) al {{V:c10_conv_im}}',
      r'Sin axión, la métrica dinámica baja las notas de Cowling: \(f, p_1, p_2\) = 1.961, 6.594, 9.872 kHz (−19, −8, −3 %); \(\tau_f\) = 0.174 s',
      r'Las 36 notas acopladas, encontradas y amortiguadas',
      r'Umbral: los modos \(p\) radian axiones solo con \(\mathrm{Re}\,\nu > \nu_a\)',
-     (r'Con la métrica dinámica, el axión sube \(f\) hasta un 7.7 % (Cowling: 5.4 %) y acorta su amortiguamiento de 0.17 a 0.13 s', 'obs'),
-     (r'Amortiguamiento máximo: \(p_2\) a 5 kHz, 12.8 Hz, como en Cowling; la suma \(1/\tau_{GW}+1/\tau_a\) solo acierta en orden de magnitud', 'obs')],
+     (r'Con la métrica dinámica, el axión sube \(f\) hasta un {{V:c10_fmax}} (Cowling: {{V:c9_fmax}}) y acorta su amortiguamiento de {{V:c10_tau0}} a {{V:c10_tau15}}', 'obs'),
+     (r'Amortiguamiento máximo: \(p_2\) a {{V:c10_p2nu}}, {{V:c10_p2}} (Cowling: {{V:c9_p2}}); la suma \(1/\tau_{GW}+1/\tau_a\) solo acierta en orden de magnitud', 'obs')],
+    # ---- Pasos 14 y 15: modos radiales (informe aparte); se muestran los nombres que genera el propio paso
+    None,
+    None,
 ]
 
+RADIAL_URL = 'https://claude.ai/artifact/9XoYYWX9wvNUKoav2HmQbB'
+BASE = Path(__file__).parent / 'baseline_v1'     # datos de la versión publicada antes de corregir el lapso
+BASE_DATE = '2026-11-05'
 
-def rows():
+
+# ---------------------------------------------------------------- cifras del texto, generadas desde los datos
+def _rx(text, pat):
+    m = re.search(pat, text)
+    assert m, (pat, text)
+    return m.group(1)
+
+
+def values(checks, axcow, axgr):
+    # Cada cifra del texto de las partes 4 y 5 sale de checks.json o de las figuras; se calcula igual para la
+    # versión anterior (baseline_v1) y la actual, y las que difieren se marcan en el HTML.
+    by = {s['module']: [c['name'] for c in s['checks']] for s in checks['steps']}
+    c9, c10 = by['step9_axion_cowling'], by['step10_axion_gr']
+    nus = axcow['nus']
+    assert nus == axgr['nus'] and nus[-1] == 15.0
+    cf, cp1, cp2 = (m for m in axcow['modes'])
+    gf, gp1, gp2 = (m for m in axgr['modes'])
+    at = lambda arr, nu: arr[nus.index(nu)]
+    V = {}
+    V['c9_t4'] = _rx(c9[3], r'máx\. ([\d.]+ %)')
+    V['c9_t1'] = _rx(c9[4], r'máx\. ([\d.]+)\)')
+    V['c9_t2'] = _rx(c9[5], r'máx\. ([\d.]+);')
+    V['c9_t2f'] = _rx(c9[5], r'modo f, ([\d.]+)\)')
+    V['c9_tmax'] = max(V['c9_t1'], V['c9_t2'], key=float)
+    V['c9_nratio'] = _rx(c9[7], r'los (\d+) \|Im')
+    V['c9_ratio'] = _rx(c9[7], r'cociente ([\d.]+-[\d.]+)').replace('-', '–')
+    V['c9_tau'] = _rx(c9[7], r'tau_a mínimo = ([\d.]+ ms)')
+    V['c9_fmax'] = f"{max(cf['cp']):.1f} %"
+    V['c9_f15'] = f"{cf['cp'][-1]:.1f} %"
+    # p1 a 8 kHz en Cowling: ¿radia? (Re nu = nu_0 (1 + desplazamiento))
+    re8 = axgr['cow0'][1] * (1 + at(cp1['cp'], 8.0) / 100)
+    gap8, rad8 = 100 * (re8 / 8.0 - 1), at(cp1['im'], 8.0) > 1e-3
+    exc = 'sin excepciones' not in c9[6]
+    assert exc == rad8, (c9[6], rad8)
+    if rad8:
+        V['c9_edge'] = (rf'Los modos que radian son los mismos, salvo \(p_1\) a 8 kHz, cuya parte real cae a un '
+                        rf'{abs(gap8):.1f} % del umbral: en nuestro cálculo queda justo por encima.')
+        V['c9_lbl6'] = r'Tabla II: los mismos modos amortiguados, salvo \(p_1\) a 8 kHz, que cae justo en el umbral'
+    else:
+        V['c9_edge'] = (rf'Los modos que radian son los mismos, sin excepción; el caso más ajustado es \(p_1\) a 8 kHz, '
+                        rf'cuya parte real queda un {abs(gap8):.2f} % por debajo del umbral.')
+        V['c9_lbl6'] = r'Tabla II: los mismos modos amortiguados que en la secuela, sin excepciones'
+    V['K:c9_lbl6'] = 'obs' if rad8 else ''
+    i5 = max(range(len(nus)), key=lambda i: gf['cp'][i])
+    V['c10_fmax'] = f"{gf['cp'][i5]:.1f} %"
+    assert V['c10_fmax'] == _rx(c10[7], r'hasta un ([\d.]+ %)'), c10[7]
+    V['c10_fmax_nu'] = f'{nus[i5]:.0f} kHz'
+    V['c10_f15'] = f"{gf['cp'][-1]:.1f} %"
+    V['c10_f6'] = f"{at(gf['re'], 6.0):.3f} kHz"
+    m = re.search(r'Re nu en (\d)e-0?(\d+) e Im nu en ([\d.]+ %)', c10[3])
+    assert m, c10[3]
+    V['c10_conv_re'] = rf'\({m.group(1)}\times10^{{-{m.group(2)}}}\)'
+    V['c10_conv_im'] = m.group(3)
+    V['c10_tau0'] = _rx(c10[4], r'gravitacionales en ([\d.]+ s)')
+    V['c10_tau15'] = _rx(c10[7], r'pasa de [\d.]+ a ([\d.]+ s)')
+    V['c10_pdiff'] = f"{max(abs(g - c) for G, C in ((gp1, cp1), (gp2, cp2)) for g, c in zip(G['cp'], C['cp'])):.1f}"
+    gre8 = at(gp1['re'], 8.0)
+    if rad8:
+        V['c10_edge'] = r'\(p_1\) deja de radiar a 8 kHz, donde en nuestro Cowling (paso 9) aún radia un poco.'
+    else:
+        V['c10_edge'] = (rf'A 8 kHz, \(p_1\) ({gre8:.2f} kHz) queda un {100 * (1 - gre8 / 8):.0f} % por debajo de \(\nu_a\) '
+                         rf'y solo radia ondas gravitacionales; en Cowling (paso 9) tampoco radia, aunque allí queda a un '
+                         rf'{abs(gap8):.2f} % del umbral.')
+    j = max(range(len(nus)), key=lambda i: gp2['im'][i])
+    V['c10_p2nu'], V['c10_p2'] = f'{nus[j]:.0f} kHz', f"{gp2['im'][j]:.1f} Hz"
+    assert f"p2 a {nus[j]:.0f} kHz, {gp2['im'][j]:.1f} Hz" in c10[8], c10[8]
+    V['c10_p2tau'] = f"{1e3 / (2 * math.pi * gp2['im'][j]):.1f} ms"
+    V['c9_p2'] = f"{cp2['im'][j]:.1f} Hz"
+    V['c10_p2_8'], V['c9_p2_8'] = f"{at(gp2['im'], 8.0):.2f} Hz", f"{at(cp2['im'], 8.0):.1f} Hz"
+    return V
+
+
+DESCR = {
+    'c9_t4': 'Tabla IV: diferencia máxima en las masas (Cowling)',
+    'c9_t1': 'Tabla I: diferencia máxima en los desplazamientos (puntos)',
+    'c9_t2': 'Tabla II: diferencia máxima en los desplazamientos (puntos)',
+    'c9_t2f': 'Tabla II, modo f: diferencia máxima (puntos)',
+    'c9_tmax': 'Tablas I y II: diferencia máxima (puntos)',
+    'c9_nratio': 'Tabla II: amortiguamientos ≥ 1 Hz comparados',
+    'c9_ratio': 'Tabla II: cociente de amortiguamientos (este cálculo / secuela)',
+    'c9_tau': 'Cowling: τ_a mínimo',
+    'c9_fmax': 'Cowling: subida máxima del modo f',
+    'c9_f15': 'Cowling: subida del modo f a 15 kHz',
+    'c9_edge': 'Cowling: p₁ a 8 kHz frente al umbral',
+    'c9_lbl6': 'Comprobación: modos amortiguados frente a la secuela',
+    'c10_fmax': 'Métrica dinámica: subida máxima del modo f',
+    'c10_fmax_nu': 'Métrica dinámica: ν_a de la subida máxima de f',
+    'c10_f15': 'Métrica dinámica: subida del modo f a 15 kHz',
+    'c10_f6': 'Métrica dinámica: modo f a 6 kHz',
+    'c10_conv_re': 'Métrica dinámica: estabilidad de Re ν del modo f (6 kHz)',
+    'c10_conv_im': 'Métrica dinámica: estabilidad de Im ν del modo f (6 kHz)',
+    'c10_tau0': 'Métrica dinámica: τ_GW del modo f sin axión',
+    'c10_tau15': 'Métrica dinámica: τ_GW del modo f a 15 kHz',
+    'c10_pdiff': 'Modos p: diferencia máxima con Cowling (puntos)',
+    'c10_edge': 'Métrica dinámica: p₁ a 8 kHz frente al umbral',
+    'c10_p2nu': 'Métrica dinámica: ν_a del amortiguamiento máximo de p₂',
+    'c10_p2': 'Métrica dinámica: amortiguamiento máximo de p₂',
+    'c10_p2tau': 'Métrica dinámica: τ_a de p₂ en ese máximo',
+    'c9_p2': 'Cowling: amortiguamiento de p₂ a esa ν_a',
+    'c10_p2_8': 'Métrica dinámica: amortiguamiento de p₂ a 8 kHz',
+    'c9_p2_8': 'Cowling: amortiguamiento de p₂ a 8 kHz',
+}
+
+
+def _mark(new, old):
+    if old is None or new == old:
+        return new
+    return f'<mark class="nuevo" title="Antes: {html.escape(old)}">{new}<span class="antes">{old}</span></mark>'
+
+
+def fill(text, V, V0, plain=False):
+    def sub(m):
+        key = m.group(1)
+        return V[key] if plain else _mark(V[key], V0.get(key))
+    return re.sub(r'\{\{V:(\w+)\}\}', sub, text)
+
+
+def _decimals(text):
+    # cifras decimales de un texto, sin LaTeX en línea ni números de ecuación («Ec. (4.13)», «(4.1)»)
+    text = re.sub(r'\\\(.*?\\\)', ' ', text)
+    text = re.sub(r'Ecs?\.\s*\(?[\d.]+[a-z]?|\(\d+\.\d+[a-z]?\)', ' ', text)
+    return set(re.findall(r'(?<![\w.])\d+\.\d+', text))
+
+
+def cambios(V, V0, checks, base_checks, figs_changed):
+    keys = [k for k in DESCR if V0.get(k) != V[k] and k not in ('c9_edge', 'c10_edge', 'c9_lbl6', 'c9_tmax')]
+    rows_ = ''.join(f'<tr><td>{html.escape(DESCR[k])}</td><td class="num">{V0[k]}</td><td class="num"><b>{V[k]}</b></td></tr>'
+                    for k in keys)
+    base = {s['module']: s['checks'] for s in base_checks['steps']}
+    nch = sum(1 for s in checks['steps'] if s['module'] in base
+              for c, c0 in zip(s['checks'], base[s['module']]) if c['name'] != c0['name'])
+    flips = [c['name'] for s in checks['steps'] if s['module'] in base
+             for c, c0 in zip(s['checks'], base[s['module']]) if c['ok'] != c0['ok']]
+    nflip_txt = 'ninguna cambia de resultado' if not flips else f'{len(flips)} cambian de resultado'
+    new_steps = [s['step'] for s in checks['steps'] if s['module'] not in base]
+    better = float(V['c9_tmax']) < float(V0['c9_tmax'])
+    return f'''<section class="stack cambios" id="cambios">
+    <p class="eyebrow">Versión 2 · {checks['env']['date']} · sustituye a la del {BASE_DATE}</p>
+    <h2>Qué cambia en esta versión</h2>
+    <p><b>Corrección en el código compartido de la estrella con axión.</b> El lapso se normalizaba con \\(\\Phi(\\infty)=0\\) imponiendo en la superficie \\(e^{{2\\Phi(R)}}=1-2M(R)/R\\), sin contar la masa de la cola del condensado que queda fuera de la estrella. Ahora la condición se impone al final de la integración, donde la cola ya ha decaído. Afecta a todo lo calculado con axión (cuarta y quinta parte); sin axión no cambia nada. Lo destapó una revisión externa del informe de modos radiales, en el que el resultado dependía del radio de empalme.</p>
+    <p>Las cifras que cambian aparecen así: <mark class="nuevo">valor nuevo<span class="antes">valor anterior</span></mark>. Las gráficas de la cuarta y quinta parte están recalculadas{'' if figs_changed else ' (sin cambios visibles)'}. {nch} comprobaciones cambian de cifras y llevan la etiqueta «actualizada»; {nflip_txt}. El acuerdo con las Tablas I y II de la secuela {'mejora' if better else 'no mejora'}: la diferencia máxima pasa de {V0['c9_tmax']} a {V['c9_tmax']} puntos.{(' ' + _mark(V['c9_edge'], V0['c9_edge'])) if V['c9_edge'] != V0['c9_edge'] else ''}</p>
+    <p>Se añaden {len(new_steps)} pasos ({', '.join(html.escape(x) for x in new_steps)}), con <a href="{RADIAL_URL}">informe propio</a>, y se retiran los enlaces a las tres «líneas abiertas», cuyo informe no resistió la auditoría.</p>
+    <div class="tw"><table><thead><tr><th>Cifra</th><th>Antes</th><th>Ahora</th></tr></thead><tbody>{rows_}</tbody></table></div>
+  </section>'''
+
+
+
+def rows(V, V0):
     data = json.loads((RES / 'checks.json').read_text())
+    base = {st['module']: st['checks'] for st in json.loads((BASE / 'checks.json').read_text())['steps']}
     assert len(data['steps']) == len(PRETTY), (len(data['steps']), len(PRETTY))
     out, n_ok, n_tot, per_step = [], 0, 0, []
     for step, pretty in zip(data['steps'], PRETTY):
         checks = step['checks']
+        old = base.get(step['module'])
+        if pretty is None:                                  # pasos sin etiqueta a mano: el nombre generado
+            pretty = [html.escape(c['name']) for c in checks]
         assert len(checks) == len(pretty), (step['step'], len(checks), len(pretty))
         items = []
-        for c, p in zip(checks, pretty):
+        for i, (c, p) in enumerate(zip(checks, pretty)):
             label, kind = (p if isinstance(p, tuple) else (p, ''))
+            kind = re.sub(r'\{\{K:(\w+)\}\}', lambda m: V['K:' + m.group(1)], kind)
+            # guarda: toda cifra decimal tecleada en la etiqueta debe estar en el nombre que genera el paso
+            missing = _decimals(fill(label, V, V0, plain=True)) - _decimals(c['name'])
+            assert not missing or '{{V:' in label, (step['module'], i, sorted(missing), c['name'])
+            label = fill(label, V, V0)
             n_tot += 1
             n_ok += c['ok']
             if not c['ok']:
@@ -166,8 +330,11 @@ def rows():
                 chip = '<span class="chip chip-obs">observación</span>'
             else:
                 chip = '<span class="chip chip-ok">coincide</span>'
+            if old is not None and c['name'] != old[i]['name']:
+                chip = f'<span class="chips">{chip}<span class="chip chip-new">actualizada</span></span>'
             items.append(f'<li title="{html.escape(c["name"])}">{chip}<span class="ck">{label}</span></li>')
-        out.append(f'<section class="steplist"><h3>{html.escape(step["step"])}</h3><ul class="checks">'
+        tag = '' if old is not None else ' <span class="chip chip-new">nuevo en esta versión</span>'
+        out.append(f'<section class="steplist"><h3>{html.escape(step["step"])}{tag}</h3><ul class="checks">'
                    + ''.join(items) + '</ul></section>')
         per_step.append((sum(c['ok'] for c in checks), len(checks)))
     return '\n'.join(out), n_ok, n_tot, data, per_step
@@ -188,7 +355,12 @@ def repro(data, per_step):
 
 def main():
     tpl = (Path(__file__).parent / 'template.html').read_text()
-    table, n_ok, n_tot, data, per_step = rows()
+    checks = json.loads((RES / 'checks.json').read_text())
+    load = lambda d, n: json.loads((d / f'fig_{n}.json').read_text())
+    V = values(checks, load(RES, 'axcow'), load(RES, 'axgr'))
+    V0 = values(json.loads((BASE / 'checks.json').read_text()), load(BASE, 'axcow'), load(BASE, 'axgr'))
+    figs_changed = any(load(RES, n) != load(BASE, n) for n in ('axcow', 'axgr'))
+    table, n_ok, n_tot, data, per_step = rows(V, V0)
     steps, env = repro(data, per_step)
     fails = '\n'.join('  FAIL: ' + html.escape(c['name']) for s in data['steps'] for c in s['checks'] if not c['ok'])
     ok1, tot1 = (sum(x[i] for x in per_step[0:4]) for i in (0, 1))
@@ -197,6 +369,7 @@ def main():
     ok4, tot4 = per_step[7]
     ok5, tot5 = per_step[8]
     ok6, tot6 = per_step[9]
+    ok7, tot7 = (sum(x[i] for x in per_step[10:12]) for i in (0, 1))
     figdata = json.dumps({k: json.loads((RES / f'fig_{f}.json').read_text())
                           for k, f in [('toy', 'toy'), ('levels', 'levels'), ('modes', 'modes'), ('meff', 'meff'),
                                        ('background', 'background'), ('axcow', 'axcow'), ('axgr', 'axgr')]}, separators=(',', ':')).replace('</', '<\\/')
@@ -209,17 +382,21 @@ def main():
             .replace('{{N_OK4}}', str(ok4)).replace('{{N_TOT4}}', str(tot4))
             .replace('{{N_OK5}}', str(ok5)).replace('{{N_TOT5}}', str(tot5))
             .replace('{{N_OK6}}', str(ok6)).replace('{{N_TOT6}}', str(tot6))
+            .replace('{{N_OK7}}', str(ok7)).replace('{{N_TOT7}}', str(tot7))
+            .replace('{{CAMBIOS}}', cambios(V, V0, checks, json.loads((BASE / 'checks.json').read_text()), figs_changed))
+            .replace('{{RADIAL_URL}}', RADIAL_URL)
             .replace('{{FIGDATA}}', figdata).replace('{{CHARTS_JS}}', charts_js).replace('{{ANIM_JS}}', anim_js)
             .replace('{{SECS}}', str(data['seconds'])).replace('{{MINS}}', str(round(data['seconds'] / 60))).replace('{{STEPS}}', steps).replace('{{ENV}}', env)
             .replace('{{FAILS}}', fails))
-    assert '{{' not in page
+    page = fill(page, V, V0)
+    assert '{{' not in page, re.findall(r'\{\{[^}]*\}\}', page)[:5]
     out = RES / 'informe_axiones.html'
     out.write_text(page)
     guia_out = RES / 'guia_departamento.html'
     guia_out.write_text((Path(__file__).parent / 'guia_departamento.html').read_text())
     print(out, f'{len(page) / 1e3:.0f} kB', f'{n_ok}/{n_tot}')
     print(guia_out, f'{guia_out.stat().st_size / 1e3:.0f} kB')
-    for extra in ('lineas_investigacion.html', 'informe_gmodes.html', 'informe_rotacion.html', 'informe_magnetar.html'):
+    for extra in ():                       # las tres «líneas» retiradas ya no se copian (LAB_NOTEBOOK §3)
         src = Path(__file__).parent / extra
         if src.exists():
             dst = RES / extra

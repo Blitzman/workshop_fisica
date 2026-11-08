@@ -11,6 +11,7 @@ Luego calcula f, p1 y p2 para las 12 masas del axión de la Tabla II del Paper I
 (solo el fondo) y encendido, y compara con Cowling (paso 9) y con la suma de amortiguamientos que
 propone el Paper II, 1/tau = 1/tau_GW + 1/tau_a.
 """
+import json
 import multiprocessing as mp
 import time
 
@@ -155,15 +156,19 @@ def checks(ref, rows, conv, lmi, worst, subs):
     ok = all((abs(z.imag) * 1e3 > 0.05) == (z.real > nu) for nu, i, z in above)
     res.append(('Umbral: los modos p solo radian axiones por encima de nu_a (|Im nu| > 0.05 Hz si Re nu > nu_a; '
                 'por debajo, solo ondas gravitacionales, < 0.05 Hz)', ok, ''))
+    from .figdata import RES
+    axcow = json.loads((RES / 'fig_axcow.json').read_text())   # escrito por el paso 9 en la misma ejecución
+    cow_im = dict(zip(axcow['nus'], axcow['modes'][2]['im']))
     sf = [100 * (rows[nu]['cp'][0].real / gr0[0] - 1) for nu in sorted(rows)]
-    res.append((f'Con la métrica dinámica, el axión sube el modo f hasta un {max(sf):.1f} % (Cowling, paso 9: 5.4 %) '
+    res.append((f'Con la métrica dinámica, el axión sube el modo f hasta un {max(sf):.1f} % '
+                f'(Cowling, paso 9: {max(axcow["modes"][0]["cp"]):.1f} %) '
                 f'y su amortiguamiento por ondas gravitacionales pasa de {1 / (2 * np.pi * -ref["gr"][0].imag * 1e3):.2f} '
                 f'a {1 / (2 * np.pi * -rows[15.0]["cp"][0].imag * 1e3):.2f} s', True, 'resultado nuevo'))
     p2 = {nu: -rows[nu]['cp'][2].imag * 1e3 for nu in rows}
     num = max(p2, key=p2.get)
     res.append((f'Amortiguamiento máximo por axiones: p2 a {num:.0f} kHz, {p2[num]:.1f} Hz '
                 f'(tau_a = {1e3 / (2 * np.pi * p2[num]):.1f} ms), como en Cowling; la suma 1/tau_GW + 1/tau_a con el '
-                f'tau_a de Cowling solo acierta en orden de magnitud (p2 a 8 kHz: {p2[8.0]:.2f} Hz frente a 1.0)',
+                f'tau_a de Cowling solo acierta en orden de magnitud (p2 a 8 kHz: {p2[8.0]:.2f} Hz frente a {cow_im[8.0]:.1f})',
                 True, 'resultado nuevo'))
     return res
 

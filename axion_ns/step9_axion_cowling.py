@@ -133,8 +133,8 @@ def checks(ref, rows, none25):
             ours, theirs = abs(z.imag) * 1e3 > 1e-3, pv[i][1] != 0
             if ours != theirs:
                 (near if abs(z.real / nu - 1) < 0.003 else mism).append((nu, ['f', 'p1', 'p2'][i]))
-    res.append((f"Tabla II: los modos amortiguados son los mismos (Im nu = 0 por debajo de nu_a) salvo "
-                f"{len(near)} justo en el umbral", not mism,
+    res.append(("Tabla II: los modos amortiguados son los mismos (Im nu = 0 por debajo de nu_a)"
+                + (f" salvo {len(near)} justo en el umbral" if near else ", sin excepciones"), not mism,
                 ', '.join(f'{m} a {nu} kHz: Re nu a menos del 0.3 % de nu_a' for nu, m in near)))
     ratios = [abs(z.imag) * 1e3 / abs(pv[i][1]) for nu, pv in T2.items() for i, z in enumerate(rows[nu]['T2'])
               if abs(pv[i][1]) >= 1]
