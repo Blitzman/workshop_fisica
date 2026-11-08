@@ -172,6 +172,8 @@ alpha = D['params']['alpha']
 # ------------------------------------------------------------------ estrella realista (paso 15)
 SP = ROOT / 'results' / 'radial_star.json'
 S = json.loads(SP.read_text()) if SP.exists() else None
+STP = ROOT / 'results' / 'radial_stability.json'
+STB = json.loads(STP.read_text()) if STP.exists() else None
 if S:
     s6 = S['nu6']
     # Figura 4: espectro a nu_a = 6 kHz en dos filas (frecuencia real / amortiguados)
@@ -219,11 +221,29 @@ if S:
     _dev = [(abs(v_[0] / r_['base'][0] - 1), abs(v_[1] / r_['base'][1] - 1)) for r_ in rob.values() for v_ in r_.values()]
     rob_re, rob_im = (max(d[0] for d in _dev), 100 * max(d[1] for d in _dev)) if _dev else (0, 0)
     stab = S.get('stability', {})
+    if STB:
+        R_ = STB['region']
+        cA = STB['control_axion']
+        stb_rows = ''.join(
+            f'<li class="{"ok" if c["ok"] else "bad"}"><span class="pill">{"OK" if c["ok"] else "FALLA"}</span>'
+            f'<span>{html.escape(c["name"])}{(" <em>(" + html.escape(c["note"]) + ")</em>") if c["note"] else ""}</span></li>'
+            for c in STB['checks'])
+        res_ = ' y '.join(f'{fnum(float(k[2:]), 1)} kHz: índice {STB[k]["total"]:.0f}' for k in STB if k.startswith('nu'))
+        stab_html = f"""
+  <h3>Estabilidad radial (paso 16)</h3>
+  <p>Una perturbación inestable crece en el tiempo: su frecuencia tiene <code>Im ω &gt; 0</code>. Ahí la onda exterior decae y la función del empalme, escrita sin polos (<code>radial.det_entire</code>), es analítica. El principio del argumento cuenta sus ceros dentro de un contorno sin buscarlos uno a uno. Región: <code>|Re ν| ≤ {fnum(R_['xmax'], 0)}</code> kHz, <code>{R_['eps']} ≤ Im ν ≤ {fnum(R_['ymax'], 0)}</code> kHz. Además, en el eje imaginario la función es real y contamos sus cambios de signo hasta {fnum(R_['gmax'], 0)} kHz.</p>
+  <p><b>Resultado:</b> {res_}, sin ningún cambio de signo en el eje. <b>El método detecta inestabilidades cuando existen:</b> en estrellas más allá de la masa máxima da índice 1, sin axión y con axión, en este caso con el modo creciente en el eje, γ = {', '.join(fnum(g, 2) for g in cA['axis_sign_changes'])} kHz.</p>
+  <p><b>Qué no cubre:</b> crecimientos más lentos que {R_['eps']} kHz, que solo ve el barrido del eje (paso 15, desde 0,01 kHz); crecimientos más rápidos que {fnum(R_['ymax'], 0)} kHz, muy por encima de la escala dinámica de la estrella; y perturbaciones no radiales. Lo que obtenemos es que <b>no encontramos modos radiales inestables en esa región</b>, no que la estrella sea estable frente a toda perturbación.</p>
+  <p><b>Una trampa que encontramos por el camino:</b> un único contorno grande «encontraba» 2, 4 u 8 ceros según el muestreo. La fase de la función gira muy deprisa en los bordes largos, y dos muestras seguidas podían distar más de una vuelta sin que el refinado lo notara. Dividiendo el contorno en piezas, y quitando el factor analítico e^(i k r_m), que no tiene ceros, el resultado es 0 en todas ellas. Aun así, cerca del umbral la escalera de estados ligados del átomo gravitatorio, que se acumula en ν_a justo bajo el borde inferior, hace girar la fase más deprisa de lo que resuelve un muestreo fijo: a 3,4 kHz una pieza dio 1 con 48 puntos por lado y 0 con 96. Por eso cada índice solo se acepta si no cambia al doblar el muestreo. Los dos controles negativos del paso comprueban que esos fallos se detectan.</p>
+  <ul class="checks">{stb_rows}</ul>"""
+    else:
+        stab_html = (f"<p>Estabilidad: en el eje imaginario el determinante no cambia de signo "
+                     f"({', '.join(str(v_['sign_changes']) for v_ in stab.values())} cambios).</p>")
     rob_html = (f"""
   <h3>Robustez numérica y estabilidad</h3>
   <p>Los amortiguamientos de unos pocos Hz son lo más delicado del cálculo. Los recalculamos variando la tolerancia del integrador, el radio inicial, la longitud de la integración exterior y el radio donde se empalma con la solución exterior. Ninguna variante mueve Re ν más de un {rob_re:.0e} relativo ni Im ν más de un {rob_im:.3f} %:</p>
   <div class="tbl"><table><tr><th>modo</th><th>variante</th><th>Re ν (kHz)</th><th>Im ν (Hz)</th></tr>{rob_rows}</table></div>
-  <p>Estabilidad: en el eje imaginario <code>ω = iγ</code> (γ entre 0,01 y 10 kHz) el determinante no cambia de signo ni a 6 ni a 3,4 kHz ({', '.join(f"{v_['sign_changes']}" for v_ in stab.values())} cambios). No hemos detectado modos radiales que crezcan en ese rango. Un barrido de signo no es una demostración, porque puede no ver pares de raíces próximas ni raíces fuera del eje, y nada de esto dice algo sobre perturbaciones no radiales. Una prueba más completa sería el principio del argumento en el semiplano superior; está pendiente.</p>""" if rob else '')
+{stab_html}""" if rob else '')
     art = S.get('artifact')
     art_html = (f"""<div class="callout">
     <h3>Corrección: un artefacto retirado</h3>
@@ -295,8 +315,9 @@ import shutil
 FILES = ['axion_ns/model.py', 'axion_ns/geometry.py', 'axion_ns/compare.py', 'axion_ns/pipeline.py', 'axion_ns/nonradial.py',
          'axion_ns/fullgr.py', 'axion_ns/bsk26.py', 'axion_ns/axstar.py', 'axion_ns/axgr.py', 'axion_ns/radial.py',
          'axion_ns/step2_perturbations.py', 'axion_ns/step4_numerics.py', 'axion_ns/step14_radial_branches.py',
-         'axion_ns/step15_radial_star.py', 'report/build_radial.py', 'pyproject.toml', 'uv.lock']
-DATA = ['results/radial_branches.json', 'results/radial_star.json']
+         'axion_ns/step15_radial_star.py', 'axion_ns/step16_radial_stability.py', 'report/build_radial.py',
+         'pyproject.toml', 'uv.lock']
+DATA = ['results/radial_branches.json', 'results/radial_star.json', 'results/radial_stability.json']
 FD = ROOT / 'report' / 'radial_files'
 FD.mkdir(exist_ok=True)
 published = {}

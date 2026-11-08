@@ -1,5 +1,5 @@
 {
- "seconds": 5450,
+ "seconds": 10115,
  "env": {
   "python": "3.14.4",
   "platform": "Linux x86_64",
@@ -873,6 +873,48 @@
      "name": "Robustez de Im ν: rtol, r0 y longitud exterior cambian como mucho un 0.004 %; el radio de empalme (último paso hacia fuera) un 0.00 % en H1 (6 kHz), 0.00 % en F (3,4 kHz)",
      "ok": true,
      "note": "H13; el radio de empalme es la incertidumbre dominante"
+    }
+   ]
+  },
+  {
+   "step": "Estabilidad radial: principio del argumento",
+   "module": "step16_radial_stability",
+   "seconds": 4665.0,
+   "checks": [
+    {
+     "name": "Control positivo sin axión: índice 1 más allá de la masa máxima (p_c = 1000) y 0 antes (p_c = 800)",
+     "ok": true,
+     "note": "H18(b)"
+    },
+    {
+     "name": "Control positivo con axión (nu_a = 6 kHz, p_c = 1000): índice 1; cambio de signo en el eje imaginario en gamma = 0.58 kHz",
+     "ok": true,
+     "note": "H18(c)"
+    },
+    {
+     "name": "nu_a = 6.0 kHz: ningún cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [0, 0], [0, 0]]; 1545 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 1e-14",
+     "ok": true,
+     "note": "H18(a)"
+    },
+    {
+     "name": "Robustez (6 kHz, franja central baja): índice 0 con 192 puntos por lado y 0 con eps/2",
+     "ok": true,
+     "note": "H18(d)"
+    },
+    {
+     "name": "Control negativo 1: sin quitar el factor e^(i k r_m) y con muestreo grueso, el contorno pierde vueltas (índice 3 en vez de 0)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: con la rama principal de k también para Re omega < 0, la simetría F(-w*) = F(w)* se rompe (1.0e+00 frente a 1e-14)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "nu_a = 3.4 kHz: ningún cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [1, 0, 0], [0, 0]]; 1950 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 1e-14",
+     "ok": true,
+     "note": "H18(a)"
     }
    ]
   }

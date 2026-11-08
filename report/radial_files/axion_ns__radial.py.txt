@@ -126,7 +126,7 @@ def exterior_matrix():
     return sp.lambdify((r, w, *AG.BG), M, 'numpy', cse=True)
 
 
-def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1, dphi=0.0):
+def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1, dphi=0.0, raw=False):
     """(psi, psi') del axión en r_m con condición saliente (o ligada), integrando la ecuación exterior
     derivada (exterior_matrix con theta_0 = 0: Schwarzschild + KG masivo, = Ec. 3.7 del Paper I) a lo largo
     del rayo complejo r = r_m + s e^{i phi}, con phi = pi/2 - arg(k): ahí la onda saliente decae como e^{-|k| s}.
@@ -138,7 +138,10 @@ def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1,
     k = np.sqrt(complex(omega**2 - ma**2))
     if k.imag < 0 and abs(k.real) < 1e-14:
         k = -k
-    k = sheet * k                      # sheet = -1: onda entrante (control negativo)
+    if sheet == 0:                     # semiplano superior: la rama con Im k > 0 (decae), también si Re omega < 0
+        k = k if k.imag > 0 else -k
+    else:
+        k = sheet * k                  # sheet = -1: onda entrante (control negativo)
     phi = np.pi / 2 - np.angle(k) + dphi    # dphi != 0: prueba de independencia del contorno
     e = np.exp(1j * phi)
     S = n_decay / (abs(k) * np.cos(dphi))
@@ -158,6 +161,13 @@ def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1,
     sc = psi
     rhs = lambda s, y: e * (np.asarray(Ae(r_m + s * e, omega, *bg(r_m + s * e)), dtype=complex) @ y)
     sol = solve_ivp(rhs, (S, 0.0), [psi / sc, dpsi / sc], method='DOP853', rtol=rtol, atol=1e-60)
+    if raw == 'inf':   # solo la normalización en el infinito (control negativo del paso 16: el contorno pierde vueltas)
+        return sol.y[0, -1] * sc, sol.y[1, -1] * sc
+    if raw:     # normalizada a la forma asintótica e^{i(kr + eta ln r)}/r: no depende del camino, analítica en omega.
+        # Se divide además por esa misma forma evaluada en r_m (analítica y sin ceros en Im omega > 0): no cambia
+        # el número de ceros y quita el giro rápido de fase e^{i k r_m}, que el muestreo del contorno no resolvería.
+        f_rm = np.exp(1j * (k * (rinf - r_m) + eta * np.log(rinf / r_m))) * r_m / rinf
+        return sol.y[0, -1] * f_rm, sol.y[1, -1] * f_rm
     return sol.y[0, -1], sol.y[1, -1]
 
 
@@ -201,6 +211,75 @@ def det(st, omega, rm=None, sheet=1, rtol=1e-10, r0=1e-3, n_decay=40.0):
     L = dps / ps
     (a, ya), (c, yc) = cols
     return a * (yc[1] - L * yc[0]) - c * (ya[1] - L * ya[0])
+
+
+def det_entire(st, omega, rm=None, rtol=1e-10, n_decay=40.0, inward=True, sheet=0, raw=True):
+    """Versión sin polos de det para el principio del argumento en Im omega > 0: multiplica por Psi,
+    con Psi normalizada en el infinito (raw=True) y la rama Im k > 0. Mismos ceros que det fuera del eje real.
+    inward=True: Psi (que decae hacia fuera) se integra de r_m a R y se empalma en la superficie. Es lo estable
+    en Im omega > 0: hacia dentro Psi es la solución dominante. Llevar las semillas de R a r_m (inward=False,
+    como hace det) mezcla la solución que crece con la que decae y pierde la fase cuando Im omega es grande."""
+    rm = rm or AG.r_match(st)
+    ps, dps = exterior_psi(omega, st.sol.y[0, -1], rm, st.ma, np.sqrt(st.fa2), st.E0, sheet=sheet,
+                           n_decay=n_decay, rtol=min(rtol, 1e-11), raw=raw)
+    sf, sa = (interior(st, omega, seed, rtol=rtol).y[:, -1] for seed in ('fluid', 'axion'))
+    a, c = sf[1], sa[1]
+    y = c * sf - a * sa                                   # Delta p(R) = 0
+    if inward:
+        from scipy.integrate import solve_ivp
+        Ae = exterior_matrix()
+        u = solve_ivp(lambda rr, v: np.asarray(Ae(rr, omega, *_bgvals(st, rr)), dtype=complex) @ v,
+                      (rm, st.R), [ps, dps], method='DOP853', rtol=rtol, atol=1e-300).y[:, -1]
+        return y[3] * u[0] - y[2] * u[1]
+    yo = outward(st, omega, y[2:], rm, rtol=rtol).y[:, -1]
+    return yo[1] * ps - yo[0] * dps
+
+
+def winding(f, corners, max_step=np.pi / 3, n0=48, max_pts=6000, pool=None, cache=None):
+    """Índice de f alrededor del polígono `corners` (sentido antihorario), con muestreo adaptativo: se
+    subdivide todo tramo en que la fase salta más de max_step. Devuelve (índice, nº de puntos, |f| mínimo,
+    salto de fase máximo). `cache` (dict) reutiliza evaluaciones entre llamadas.
+    Ojo: el refinado no detecta saltos de una vuelta entera entre dos muestras (aliasing); para eso está
+    winding_converged."""
+    cache = {} if cache is None else cache
+    _map = (pool.map if pool else map)
+
+    def ev(f_, zs):
+        todo = [z for z in zs if z not in cache]
+        for z, v in zip(todo, _map(f_, todo)):
+            cache[z] = v
+        return [cache[z] for z in zs]
+    pts = []
+    for z0, z1 in zip(corners, corners[1:] + corners[:1]):
+        pts += [complex(z) for z in z0 + (z1 - z0) * np.arange(n0) / n0]
+    vals = list(ev(f, pts))
+    while True:
+        ph = [np.angle(vals[(i + 1) % len(vals)] / vals[i]) for i in range(len(vals))]
+        bad = [i for i, d in enumerate(ph) if abs(d) > max_step]
+        if not bad or len(pts) > max_pts:
+            break
+        new = [(i, complex(0.5 * (pts[i] + pts[(i + 1) % len(pts)]))) for i in bad]
+        nv = list(ev(f, [z for _, z in new]))
+        for (i, z), v in sorted(zip(new, nv), key=lambda t: -t[0][0]):
+            pts.insert(i + 1, z)
+            vals.insert(i + 1, v)
+    ph = [np.angle(vals[(i + 1) % len(vals)] / vals[i]) for i in range(len(vals))]
+    return float(sum(ph) / (2 * np.pi)), len(pts), float(min(abs(v) for v in vals)), max(abs(d) for d in ph)
+
+
+def winding_converged(f, corners, n0=48, n_max=384, pool=None):
+    """winding con n0, 2 n0, 4 n0...: se acepta el índice cuando dos muestreos seguidos coinciden (los puntos
+    del grueso se reutilizan). Devuelve (índice, n0 final, puntos, salto máximo, lista de índices probados)."""
+    cache, tried = {}, []
+    n = n0
+    while True:
+        w = winding(f, corners, n0=n, pool=pool, cache=cache)
+        tried.append(round(w[0]))
+        if len(tried) >= 2 and tried[-1] == tried[-2]:
+            return tried[-1], n, len(cache), w[3], tried
+        if n >= n_max:
+            return None, n, len(cache), w[3], tried
+        n *= 2
 
 
 def fluid_fraction(st, omega, rm=None):

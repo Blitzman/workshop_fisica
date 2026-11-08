@@ -144,12 +144,39 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
     - La nota de H8 decía «el amortiguamiento se anula al llegar al umbral», en contradicción con el resumen. Ahora dice que es una ley de tramo intermedio y da dónde se anula (Re w − 1 = 2,6·10⁻⁵, antes del umbral).
     - El «~18 %» de variación de Im k estaba tecleado a mano; el valor real es 19 %. Ahora se calcula.
     - La fracción fluida queda descrita como diagnóstico, no como energía conservada: para un modo cuasi-normal depende del corte en r_m.
-    - Sigue pendiente y la reclaman las tres revisiones: el principio del argumento en el semiplano superior para la estrella realista. También una comprobación independiente de las ecuaciones radiales en GR (por ejemplo, frente a un código publicado de modos radiales sin axión, más allá del punto de retorno).
+    - El principio del argumento para la estrella realista, que reclamaban las tres revisiones, ya está hecho: H18 y paso 16. Sigue pendiente una comprobación independiente de las ecuaciones radiales en GR (por ejemplo, frente a un código publicado de modos radiales sin axión, más allá del punto de retorno).
     - El defecto cuántico negativo de la escalera (n_eff = 5,967 en n = 6) sigue sin explicar.
     - En `build_radial.py` quedan cifras tecleadas en el recuadro de la corrección (~0,16 %, ~0,5 %, 1,6·10⁻³). Para el informe radial faltan además: la estabilidad con el principio del argumento en el semiplano superior (crítica A), el barrido denso en el umbral (D), redactar como «no detectamos inestabilidades» y no como «es estable», y separar mejor lo demostrado de lo que es hipótesis.
   - `axstar.Phi_shift` ajusta Φ a Schwarzschild en R con `m(R)`, pero la cola del condensado fuera de la estrella lleva un 0,5 % de la masa. Lejos, `Φ − ½ ln(1 − 2M_t/r) = +1,6·10⁻³` (a 6 y a 3,4 kHz), en vez de 0.
   - *Predicción:* normalizando con `M_t` al final de la integración del fondo, (i) la dependencia de `Im ν` con el radio de empalme cae a ≲0,1 % y (ii) todas las frecuencias con axión se desplazan ~0,16 %.
   - *Afecta a código compartido:* los pasos 9 (Cowling, tablas del Paper II) y 10 (GR no radial) usan el mismo `Phi_shift`.
+
+- **[H18 · CONFIRMADA, con una trampa de método] Estabilidad radial de la estrella realista por el principio del argumento (crítica A, pedida por tres revisiones).**
+  - *Problema del método actual:* `radial.det` usa `L = ψ'/ψ` y tiene polos donde `ψ(r_m) = 0`, de modo que el índice cuenta ceros − polos. Además, `exterior_psi` normaliza ψ a 1 en el punto de partida del rayo, que depende de |k| y de arg k: (ψ, ψ') sueltos no son analíticos en ω, solo su cociente.
+  - *Cambio:* `F(ω) = a(y_c' Ψ − Ψ' y_c) − c(y_a' Ψ − Ψ' y_a)`, con Ψ normalizada a la forma asintótica `e^{i(kr+η ln r)}/r`, que no depende del camino. F es analítica en el semiplano superior si se toma la rama de k con `Im k > 0`. Para `Re ω < 0`, la raíz principal da `Im k < 0` y hay que cambiarle el signo.
+  - *Contorno:* un rectángulo `Re ν ∈ [−X, X]`, `Im ν ∈ [ε, Y]` que cruza el eje imaginario, con muestreo adaptativo (salto de fase < π/3 entre puntos). ε > 0 deja fuera los estados ligados reales (F, la escalera del átomo). Las tasas de crecimiento por debajo de ε quedan cubiertas por el barrido de signo en el eje imaginario, desde 0,01 kHz.
+  - *Predicciones:*
+    - (a) ν_a = 6 y 3,4 kHz: índice 0.
+    - (b) Control positivo sin axión: con la función entera `Δp(R)` de la semilla fluida, p_c = 1000 MeV/fm³ (más allá de M_max, 905) da índice 1 y p_c = 800 da 0.
+    - (c) Control positivo con axión: una estrella con axión más allá de su masa máxima da índice 1, con el mismo F(ω) que (a).
+    - (d) El índice no cambia al agrandar el rectángulo ni con ε/2.
+  - *Si (b) o (c) fallan,* el método no detecta inestabilidades y (a) no vale nada.
+  - *Resultado (2026-11-08):*
+    - (b) Sin axión: índice 1 con p_c = 1000 (modo creciente en i·0,70 kHz) y 0 con p_c = 800. Confirmado.
+    - (c) Con axión, ν_a = 6 kHz y p_c = 1000: índice 1, y F cambia de signo una sola vez en el eje imaginario, en γ ≈ 0,6 kHz. Confirmado.
+    - (a) ν_a = 6 y 3,4 kHz: índice 0 en todas las piezas, y ningún cambio de signo ni mínimo de |F| en el eje hasta 20–25 kHz. Confirmado.
+    - (d) Con ε/2, el doble de muestreo y el rectángulo ampliado a ±20 kHz por piezas: 0. Confirmado, pero solo troceando (ver la trampa).
+  - *Tres errores míos por el camino:*
+    - `sheet=0` multiplicaba k por 0 antes de elegir la rama.
+    - Las funciones anónimas no se pueden repartir entre procesos.
+    - **Aliasing en el contorno:** la normalización en el infinito deja en Ψ el factor e^{i k r_m}, cuya fase gira ~25 rad en el borde inferior. Con 12 puntos por lado se perdían vueltas y salían índices −2 (que parecían polos). Se corrigió dividiendo por la forma asintótica en r_m, que es analítica y sin ceros.
+    - Aun así, un único rectángulo grande daba 2, 4 u 8 según el muestreo y el tamaño, porque el borde superior es largo y |F| llega a 10²⁴. Troceando (franja central |Re ν| ≤ 2 y piezas a la derecha), cada pieza da 0 y no cambia al refinar.
+  - *Comprobaciones que lo destaparon:* la simetría F(−ω*) = F(ω)*, que se cumple a 10⁻¹⁴, obliga a que las dos mitades den lo mismo. Con las mitades a 0 y el eje sin ceros, el total no puede ser 2, así que era muestreo.
+  - *Segunda trampa, ya en el paso 16:* a 3,4 kHz la pieza 2 < Re ν < 12, 0,05 < Im ν < 4 dio 1 con 48 puntos por lado y 0 con 96. Es la escalera del átomo gravitatorio, que se acumula en ν_a justo bajo el borde inferior y hace girar la fase más deprisa de lo que resuelve un muestreo fijo. Desde entonces `radial.winding_converged` solo acepta un índice cuando dos muestreos seguidos (n, 2n, reutilizando puntos) coinciden.
+  - *Paso 16 definitivo: 7/7.* Controles positivos 1 (sin axión) y 1 (con axión, γ = 0,58 kHz); ν_a = 6 y 3,4 kHz: 0 en todas las piezas, convergido; eje sin cambios de signo hasta 20 kHz; ε/2 y 192 puntos por lado: 0. Controles negativos: sin quitar e^{ikr_m} sale índice 3; con la rama principal de k, la simetría se rompe (1,0 frente a 10⁻¹⁴).
+  - *Lección:* un índice del principio del argumento solo vale si no cambia al refinar el muestreo y al trocear el contorno. Un contorno largo sobre una función que crece en exponencial pierde vueltas sin avisar.
+  - *Argumento físico de apoyo, no demostrado aquí:* si el sistema es autoadjunto con condición de decaimiento, que es lo esperable porque sale de una acción, ω² es real y las inestabilidades solo pueden estar en el eje imaginario. Es lo que se ve en los dos controles.
+  - *Código:* `axion_ns/step16_radial_stability.py`, `radial.det_entire`, `radial.winding`.
 
 ## 2. Insights físicos y preguntas abiertas para los autores
 

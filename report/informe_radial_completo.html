@@ -221,7 +221,13 @@ a { color: var(--accent); }
   <h3>Robustez numérica y estabilidad</h3>
   <p>Los amortiguamientos de unos pocos Hz son lo más delicado del cálculo. Los recalculamos variando la tolerancia del integrador, el radio inicial, la longitud de la integración exterior y el radio donde se empalma con la solución exterior. Ninguna variante mueve Re ν más de un 1e-06 relativo ni Im ν más de un 0.004 %:</p>
   <div class="tbl"><table><tr><th>modo</th><th>variante</th><th>Re ν (kHz)</th><th>Im ν (Hz)</th></tr><tr><td>H1 (6 kHz)</td><td>base</td><td>8.119209</td><td>-3.6023</td></tr><tr><td>H1 (6 kHz)</td><td>rtol 1e-12</td><td>8.119209</td><td>-3.6023</td></tr><tr><td>H1 (6 kHz)</td><td>r0 1e-4 km</td><td>8.119216</td><td>-3.6022</td></tr><tr><td>H1 (6 kHz)</td><td>exterior ×1,5</td><td>8.119209</td><td>-3.6023</td></tr><tr><td>H1 (6 kHz)</td><td>empalme |θ0|&lt;1e-05 (84 km)</td><td>8.119209</td><td>-3.6023</td></tr><tr><td>H1 (6 kHz)</td><td>empalme |θ0|&lt;1e-06 (101 km)</td><td>8.119209</td><td>-3.6023</td></tr><tr><td>F (3,4 kHz)</td><td>base</td><td>3.410292</td><td>-0.5755</td></tr><tr><td>F (3,4 kHz)</td><td>rtol 1e-12</td><td>3.410292</td><td>-0.5755</td></tr><tr><td>F (3,4 kHz)</td><td>r0 1e-4 km</td><td>3.410294</td><td>-0.5755</td></tr><tr><td>F (3,4 kHz)</td><td>exterior ×1,5</td><td>3.410292</td><td>-0.5755</td></tr><tr><td>F (3,4 kHz)</td><td>empalme |θ0|&lt;1e-05 (131 km)</td><td>3.410292</td><td>-0.5755</td></tr><tr><td>F (3,4 kHz)</td><td>empalme |θ0|&lt;1e-06 (160 km)</td><td>3.410292</td><td>-0.5755</td></tr></table></div>
-  <p>Estabilidad: en el eje imaginario <code>ω = iγ</code> (γ entre 0,01 y 10 kHz) el determinante no cambia de signo ni a 6 ni a 3,4 kHz (0, 0 cambios). No hemos detectado modos radiales que crezcan en ese rango. Un barrido de signo no es una demostración, porque puede no ver pares de raíces próximas ni raíces fuera del eje, y nada de esto dice algo sobre perturbaciones no radiales. Una prueba más completa sería el principio del argumento en el semiplano superior; está pendiente.</p>
+
+  <h3>Estabilidad radial (paso 16)</h3>
+  <p>Una perturbación inestable crece en el tiempo: su frecuencia tiene <code>Im ω &gt; 0</code>. Ahí la onda exterior decae y la función del empalme, escrita sin polos (<code>radial.det_entire</code>), es analítica. El principio del argumento cuenta sus ceros dentro de un contorno sin buscarlos uno a uno. Región: <code>|Re ν| ≤ 12</code> kHz, <code>0.05 ≤ Im ν ≤ 12</code> kHz. Además, en el eje imaginario la función es real y contamos sus cambios de signo hasta 20 kHz.</p>
+  <p><b>Resultado:</b> 6.0 kHz: índice 0 y 3.4 kHz: índice 0, sin ningún cambio de signo en el eje. <b>El método detecta inestabilidades cuando existen:</b> en estrellas más allá de la masa máxima da índice 1, sin axión y con axión, en este caso con el modo creciente en el eje, γ = 0.58 kHz.</p>
+  <p><b>Qué no cubre:</b> crecimientos más lentos que 0.05 kHz, que solo ve el barrido del eje (paso 15, desde 0,01 kHz); crecimientos más rápidos que 12 kHz, muy por encima de la escala dinámica de la estrella; y perturbaciones no radiales. Lo que obtenemos es que <b>no encontramos modos radiales inestables en esa región</b>, no que la estrella sea estable frente a toda perturbación.</p>
+  <p><b>Una trampa que encontramos por el camino:</b> un único contorno grande «encontraba» 2, 4 u 8 ceros según el muestreo. La fase de la función gira muy deprisa en los bordes largos, y dos muestras seguidas podían distar más de una vuelta sin que el refinado lo notara. Dividiendo el contorno en piezas, y quitando el factor analítico e^(i k r_m), que no tiene ceros, el resultado es 0 en todas ellas. Aun así, cerca del umbral la escalera de estados ligados del átomo gravitatorio, que se acumula en ν_a justo bajo el borde inferior, hace girar la fase más deprisa de lo que resuelve un muestreo fijo: a 3,4 kHz una pieza dio 1 con 48 puntos por lado y 0 con 96. Por eso cada índice solo se acepta si no cambia al doblar el muestreo. Los dos controles negativos del paso comprueban que esos fallos se detectan.</p>
+  <ul class="checks"><li class="ok"><span class="pill">OK</span><span>Control positivo sin axión: índice 1 más allá de la masa máxima (p_c = 1000) y 0 antes (p_c = 800) <em>(H18(b))</em></span></li><li class="ok"><span class="pill">OK</span><span>Control positivo con axión (nu_a = 6 kHz, p_c = 1000): índice 1; cambio de signo en el eje imaginario en gamma = 0.58 kHz <em>(H18(c))</em></span></li><li class="ok"><span class="pill">OK</span><span>nu_a = 6.0 kHz: ningún cero de F con |Re nu| &lt;= 12, 0.05 &lt;= Im nu &lt;= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [0, 0], [0, 0]]; 1545 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 1e-14 <em>(H18(a))</em></span></li><li class="ok"><span class="pill">OK</span><span>Robustez (6 kHz, franja central baja): índice 0 con 192 puntos por lado y 0 con eps/2 <em>(H18(d))</em></span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 1: sin quitar el factor e^(i k r_m) y con muestreo grueso, el contorno pierde vueltas (índice 3 en vez de 0)</span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 2: con la rama principal de k también para Re omega &lt; 0, la simetría F(-w*) = F(w)* se rompe (1.0e+00 frente a 1e-14)</span></li><li class="ok"><span class="pill">OK</span><span>nu_a = 3.4 kHz: ningún cero de F con |Re nu| &lt;= 12, 0.05 &lt;= Im nu &lt;= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [1, 0, 0], [0, 0]]; 1950 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 1e-14 <em>(H18(a))</em></span></li></ul>
   <div class="callout">
     <h3>Corrección: un artefacto retirado</h3>
     <p>La versión anterior de este informe mostraba una «rama axiónica» de resonancias muy amortiguadas en la estrella realista (6,585 − 0,563i kHz y otras casi equiespaciadas). Era un artefacto. Normalizábamos el lapso Φ en la superficie con la masa encerrada allí, sin contar la nube del axión fuera de la estrella (~0,5 % de la masa). Eso dejaba Φ(∞) = 1,6·10⁻³ en vez de 0, y el coeficiente <code>ω² e^(−2Φ)</code> daba un salto en el punto de empalme con la solución exterior. Ese salto refleja parte de la onda y forma una cavidad entre la superficie y el empalme.</p>
@@ -1567,7 +1573,7 @@ def report(title, results):
     for name, ok, note in results:
         print(f&#x27;  [{&quot;OK &quot; if ok else &quot;FAIL&quot;}] {name}&#x27; + (f&#x27;  -- {note}&#x27; if note else &#x27;&#x27;))
     return results
-</code></pre></details><details class="src"><summary><code>axion_ns/radial.py</code> <span class="small">(241 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Modos radiales (l = 0) en relatividad general completa con el condensado de axiones (hipótesis H11).
+</code></pre></details><details class="src"><summary><code>axion_ns/radial.py</code> <span class="small">(320 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Modos radiales (l = 0) en relatividad general completa con el condensado de axiones (hipótesis H11).
 
 Nada se transcribe a mano: se parte de las ecuaciones linealizadas desde la acción (pipeline.linear_equations,
 las mismas que el paso 2 compara con la Ec. (3.3) del Paper I) y se convierten en una matriz numérica con
@@ -1695,7 +1701,7 @@ def exterior_matrix():
     return sp.lambdify((r, w, *AG.BG), M, &#x27;numpy&#x27;, cse=True)
 
 
-def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1, dphi=0.0):
+def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1, dphi=0.0, raw=False):
     &quot;&quot;&quot;(psi, psi&#x27;) del axión en r_m con condición saliente (o ligada), integrando la ecuación exterior
     derivada (exterior_matrix con theta_0 = 0: Schwarzschild + KG masivo, = Ec. 3.7 del Paper I) a lo largo
     del rayo complejo r = r_m + s e^{i phi}, con phi = pi/2 - arg(k): ahí la onda saliente decae como e^{-|k| s}.
@@ -1707,7 +1713,10 @@ def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1,
     k = np.sqrt(complex(omega**2 - ma**2))
     if k.imag &lt; 0 and abs(k.real) &lt; 1e-14:
         k = -k
-    k = sheet * k                      # sheet = -1: onda entrante (control negativo)
+    if sheet == 0:                     # semiplano superior: la rama con Im k &gt; 0 (decae), también si Re omega &lt; 0
+        k = k if k.imag &gt; 0 else -k
+    else:
+        k = sheet * k                  # sheet = -1: onda entrante (control negativo)
     phi = np.pi / 2 - np.angle(k) + dphi    # dphi != 0: prueba de independencia del contorno
     e = np.exp(1j * phi)
     S = n_decay / (abs(k) * np.cos(dphi))
@@ -1727,6 +1736,13 @@ def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1,
     sc = psi
     rhs = lambda s, y: e * (np.asarray(Ae(r_m + s * e, omega, *bg(r_m + s * e)), dtype=complex) @ y)
     sol = solve_ivp(rhs, (S, 0.0), [psi / sc, dpsi / sc], method=&#x27;DOP853&#x27;, rtol=rtol, atol=1e-60)
+    if raw == &#x27;inf&#x27;:   # solo la normalización en el infinito (control negativo del paso 16: el contorno pierde vueltas)
+        return sol.y[0, -1] * sc, sol.y[1, -1] * sc
+    if raw:     # normalizada a la forma asintótica e^{i(kr + eta ln r)}/r: no depende del camino, analítica en omega.
+        # Se divide además por esa misma forma evaluada en r_m (analítica y sin ceros en Im omega &gt; 0): no cambia
+        # el número de ceros y quita el giro rápido de fase e^{i k r_m}, que el muestreo del contorno no resolvería.
+        f_rm = np.exp(1j * (k * (rinf - r_m) + eta * np.log(rinf / r_m))) * r_m / rinf
+        return sol.y[0, -1] * f_rm, sol.y[1, -1] * f_rm
     return sol.y[0, -1], sol.y[1, -1]
 
 
@@ -1770,6 +1786,75 @@ def det(st, omega, rm=None, sheet=1, rtol=1e-10, r0=1e-3, n_decay=40.0):
     L = dps / ps
     (a, ya), (c, yc) = cols
     return a * (yc[1] - L * yc[0]) - c * (ya[1] - L * ya[0])
+
+
+def det_entire(st, omega, rm=None, rtol=1e-10, n_decay=40.0, inward=True, sheet=0, raw=True):
+    &quot;&quot;&quot;Versión sin polos de det para el principio del argumento en Im omega &gt; 0: multiplica por Psi,
+    con Psi normalizada en el infinito (raw=True) y la rama Im k &gt; 0. Mismos ceros que det fuera del eje real.
+    inward=True: Psi (que decae hacia fuera) se integra de r_m a R y se empalma en la superficie. Es lo estable
+    en Im omega &gt; 0: hacia dentro Psi es la solución dominante. Llevar las semillas de R a r_m (inward=False,
+    como hace det) mezcla la solución que crece con la que decae y pierde la fase cuando Im omega es grande.&quot;&quot;&quot;
+    rm = rm or AG.r_match(st)
+    ps, dps = exterior_psi(omega, st.sol.y[0, -1], rm, st.ma, np.sqrt(st.fa2), st.E0, sheet=sheet,
+                           n_decay=n_decay, rtol=min(rtol, 1e-11), raw=raw)
+    sf, sa = (interior(st, omega, seed, rtol=rtol).y[:, -1] for seed in (&#x27;fluid&#x27;, &#x27;axion&#x27;))
+    a, c = sf[1], sa[1]
+    y = c * sf - a * sa                                   # Delta p(R) = 0
+    if inward:
+        from scipy.integrate import solve_ivp
+        Ae = exterior_matrix()
+        u = solve_ivp(lambda rr, v: np.asarray(Ae(rr, omega, *_bgvals(st, rr)), dtype=complex) @ v,
+                      (rm, st.R), [ps, dps], method=&#x27;DOP853&#x27;, rtol=rtol, atol=1e-300).y[:, -1]
+        return y[3] * u[0] - y[2] * u[1]
+    yo = outward(st, omega, y[2:], rm, rtol=rtol).y[:, -1]
+    return yo[1] * ps - yo[0] * dps
+
+
+def winding(f, corners, max_step=np.pi / 3, n0=48, max_pts=6000, pool=None, cache=None):
+    &quot;&quot;&quot;Índice de f alrededor del polígono `corners` (sentido antihorario), con muestreo adaptativo: se
+    subdivide todo tramo en que la fase salta más de max_step. Devuelve (índice, nº de puntos, |f| mínimo,
+    salto de fase máximo). `cache` (dict) reutiliza evaluaciones entre llamadas.
+    Ojo: el refinado no detecta saltos de una vuelta entera entre dos muestras (aliasing); para eso está
+    winding_converged.&quot;&quot;&quot;
+    cache = {} if cache is None else cache
+    _map = (pool.map if pool else map)
+
+    def ev(f_, zs):
+        todo = [z for z in zs if z not in cache]
+        for z, v in zip(todo, _map(f_, todo)):
+            cache[z] = v
+        return [cache[z] for z in zs]
+    pts = []
+    for z0, z1 in zip(corners, corners[1:] + corners[:1]):
+        pts += [complex(z) for z in z0 + (z1 - z0) * np.arange(n0) / n0]
+    vals = list(ev(f, pts))
+    while True:
+        ph = [np.angle(vals[(i + 1) % len(vals)] / vals[i]) for i in range(len(vals))]
+        bad = [i for i, d in enumerate(ph) if abs(d) &gt; max_step]
+        if not bad or len(pts) &gt; max_pts:
+            break
+        new = [(i, complex(0.5 * (pts[i] + pts[(i + 1) % len(pts)]))) for i in bad]
+        nv = list(ev(f, [z for _, z in new]))
+        for (i, z), v in sorted(zip(new, nv), key=lambda t: -t[0][0]):
+            pts.insert(i + 1, z)
+            vals.insert(i + 1, v)
+    ph = [np.angle(vals[(i + 1) % len(vals)] / vals[i]) for i in range(len(vals))]
+    return float(sum(ph) / (2 * np.pi)), len(pts), float(min(abs(v) for v in vals)), max(abs(d) for d in ph)
+
+
+def winding_converged(f, corners, n0=48, n_max=384, pool=None):
+    &quot;&quot;&quot;winding con n0, 2 n0, 4 n0...: se acepta el índice cuando dos muestreos seguidos coinciden (los puntos
+    del grueso se reutilizan). Devuelve (índice, n0 final, puntos, salto máximo, lista de índices probados).&quot;&quot;&quot;
+    cache, tried = {}, []
+    n = n0
+    while True:
+        w = winding(f, corners, n0=n, pool=pool, cache=cache)
+        tried.append(round(w[0]))
+        if len(tried) &gt;= 2 and tried[-1] == tried[-2]:
+            return tried[-1], n, len(cache), w[3], tried
+        if n &gt;= n_max:
+            return None, n, len(cache), w[3], tried
+        n *= 2
 
 
 def fluid_fraction(st, omega, rm=None):
@@ -2266,6 +2351,140 @@ def run():
 
 if __name__ == &#x27;__main__&#x27;:
     run()
+</code></pre></details><details class="src"><summary><code>axion_ns/step16_radial_stability.py</code> <span class="small">(134 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 16: estabilidad radial de la estrella con condensado por el principio del argumento (hipótesis H18).
+
+Responde a la crítica A de las revisiones externas: el barrido de signo en el eje imaginario (paso 15) no excluye
+raíces fuera del eje ni pares próximos. Aquí se cuentan los ceros de F(omega) = radial.det_entire en el semiplano
+inestable Im omega &gt; 0, donde la solución exterior decae (rama Im k &gt; 0) y F es analítica y sin polos.
+
+- Cada índice se acepta solo si no cambia al doblar el muestreo (radial.winding_converged): cerca del umbral la
+  escalera de estados ligados del átomo gravitatorio, que se acumula en nu_a, hace girar la fase más deprisa de lo
+  que resuelve un muestreo fijo (a 3,4 kHz una pieza daba 1 con 48 puntos por lado y 0 con 96).
+- Contorno: piezas |Re nu| &lt;= 12 kHz, eps &lt;= Im nu &lt;= 12 kHz. Una franja central (|Re nu| &lt;= 2) que contiene el eje
+  y dos piezas a la derecha; las de la izquierda valen lo mismo por la simetría F(-omega*) = F(omega)*, que se
+  comprueba. Un único rectángulo grande pierde vueltas: su borde superior es largo y la fase gira deprisa
+  (lo vimos: 2, 4 u 8 «ceros» según el muestreo, que desaparecen al trocear).
+- En el eje imaginario F es real: se cuentan además sus cambios de signo hasta 20 kHz.
+- Controles positivos: estrellas más allá de la masa máxima (sin axión y con axión) deben dar índice 1.
+- Controles negativos: sin quitar el factor e^{i k r_m} el contorno pierde vueltas, y con la rama principal de k
+  para Re omega &lt; 0 se rompe la simetría; las comprobaciones lo detectan.
+&quot;&quot;&quot;
+import json
+import multiprocessing as mp
+from pathlib import Path
+
+import numpy as np
+
+from . import axstar as AX
+from . import radial as RD
+from .pipeline import report
+
+OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
+EPS, YMAX, XC, XMAX, GMAX = 0.05, 12.0, 2.0, 12.0, 20.0
+TILES_C = [(-XC, XC, EPS, 4.0), (-XC, XC, 4.0, YMAX)]
+TILES_R = [(XC, XMAX, EPS, 4.0), (XC, XMAX, 4.0, YMAX)]
+_S = {}
+
+
+def _F(nu):
+    st, kw = _S[&#x27;st&#x27;], _S[&#x27;kw&#x27;]
+    return complex(RD.det_entire(st, AX.omega_of(nu), **kw))
+
+
+def _g(nu):                              # sin axión: Delta p(R) de la semilla fluida, entera en omega
+    return complex(RD.interior(_S[&#x27;st&#x27;], AX.omega_of(nu), &#x27;fluid&#x27;).y[1, -1])
+
+
+def _corners(b):
+    x0, x1, y0, y1 = b
+    return [complex(x0, y0), complex(x1, y0), complex(x1, y1), complex(x0, y1)]
+
+
+def count(st, f=_F, n0=48, eps=EPS, kw=None):
+    &quot;&quot;&quot;Índice total en |Re nu| &lt;= XMAX, eps &lt;= Im nu &lt;= YMAX (franja central + 2 x derecha) y cambios de signo de F
+    en el eje imaginario. Devuelve un dict con todo.&quot;&quot;&quot;
+    _S.update(st=st, kw=kw or {})
+    tc = [(a, b, max(c, eps) if c == EPS else c, d) for a, b, c, d in TILES_C]
+    tr = [(a, b, max(c, eps) if c == EPS else c, d) for a, b, c, d in TILES_R]
+    with mp.get_context(&#x27;fork&#x27;).Pool(6) as pool:
+        wc = [RD.winding_converged(f, _corners(b), n0=n0, pool=pool) for b in tc]
+        wr = [RD.winding_converged(f, _corners(b), n0=n0, pool=pool) for b in tr]
+        gs = np.concatenate([np.geomspace(0.01, 1, 60), np.linspace(1, GMAX, 400)[1:]])
+        v = np.array(pool.map(f, list(1j * gs)))
+    conv = all(w[0] is not None for w in wc + wr)
+    total = sum(w[0] for w in wc) + 2 * sum(w[0] for w in wr) if conv else None
+    sc = [float(gs[i]) for i in range(len(gs) - 1) if v[i].real * v[i + 1].real &lt; 0]
+    return {&#x27;total&#x27;: total, &#x27;converged&#x27;: conv, &#x27;central&#x27;: [w[0] for w in wc], &#x27;right&#x27;: [w[0] for w in wr],
+            &#x27;tried&#x27;: [w[4] for w in wc + wr], &#x27;n0_final&#x27;: [w[1] for w in wc + wr],
+            &#x27;points&#x27;: sum(w[2] for w in wc + wr), &#x27;max_dphase&#x27;: max(w[3] for w in wc + wr),
+            &#x27;axis_sign_changes&#x27;: sc, &#x27;axis_imag_rel&#x27;: float(np.max(np.abs(v.imag) / np.abs(v)))}
+
+
+def symmetry(st, sheet=0):
+    _S.update(st=st, kw={&#x27;sheet&#x27;: sheet})
+    pts = [2 + 1j, 5 + 0.3j, 9 + 6j, 11 + 11j]
+    return max(abs(_F(-z.conjugate()) - np.conj(_F(z))) / abs(_F(z)) for z in pts)
+
+
+def run():
+    res, out = [], {}
+    # 1. Controles positivos sin axión: F = Delta p(R), el punto de retorno está en p_c ~ 905 MeV/fm^3 (paso 15)
+    ctrl = {}
+    for p0 in (1000.0, 800.0):
+        _S.update(st=AX.Star(None, p0=p0))
+        with mp.get_context(&#x27;fork&#x27;).Pool(6) as pool:
+            ctrl[p0] = RD.winding_converged(_g, _corners((-XMAX, XMAX, EPS, YMAX)), pool=pool)[0]
+    res.append((f&#x27;Control positivo sin axión: índice {ctrl[1000.0]} más allá de la masa máxima (p_c = 1000) y &#x27;
+                f&#x27;{ctrl[800.0]} antes (p_c = 800)&#x27;, ctrl[1000.0] == 1 and ctrl[800.0] == 0, &#x27;H18(b)&#x27;))
+    out[&#x27;control_no_axion&#x27;] = {str(k): v for k, v in ctrl.items()}
+
+    # 2. Control positivo con axión: estrella con condensado más allá de su masa máxima
+    stc = AX.Star(6.0, p0=1000.0)
+    cc = count(stc)
+    res.append((f&#x27;Control positivo con axión (nu_a = 6 kHz, p_c = 1000): índice {cc[&quot;total&quot;]}; cambio de signo en el &#x27;
+                f&#x27;eje imaginario en gamma = {&quot;, &quot;.join(f&quot;{g:.2f}&quot; for g in cc[&quot;axis_sign_changes&quot;])} kHz&#x27;,
+                cc[&#x27;total&#x27;] == 1 and len(cc[&#x27;axis_sign_changes&#x27;]) == 1, &#x27;H18(c)&#x27;))
+    out[&#x27;control_axion&#x27;] = cc
+
+    # 3. Las estrellas del paso 15
+    for nu_a in (6.0, 3.4):
+        st = AX.Star(nu_a)
+        sym = symmetry(st)
+        c = count(st)
+        out[f&#x27;nu{nu_a}&#x27;] = {**c, &#x27;symmetry&#x27;: sym}
+        ok = c[&#x27;total&#x27;] == 0 and not c[&#x27;axis_sign_changes&#x27;] and c[&#x27;axis_imag_rel&#x27;] &lt; 1e-10 and sym &lt; 1e-10
+        res.append((f&#x27;nu_a = {nu_a} kHz: ningún cero de F con |Re nu| &lt;= {XMAX:.0f}, {EPS} &lt;= Im nu &lt;= {YMAX:.0f} kHz &#x27;
+                    f&#x27;(índice {c[&quot;total&quot;]}: central {c[&quot;central&quot;]}, derecha x2 {c[&quot;right&quot;]}, cada pieza estable al doblar &#x27;
+                    f&#x27;el muestreo, {c[&quot;tried&quot;]}; {c[&quot;points&quot;]} puntos) y &#x27;
+                    f&#x27;ningún cambio de signo en el eje hasta {GMAX:.0f} kHz; simetría F(-w*) = F(w)* a {sym:.0e}&#x27;,
+                    ok, &#x27;H18(a)&#x27;))
+        if nu_a == 6.0:
+            # robustez: doble muestreo y eps/2 en la pieza central baja (la más delicada)
+            _S.update(st=st, kw={})
+            with mp.get_context(&#x27;fork&#x27;).Pool(6) as pool:
+                w2 = RD.winding(_F, _corners(TILES_C[0]), n0=192, pool=pool)[0]
+                w3 = RD.winding_converged(_F, _corners((-XC, XC, EPS / 2, 4.0)), pool=pool)[0]
+                # control negativo 1: sin quitar e^{i k r_m}, muestreo grueso en una pieza ancha
+                _S.update(kw={&#x27;raw&#x27;: &#x27;inf&#x27;})
+                wbad = RD.winding(_F, _corners((0.0, XMAX, EPS, 4.0)), n0=12, pool=pool)[0]
+            out[&#x27;robust6&#x27;] = {&#x27;n0_96&#x27;: w2, &#x27;eps_half&#x27;: w3, &#x27;neg_raw_inf&#x27;: wbad}
+            res.append((f&#x27;Robustez (6 kHz, franja central baja): índice {round(w2)} con 192 puntos por lado y {w3} con eps/2&#x27;,
+                        round(w2) == c[&#x27;central&#x27;][0] and w3 == c[&#x27;central&#x27;][0], &#x27;H18(d)&#x27;))
+            res.append((f&#x27;Control negativo 1: sin quitar el factor e^(i k r_m) y con muestreo grueso, el contorno pierde &#x27;
+                        f&#x27;vueltas (índice {round(wbad)} en vez de 0)&#x27;, round(wbad) != 0, &#x27;&#x27;))
+            symbad = symmetry(st, sheet=1)
+            out[&#x27;neg_sheet_principal&#x27;] = symbad
+            res.append((f&#x27;Control negativo 2: con la rama principal de k también para Re omega &lt; 0, la simetría &#x27;
+                        f&#x27;F(-w*) = F(w)* se rompe ({symbad:.1e} frente a {sym:.0e})&#x27;, symbad &gt; 1e-3, &#x27;&#x27;))
+    OUT.mkdir(exist_ok=True)
+    out[&#x27;region&#x27;] = {&#x27;eps&#x27;: EPS, &#x27;ymax&#x27;: YMAX, &#x27;xmax&#x27;: XMAX, &#x27;gmax&#x27;: GMAX}
+    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
+    (OUT / &#x27;radial_stability.json&#x27;).write_text(json.dumps(out, indent=1))
+    return report(&#x27;Paso 16: estabilidad radial por el principio del argumento&#x27;, res)
+
+
+if __name__ == &#x27;__main__&#x27;:
+    run()
 </code></pre></details><details class="src"><summary><code>axion_ns/step2_perturbations.py</code> <span class="small">(59 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 2: perturbaciones radiales lineales y comparación con Ec. (3.3) y (3.7).&quot;&quot;&quot;
 import sympy as sp
 
@@ -2491,7 +2710,7 @@ dependencies = [
     &quot;scipy&gt;=1.18.1&quot;,
     &quot;sympy&gt;=1.14.0&quot;,
 ]
-</code></pre></details><details class="src"><summary><code>report/build_radial.py</code> <span class="small">(520 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Genera report/informe_radial.html (y la copia en results/) desde results/radial_branches.json.
+</code></pre></details><details class="src"><summary><code>report/build_radial.py</code> <span class="small">(541 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Genera report/informe_radial.html (y la copia en results/) desde results/radial_branches.json.
 
 Regla (AGENTS.md §4): ninguna cifra se teclea a mano; todas salen del JSON que escribe
 axion_ns/step14_radial_branches.py.
@@ -2665,6 +2884,8 @@ alpha = D[&#x27;params&#x27;][&#x27;alpha&#x27;]
 # ------------------------------------------------------------------ estrella realista (paso 15)
 SP = ROOT / &#x27;results&#x27; / &#x27;radial_star.json&#x27;
 S = json.loads(SP.read_text()) if SP.exists() else None
+STP = ROOT / &#x27;results&#x27; / &#x27;radial_stability.json&#x27;
+STB = json.loads(STP.read_text()) if STP.exists() else None
 if S:
     s6 = S[&#x27;nu6&#x27;]
     # Figura 4: espectro a nu_a = 6 kHz en dos filas (frecuencia real / amortiguados)
@@ -2712,11 +2933,29 @@ if S:
     _dev = [(abs(v_[0] / r_[&#x27;base&#x27;][0] - 1), abs(v_[1] / r_[&#x27;base&#x27;][1] - 1)) for r_ in rob.values() for v_ in r_.values()]
     rob_re, rob_im = (max(d[0] for d in _dev), 100 * max(d[1] for d in _dev)) if _dev else (0, 0)
     stab = S.get(&#x27;stability&#x27;, {})
+    if STB:
+        R_ = STB[&#x27;region&#x27;]
+        cA = STB[&#x27;control_axion&#x27;]
+        stb_rows = &#x27;&#x27;.join(
+            f&#x27;&lt;li class=&quot;{&quot;ok&quot; if c[&quot;ok&quot;] else &quot;bad&quot;}&quot;&gt;&lt;span class=&quot;pill&quot;&gt;{&quot;OK&quot; if c[&quot;ok&quot;] else &quot;FALLA&quot;}&lt;/span&gt;&#x27;
+            f&#x27;&lt;span&gt;{html.escape(c[&quot;name&quot;])}{(&quot; &lt;em&gt;(&quot; + html.escape(c[&quot;note&quot;]) + &quot;)&lt;/em&gt;&quot;) if c[&quot;note&quot;] else &quot;&quot;}&lt;/span&gt;&lt;/li&gt;&#x27;
+            for c in STB[&#x27;checks&#x27;])
+        res_ = &#x27; y &#x27;.join(f&#x27;{fnum(float(k[2:]), 1)} kHz: índice {STB[k][&quot;total&quot;]:.0f}&#x27; for k in STB if k.startswith(&#x27;nu&#x27;))
+        stab_html = f&quot;&quot;&quot;
+  &lt;h3&gt;Estabilidad radial (paso 16)&lt;/h3&gt;
+  &lt;p&gt;Una perturbación inestable crece en el tiempo: su frecuencia tiene &lt;code&gt;Im ω &amp;gt; 0&lt;/code&gt;. Ahí la onda exterior decae y la función del empalme, escrita sin polos (&lt;code&gt;radial.det_entire&lt;/code&gt;), es analítica. El principio del argumento cuenta sus ceros dentro de un contorno sin buscarlos uno a uno. Región: &lt;code&gt;|Re ν| ≤ {fnum(R_[&#x27;xmax&#x27;], 0)}&lt;/code&gt; kHz, &lt;code&gt;{R_[&#x27;eps&#x27;]} ≤ Im ν ≤ {fnum(R_[&#x27;ymax&#x27;], 0)}&lt;/code&gt; kHz. Además, en el eje imaginario la función es real y contamos sus cambios de signo hasta {fnum(R_[&#x27;gmax&#x27;], 0)} kHz.&lt;/p&gt;
+  &lt;p&gt;&lt;b&gt;Resultado:&lt;/b&gt; {res_}, sin ningún cambio de signo en el eje. &lt;b&gt;El método detecta inestabilidades cuando existen:&lt;/b&gt; en estrellas más allá de la masa máxima da índice 1, sin axión y con axión, en este caso con el modo creciente en el eje, γ = {&#x27;, &#x27;.join(fnum(g, 2) for g in cA[&#x27;axis_sign_changes&#x27;])} kHz.&lt;/p&gt;
+  &lt;p&gt;&lt;b&gt;Qué no cubre:&lt;/b&gt; crecimientos más lentos que {R_[&#x27;eps&#x27;]} kHz, que solo ve el barrido del eje (paso 15, desde 0,01 kHz); crecimientos más rápidos que {fnum(R_[&#x27;ymax&#x27;], 0)} kHz, muy por encima de la escala dinámica de la estrella; y perturbaciones no radiales. Lo que obtenemos es que &lt;b&gt;no encontramos modos radiales inestables en esa región&lt;/b&gt;, no que la estrella sea estable frente a toda perturbación.&lt;/p&gt;
+  &lt;p&gt;&lt;b&gt;Una trampa que encontramos por el camino:&lt;/b&gt; un único contorno grande «encontraba» 2, 4 u 8 ceros según el muestreo. La fase de la función gira muy deprisa en los bordes largos, y dos muestras seguidas podían distar más de una vuelta sin que el refinado lo notara. Dividiendo el contorno en piezas, y quitando el factor analítico e^(i k r_m), que no tiene ceros, el resultado es 0 en todas ellas. Aun así, cerca del umbral la escalera de estados ligados del átomo gravitatorio, que se acumula en ν_a justo bajo el borde inferior, hace girar la fase más deprisa de lo que resuelve un muestreo fijo: a 3,4 kHz una pieza dio 1 con 48 puntos por lado y 0 con 96. Por eso cada índice solo se acepta si no cambia al doblar el muestreo. Los dos controles negativos del paso comprueban que esos fallos se detectan.&lt;/p&gt;
+  &lt;ul class=&quot;checks&quot;&gt;{stb_rows}&lt;/ul&gt;&quot;&quot;&quot;
+    else:
+        stab_html = (f&quot;&lt;p&gt;Estabilidad: en el eje imaginario el determinante no cambia de signo &quot;
+                     f&quot;({&#x27;, &#x27;.join(str(v_[&#x27;sign_changes&#x27;]) for v_ in stab.values())} cambios).&lt;/p&gt;&quot;)
     rob_html = (f&quot;&quot;&quot;
   &lt;h3&gt;Robustez numérica y estabilidad&lt;/h3&gt;
   &lt;p&gt;Los amortiguamientos de unos pocos Hz son lo más delicado del cálculo. Los recalculamos variando la tolerancia del integrador, el radio inicial, la longitud de la integración exterior y el radio donde se empalma con la solución exterior. Ninguna variante mueve Re ν más de un {rob_re:.0e} relativo ni Im ν más de un {rob_im:.3f} %:&lt;/p&gt;
   &lt;div class=&quot;tbl&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;th&gt;modo&lt;/th&gt;&lt;th&gt;variante&lt;/th&gt;&lt;th&gt;Re ν (kHz)&lt;/th&gt;&lt;th&gt;Im ν (Hz)&lt;/th&gt;&lt;/tr&gt;{rob_rows}&lt;/table&gt;&lt;/div&gt;
-  &lt;p&gt;Estabilidad: en el eje imaginario &lt;code&gt;ω = iγ&lt;/code&gt; (γ entre 0,01 y 10 kHz) el determinante no cambia de signo ni a 6 ni a 3,4 kHz ({&#x27;, &#x27;.join(f&quot;{v_[&#x27;sign_changes&#x27;]}&quot; for v_ in stab.values())} cambios). No hemos detectado modos radiales que crezcan en ese rango. Un barrido de signo no es una demostración, porque puede no ver pares de raíces próximas ni raíces fuera del eje, y nada de esto dice algo sobre perturbaciones no radiales. Una prueba más completa sería el principio del argumento en el semiplano superior; está pendiente.&lt;/p&gt;&quot;&quot;&quot; if rob else &#x27;&#x27;)
+{stab_html}&quot;&quot;&quot; if rob else &#x27;&#x27;)
     art = S.get(&#x27;artifact&#x27;)
     art_html = (f&quot;&quot;&quot;&lt;div class=&quot;callout&quot;&gt;
     &lt;h3&gt;Corrección: un artefacto retirado&lt;/h3&gt;
@@ -2788,8 +3027,9 @@ import shutil
 FILES = [&#x27;axion_ns/model.py&#x27;, &#x27;axion_ns/geometry.py&#x27;, &#x27;axion_ns/compare.py&#x27;, &#x27;axion_ns/pipeline.py&#x27;, &#x27;axion_ns/nonradial.py&#x27;,
          &#x27;axion_ns/fullgr.py&#x27;, &#x27;axion_ns/bsk26.py&#x27;, &#x27;axion_ns/axstar.py&#x27;, &#x27;axion_ns/axgr.py&#x27;, &#x27;axion_ns/radial.py&#x27;,
          &#x27;axion_ns/step2_perturbations.py&#x27;, &#x27;axion_ns/step4_numerics.py&#x27;, &#x27;axion_ns/step14_radial_branches.py&#x27;,
-         &#x27;axion_ns/step15_radial_star.py&#x27;, &#x27;report/build_radial.py&#x27;, &#x27;pyproject.toml&#x27;, &#x27;uv.lock&#x27;]
-DATA = [&#x27;results/radial_branches.json&#x27;, &#x27;results/radial_star.json&#x27;]
+         &#x27;axion_ns/step15_radial_star.py&#x27;, &#x27;axion_ns/step16_radial_stability.py&#x27;, &#x27;report/build_radial.py&#x27;,
+         &#x27;pyproject.toml&#x27;, &#x27;uv.lock&#x27;]
+DATA = [&#x27;results/radial_branches.json&#x27;, &#x27;results/radial_star.json&#x27;, &#x27;results/radial_stability.json&#x27;]
 FD = ROOT / &#x27;report&#x27; / &#x27;radial_files&#x27;
 FD.mkdir(exist_ok=True)
 published = {}
@@ -4549,6 +4789,185 @@ print(&#x27;informe_radial.html:&#x27;, len(page) // 1024, &#x27;KB;&#x27;, n_ok
    &quot;box&quot;: &quot;inestable, x0 = 0.6&quot;,
    &quot;count&quot;: 1.0,
    &quot;expected&quot;: 1
+  }
+ ]
+}</code></pre></details><details class="src"><summary><code>results/radial_stability.json</code> <span class="small">(180 líneas)</span></summary><pre class="code"><code>{
+ &quot;control_no_axion&quot;: {
+  &quot;1000.0&quot;: 1,
+  &quot;800.0&quot;: 0
+ },
+ &quot;control_axion&quot;: {
+  &quot;total&quot;: 1,
+  &quot;converged&quot;: true,
+  &quot;central&quot;: [
+   1,
+   0
+  ],
+  &quot;right&quot;: [
+   0,
+   0
+  ],
+  &quot;tried&quot;: [
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  &quot;n0_final&quot;: [
+   96,
+   96,
+   96,
+   96
+  ],
+  &quot;points&quot;: 1547,
+  &quot;max_dphase&quot;: 1.0354737083273273,
+  &quot;axis_sign_changes&quot;: [
+   0.5790443980602487
+  ],
+  &quot;axis_imag_rel&quot;: 0.0
+ },
+ &quot;nu6.0&quot;: {
+  &quot;total&quot;: 0,
+  &quot;converged&quot;: true,
+  &quot;central&quot;: [
+   0,
+   0
+  ],
+  &quot;right&quot;: [
+   0,
+   0
+  ],
+  &quot;tried&quot;: [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  &quot;n0_final&quot;: [
+   96,
+   96,
+   96,
+   96
+  ],
+  &quot;points&quot;: 1545,
+  &quot;max_dphase&quot;: 1.043745696150156,
+  &quot;axis_sign_changes&quot;: [],
+  &quot;axis_imag_rel&quot;: 0.0,
+  &quot;symmetry&quot;: 1.4161159350699334e-14
+ },
+ &quot;robust6&quot;: {
+  &quot;n0_96&quot;: -7.355032700884382e-16,
+  &quot;eps_half&quot;: 0,
+  &quot;neg_raw_inf&quot;: 2.9999999999999987
+ },
+ &quot;neg_sheet_principal&quot;: 1.0000004896705152,
+ &quot;nu3.4&quot;: {
+  &quot;total&quot;: 0,
+  &quot;converged&quot;: true,
+  &quot;central&quot;: [
+   0,
+   0
+  ],
+  &quot;right&quot;: [
+   0,
+   0
+  ],
+  &quot;tried&quot;: [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  &quot;n0_final&quot;: [
+   96,
+   96,
+   192,
+   96
+  ],
+  &quot;points&quot;: 1950,
+  &quot;max_dphase&quot;: 0.9874318439402446,
+  &quot;axis_sign_changes&quot;: [],
+  &quot;axis_imag_rel&quot;: 0.0,
+  &quot;symmetry&quot;: 1.25021604947723e-14
+ },
+ &quot;region&quot;: {
+  &quot;eps&quot;: 0.05,
+  &quot;ymax&quot;: 12.0,
+  &quot;xmax&quot;: 12.0,
+  &quot;gmax&quot;: 20.0
+ },
+ &quot;checks&quot;: [
+  {
+   &quot;name&quot;: &quot;Control positivo sin axi\u00f3n: \u00edndice 1 m\u00e1s all\u00e1 de la masa m\u00e1xima (p_c = 1000) y 0 antes (p_c = 800)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;H18(b)&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Control positivo con axi\u00f3n (nu_a = 6 kHz, p_c = 1000): \u00edndice 1; cambio de signo en el eje imaginario en gamma = 0.58 kHz&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;H18(c)&quot;
+  },
+  {
+   &quot;name&quot;: &quot;nu_a = 6.0 kHz: ning\u00fan cero de F con |Re nu| &lt;= 12, 0.05 &lt;= Im nu &lt;= 12 kHz (\u00edndice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [0, 0], [0, 0]]; 1545 puntos) y ning\u00fan cambio de signo en el eje hasta 20 kHz; simetr\u00eda F(-w*) = F(w)* a 1e-14&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;H18(a)&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Robustez (6 kHz, franja central baja): \u00edndice 0 con 192 puntos por lado y 0 con eps/2&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;H18(d)&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Control negativo 1: sin quitar el factor e^(i k r_m) y con muestreo grueso, el contorno pierde vueltas (\u00edndice 3 en vez de 0)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Control negativo 2: con la rama principal de k tambi\u00e9n para Re omega &lt; 0, la simetr\u00eda F(-w*) = F(w)* se rompe (1.0e+00 frente a 1e-14)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
+  },
+  {
+   &quot;name&quot;: &quot;nu_a = 3.4 kHz: ning\u00fan cero de F con |Re nu| &lt;= 12, 0.05 &lt;= Im nu &lt;= 12 kHz (\u00edndice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [1, 0, 0], [0, 0]]; 1950 puntos) y ning\u00fan cambio de signo en el eje hasta 20 kHz; simetr\u00eda F(-w*) = F(w)* a 1e-14&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;H18(a)&quot;
   }
  ]
 }</code></pre></details><details class="src"><summary><code>results/radial_star.json</code> <span class="small">(216 líneas)</span></summary><pre class="code"><code>{

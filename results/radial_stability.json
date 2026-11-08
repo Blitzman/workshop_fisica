@@ -1,0 +1,180 @@
+{
+ "control_no_axion": {
+  "1000.0": 1,
+  "800.0": 0
+ },
+ "control_axion": {
+  "total": 1,
+  "converged": true,
+  "central": [
+   1,
+   0
+  ],
+  "right": [
+   0,
+   0
+  ],
+  "tried": [
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "n0_final": [
+   96,
+   96,
+   96,
+   96
+  ],
+  "points": 1547,
+  "max_dphase": 1.0354737083273273,
+  "axis_sign_changes": [
+   0.5790443980602487
+  ],
+  "axis_imag_rel": 0.0
+ },
+ "nu6.0": {
+  "total": 0,
+  "converged": true,
+  "central": [
+   0,
+   0
+  ],
+  "right": [
+   0,
+   0
+  ],
+  "tried": [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "n0_final": [
+   96,
+   96,
+   96,
+   96
+  ],
+  "points": 1545,
+  "max_dphase": 1.043745696150156,
+  "axis_sign_changes": [],
+  "axis_imag_rel": 0.0,
+  "symmetry": 1.4161159350699334e-14
+ },
+ "robust6": {
+  "n0_96": -7.355032700884382e-16,
+  "eps_half": 0,
+  "neg_raw_inf": 2.9999999999999987
+ },
+ "neg_sheet_principal": 1.0000004896705152,
+ "nu3.4": {
+  "total": 0,
+  "converged": true,
+  "central": [
+   0,
+   0
+  ],
+  "right": [
+   0,
+   0
+  ],
+  "tried": [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "n0_final": [
+   96,
+   96,
+   192,
+   96
+  ],
+  "points": 1950,
+  "max_dphase": 0.9874318439402446,
+  "axis_sign_changes": [],
+  "axis_imag_rel": 0.0,
+  "symmetry": 1.25021604947723e-14
+ },
+ "region": {
+  "eps": 0.05,
+  "ymax": 12.0,
+  "xmax": 12.0,
+  "gmax": 20.0
+ },
+ "checks": [
+  {
+   "name": "Control positivo sin axi\u00f3n: \u00edndice 1 m\u00e1s all\u00e1 de la masa m\u00e1xima (p_c = 1000) y 0 antes (p_c = 800)",
+   "ok": true,
+   "note": "H18(b)"
+  },
+  {
+   "name": "Control positivo con axi\u00f3n (nu_a = 6 kHz, p_c = 1000): \u00edndice 1; cambio de signo en el eje imaginario en gamma = 0.58 kHz",
+   "ok": true,
+   "note": "H18(c)"
+  },
+  {
+   "name": "nu_a = 6.0 kHz: ning\u00fan cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (\u00edndice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [0, 0], [0, 0]]; 1545 puntos) y ning\u00fan cambio de signo en el eje hasta 20 kHz; simetr\u00eda F(-w*) = F(w)* a 1e-14",
+   "ok": true,
+   "note": "H18(a)"
+  },
+  {
+   "name": "Robustez (6 kHz, franja central baja): \u00edndice 0 con 192 puntos por lado y 0 con eps/2",
+   "ok": true,
+   "note": "H18(d)"
+  },
+  {
+   "name": "Control negativo 1: sin quitar el factor e^(i k r_m) y con muestreo grueso, el contorno pierde vueltas (\u00edndice 3 en vez de 0)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2: con la rama principal de k tambi\u00e9n para Re omega < 0, la simetr\u00eda F(-w*) = F(w)* se rompe (1.0e+00 frente a 1e-14)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "nu_a = 3.4 kHz: ning\u00fan cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (\u00edndice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [1, 0, 0], [0, 0]]; 1950 puntos) y ning\u00fan cambio de signo en el eje hasta 20 kHz; simetr\u00eda F(-w*) = F(w)* a 1e-14",
+   "ok": true,
+   "note": "H18(a)"
+  }
+ ]
+}
