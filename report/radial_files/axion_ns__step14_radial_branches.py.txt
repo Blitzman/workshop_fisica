@@ -166,9 +166,9 @@ def min_gap(lam2):
 
 
 # ------------------------------------------------------------------ inestabilidad taquiónica en theta = 0
-def x0_unstable(alpha=ALPHA, mass2_in=None):
-    """x0 mínimo con un modo w^2 = 0 (kappa = 1) a lambda = 0: a partir de ahí hay un modo que crece."""
-    g = lambda x0: mp.re(f_k(mp.mpc(0, 1), 0.0, alpha, CS2, x0, mass2_in=mass2_in))
+def x0_unstable(alpha=ALPHA, mass2_in=None, lam2=0.0):
+    """x0 mínimo con un modo w^2 = 0 (kappa = 1): a partir de ahí hay un modo que crece."""
+    g = lambda x0: mp.re(f_k(mp.mpc(0, 1), lam2, alpha, CS2, x0, mass2_in=mass2_in))
     xs = np.linspace(0.02, 1.5, 600)
     v = [float(g(x)) for x in xs]
     for i in range(len(xs) - 1):
@@ -232,11 +232,14 @@ def run():
 
     # 5. Inestabilidad del modelo linealizado en theta = 0 (fuera de la ventana Im w <= 0.01 del paso 4)
     xc = x0_unstable()
+    xc3 = x0_unstable(lam2=1e-3)
     xc_an = np.arctan(1 / np.sqrt(ALPHA - 1)) / np.sqrt(ALPHA - 1)
     un = [x for x in axis_roots((1e-3, ALPHA, CS2, 0.6), kmax=4.0, n=2000) if x > 1]
-    res.append((f'Modo inestable en theta = 0: aparece para x0 > {xc:.5f} (analítico arctan(1/√(α-1))/√(α-1) = {xc_an:.5f}); '
+    res.append((f'Modo inestable del modelo simplificado (m²_in = m_a²(1 - α)): sin acoplo aparece para x0 > {xc:.8f} '
+                f'(analítico arctan(1/√(α-1))/√(α-1) = {xc_an:.8f}); con λ² = 1e-3, para x0 > {xc3:.8f}; '
                 f'en los parámetros de la figura (x0 = 0.6) w² = {1 - un[0]**2:.3f} (crece como e^({np.sqrt(un[0]**2 - 1):.2f} m_a t))',
-                abs(xc - xc_an) < 1e-6 and len(un) == 1, 'el paso 4 no lo veía: buscaba solo Im w ≤ 0.01'))
+                abs(xc - xc_an) < 1e-6 and len(un) == 1 and xc3 < xc,
+                'el paso 4 no lo veía: buscaba solo Im w ≤ 0.01; el acoplo apenas mueve el umbral'))
     m2pi = (ALPHA - 1) / np.sqrt(1 - BETA)
     st_pi = [x for x in axis_roots((0.0, ALPHA, CS2, 0.6), kmax=4.0, n=2000, mass2_in=m2pi) if x > 0]
     res.append((f'Variante theta = pi (m²_in = {m2pi:.1f} m_a², sin acoplo): sin estados ligados ni inestables', not st_pi, ''))
@@ -289,7 +292,7 @@ def run():
         'damping_exponent': s,
         'collision': {str(k_): v_ for k_, v_ in coll.items()},
         'gaps': [{'lam2': l2, 'gap_w2': g, 'x0': x} for l2, g, x in gaps],
-        'x0_unstable': xc, 'x0_unstable_analytic': float(xc_an),
+        'x0_unstable': xc, 'x0_unstable_analytic': float(xc_an), 'x0_unstable_lam2_1e-3': xc3,
         'winding': [{'box': lab, 'count': nw, 'expected': exp} for lab, nw, _, exp in wres],
     }, indent=1))
     return report('Paso 14: modos radiales, umbral cuasi-normal/evanescente y ramas (modelo simplificado)', res)

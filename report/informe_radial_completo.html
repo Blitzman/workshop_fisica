@@ -113,7 +113,7 @@ a { color: var(--accent); }
 <section class="sheet summary">
   <h3>Resumen</h3>
   <ul>
-    <li>Para <code>l = 0</code> no hay radiación gravitatoria, así que el único canal de pérdida es la emisión de axiones, con <code>k_out² = ω² − m_a²</code>. Escrita en la variable <code>k = k_out</code>, la función de dispersión del modelo (Ec. 4.13) no tiene la ambigüedad de hoja del umbral exterior.</li>
+    <li>Para <code>l = 0</code> no hay radiación gravitatoria, así que, en este modelo idealizado (sin viscosidad, neutrinos ni otras disipaciones), el único canal de pérdida es la emisión de axiones, con <code>k_out² = ω² − m_a²</code>. Escrita en la variable <code>k = k_out</code>, la función de dispersión del modelo (Ec. 4.13) no tiene la ambigüedad de hoja del umbral exterior.</li>
     <li>La transición sigue la secuencia típica de onda con umbral: el par cuasi-normal <code>k = ±a − ib</code> colisiona en el eje imaginario negativo en <code>x₀ = 0.85147</code> (raíz doble, λ² = 10⁻³), cuando su frecuencia ya está <b>por debajo</b> de <code>m_a</code> (<code>w − 1 = -7,3·10⁻⁵</code>). Se convierte en dos <b>estados virtuales</b> (<code>Im k &lt; 0</code>, frecuencia real pero no físicos). Uno de ellos sube, cruza <code>k = 0</code> (justo <code>ω = m_a</code>) en <code>x₀ = 0.85152</code> y pasa a <b>estado ligado</b> (<code>Im k &gt; 0</code>); el otro sigue virtual.</li>
     <li>Cerca del umbral, <code>|Im w| ∝ (Re w − 1)^0.46</code>, próximo a ½. Es una ley de tramo intermedio. El amortiguamiento solo se anula en la colisión, ya por debajo del umbral, a <code>w − 1 ≈ k²/2 ∼ −(Im k)²/2</code> (λ² = 10⁻⁴: <code>-8,38·10⁻⁷</code>).</li>
     <li>Las ramas fluida y axiónica no se cruzan: la separación mínima es lineal en el acoplo, con <code>Δw²_min/λ = 7.58–7.60</code> para λ² = 10⁻⁶…10⁻³.</li>
@@ -131,8 +131,8 @@ a { color: var(--accent); }
   <div class="tbl"><table>
     <tr><th>Posición de la raíz en el plano k</th><th>Onda exterior</th><th>Interpretación</th></tr>
     <tr><td><code>Re k &gt; 0</code>, <code>Im k &lt; 0</code></td><td>saliente, crece con r</td><td>modo cuasi-normal (amortiguado)</td></tr>
-    <tr><td><code>Re k = 0</code>, <code>Im k &gt; 0</code></td><td>evanescente <code>e^(−κr)</code></td><td>modo ligado: frecuencia real, normalizable</td></tr>
-    <tr><td><code>Re k = 0</code>, <code>Im k &lt; 0</code></td><td>crece <code>e^(+κr)</code></td><td>estado virtual: frecuencia real, no es un modo físico</td></tr>
+    <tr><td><code>Re k = 0</code>, <code>Im k &gt; 0</code></td><td>evanescente <code>e^(−κr)</code></td><td>modo ligado, normalizable: <code>w² = 1 − κ²</code>, frecuencia real si <code>κ &lt; 1</code>; si <code>κ &gt; 1</code>, <code>w² &lt; 0</code> y el modo crece (el inestable de la Sec. 5)</td></tr>
+    <tr><td><code>Re k = 0</code>, <code>Im k &lt; 0</code></td><td>crece <code>e^(+κr)</code></td><td>estado virtual, no es un modo físico (frecuencia real si <code>κ &lt; 1</code>)</td></tr>
   </table></div>
   <p>En la variable <code>w</code> esa distinción se pierde: un estado ligado y uno virtual tienen ambos <code>Im w = 0</code>. La expresión <code>w√(1 − 1/w²)</code> del paso 4 pone el corte en el segmento real <code>(−1, 1)</code>. Por debajo del umbral y en el semiplano inferior da la hoja no física. Nuestro primer seguimiento de raíces cayó precisamente en el estado virtual.</p>
 </section>
@@ -178,7 +178,7 @@ a { color: var(--accent); }
 <section>
   <h2>5. Un modo inestable en el modelo simplificado (masa efectiva m_a²(1 − α))</h2>
   <p>Una precisión sobre qué modelo es. El de la Sec. IV del Paper I no es la linealización consistente de la acción en <code>θ = 0</code>: allí <code>∂m*/∂a = 0</code>, y el acoplo lineal se anularía. El paper combina la masa efectiva de <code>θ = 0</code>, <code>m_a²(1 − α)</code>, con un acoplo constante. Es un modelo fenomenológico, y lo que sigue es una propiedad de ese modelo, no del problema exacto de la condensación.</p>
-  <p>Con los parámetros de la Fig. 3 (<code>x₀ = 0.6</code>) hay un estado ligado con <code>w² = −6.177</code>, es decir, una perturbación que crece como <code>e^(2.49 m_a t)</code>. Es el estado fundamental del pozo taquiónico interior, con onda oscilante dentro y evanescente fuera. Aparece para <code>x₀ &gt; 0.10725</code>, valor que coincide con la condición analítica <code>arctan(1/√(α−1))/√(α−1) = 0.10725</code>. Esa condición no contiene el acoplo: la inestabilidad la produce el término de masa taquiónico, no el acoplo con el fluido.</p>
+  <p>Con los parámetros de la Fig. 3 (<code>x₀ = 0.6</code>) hay un estado ligado con <code>w² = −6.177</code>, es decir, una perturbación que crece como <code>e^(2.49 m_a t)</code>. Es el estado fundamental del pozo taquiónico interior, con onda oscilante dentro y evanescente fuera. Sin acoplo aparece para <code>x₀ &gt; 0.10725018</code>, valor que coincide con la condición analítica <code>arctan(1/√(α−1))/√(α−1) = 0.10725018</code>. Con λ² = 10⁻³ el umbral baja a <code>0.10720993</code>: el acoplo apenas lo mueve, así que la inestabilidad la produce sobre todo el término de masa taquiónico.</p>
   <p>Nuestro paso 4 no lo detectaba porque buscaba raíces solo en <code>Im w ≤ 0.01</code>. Linealizando en <code>θ = π</code> (masa efectiva interior positiva, sin acoplo lineal) desaparece: no hay estados ligados ni inestables.</p>
   <div class="callout">
     <h3>Pregunta para el grupo</h3>
@@ -252,10 +252,12 @@ a { color: var(--accent); }
   
   <h3>¿Hay resonancias axiónicas muy amortiguadas? (paso 20)</h3>
   <p>Contamos con el principio del argumento los modos en <code>6,05 ≤ Re ν ≤ 12</code> kHz, <code>−1,5 ≤ Im ν &lt; 0</code> (ν_a = 6 kHz), con la condición saliente. Cada pieza del contorno se acepta solo si su índice no cambia al doblar el muestreo. Resultado: <b>2 modos</b>, y son los dos fluidos que encuentra Muller (Re ν = 8.1192 kHz con Im ν = −3.60 Hz, Re ν = 11.6786 kHz con Im ν = −21.70 Hz; fracción fluida 0.97, 0.88). En esa región <b>no hay ninguna familia axiónica</b>.</p>
-  <p>El control positivo comprueba que el recuento ve resonancias muy amortiguadas cuando existen: con la normalización antigua del lapso, el índice sube a 8 (piezas [1, 1, 3, 3]), con las resonancias de cavidad que mostraba la versión anterior. Fuera de esa región (amortiguamientos mayores que 1,5 kHz o frecuencias por encima de 12 kHz) no hemos mirado.</p>
+  <p>El control positivo comprueba que el recuento ve resonancias muy amortiguadas cuando existen: con la normalización antigua del lapso, el índice sube a 8 (piezas [1, 1, 3, 3]), con las resonancias de cavidad que mostraba la versión anterior.</p>
+  <p><b>Más abajo en el plano, donde la secuela tiene un modo axiónico.</b> La Tabla III de la secuela (l = 2, aproximación de Cowling) da a ν_a = 6 kHz un modo axiónico muy amortiguado en 9,0 − 3,8i kHz, fuera de la franja anterior. Repetimos el recuento en <code>6,05 ≤ Re ν ≤ 12</code>, <code>−5 ≤ Im ν ≤ −1,5</code> kHz: el índice es 2, pero los ceros no tienen fluido (fracción ~10⁻¹⁴) y dependen del radio donde empalmamos con la solución exterior. Empalmando en r = 117 km (lo habitual), en r = 101 km (θ₀ = 10⁻⁶) o en r = 84 km (θ₀ = 10⁻⁵): 6.29 − 4.48i kHz, que pasa a 4.87 − 5.11i y a 7.02 − 5.61i kHz (20 % y 17 %); 7.32 − 4.79i kHz, que pasa a 8.28 − 6.10i y a 8.28 − 6.00i kHz (19 % y 18 %). Con los mismos cambios, los modos fluidos se mueven muy poco (8.1192 kHz: 1×10⁻⁷ % y 2×10⁻⁷ %; 11.6786 kHz: 4×10⁻⁸ % y 1×10⁻⁷ %; paso 21). <b>Son artefactos del empalme, no modos de la estrella</b>. En esa región F está mal condicionada (Muller converge a puntos separados unos Hz desde semillas distintas), así que <b>el método no decide si hay o no un análogo radial de a0</b>. Para decidirlo haría falta extender el fondo más allá de r = 117 km y empalmar donde la cola del axión sea de verdad despreciable (θ₀ sigue por encima de 10⁻⁷ al final del fondo). Con la normalización antigua del lapso, el índice de esta región es 0. Tampoco contradice a la secuela: allí l = 2 y Cowling; aquí l = 0 con la métrica dinámica. Fuera de <code>Re ν ≤ 12</code> kHz e <code>Im ν ≥ −5</code> kHz no hemos mirado.</p>
   <div class="callout">
     <h3>Abierto</h3>
     <p>No hemos podido decidir si el amortiguamiento tiende a cero o a un valor finito justo encima del umbral (factor de Sommerfeld del potencial 1/r). Los dos puntos disponibles apuntan a que cae deprisa, pero hace falta un barrido denso en ν_a.</p>
+    <p>No sabemos si hay modos radiales axiónicos con amortiguamiento de varios kHz (la región de a0 en la secuela): ahí nuestra F está mal condicionada y sus ceros dependen del empalme (paso 21).</p>
   </div>
   <ul class="checks"><li class="ok"><span class="pill">OK</span><span>Ecuación exterior derivada (theta_0 = 0) = Ec. (3.7) del Paper I: error relativo 2.3e-16</span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 1 (sin término de masa, el error real del 2026-11-07): error 2.67</span></li><li class="ok"><span class="pill">OK</span><span>Sin axión (BSk26): masa máxima 2.1695 M☉ en p_c = 905.0 MeV/fm³; ω_F² = 0 en p_c = 904.9 (diferencia 0.01 %) <em>(criterio de Chandrasekhar/punto de retorno)</em></span></li><li class="ok"><span class="pill">OK</span><span>Exterior en el rayo complejo: cumple Cauchy-Riemann (desajuste 3.3e-04). El de la recta real (axstar.exterior_L) se desvía 207 % en la resonancia muy amortiguada, 1e-04 en un modo poco amortiguado y 3e-13 bajo el umbral <em>(la onda saliente crece con r y la integración hacia dentro es inestable; los pasos 9-10 (Im de pocos Hz) no se ven afectados)</em></span></li><li class="ok"><span class="pill">OK</span><span>ν_a = 6 kHz: modo F en 3.4505 kHz &lt; ν_a, frecuencia real (|Im det|/|det| = 0e+00 en el eje), fracción fluida 0.976 <em>(H11(b))</em></span></li><li class="ok"><span class="pill">OK</span><span>Átomo gravitatorio (α_g = 0.2748): n_eff = 2.012, 2.990, 3.979, 4.972, 5.967 para n = 2…6; carácter axiónico <em>(H11(c))</em></span></li><li class="ok"><span class="pill">OK</span><span>ν_a = 6 kHz: H1 = 8.1192 -0.0036i kHz (fracción fluida 0.973) <em>(H11(b))</em></span></li><li class="ok"><span class="pill">OK</span><span>Artefacto retirado: con la normalización antigua del lapso, la «resonancia axiónica» se mueve de 6.585 -0.563i a 6.236 -0.712i al cambiar el empalme (117 → 84 km); con la corrección no queda ninguna raíz en esa región (Muller sale hacia 3.01 -0.15i) <em>(era una cavidad entre R y el radio de empalme)</em></span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 2 (onda entrante): en la raíz H1 el determinante deja de anularse (|det|/escala = 1.5e-01)</span></li><li class="ok"><span class="pill">OK</span><span>ν_a = 3,5 kHz: dos ligados 3.4040 y 3.4544 kHz con carácter mezclado (0.22 y 0.75 de fluido): cruce evitado F – átomo n = 1</span></li><li class="ok"><span class="pill">OK</span><span>ν_a = 3,4 kHz: F ya por encima del umbral, Re ν = 3.4103 kHz e Im ν = -0.58 Hz (fracción fluida 0.968) <em>(el modo fluido pasa a cuasi-normal al cruzar ν_a)</em></span></li><li class="ok"><span class="pill">OK</span><span>Estabilidad radial: sin raíces en ω = iγ, γ ∈ [0,01; 10] kHz, para ν_a = 6 y 3,4 kHz (6: 0 cambios de signo, 3.4: 0 cambios de signo) <em>(H12; un barrido de signo puede no ver pares de raíces muy próximas)</em></span></li><li class="ok"><span class="pill">OK</span><span>Robustez de Im ν: rtol, r0 y longitud exterior cambian como mucho un 0.004 %; el radio de empalme (último paso hacia fuera) un 0.00 % en H1 (6 kHz), 0.00 % en F (3,4 kHz) <em>(H13; el radio de empalme es la incertidumbre dominante)</em></span></li></ul>
 </section>
@@ -263,7 +265,7 @@ a { color: var(--accent); }
 <section>
   <h2>7. Verificación del modelo simplificado</h2>
   <p><b>12/12</b> comprobaciones superadas en <code>axion_ns/step14_radial_branches.py</code> (unos 30 s, incluido en <code>run_all</code>). Los dos controles negativos cambian la física (onda entrante; signo de la masa interior) y deben romper el resultado.</p>
-  <ul class="checks"><li class="ok"><span class="pill">OK</span><span>f(k) en la variable k coincide con f_toy(w) del paso 4 (Re w &gt; 1): diferencia relativa 7.5e-31</span></li><li class="ok"><span class="pill">OK</span><span>Modo fluido fundamental en x0 = 0.6: w = 1.43104-2.78e-03i (cuasi-normal, Im k = -0.0039 &lt; 0)</span></li><li class="ok"><span class="pill">OK</span><span>H9: el par cuasi-normal k = ±a - ib (b ≈ 0.0079...0.0119) colisiona en el eje imaginario negativo en x0 = 0.8514671 (raíz doble, residuo 1e-15; λ² = 1e-3), con k = -0.0120972i y w - 1 = -7.317e-05: ya por debajo del umbral. Quedan dos virtuales; uno cruza k = 0 (w = 1) en x0 = 0.8515243 y pasa a ligado. En x0 = 0.86: un ligado (kappa = +0.1339, w = 0.99099) y un virtual (kappa = -0.1605)</span></li><li class="ok"><span class="pill">OK</span><span>H8: |Im w| ~ (Re w - 1)^0.457 en el tramo intermedio Re k &gt; 5|Im k| (λ² = 1e-4; ½ si Im k fuera constante, que varía un 19 % en el tramo) <em>(ajuste en un tramo finito, no una ley asintótica: más cerca del umbral domina la colisión de polos. El amortiguamiento solo se anula en la colisión, x0 = 0.8594224655, con w - 1 = -8.3769e-07 (por debajo del umbral, = k²/2 a este orden, k = -0.0012944i); el virtual cruza k = 0 en x0 = 0.8594231785)</em></span></li><li class="ok"><span class="pill">OK</span><span>H10: cruce evitado fluido-axión, Δw²_min/λ = 7.598, 7.598, 7.596, 7.577 para λ² = 1e-6…1e-3 (en x0 ≈ 1.073): separación ∝ λ</span></li><li class="ok"><span class="pill">OK</span><span>Modo inestable en theta = 0: aparece para x0 &gt; 0.10725 (analítico arctan(1/√(α-1))/√(α-1) = 0.10725); en los parámetros de la figura (x0 = 0.6) w² = -6.177 (crece como e^(2.49 m_a t)) <em>(el paso 4 no lo veía: buscaba solo Im w ≤ 0.01)</em></span></li><li class="ok"><span class="pill">OK</span><span>Variante theta = pi (m²_in = 25.6 m_a², sin acoplo): sin estados ligados ni inestables</span></li><li class="ok"><span class="pill">OK</span><span>Identidad Im w = +Re k·Im k/Re w (de w² = 1 + k²): residuo 0.0e+00; con el signo − que escribimos por error en el informe: 5.6e-03 <em>(errata señalada por la revisión)</em></span></li><li class="ok"><span class="pill">OK</span><span>Ninguna raíz reportada es un cero espurio de D (min |D| = 21.4)</span></li><li class="ok"><span class="pill">OK</span><span>Método independiente (principio del argumento sobre f/√D, sin Muller): par cuasi-normal, x0 = 0.80, Re k &gt; 0: 1.00 (esperado 1); par completo, x0 = 0.80: 2.00 (esperado 2); ligado, x0 = 0.86: 1.00 (esperado 1); virtual, x0 = 0.86: 1.00 (esperado 1); inestable, x0 = 0.6: 1.00 (esperado 1) <em>(H14)</em></span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 1 (onda entrante, i k -&gt; -i k): el estado ligado de x0 = 0.86 deja de estar en kappa &gt; 0 en la misma posición</span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 2 (m²_in = 1 - α -&gt; α - 1): desaparece el umbral de inestabilidad (x0_c = None)</span></li></ul>
+  <ul class="checks"><li class="ok"><span class="pill">OK</span><span>f(k) en la variable k coincide con f_toy(w) del paso 4 (Re w &gt; 1): diferencia relativa 7.5e-31</span></li><li class="ok"><span class="pill">OK</span><span>Modo fluido fundamental en x0 = 0.6: w = 1.43104-2.78e-03i (cuasi-normal, Im k = -0.0039 &lt; 0)</span></li><li class="ok"><span class="pill">OK</span><span>H9: el par cuasi-normal k = ±a - ib (b ≈ 0.0079...0.0119) colisiona en el eje imaginario negativo en x0 = 0.8514671 (raíz doble, residuo 1e-15; λ² = 1e-3), con k = -0.0120972i y w - 1 = -7.317e-05: ya por debajo del umbral. Quedan dos virtuales; uno cruza k = 0 (w = 1) en x0 = 0.8515243 y pasa a ligado. En x0 = 0.86: un ligado (kappa = +0.1339, w = 0.99099) y un virtual (kappa = -0.1605)</span></li><li class="ok"><span class="pill">OK</span><span>H8: |Im w| ~ (Re w - 1)^0.457 en el tramo intermedio Re k &gt; 5|Im k| (λ² = 1e-4; ½ si Im k fuera constante, que varía un 19 % en el tramo) <em>(ajuste en un tramo finito, no una ley asintótica: más cerca del umbral domina la colisión de polos. El amortiguamiento solo se anula en la colisión, x0 = 0.8594224655, con w - 1 = -8.3769e-07 (por debajo del umbral, = k²/2 a este orden, k = -0.0012944i); el virtual cruza k = 0 en x0 = 0.8594231785)</em></span></li><li class="ok"><span class="pill">OK</span><span>H10: cruce evitado fluido-axión, Δw²_min/λ = 7.598, 7.598, 7.596, 7.577 para λ² = 1e-6…1e-3 (en x0 ≈ 1.073): separación ∝ λ</span></li><li class="ok"><span class="pill">OK</span><span>Modo inestable del modelo simplificado (m²_in = m_a²(1 - α)): sin acoplo aparece para x0 &gt; 0.10725018 (analítico arctan(1/√(α-1))/√(α-1) = 0.10725018); con λ² = 1e-3, para x0 &gt; 0.10720993; en los parámetros de la figura (x0 = 0.6) w² = -6.177 (crece como e^(2.49 m_a t)) <em>(el paso 4 no lo veía: buscaba solo Im w ≤ 0.01; el acoplo apenas mueve el umbral)</em></span></li><li class="ok"><span class="pill">OK</span><span>Variante theta = pi (m²_in = 25.6 m_a², sin acoplo): sin estados ligados ni inestables</span></li><li class="ok"><span class="pill">OK</span><span>Identidad Im w = +Re k·Im k/Re w (de w² = 1 + k²): residuo 0.0e+00; con el signo − que escribimos por error en el informe: 5.6e-03 <em>(errata señalada por la revisión)</em></span></li><li class="ok"><span class="pill">OK</span><span>Ninguna raíz reportada es un cero espurio de D (min |D| = 21.4)</span></li><li class="ok"><span class="pill">OK</span><span>Método independiente (principio del argumento sobre f/√D, sin Muller): par cuasi-normal, x0 = 0.80, Re k &gt; 0: 1.00 (esperado 1); par completo, x0 = 0.80: 2.00 (esperado 2); ligado, x0 = 0.86: 1.00 (esperado 1); virtual, x0 = 0.86: 1.00 (esperado 1); inestable, x0 = 0.6: 1.00 (esperado 1) <em>(H14)</em></span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 1 (onda entrante, i k -&gt; -i k): el estado ligado de x0 = 0.86 deja de estar en kappa &gt; 0 en la misma posición</span></li><li class="ok"><span class="pill">OK</span><span>Control negativo 2 (m²_in = 1 - α -&gt; α - 1): desaparece el umbral de inestabilidad (x0_c = None)</span></li></ul>
   <div class="callout neutral">
     <p><b>Límites.</b> La función de dispersión es la Ec. (4.13) tal como la transcribimos en el paso 4, no una compilación desde SymPy. Las comprobaciones de la estrella realista están al final de la sección 6.</p>
   </div>
@@ -1912,7 +1914,7 @@ def muller(f, z, tol=1e-9, maxit=30):
         if abs(dz) &lt; tol * abs(z2):
             break
     return z2
-</code></pre></details><details class="src"><summary><code>axion_ns/step14_radial_branches.py</code> <span class="small">(299 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 14: modos radiales del modelo simplificado (Paper I, Ec. 4.13). Transición cuasi-normal -&gt; evanescente
+</code></pre></details><details class="src"><summary><code>axion_ns/step14_radial_branches.py</code> <span class="small">(302 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 14: modos radiales del modelo simplificado (Paper I, Ec. 4.13). Transición cuasi-normal -&gt; evanescente
 y ramas del espectro (pregunta de José, 2026-11-07; hipótesis H8-H10 en LAB_NOTEBOOK.md).
 
 Idea clave: en el modelo simplificado la función de dispersión solo depende de w^2 y del número de onda exterior
@@ -2080,9 +2082,9 @@ def min_gap(lam2):
 
 
 # ------------------------------------------------------------------ inestabilidad taquiónica en theta = 0
-def x0_unstable(alpha=ALPHA, mass2_in=None):
-    &quot;&quot;&quot;x0 mínimo con un modo w^2 = 0 (kappa = 1) a lambda = 0: a partir de ahí hay un modo que crece.&quot;&quot;&quot;
-    g = lambda x0: mp.re(f_k(mp.mpc(0, 1), 0.0, alpha, CS2, x0, mass2_in=mass2_in))
+def x0_unstable(alpha=ALPHA, mass2_in=None, lam2=0.0):
+    &quot;&quot;&quot;x0 mínimo con un modo w^2 = 0 (kappa = 1): a partir de ahí hay un modo que crece.&quot;&quot;&quot;
+    g = lambda x0: mp.re(f_k(mp.mpc(0, 1), lam2, alpha, CS2, x0, mass2_in=mass2_in))
     xs = np.linspace(0.02, 1.5, 600)
     v = [float(g(x)) for x in xs]
     for i in range(len(xs) - 1):
@@ -2146,11 +2148,14 @@ def run():
 
     # 5. Inestabilidad del modelo linealizado en theta = 0 (fuera de la ventana Im w &lt;= 0.01 del paso 4)
     xc = x0_unstable()
+    xc3 = x0_unstable(lam2=1e-3)
     xc_an = np.arctan(1 / np.sqrt(ALPHA - 1)) / np.sqrt(ALPHA - 1)
     un = [x for x in axis_roots((1e-3, ALPHA, CS2, 0.6), kmax=4.0, n=2000) if x &gt; 1]
-    res.append((f&#x27;Modo inestable en theta = 0: aparece para x0 &gt; {xc:.5f} (analítico arctan(1/√(α-1))/√(α-1) = {xc_an:.5f}); &#x27;
+    res.append((f&#x27;Modo inestable del modelo simplificado (m²_in = m_a²(1 - α)): sin acoplo aparece para x0 &gt; {xc:.8f} &#x27;
+                f&#x27;(analítico arctan(1/√(α-1))/√(α-1) = {xc_an:.8f}); con λ² = 1e-3, para x0 &gt; {xc3:.8f}; &#x27;
                 f&#x27;en los parámetros de la figura (x0 = 0.6) w² = {1 - un[0]**2:.3f} (crece como e^({np.sqrt(un[0]**2 - 1):.2f} m_a t))&#x27;,
-                abs(xc - xc_an) &lt; 1e-6 and len(un) == 1, &#x27;el paso 4 no lo veía: buscaba solo Im w ≤ 0.01&#x27;))
+                abs(xc - xc_an) &lt; 1e-6 and len(un) == 1 and xc3 &lt; xc,
+                &#x27;el paso 4 no lo veía: buscaba solo Im w ≤ 0.01; el acoplo apenas mueve el umbral&#x27;))
     m2pi = (ALPHA - 1) / np.sqrt(1 - BETA)
     st_pi = [x for x in axis_roots((0.0, ALPHA, CS2, 0.6), kmax=4.0, n=2000, mass2_in=m2pi) if x &gt; 0]
     res.append((f&#x27;Variante theta = pi (m²_in = {m2pi:.1f} m_a², sin acoplo): sin estados ligados ni inestables&#x27;, not st_pi, &#x27;&#x27;))
@@ -2203,7 +2208,7 @@ def run():
         &#x27;damping_exponent&#x27;: s,
         &#x27;collision&#x27;: {str(k_): v_ for k_, v_ in coll.items()},
         &#x27;gaps&#x27;: [{&#x27;lam2&#x27;: l2, &#x27;gap_w2&#x27;: g, &#x27;x0&#x27;: x} for l2, g, x in gaps],
-        &#x27;x0_unstable&#x27;: xc, &#x27;x0_unstable_analytic&#x27;: float(xc_an),
+        &#x27;x0_unstable&#x27;: xc, &#x27;x0_unstable_analytic&#x27;: float(xc_an), &#x27;x0_unstable_lam2_1e-3&#x27;: xc3,
         &#x27;winding&#x27;: [{&#x27;box&#x27;: lab, &#x27;count&#x27;: nw, &#x27;expected&#x27;: exp} for lab, nw, _, exp in wres],
     }, indent=1))
     return report(&#x27;Paso 14: modos radiales, umbral cuasi-normal/evanescente y ramas (modelo simplificado)&#x27;, res)
@@ -2774,7 +2779,7 @@ def run(nus=NU_A):
 
 if __name__ == &#x27;__main__&#x27;:
     run()
-</code></pre></details><details class="src"><summary><code>axion_ns/step20_damped_count.py</code> <span class="small">(81 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 20: recuento de modos en el semiplano amortiguado de la estrella realista (hipótesis H22).
+</code></pre></details><details class="src"><summary><code>axion_ns/step20_damped_count.py</code> <span class="small">(119 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 20: recuento de modos en el semiplano amortiguado de la estrella realista (hipótesis H22).
 
 ¿Existe una familia física de resonancias axiónicas muy amortiguadas? Las que mostraba una versión anterior eran
 artefactos del lapso (paso 15, H17), pero eso no prueba que no exista ninguna. Aquí se cuentan los ceros de
@@ -2797,11 +2802,14 @@ from .pipeline import report
 
 OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
 TILES = [(6.05, 9.0, -0.3, -0.002), (9.0, 12.0, -0.3, -0.002), (6.05, 9.0, -1.5, -0.3), (9.0, 12.0, -1.5, -0.3)]
+# región profunda (H23): ahí está a0 = 9.0 - 3.8i kHz de la Tabla III de la secuela (l = 2, Cowling, nu_a = 6 kHz)
+TILES_DEEP = [(6.05, 9.0, -5.0, -1.5), (9.0, 12.0, -5.0, -1.5)]
+PAPER2_A0 = 9.0 - 3.8j
 _S = {}
 
 
 def _F(nu):
-    return complex(RD.det_entire(_S[&#x27;st&#x27;], AX.omega_of(nu), inward=False, sheet=1))
+    return complex(RD.det_entire(_S[&#x27;st&#x27;], AX.omega_of(nu), rm=_S.get(&#x27;rm&#x27;), inward=False, sheet=1))
 
 
 def _corners(b):
@@ -2809,10 +2817,10 @@ def _corners(b):
     return [complex(x0, y0), complex(x1, y0), complex(x1, y1), complex(x0, y1)]
 
 
-def count(st):
+def count(st, tiles=TILES):
     _S[&#x27;st&#x27;] = st
     with mp.get_context(&#x27;fork&#x27;).Pool(6) as pool:
-        w = [RD.winding_converged(_F, _corners(b), pool=pool) for b in TILES]
+        w = [RD.winding_converged(_F, _corners(b), pool=pool) for b in tiles]
     return {&#x27;per_tile&#x27;: [x[0] for x in w], &#x27;tried&#x27;: [x[4] for x in w], &#x27;points&#x27;: sum(x[2] for x in w),
             &#x27;total&#x27;: sum(x[0] for x in w) if all(x[0] is not None for x in w) else None}
 
@@ -2836,6 +2844,40 @@ def run():
                 f&#x27;(piezas {c[&quot;per_tile&quot;]}, convergidas {c[&quot;tried&quot;]}); Muller encuentra {len(found)} modos fluidos ahí: &#x27;
                 + &#x27;, &#x27;.join(f&#x27;{z.real:.4f}{z.imag * 1e3:+.2f}i (fluido {f:.2f})&#x27; for z, f in zip(found, fr)),
                 c[&#x27;total&#x27;] == len(found), &#x27;sin ceros adicionales: ninguna familia axiónica en esa región&#x27;))
+    # H23: región profunda, donde la secuela tiene su modo axiónico a0 (l = 2, Cowling)
+    cd = count(st, TILES_DEEP)
+    deep = {**cd, &#x27;roots&#x27;: []}
+    if cd[&#x27;total&#x27;]:
+        rr = np.linspace(st.R, RD.AG.r_match(st), 4000)
+        r_alt = float(rr[np.argmax(np.abs(st.sol.sol(rr)[3]) &lt; 1e-5)])
+        seeds = [PAPER2_A0] + [complex(x, y) for x in (7.0, 8.5, 10.0, 11.5) for y in (-2.0, -3.0, -4.0)]
+        for sd in seeds:
+            try:
+                z = complex(RD.muller(_F, sd, tol=1e-9))
+            except RuntimeError:
+                continue
+            if 6.05 &lt; z.real &lt; 12 and -5 &lt; z.imag &lt; -1.5 and all(abs(z - y[&#x27;nu&#x27;]) &gt; 1e-3 for y in deep[&#x27;roots&#x27;]):
+                _S[&#x27;rm&#x27;] = r_alt
+                try:
+                    z2 = complex(RD.muller(_F, z, tol=1e-9))
+                except RuntimeError:
+                    z2 = complex(np.nan, np.nan)
+                _S.pop(&#x27;rm&#x27;)
+                deep[&#x27;roots&#x27;].append({&#x27;nu&#x27;: z, &#x27;nu_alt_rm&#x27;: z2, &#x27;r_alt&#x27;: r_alt, &#x27;shift_pct&#x27;: float(100 * abs(z2 / z - 1)),
+                                      &#x27;fluid&#x27;: RD.fluid_fraction(st, AX.omega_of(z))})
+        deep[&#x27;roots&#x27;] = [{**r_, &#x27;nu&#x27;: [r_[&#x27;nu&#x27;].real, r_[&#x27;nu&#x27;].imag], &#x27;nu_alt_rm&#x27;: [r_[&#x27;nu_alt_rm&#x27;].real, r_[&#x27;nu_alt_rm&#x27;].imag]}
+                         for r_ in deep[&#x27;roots&#x27;]]
+    out[&#x27;deep&#x27;] = deep
+    robust = [r_ for r_ in deep[&#x27;roots&#x27;] if r_[&#x27;shift_pct&#x27;] &lt; 0.1]
+    if not cd[&#x27;total&#x27;]:
+        txt = &#x27;ningún cero: no hay análogo radial de a0 en esa región&#x27;
+    else:
+        txt = (&#x27;ceros: &#x27; + &#x27;; &#x27;.join(f&quot;{r_[&#x27;nu&#x27;][0]:.3f}{r_[&#x27;nu&#x27;][1]:+.3f}i kHz (fluido {r_[&#x27;fluid&#x27;]:.2f}; al cambiar el &quot;
+                                     f&quot;empalme se mueve un {r_[&#x27;shift_pct&#x27;]:.2g} %)&quot; for r_ in deep[&#x27;roots&#x27;]))
+    res.append((f&#x27;H23: región profunda Re nu in [6.05, 12], Im nu in [-5, -1.5] kHz: índice {cd[&quot;total&quot;]} (piezas &#x27;
+                f&#x27;{cd[&quot;per_tile&quot;]}, convergidas {cd[&quot;tried&quot;]}); {txt}. Secuela, Tabla III (l = 2, Cowling): a0 = &#x27;
+                f&#x27;{PAPER2_A0.real} {PAPER2_A0.imag:+.1f}i kHz&#x27;, cd[&#x27;total&#x27;] is not None and
+                (cd[&#x27;total&#x27;] == 0 or len(robust) == cd[&#x27;total&#x27;]), &#x27;el resultado decide; no había predicción fuerte&#x27;))
     # control positivo: normalización antigua del lapso (Phi ajustado en R con m(R), sin la cola)
     m_R, Phi_R = st.sol.sol(st.R)[0], st.sol.sol(st.R)[2]
     Ps_new = st.Phi_shift
@@ -2844,6 +2886,7 @@ def run():
     out[&#x27;lapse&#x27;] = {&#x27;phi_inf_old&#x27;: float(st._Ps - Ps_new), &#x27;tail_mass_frac&#x27;: float((M_tot - m_R) / M_tot)}
     co = count(st)
     out[&#x27;old_lapse&#x27;] = co
+    out[&#x27;old_lapse_deep&#x27;] = count(st, TILES_DEEP)
     res.append((f&#x27;H22(b), control positivo: con la normalización antigua del lapso el índice sube a {co[&quot;total&quot;]} &#x27;
                 f&#x27;(piezas {co[&quot;per_tile&quot;]}): el recuento ve las resonancias de cavidad&#x27;, co[&#x27;total&#x27;] is not None
                 and c[&#x27;total&#x27;] is not None and co[&#x27;total&#x27;] &gt;= c[&#x27;total&#x27;] + 3, &#x27;&#x27;))
@@ -2851,6 +2894,108 @@ def run():
     OUT.mkdir(exist_ok=True)
     (OUT / &#x27;radial_damped.json&#x27;).write_text(json.dumps(out, indent=1))
     return report(&#x27;Paso 20: recuento en el semiplano amortiguado&#x27;, res)
+
+
+if __name__ == &#x27;__main__&#x27;:
+    run()
+</code></pre></details><details class="src"><summary><code>axion_ns/step21_deep_artifacts.py</code> <span class="small">(102 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Paso 21: ¿son modos los ceros profundos del paso 20? (hipótesis H23b).
+
+El paso 20 encuentra dos ceros de F en Re nu in [6.05, 9], Im nu in [-5, -1.5] kHz (nu_a = 6 kHz). No tienen
+fluido y se mueven mucho al cambiar el radio de empalme. Aquí se comprueba si son artefactos del empalme:
+  (i) control: los modos fluidos H1 y H2 deben quedarse quietos (&lt; 0.1 %) con el mismo cambio de radio;
+  (ii) los ceros profundos deben moverse &gt; 5 % también con un tercer radio (donde theta_0 = 1e-6).
+Controles negativos:
+  1. con onda entrante (sheet = -1), H1 deja de ser un cero;
+  2. empalmando en la superficie (r_m = R, sin la cola del campo), la prueba debe notar que se ha quitado algo:
+     H1 se mueve más que con el cambio de radio de (i).
+&quot;&quot;&quot;
+import json
+from pathlib import Path
+
+import numpy as np
+
+from . import axgr as AG
+from . import axstar as AX
+from . import radial as RD
+from .pipeline import report
+
+OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
+_S = {}
+
+
+def _F(nu):
+    return complex(RD.det_entire(_S[&#x27;st&#x27;], AX.omega_of(nu), rm=_S.get(&#x27;rm&#x27;), inward=False, sheet=_S.get(&#x27;sheet&#x27;, 1)))
+
+
+def _root(z, rm=None):
+    _S[&#x27;rm&#x27;] = rm
+    try:
+        return complex(RD.muller(_F, z, tol=1e-9))
+    except RuntimeError:
+        return complex(np.nan, np.nan)
+    finally:
+        _S.pop(&#x27;rm&#x27;)
+
+
+def _radius(st, th):
+    rr = np.linspace(st.R, AG.r_match(st), 4000)
+    return float(rr[np.argmax(np.abs(st.sol.sol(rr)[3]) &lt; th)])
+
+
+def run():
+    res, out = [], {}
+    D = json.loads((OUT / &#x27;radial_damped.json&#x27;).read_text())
+    st = AX.Star(6.0)
+    _S[&#x27;st&#x27;] = st
+    r0, r5, r6 = float(AG.r_match(st)), _radius(st, 1e-5), _radius(st, 1e-6)
+    out[&#x27;radii&#x27;] = {&#x27;default&#x27;: r0, &#x27;theta_1e-5&#x27;: r5, &#x27;theta_1e-6&#x27;: r6, &#x27;R&#x27;: float(st.R)}
+    # (i) control: modos fluidos
+    fl = []
+    for z in (complex(*v) for v in D[&#x27;nu6&#x27;][&#x27;fluid_modes&#x27;]):
+        z0 = _root(z)
+        z5, z6, zR = _root(z0, r5), _root(z0, r6), _root(z0, float(st.R))
+        fl.append({&#x27;nu&#x27;: [z0.real, z0.imag], &#x27;shift_pct&#x27;: {k: float(100 * abs(w / z0 - 1)) for k, w in
+                   ((&#x27;theta_1e-5&#x27;, z5), (&#x27;theta_1e-6&#x27;, z6), (&#x27;R&#x27;, zR))},
+                   &#x27;dIm_Hz&#x27;: {k: float(1e3 * (w - z0).imag) for k, w in ((&#x27;theta_1e-5&#x27;, z5), (&#x27;theta_1e-6&#x27;, z6), (&#x27;R&#x27;, zR))}})
+    # (ii) ceros profundos, sin duplicados (Muller converge a puntos a 0.002-0.004 kHz desde semillas distintas)
+    deep = []
+    for r_ in D[&#x27;deep&#x27;][&#x27;roots&#x27;]:
+        z = complex(*r_[&#x27;nu&#x27;])
+        if all(abs(z - complex(*d[&#x27;nu&#x27;])) &gt; 0.05 for d in deep):
+            z0 = _root(z)
+            z5, z6 = _root(z0, r5), _root(z0, r6)
+            deep.append({&#x27;nu&#x27;: [z0.real, z0.imag], &#x27;nu_1e-5&#x27;: [z5.real, z5.imag], &#x27;nu_1e-6&#x27;: [z6.real, z6.imag],
+                         &#x27;shift_pct&#x27;: {&#x27;theta_1e-5&#x27;: float(100 * abs(z5 / z0 - 1)), &#x27;theta_1e-6&#x27;: float(100 * abs(z6 / z0 - 1))},
+                         &#x27;fluid&#x27;: r_[&#x27;fluid&#x27;]})
+    out[&#x27;fluid&#x27;], out[&#x27;deep&#x27;] = fl, deep
+    ok_i = all(max(f[&#x27;shift_pct&#x27;][&#x27;theta_1e-5&#x27;], f[&#x27;shift_pct&#x27;][&#x27;theta_1e-6&#x27;]) &lt; 0.1 for f in fl)
+    res.append((&#x27;H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: &#x27; + &#x27;; &#x27;.join(
+        f&quot;(Re {f[&#x27;nu&#x27;][0]:.4f} kHz, Im {f[&#x27;nu&#x27;][1] * 1e3:.2f} Hz): {f[&#x27;shift_pct&#x27;][&#x27;theta_1e-5&#x27;]:.2g} % y {f[&#x27;shift_pct&#x27;][&#x27;theta_1e-6&#x27;]:.2g} % &quot;
+        f&quot;(Im: {f[&#x27;dIm_Hz&#x27;][&#x27;theta_1e-5&#x27;]:+.2g} y {f[&#x27;dIm_Hz&#x27;][&#x27;theta_1e-6&#x27;]:+.2g} Hz)&quot; for f in fl), ok_i, &#x27;&#x27;))
+    ok_ii = bool(deep) and all(min(d[&#x27;shift_pct&#x27;].values()) &gt; 5 for d in deep)
+    res.append((&#x27;H23b(ii): los ceros profundos se mueven con los dos radios alternativos: &#x27; + &#x27;; &#x27;.join(
+        f&quot;{d[&#x27;nu&#x27;][0]:.3f}{d[&#x27;nu&#x27;][1]:+.3f}i kHz -&gt; {d[&#x27;nu_1e-5&#x27;][0]:.3f}{d[&#x27;nu_1e-5&#x27;][1]:+.3f}i ({d[&#x27;shift_pct&#x27;][&#x27;theta_1e-5&#x27;]:.2g} %) &quot;
+        f&quot;y {d[&#x27;nu_1e-6&#x27;][0]:.3f}{d[&#x27;nu_1e-6&#x27;][1]:+.3f}i ({d[&#x27;shift_pct&#x27;][&#x27;theta_1e-6&#x27;]:.2g} %)&quot; for d in deep),
+        ok_ii, &#x27;si (i) y (ii) pasan: artefactos del empalme, no modos&#x27;))
+    # control negativo 1: onda entrante
+    h1 = complex(*fl[0][&#x27;nu&#x27;])
+    _S[&#x27;sheet&#x27;] = -1
+    ratio_in = abs(_F(h1)) / abs(_F(h1 + 0.05))
+    _S[&#x27;sheet&#x27;] = 1
+    ratio_out = abs(_F(h1)) / abs(_F(h1 + 0.05))
+    out[&#x27;neg1&#x27;] = {&#x27;ratio_ingoing&#x27;: float(ratio_in), &#x27;ratio_outgoing&#x27;: float(ratio_out)}
+    res.append((f&#x27;Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = {ratio_in:.2g}, &#x27;
+                f&#x27;frente a {ratio_out:.1e} con la saliente)&#x27;, ratio_in &gt; 1e-2 and ratio_out &lt; 1e-4, &#x27;&#x27;))
+    # control negativo 2: empalme en la superficie
+    sR = fl[0][&#x27;shift_pct&#x27;][&#x27;R&#x27;]
+    s_alt = max(fl[0][&#x27;shift_pct&#x27;][&#x27;theta_1e-5&#x27;], fl[0][&#x27;shift_pct&#x27;][&#x27;theta_1e-6&#x27;])
+    out[&#x27;neg2&#x27;] = {&#x27;shift_R_pct&#x27;: sR, &#x27;shift_alt_pct&#x27;: s_alt}
+    res.append((f&#x27;Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un {sR:.2g} %, &#x27;
+                f&#x27;más que con los radios alternativos ({s_alt:.2g} %)&#x27;, sR &gt; 3 * s_alt, &#x27;&#x27;))
+    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
+    OUT.mkdir(exist_ok=True)
+    (OUT / &#x27;radial_deep.json&#x27;).write_text(json.dumps(out, indent=1))
+    return report(&#x27;Paso 21: ceros profundos frente al radio de empalme&#x27;, res)
 
 
 if __name__ == &#x27;__main__&#x27;:
@@ -3080,7 +3225,7 @@ dependencies = [
     &quot;scipy&gt;=1.18.1&quot;,
     &quot;sympy&gt;=1.14.0&quot;,
 ]
-</code></pre></details><details class="src"><summary><code>report/build_radial.py</code> <span class="small">(634 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Genera report/informe_radial.html (y la copia en results/) desde results/radial_branches.json.
+</code></pre></details><details class="src"><summary><code>report/build_radial.py</code> <span class="small">(671 líneas)</span></summary><pre class="code"><code>&quot;&quot;&quot;Genera report/informe_radial.html (y la copia en results/) desde results/radial_branches.json.
 
 Regla (AGENTS.md §4): ninguna cifra se teclea a mano; todas salen del JSON que escribe
 axion_ns/step14_radial_branches.py.
@@ -3097,6 +3242,11 @@ D = json.loads((ROOT / &#x27;results&#x27; / &#x27;radial_branches.json&#x27;).r
 
 def fnum(x, nd=3):
     return f&#x27;{x:.{nd}f}&#x27;.replace(&#x27;-&#x27;, &#x27;−&#x27;)
+
+
+def cnum(z, nd=2):
+    &quot;&quot;&quot;Número complejo [re, im] como «a − bi».&quot;&quot;&quot;
+    return f&quot;{fnum(z[0], nd)} {&#x27;−&#x27; if z[1] &lt; 0 else &#x27;+&#x27;} {fnum(abs(z[1]), nd)}i&quot;
 
 
 # ------------------------------------------------------------------ SVG helpers
@@ -3249,6 +3399,7 @@ GM_SUN_KM, C_KMS = 1.476625, 299792.458
 alpha_g = 1.5 * GM_SUN_KM * 2 * math.pi * 3000 / C_KMS
 wf = D[&#x27;fluid_x0_0p6&#x27;]
 xc, xc_an = D[&#x27;x0_unstable&#x27;], D[&#x27;x0_unstable_analytic&#x27;]
+xc3 = D.get(&#x27;x0_unstable_lam2_1e-3&#x27;)
 w2u = D[&#x27;unstable_x0_0p6_w2&#x27;]
 grow = math.sqrt(-w2u)
 alpha = D[&#x27;params&#x27;][&#x27;alpha&#x27;]
@@ -3262,6 +3413,8 @@ CRP = ROOT / &#x27;results&#x27; / &#x27;radial_crossing.json&#x27;
 CRS = json.loads(CRP.read_text()) if CRP.exists() else None
 DMP = ROOT / &#x27;results&#x27; / &#x27;radial_damped.json&#x27;
 DMD = json.loads(DMP.read_text()) if DMP.exists() else None
+DPP = ROOT / &#x27;results&#x27; / &#x27;radial_deep.json&#x27;
+DEEP = json.loads(DPP.read_text()) if DPP.exists() else None
 RYP = ROOT / &#x27;results&#x27; / &#x27;radial_rydberg.json&#x27;
 RYD = json.loads(RYP.read_text()) if RYP.exists() else None
 VLP = ROOT / &#x27;results&#x27; / &#x27;radial_validation.json&#x27;
@@ -3399,10 +3552,38 @@ if S:
     lap = DMD[&#x27;lapse&#x27;] if DMD else None
     if DMD:
         _fm = DMD[&#x27;nu6&#x27;][&#x27;fluid_modes&#x27;]
+        dp_ = DMD.get(&#x27;deep&#x27;)
+        if dp_:
+            _rob = [r_ for r_ in dp_[&#x27;roots&#x27;] if r_[&#x27;shift_pct&#x27;] &lt; 0.1]
+            if dp_[&#x27;total&#x27;] == 0:
+                _res = &#x27;&lt;b&gt;ningún cero&lt;/b&gt;: no hay análogo radial de ese modo en la región explorada&#x27;
+            elif DEEP:
+                _art = (all(max(f_[&#x27;shift_pct&#x27;][&#x27;theta_1e-5&#x27;], f_[&#x27;shift_pct&#x27;][&#x27;theta_1e-6&#x27;]) &lt; 0.1 for f_ in DEEP[&#x27;fluid&#x27;])
+                        and bool(DEEP[&#x27;deep&#x27;]) and all(min(d_[&#x27;shift_pct&#x27;].values()) &gt; 5 for d_ in DEEP[&#x27;deep&#x27;]))   # mismos criterios que el paso 21
+                _rd = DEEP[&#x27;radii&#x27;]
+                _zz = &#x27;; &#x27;.join(f&quot;{cnum(d_[&#x27;nu&#x27;])} kHz, que pasa a {cnum(d_[&#x27;nu_1e-5&#x27;])} &quot;
+                                f&quot;y a {cnum(d_[&#x27;nu_1e-6&#x27;])} kHz ({d_[&#x27;shift_pct&#x27;][&#x27;theta_1e-5&#x27;]:.2g} % y {d_[&#x27;shift_pct&#x27;][&#x27;theta_1e-6&#x27;]:.2g} %)&quot;
+                                for d_ in DEEP[&#x27;deep&#x27;])
+                _fc = &#x27;; &#x27;.join(f&quot;{fnum(f_[&#x27;nu&#x27;][0], 4)} kHz: {f_[&#x27;shift_pct&#x27;][&#x27;theta_1e-5&#x27;]:.1g} % y {f_[&#x27;shift_pct&#x27;][&#x27;theta_1e-6&#x27;]:.1g} %&quot;.replace(&#x27;e-0&#x27;, &#x27;×10^−&#x27;).replace(&#x27;×10^−7&#x27;, &#x27;×10⁻⁷&#x27;).replace(&#x27;×10^−8&#x27;, &#x27;×10⁻⁸&#x27;) for f_ in DEEP[&#x27;fluid&#x27;])
+                _res = (f&quot;el índice es {dp_[&#x27;total&#x27;]}, pero los ceros no tienen fluido (fracción ~10⁻¹⁴) y dependen del radio donde empalmamos con la solución exterior. &quot;
+                        f&quot;Empalmando en r = {fnum(_rd[&#x27;default&#x27;], 0)} km (lo habitual), en r = {fnum(_rd[&#x27;theta_1e-6&#x27;], 0)} km (θ₀ = 10⁻⁶) o en r = {fnum(_rd[&#x27;theta_1e-5&#x27;], 0)} km (θ₀ = 10⁻⁵): {_zz}. &quot;
+                        f&quot;Con los mismos cambios, los modos fluidos se mueven muy poco ({_fc}; paso 21)&quot;)
+                _res += (&#x27;. &lt;b&gt;Son artefactos del empalme, no modos de la estrella&lt;/b&gt;. En esa región F está mal condicionada (Muller converge a puntos separados unos Hz desde semillas distintas), así que &lt;b&gt;el método no decide si hay o no un análogo radial de a0&lt;/b&gt;. Para decidirlo haría falta extender el fondo más allá de r = &#x27;
+                         f&quot;{fnum(_rd[&#x27;default&#x27;], 0)} km y empalmar donde la cola del axión sea de verdad despreciable (θ₀ sigue por encima de 10⁻⁷ al final del fondo). Con la normalización antigua del lapso, el índice de esta región es {DMD.get(&#x27;old_lapse_deep&#x27;, {}).get(&#x27;total&#x27;)}&quot;
+                         if _art else &#x27;. La prueba del paso 21 no fue concluyente (ver la lista de comprobaciones)&#x27;)
+            else:
+                _res = (f&quot;índice {dp_[&#x27;total&#x27;]}; &quot; + &#x27;; &#x27;.join(
+                    f&quot;{fnum(r_[&#x27;nu&#x27;][0], 3)} {fnum(r_[&#x27;nu&#x27;][1], 3)}i kHz (fracción fluida {fnum(r_[&#x27;fluid&#x27;], 2)}; al cambiar el radio de &quot;
+                    f&quot;empalme se mueve un {r_[&#x27;shift_pct&#x27;]:.2g} %, {&#x27;robusto&#x27; if r_[&#x27;shift_pct&#x27;] &lt; 0.1 else &#x27;no robusto&#x27;})&quot; for r_ in dp_[&#x27;roots&#x27;]))
+            _old = DMD.get(&#x27;old_lapse_deep&#x27;, {}).get(&#x27;total&#x27;)
+            deep_html = f&#x27;&#x27;&#x27;
+  &lt;p&gt;&lt;b&gt;Más abajo en el plano, donde la secuela tiene un modo axiónico.&lt;/b&gt; La Tabla III de la secuela (l = 2, aproximación de Cowling) da a ν_a = 6 kHz un modo axiónico muy amortiguado en 9,0 − 3,8i kHz, fuera de la franja anterior. Repetimos el recuento en &lt;code&gt;6,05 ≤ Re ν ≤ 12&lt;/code&gt;, &lt;code&gt;−5 ≤ Im ν ≤ −1,5&lt;/code&gt; kHz: {_res}{f&quot; (con la normalización antigua del lapso, índice {_old})&quot; if _old is not None and not DEEP else &quot;&quot;}. Tampoco contradice a la secuela: allí l = 2 y Cowling; aquí l = 0 con la métrica dinámica. Fuera de &lt;code&gt;Re ν ≤ 12&lt;/code&gt; kHz e &lt;code&gt;Im ν ≥ −5&lt;/code&gt; kHz no hemos mirado.&lt;/p&gt;&#x27;&#x27;&#x27;
+        else:
+            deep_html = &#x27;&#x27;
         damped_html = f&#x27;&#x27;&#x27;
   &lt;h3&gt;¿Hay resonancias axiónicas muy amortiguadas? (paso 20)&lt;/h3&gt;
   &lt;p&gt;Contamos con el principio del argumento los modos en &lt;code&gt;6,05 ≤ Re ν ≤ 12&lt;/code&gt; kHz, &lt;code&gt;−1,5 ≤ Im ν &amp;lt; 0&lt;/code&gt; (ν_a = 6 kHz), con la condición saliente. Cada pieza del contorno se acepta solo si su índice no cambia al doblar el muestreo. Resultado: &lt;b&gt;{DMD[&#x27;nu6&#x27;][&#x27;total&#x27;]} modos&lt;/b&gt;, y son los dos fluidos que encuentra Muller ({&#x27;, &#x27;.join(f&quot;Re ν = {fnum(z[0], 4)} kHz con Im ν = {fnum(z[1] * 1e3, 2)} Hz&quot; for z in _fm)}; fracción fluida {&#x27;, &#x27;.join(fnum(f, 2) for f in DMD[&#x27;nu6&#x27;][&#x27;fluid_fraction&#x27;])}). En esa región &lt;b&gt;no hay ninguna familia axiónica&lt;/b&gt;.&lt;/p&gt;
-  &lt;p&gt;El control positivo comprueba que el recuento ve resonancias muy amortiguadas cuando existen: con la normalización antigua del lapso, el índice sube a {DMD[&#x27;old_lapse&#x27;][&#x27;total&#x27;]} (piezas {DMD[&#x27;old_lapse&#x27;][&#x27;per_tile&#x27;]}), con las resonancias de cavidad que mostraba la versión anterior. Fuera de esa región (amortiguamientos mayores que 1,5 kHz o frecuencias por encima de 12 kHz) no hemos mirado.&lt;/p&gt;&#x27;&#x27;&#x27;
+  &lt;p&gt;El control positivo comprueba que el recuento ve resonancias muy amortiguadas cuando existen: con la normalización antigua del lapso, el índice sube a {DMD[&#x27;old_lapse&#x27;][&#x27;total&#x27;]} (piezas {DMD[&#x27;old_lapse&#x27;][&#x27;per_tile&#x27;]}), con las resonancias de cavidad que mostraba la versión anterior.&lt;/p&gt;{deep_html}&#x27;&#x27;&#x27;
     else:
         damped_html = &#x27;&#x27;
     tail_txt = f&quot;{fnum(100 * lap[&#x27;tail_mass_frac&#x27;], 2)} % de la masa&quot; if lap else &quot;una fracción pequeña de la masa&quot;
@@ -3455,6 +3636,7 @@ if S:
   &lt;div class=&quot;callout&quot;&gt;
     &lt;h3&gt;Abierto&lt;/h3&gt;
     &lt;p&gt;No hemos podido decidir si el amortiguamiento tiende a cero o a un valor finito justo encima del umbral (factor de Sommerfeld del potencial 1/r). Los dos puntos disponibles apuntan a que cae deprisa, pero hace falta un barrido denso en ν_a.&lt;/p&gt;
+    &lt;p&gt;No sabemos si hay modos radiales axiónicos con amortiguamiento de varios kHz (la región de a0 en la secuela): ahí nuestra F está mal condicionada y sus ceros dependen del empalme (paso 21).&lt;/p&gt;
   &lt;/div&gt;
   &lt;ul class=&quot;checks&quot;&gt;{st_rows}&lt;/ul&gt;
 &lt;/section&gt;&quot;&quot;&quot;
@@ -3486,12 +3668,12 @@ FILES = [&#x27;axion_ns/model.py&#x27;, &#x27;axion_ns/geometry.py&#x27;, &#x27;
          &#x27;axion_ns/fullgr.py&#x27;, &#x27;axion_ns/bsk26.py&#x27;, &#x27;axion_ns/axstar.py&#x27;, &#x27;axion_ns/axgr.py&#x27;, &#x27;axion_ns/radial.py&#x27;,
          &#x27;axion_ns/step2_perturbations.py&#x27;, &#x27;axion_ns/step4_numerics.py&#x27;, &#x27;axion_ns/step14_radial_branches.py&#x27;,
          &#x27;axion_ns/step15_radial_star.py&#x27;, &#x27;axion_ns/step16_radial_stability.py&#x27;, &#x27;axion_ns/step17_radial_validation.py&#x27;, &#x27;axion_ns/step18_rydberg.py&#x27;, &#x27;axion_ns/step19_avoided_crossing.py&#x27;,
-         &#x27;axion_ns/step20_damped_count.py&#x27;,
+         &#x27;axion_ns/step20_damped_count.py&#x27;, &#x27;axion_ns/step21_deep_artifacts.py&#x27;,
          &#x27;report/build_radial.py&#x27;,
          &#x27;pyproject.toml&#x27;, &#x27;uv.lock&#x27;]
 DATA = [&#x27;results/radial_branches.json&#x27;, &#x27;results/radial_star.json&#x27;, &#x27;results/radial_stability.json&#x27;,
         &#x27;results/radial_validation.json&#x27;, &#x27;results/radial_rydberg.json&#x27;,
-        &#x27;results/radial_crossing.json&#x27;, &#x27;results/radial_damped.json&#x27;]
+        &#x27;results/radial_crossing.json&#x27;, &#x27;results/radial_damped.json&#x27;, &#x27;results/radial_deep.json&#x27;]
 FD = ROOT / &#x27;report&#x27; / &#x27;radial_files&#x27;
 FD.mkdir(exist_ok=True)
 published = {}
@@ -3608,7 +3790,7 @@ a {{ color: var(--accent); }}
 &lt;section class=&quot;sheet summary&quot;&gt;
   &lt;h3&gt;Resumen&lt;/h3&gt;
   &lt;ul&gt;
-    &lt;li&gt;Para &lt;code&gt;l = 0&lt;/code&gt; no hay radiación gravitatoria, así que el único canal de pérdida es la emisión de axiones, con &lt;code&gt;k_out² = ω² − m_a²&lt;/code&gt;. Escrita en la variable &lt;code&gt;k = k_out&lt;/code&gt;, la función de dispersión del modelo (Ec. 4.13) no tiene la ambigüedad de hoja del umbral exterior.&lt;/li&gt;
+    &lt;li&gt;Para &lt;code&gt;l = 0&lt;/code&gt; no hay radiación gravitatoria, así que, en este modelo idealizado (sin viscosidad, neutrinos ni otras disipaciones), el único canal de pérdida es la emisión de axiones, con &lt;code&gt;k_out² = ω² − m_a²&lt;/code&gt;. Escrita en la variable &lt;code&gt;k = k_out&lt;/code&gt;, la función de dispersión del modelo (Ec. 4.13) no tiene la ambigüedad de hoja del umbral exterior.&lt;/li&gt;
     &lt;li&gt;La transición sigue la secuencia típica de onda con umbral: el par cuasi-normal &lt;code&gt;k = ±a − ib&lt;/code&gt; colisiona en el eje imaginario negativo en &lt;code&gt;x₀ = {fnum(C3[&#x27;x0&#x27;], 5)}&lt;/code&gt; (raíz doble, λ² = 10⁻³), cuando su frecuencia ya está &lt;b&gt;por debajo&lt;/b&gt; de &lt;code&gt;m_a&lt;/code&gt; (&lt;code&gt;w − 1 = {sci(C3[&#x27;w_minus_1&#x27;])}&lt;/code&gt;). Se convierte en dos &lt;b&gt;estados virtuales&lt;/b&gt; (&lt;code&gt;Im k &amp;lt; 0&lt;/code&gt;, frecuencia real pero no físicos). Uno de ellos sube, cruza &lt;code&gt;k = 0&lt;/code&gt; (justo &lt;code&gt;ω = m_a&lt;/code&gt;) en &lt;code&gt;x₀ = {fnum(C3[&#x27;x0_k0&#x27;], 5)}&lt;/code&gt; y pasa a &lt;b&gt;estado ligado&lt;/b&gt; (&lt;code&gt;Im k &amp;gt; 0&lt;/code&gt;); el otro sigue virtual.&lt;/li&gt;
     &lt;li&gt;Cerca del umbral, &lt;code&gt;|Im w| ∝ (Re w − 1)^{fnum(s_fit, 2)}&lt;/code&gt;, próximo a ½. Es una ley de tramo intermedio. El amortiguamiento solo se anula en la colisión, ya por debajo del umbral, a &lt;code&gt;w − 1 ≈ k²/2 ∼ −(Im k)²/2&lt;/code&gt; (λ² = 10⁻⁴: &lt;code&gt;{sci(C4[&#x27;w_minus_1&#x27;], 2)}&lt;/code&gt;).&lt;/li&gt;
     &lt;li&gt;Las ramas fluida y axiónica no se cruzan: la separación mínima es lineal en el acoplo, con &lt;code&gt;Δw²_min/λ = {fnum(min(ratios), 2)}–{fnum(max(ratios), 2)}&lt;/code&gt; para λ² = 10⁻⁶…10⁻³.&lt;/li&gt;
@@ -3623,8 +3805,8 @@ a {{ color: var(--accent); }}
   &lt;div class=&quot;tbl&quot;&gt;&lt;table&gt;
     &lt;tr&gt;&lt;th&gt;Posición de la raíz en el plano k&lt;/th&gt;&lt;th&gt;Onda exterior&lt;/th&gt;&lt;th&gt;Interpretación&lt;/th&gt;&lt;/tr&gt;
     &lt;tr&gt;&lt;td&gt;&lt;code&gt;Re k &amp;gt; 0&lt;/code&gt;, &lt;code&gt;Im k &amp;lt; 0&lt;/code&gt;&lt;/td&gt;&lt;td&gt;saliente, crece con r&lt;/td&gt;&lt;td&gt;modo cuasi-normal (amortiguado)&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;code&gt;Re k = 0&lt;/code&gt;, &lt;code&gt;Im k &amp;gt; 0&lt;/code&gt;&lt;/td&gt;&lt;td&gt;evanescente &lt;code&gt;e^(−κr)&lt;/code&gt;&lt;/td&gt;&lt;td&gt;modo ligado: frecuencia real, normalizable&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;code&gt;Re k = 0&lt;/code&gt;, &lt;code&gt;Im k &amp;lt; 0&lt;/code&gt;&lt;/td&gt;&lt;td&gt;crece &lt;code&gt;e^(+κr)&lt;/code&gt;&lt;/td&gt;&lt;td&gt;estado virtual: frecuencia real, no es un modo físico&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;code&gt;Re k = 0&lt;/code&gt;, &lt;code&gt;Im k &amp;gt; 0&lt;/code&gt;&lt;/td&gt;&lt;td&gt;evanescente &lt;code&gt;e^(−κr)&lt;/code&gt;&lt;/td&gt;&lt;td&gt;modo ligado, normalizable: &lt;code&gt;w² = 1 − κ²&lt;/code&gt;, frecuencia real si &lt;code&gt;κ &amp;lt; 1&lt;/code&gt;; si &lt;code&gt;κ &amp;gt; 1&lt;/code&gt;, &lt;code&gt;w² &amp;lt; 0&lt;/code&gt; y el modo crece (el inestable de la Sec. 5)&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;code&gt;Re k = 0&lt;/code&gt;, &lt;code&gt;Im k &amp;lt; 0&lt;/code&gt;&lt;/td&gt;&lt;td&gt;crece &lt;code&gt;e^(+κr)&lt;/code&gt;&lt;/td&gt;&lt;td&gt;estado virtual, no es un modo físico (frecuencia real si &lt;code&gt;κ &amp;lt; 1&lt;/code&gt;)&lt;/td&gt;&lt;/tr&gt;
   &lt;/table&gt;&lt;/div&gt;
   &lt;p&gt;En la variable &lt;code&gt;w&lt;/code&gt; esa distinción se pierde: un estado ligado y uno virtual tienen ambos &lt;code&gt;Im w = 0&lt;/code&gt;. La expresión &lt;code&gt;w√(1 − 1/w²)&lt;/code&gt; del paso 4 pone el corte en el segmento real &lt;code&gt;(−1, 1)&lt;/code&gt;. Por debajo del umbral y en el semiplano inferior da la hoja no física. Nuestro primer seguimiento de raíces cayó precisamente en el estado virtual.&lt;/p&gt;
 &lt;/section&gt;
@@ -3670,7 +3852,7 @@ a {{ color: var(--accent); }}
 &lt;section&gt;
   &lt;h2&gt;5. Un modo inestable en el modelo simplificado (masa efectiva m_a²(1 − α))&lt;/h2&gt;
   &lt;p&gt;Una precisión sobre qué modelo es. El de la Sec. IV del Paper I no es la linealización consistente de la acción en &lt;code&gt;θ = 0&lt;/code&gt;: allí &lt;code&gt;∂m*/∂a = 0&lt;/code&gt;, y el acoplo lineal se anularía. El paper combina la masa efectiva de &lt;code&gt;θ = 0&lt;/code&gt;, &lt;code&gt;m_a²(1 − α)&lt;/code&gt;, con un acoplo constante. Es un modelo fenomenológico, y lo que sigue es una propiedad de ese modelo, no del problema exacto de la condensación.&lt;/p&gt;
-  &lt;p&gt;Con los parámetros de la Fig. 3 (&lt;code&gt;x₀ = 0.6&lt;/code&gt;) hay un estado ligado con &lt;code&gt;w² = {fnum(w2u, 3)}&lt;/code&gt;, es decir, una perturbación que crece como &lt;code&gt;e^({fnum(grow, 2)} m_a t)&lt;/code&gt;. Es el estado fundamental del pozo taquiónico interior, con onda oscilante dentro y evanescente fuera. Aparece para &lt;code&gt;x₀ &amp;gt; {fnum(xc, 5)}&lt;/code&gt;, valor que coincide con la condición analítica &lt;code&gt;arctan(1/√(α−1))/√(α−1) = {fnum(xc_an, 5)}&lt;/code&gt;. Esa condición no contiene el acoplo: la inestabilidad la produce el término de masa taquiónico, no el acoplo con el fluido.&lt;/p&gt;
+  &lt;p&gt;Con los parámetros de la Fig. 3 (&lt;code&gt;x₀ = 0.6&lt;/code&gt;) hay un estado ligado con &lt;code&gt;w² = {fnum(w2u, 3)}&lt;/code&gt;, es decir, una perturbación que crece como &lt;code&gt;e^({fnum(grow, 2)} m_a t)&lt;/code&gt;. Es el estado fundamental del pozo taquiónico interior, con onda oscilante dentro y evanescente fuera. Sin acoplo aparece para &lt;code&gt;x₀ &amp;gt; {fnum(xc, 8)}&lt;/code&gt;, valor que coincide con la condición analítica &lt;code&gt;arctan(1/√(α−1))/√(α−1) = {fnum(xc_an, 8)}&lt;/code&gt;. Con λ² = 10⁻³ el umbral baja a &lt;code&gt;{fnum(xc3, 8) if xc3 else &#x27;—&#x27;}&lt;/code&gt;: el acoplo apenas lo mueve, así que la inestabilidad la produce sobre todo el término de masa taquiónico.&lt;/p&gt;
   &lt;p&gt;Nuestro paso 4 no lo detectaba porque buscaba raíces solo en &lt;code&gt;Im w ≤ 0.01&lt;/code&gt;. Linealizando en &lt;code&gt;θ = π&lt;/code&gt; (masa efectiva interior positiva, sin acoplo lineal) desaparece: no hay estados ligados ni inestables.&lt;/p&gt;
   &lt;div class=&quot;callout&quot;&gt;
     &lt;h3&gt;Pregunta para el grupo&lt;/h3&gt;
@@ -3714,7 +3896,7 @@ uv run python report/build_radial.py              # esta página, desde los JSON
 for out in (ROOT / &#x27;report&#x27; / &#x27;informe_radial.html&#x27;, ROOT / &#x27;results&#x27; / &#x27;informe_radial.html&#x27;):
     out.write_text(page)
 print(&#x27;informe_radial.html:&#x27;, len(page) // 1024, &#x27;KB;&#x27;, n_ok, &#x27;/&#x27;, len(checks), &#x27;checks&#x27;)
-</code></pre></details><details class="src"><summary><code>results/radial_branches.json</code> <span class="small">(1565 líneas)</span></summary><pre class="code"><code>{
+</code></pre></details><details class="src"><summary><code>results/radial_branches.json</code> <span class="small">(1566 líneas)</span></summary><pre class="code"><code>{
  &quot;params&quot;: {
   &quot;alpha&quot;: 10.0,
   &quot;cs2&quot;: 0.3,
@@ -3748,9 +3930,9 @@ print(&#x27;informe_radial.html:&#x27;, len(page) // 1024, &#x27;KB;&#x27;, n_ok
    &quot;note&quot;: &quot;&quot;
   },
   {
-   &quot;name&quot;: &quot;Modo inestable en theta = 0: aparece para x0 &gt; 0.10725 (anal\u00edtico arctan(1/\u221a(\u03b1-1))/\u221a(\u03b1-1) = 0.10725); en los par\u00e1metros de la figura (x0 = 0.6) w\u00b2 = -6.177 (crece como e^(2.49 m_a t))&quot;,
+   &quot;name&quot;: &quot;Modo inestable del modelo simplificado (m\u00b2_in = m_a\u00b2(1 - \u03b1)): sin acoplo aparece para x0 &gt; 0.10725018 (anal\u00edtico arctan(1/\u221a(\u03b1-1))/\u221a(\u03b1-1) = 0.10725018); con \u03bb\u00b2 = 1e-3, para x0 &gt; 0.10720993; en los par\u00e1metros de la figura (x0 = 0.6) w\u00b2 = -6.177 (crece como e^(2.49 m_a t))&quot;,
    &quot;ok&quot;: true,
-   &quot;note&quot;: &quot;el paso 4 no lo ve\u00eda: buscaba solo Im w \u2264 0.01&quot;
+   &quot;note&quot;: &quot;el paso 4 no lo ve\u00eda: buscaba solo Im w \u2264 0.01; el acoplo apenas mueve el umbral&quot;
   },
   {
    &quot;name&quot;: &quot;Variante theta = pi (m\u00b2_in = 25.6 m_a\u00b2, sin acoplo): sin estados ligados ni inestables&quot;,
@@ -5251,6 +5433,7 @@ print(&#x27;informe_radial.html:&#x27;, len(page) // 1024, &#x27;KB;&#x27;, n_ok
  ],
  &quot;x0_unstable&quot;: 0.10725018479888074,
  &quot;x0_unstable_analytic&quot;: 0.10725018479888072,
+ &quot;x0_unstable_lam2_1e-3&quot;: 0.10720993298767677,
  &quot;winding&quot;: [
   {
    &quot;box&quot;: &quot;par cuasi-normal, x0 = 0.80, Re k &gt; 0&quot;,
@@ -5475,7 +5658,7 @@ print(&#x27;informe_radial.html:&#x27;, len(page) // 1024, &#x27;KB;&#x27;, n_ok
    &quot;note&quot;: &quot;&quot;
   }
  ]
-}</code></pre></details><details class="src"><summary><code>results/radial_damped.json</code> <span class="small">(88 líneas)</span></summary><pre class="code"><code>{
+}</code></pre></details><details class="src"><summary><code>results/radial_damped.json</code> <span class="small">(183 líneas)</span></summary><pre class="code"><code>{
  &quot;nu6&quot;: {
   &quot;per_tile&quot;: [
    1,
@@ -5518,6 +5701,78 @@ print(&#x27;informe_radial.html:&#x27;, len(page) // 1024, &#x27;KB;&#x27;, n_ok
    0.879037707074947
   ]
  },
+ &quot;deep&quot;: {
+  &quot;per_tile&quot;: [
+   2,
+   0
+  ],
+  &quot;tried&quot;: [
+   [
+    2,
+    2
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  &quot;points&quot;: 770,
+  &quot;total&quot;: 2,
+  &quot;roots&quot;: [
+   {
+    &quot;nu&quot;: [
+     6.293147634689533,
+     -4.479490014398668
+    ],
+    &quot;nu_alt_rm&quot;: [
+     8.275164123614656,
+     -6.098056828893872
+    ],
+    &quot;r_alt&quot;: 84.05755953751199,
+    &quot;shift_pct&quot;: 33.12706062169011,
+    &quot;fluid&quot;: 9.439414066731003e-15
+   },
+   {
+    &quot;nu&quot;: [
+     6.291170930046479,
+     -4.480824539247215
+    ],
+    &quot;nu_alt_rm&quot;: [
+     8.27517571547283,
+     -6.09805311404386
+    ],
+    &quot;r_alt&quot;: 84.05755953751199,
+    &quot;shift_pct&quot;: 33.13964002561512,
+    &quot;fluid&quot;: 9.355420171930117e-15
+   },
+   {
+    &quot;nu&quot;: [
+     7.318753144353753,
+     -4.784747685776995
+    ],
+    &quot;nu_alt_rm&quot;: [
+     6.61528467161773,
+     -5.689317180639477
+    ],
+    &quot;r_alt&quot;: 84.05755953751199,
+    &quot;shift_pct&quot;: 13.105085108371068,
+    &quot;fluid&quot;: 5.340192337932384e-15
+   },
+   {
+    &quot;nu&quot;: [
+     7.322059937923942,
+     -4.781287331488159
+    ],
+    &quot;nu_alt_rm&quot;: [
+     6.615274422761622,
+     -5.689305811939148
+    ],
+    &quot;r_alt&quot;: 84.05755953751199,
+    &quot;shift_pct&quot;: 13.158193443567304,
+    &quot;fluid&quot;: 5.4535555909148036e-15
+   }
+  ]
+ },
  &quot;lapse&quot;: {
   &quot;phi_inf_old&quot;: 0.0016128417713554555,
   &quot;tail_mass_frac&quot;: 0.0048506092429300065
@@ -5550,6 +5805,24 @@ print(&#x27;informe_radial.html:&#x27;, len(page) // 1024, &#x27;KB;&#x27;, n_ok
   &quot;points&quot;: 1542,
   &quot;total&quot;: 8
  },
+ &quot;old_lapse_deep&quot;: {
+  &quot;per_tile&quot;: [
+   0,
+   0
+  ],
+  &quot;tried&quot;: [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  &quot;points&quot;: 768,
+  &quot;total&quot;: 0
+ },
  &quot;checks&quot;: [
   {
    &quot;name&quot;: &quot;H22(a): nu_a = 6 kHz, \u00edndice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ah\u00ed: 8.1192-3.60i (fluido 0.97), 11.6786-21.70i (fluido 0.88)&quot;,
@@ -5557,7 +5830,123 @@ print(&#x27;informe_radial.html:&#x27;, len(page) // 1024, &#x27;KB;&#x27;, n_ok
    &quot;note&quot;: &quot;sin ceros adicionales: ninguna familia axi\u00f3nica en esa regi\u00f3n&quot;
   },
   {
+   &quot;name&quot;: &quot;H23: regi\u00f3n profunda Re nu in [6.05, 12], Im nu in [-5, -1.5] kHz: \u00edndice 2 (piezas [2, 0], convergidas [[2, 2], [0, 0]]); ceros: 6.293-4.479i kHz (fluido 0.00; al cambiar el empalme se mueve un 33 %); 6.291-4.481i kHz (fluido 0.00; al cambiar el empalme se mueve un 33 %); 7.319-4.785i kHz (fluido 0.00; al cambiar el empalme se mueve un 13 %); 7.322-4.781i kHz (fluido 0.00; al cambiar el empalme se mueve un 13 %). Secuela, Tabla III (l = 2, Cowling): a0 = 9.0 -3.8i kHz&quot;,
+   &quot;ok&quot;: false,
+   &quot;note&quot;: &quot;el resultado decide; no hab\u00eda predicci\u00f3n fuerte&quot;
+  },
+  {
    &quot;name&quot;: &quot;H22(b), control positivo: con la normalizaci\u00f3n antigua del lapso el \u00edndice sube a 8 (piezas [1, 1, 3, 3]): el recuento ve las resonancias de cavidad&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
+  }
+ ]
+}</code></pre></details><details class="src"><summary><code>results/radial_deep.json</code> <span class="small">(112 líneas)</span></summary><pre class="code"><code>{
+ &quot;radii&quot;: {
+  &quot;default&quot;: 117.30440053809293,
+  &quot;theta_1e-5&quot;: 84.05755953751199,
+  &quot;theta_1e-6&quot;: 100.6412427776424,
+  &quot;R&quot;: 11.364864951381225
+ },
+ &quot;fluid&quot;: [
+  {
+   &quot;nu&quot;: [
+    8.119208585548744,
+    -0.0036022927257150683
+   ],
+   &quot;shift_pct&quot;: {
+    &quot;theta_1e-5&quot;: 1.2628528212170957e-07,
+    &quot;theta_1e-6&quot;: 2.0756222978364473e-07,
+    &quot;R&quot;: 0.0032927741577065345
+   },
+   &quot;dIm_Hz&quot;: {
+    &quot;theta_1e-5&quot;: -1.0531779328845636e-06,
+    &quot;theta_1e-6&quot;: -1.3340608691521372e-06,
+    &quot;R&quot;: 0.07474125181398472
+   }
+  },
+  {
+   &quot;nu&quot;: [
+    11.678582412891904,
+    -0.021698873404184287
+   ],
+   &quot;shift_pct&quot;: {
+    &quot;theta_1e-5&quot;: 4.213587955205503e-08,
+    &quot;theta_1e-6&quot;: 1.4496342341906246e-07,
+    &quot;R&quot;: 0.006293670538416096
+   },
+   &quot;dIm_Hz&quot;: {
+    &quot;theta_1e-5&quot;: 5.268075142783601e-07,
+    &quot;theta_1e-6&quot;: -1.5558532105025558e-05,
+    &quot;R&quot;: -0.6966776107071686
+   }
+  }
+ ],
+ &quot;deep&quot;: [
+  {
+   &quot;nu&quot;: [
+    6.292808282258874,
+    -4.480326100144246
+   ],
+   &quot;nu_1e-5&quot;: [
+    4.866690033883566,
+    -5.111404330768691
+   ],
+   &quot;nu_1e-6&quot;: [
+    7.02143397042295,
+    -5.613315067949477
+   ],
+   &quot;shift_pct&quot;: {
+    &quot;theta_1e-5&quot;: 20.18832310749094,
+    &quot;theta_1e-6&quot;: 17.438034739965442
+   },
+   &quot;fluid&quot;: 9.439414066731003e-15
+  },
+  {
+   &quot;nu&quot;: [
+    7.318645183447712,
+    -4.785631052416306
+   ],
+   &quot;nu_1e-5&quot;: [
+    8.275168629369064,
+    -6.098039241176277
+   ],
+   &quot;nu_1e-6&quot;: [
+    8.283413414073655,
+    -6.000555086461897
+   ],
+   &quot;shift_pct&quot;: {
+    &quot;theta_1e-5&quot;: 18.571766263907097,
+    &quot;theta_1e-6&quot;: 17.741517733295822
+   },
+   &quot;fluid&quot;: 5.340192337932384e-15
+  }
+ ],
+ &quot;neg1&quot;: {
+  &quot;ratio_ingoing&quot;: 0.14685092394278534,
+  &quot;ratio_outgoing&quot;: 3.279276028167104e-07
+ },
+ &quot;neg2&quot;: {
+  &quot;shift_R_pct&quot;: 0.0032927741577065345,
+  &quot;shift_alt_pct&quot;: 2.0756222978364473e-07
+ },
+ &quot;checks&quot;: [
+  {
+   &quot;name&quot;: &quot;H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1192 kHz, Im -3.60 Hz): 1.3e-07 % y 2.1e-07 % (Im: -1.1e-06 y -1.3e-06 Hz); (Re 11.6786 kHz, Im -21.70 Hz): 4.2e-08 % y 1.4e-07 % (Im: +5.3e-07 y -1.6e-05 Hz)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
+  },
+  {
+   &quot;name&quot;: &quot;H23b(ii): los ceros profundos se mueven con los dos radios alternativos: 6.293-4.480i kHz -&gt; 4.867-5.111i (20 %) y 7.021-5.613i (17 %); 7.319-4.786i kHz -&gt; 8.275-6.098i (19 %) y 8.283-6.001i (18 %)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;si (i) y (ii) pasan: artefactos del empalme, no modos&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 3.3e-07 con la saliente)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0033 %, m\u00e1s que con los radios alternativos (2.1e-07 %)&quot;,
    &quot;ok&quot;: true,
    &quot;note&quot;: &quot;&quot;
   }

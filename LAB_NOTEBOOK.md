@@ -231,6 +231,26 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
   - *De paso,* el paso 20 guarda Φ(∞) = 1,61·10⁻³ con la normalización antigua y la fracción de masa de la cola, 0,485 %. Ya no hay cifras tecleadas en el recuadro de la corrección.
   - *El «~0,16 %» de desplazamiento por la corrección* salía de un solo modo. Con los datos va del 0,03 % al 0,19 % (mediana ~0,1 %) en las 36 frecuencias del paso 10, y así lo dice ahora el informe.
 
+- **[H23 · NO DECIDIDA (H23b confirmada)] ¿Análogo radial de los modos axiónicos muy amortiguados de la Tabla III de la secuela? (quinta revisión)**
+  - *Dato:* la Tabla III del Paper II (l = 2, Cowling) da, a ν_a = 6 kHz, a0 = 9,0 − 3,8 i kHz y a1 = 27,95 − 3,61 i kHz. El recuento del paso 20 llegaba solo a Im ν = −1,5 kHz, así que a0 queda fuera: «no hay familia axiónica» solo valía en esa franja.
+  - *Método:* el mismo recuento (convergido al doblar el muestreo) en Re ν ∈ [6,05; 12], Im ν ∈ [−5; −1,5] kHz. Si el índice es > 0, se localiza cada cero con Muller, y solo cuenta como modo si (i) |F| → 0 y (ii) se mueve menos de un 0,1 % al cambiar el radio de empalme (la prueba que retiró los artefactos de H17).
+  - *Predicción:* no tengo una razón fuerte para ninguno de los dos resultados. Para l = 0 no hay barrera centrífuga, y en el interior (θ = π) m_eff² > m_a², que hace de barrera; los modos de la Tabla III podrían ser propios de l ≥ 1 o de Cowling. Lo dejo como pregunta abierta y lo decide el recuento:
+    - (a) índice 0: no hay análogo radial en esa región;
+    - (b) índice > 0 con ceros robustos: lo hay, y se compara su posición con a0.
+  - *Control:* con la normalización antigua del lapso, el recuento de esa región debe cambiar si las resonancias de cavidad llegan hasta ahí; si no cambia, se dice.
+  - *Primer resultado (paso 20):* ni (a) ni (b). El recuento da índice 2 en la pieza Re ν ∈ [6,05; 9] kHz, pero los ceros que encuentra Muller (≈ 6,29 − 4,48i y 7,32 − 4,78i kHz) no tienen fluido (fracción ~1e-14) y se mueven un 33 % y un 13 % al empalmar en r = 84 (θ₀ = 1e-5) en vez de en r = 117 (final del fondo, θ₀ nunca baja de 1e-7). Desde semillas distintas, Muller converge a puntos separados 0,002–0,004 kHz con tol = 1e-9: F está mal condicionada ahí. Con el lapso antiguo, el índice de la región profunda es 0.
+  - *H23b (antes de probarla):* esos ceros son artefactos del empalme del campo, no modos de la estrella.
+    - *Predicción:* (i) control: los modos fluidos H1 y H2 se mueven < 0,1 % con el mismo cambio de radio; (ii) los ceros profundos se mueven > 5 % también con un tercer radio (θ₀ = 1e-6).
+    - Si (i) falla, el cambio de radio estropea todo y la prueba no discrimina.
+    - Si (ii) falla, el cero es estable entre 117 y el tercer radio y hay que tomarlo en serio.
+    - No hay un radio mayor que 117 sin extender el fondo, y eso queda pendiente.
+  - *Resultado (paso 21, 4/4; `results/radial_deep.json`):* H23b confirmada.
+    - (i) Control: H1 y H2 se mueven ~1e-7 % al empalmar en r = 84 o r = 101 en vez de 117.
+    - (ii) Los dos ceros profundos se mueven un 17–20 % con cada radio. Además, Muller desde el mismo punto de partida no repite el destino del paso 20 (6,29 − 4,48i iba a 8,28 − 6,10i allí y a 4,87 − 5,11i aquí): F está mal condicionada en esa región.
+    - Controles negativos: con onda entrante, H1 deja de ser cero (cociente 0,15 frente a 3e-7). Empalmando en la superficie, H1 se mueve un 0,003 %: la prueba sí ve quitar la cola del campo.
+    - *Conclusión:* son artefactos del empalme. El índice 2 del paso 20 cuenta ceros de nuestra F, no modos de la estrella. **El método no decide si hay un análogo radial de a0**: la comprobación H23 del paso 20 queda en FAIL, a propósito.
+    - *Siguiente paso posible:* extender el fondo hasta que θ₀ < 1e-9 y repetir el recuento con empalmes que ya no muevan los ceros. Por qué falla, sin probar: para Im ν ≈ −4,5 kHz la onda saliente crece como e^{|Im k| r}, y la cola de θ₀ que despreciamos al empalmar (~1e-6) se amplifica por encima del orden 1.
+
 - **[H20 · CONFIRMADA] El «defecto cuántico» de la escalera del átomo gravitatorio (ν_a = 6 kHz, paso 15).**
   - *Observación:* n − n_eff = −0,012; 0,010; 0,021; 0,028; 0,033 para n = 2…6, con `n_eff = α_g/√(2(1 − ν/ν_a))`, la fórmula hidrogenoide no relativista.
   - *Hipótesis:* la dependencia en n es un artefacto de esa fórmula. El parámetro de la ecuación de Whittaker exterior, ya derivado y verificado en el paso 5 (Ec. A14), es `κ = α(1 − 2q²)/q`, con `q² = 1 − x²` y `x = ν/ν_a`. Con κ, los niveles siguen una ley de Rydberg `κ_n = n − δ` con δ casi constante. El desfase δ lo fija la región interior (la estrella y el campo fuerte); para l = 0 el término 1/r² del desarrollo es supercrítico (μ_W² = ¼ − 8α² < 0), así que no lo da el desarrollo asintótico.

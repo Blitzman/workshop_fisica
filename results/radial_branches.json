@@ -32,9 +32,9 @@
    "note": ""
   },
   {
-   "name": "Modo inestable en theta = 0: aparece para x0 > 0.10725 (anal\u00edtico arctan(1/\u221a(\u03b1-1))/\u221a(\u03b1-1) = 0.10725); en los par\u00e1metros de la figura (x0 = 0.6) w\u00b2 = -6.177 (crece como e^(2.49 m_a t))",
+   "name": "Modo inestable del modelo simplificado (m\u00b2_in = m_a\u00b2(1 - \u03b1)): sin acoplo aparece para x0 > 0.10725018 (anal\u00edtico arctan(1/\u221a(\u03b1-1))/\u221a(\u03b1-1) = 0.10725018); con \u03bb\u00b2 = 1e-3, para x0 > 0.10720993; en los par\u00e1metros de la figura (x0 = 0.6) w\u00b2 = -6.177 (crece como e^(2.49 m_a t))",
    "ok": true,
-   "note": "el paso 4 no lo ve\u00eda: buscaba solo Im w \u2264 0.01"
+   "note": "el paso 4 no lo ve\u00eda: buscaba solo Im w \u2264 0.01; el acoplo apenas mueve el umbral"
   },
   {
    "name": "Variante theta = pi (m\u00b2_in = 25.6 m_a\u00b2, sin acoplo): sin estados ligados ni inestables",
@@ -1535,6 +1535,7 @@
  ],
  "x0_unstable": 0.10725018479888074,
  "x0_unstable_analytic": 0.10725018479888072,
+ "x0_unstable_lam2_1e-3": 0.10720993298767677,
  "winding": [
   {
    "box": "par cuasi-normal, x0 = 0.80, Re k > 0",
