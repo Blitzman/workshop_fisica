@@ -1,5 +1,5 @@
 {
- "seconds": 16805.9,
+ "seconds": 16946.8,
  "env": {
   "python": "3.14.4",
   "platform": "Linux x86_64",
@@ -807,7 +807,7 @@
   {
    "step": "Modos radiales de la estrella con condensado (GR)",
    "module": "step15_radial_star",
-   "seconds": 1291.4,
+   "seconds": 1242.1,
    "checks": [
     {
      "name": "Ecuación exterior derivada (theta_0 = 0) = Ec. (3.7) del Paper I: error relativo 2.3e-16",
@@ -827,7 +827,7 @@
     {
      "name": "Exterior en el rayo complejo: cumple Cauchy-Riemann (desajuste 3.3e-04). El de la recta real (axstar.exterior_L) se desvía 207 % en la resonancia muy amortiguada, 1e-04 en un modo poco amortiguado y 3e-13 bajo el umbral",
      "ok": true,
-     "note": "la onda saliente crece con r y la integración hacia dentro es inestable; los pasos 9-10 (Im de pocos Hz) no se ven afectados"
+     "note": "la onda saliente crece con r y la integración hacia dentro es inestable; en los modos poco amortiguados de los pasos 9-10 este error es pequeño (no comprueba otras fuentes de error)"
     },
     {
      "name": "ν_a = 6 kHz: modo F en 3.4505 kHz < ν_a, frecuencia real (|Im det|/|det| = 0e+00 en el eje), fracción fluida 0.976",
@@ -845,7 +845,7 @@
      "note": "H11(b)"
     },
     {
-     "name": "Artefacto retirado: con la normalización antigua del lapso, la «resonancia axiónica» se mueve de 6.585 -0.563i a 6.236 -0.712i al cambiar el empalme (117 → 84 km); con la corrección no queda ninguna raíz en esa región (Muller sale hacia 3.01 -0.15i)",
+     "name": "Artefacto retirado: con la normalización antigua del lapso, la «resonancia axiónica» se mueve de 6.585 -0.563i a 6.236 -0.712i al cambiar el empalme (117 → 84 km); con la corrección, Muller desde esa semilla sale de la región (hacia 3.01 -0.15i); el recuento de la región lo hace el paso 20",
      "ok": true,
      "note": "era una cavidad entre R y el radio de empalme"
     },
@@ -1038,6 +1038,33 @@
     },
     {
      "name": "Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0033 %, más que con los radios alternativos (2.1e-07 %)",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Condición exterior frente al rayo complejo",
+   "module": "step22_exterior_contour",
+   "seconds": 190.2,
+   "checks": [
+    {
+     "name": "H24(a): girar el rayo complejo ±0.4 rad cambia L = psi'/psi en r_m como mucho 6.5e-12 (relativo) en H1, artefacto antiguo, cero profundo, nivel ligado n = 2 H1: 5e-15; artefacto antiguo: 1e-14; cero profundo: 2e-15; nivel ligado n = 2: 6e-12",
+     "ok": true,
+     "note": "la condición saliente no depende del camino en el plano r complejo"
+    },
+    {
+     "name": "H24(b): alejar el punto de partida (n_decay 40 → 60) cambia L como mucho 9.3e-13: H1: 3e-16; artefacto antiguo: 1e-15; cero profundo: 5e-16; nivel ligado n = 2: 9e-13",
+     "ok": true,
+     "note": "el truncado del desarrollo asintótico (con la fase coulombiana) no influye"
+    },
+    {
+     "name": "Control negativo 1: con la onda entrante, L cambia al menos un 2 (relativo) en los puntos por encima del umbral",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: con n_decay = 1 el cambio mínimo es 2.3e-04, frente a 6.5e-12 en (a)-(b): la prueba detecta un punto de partida demasiado cercano",
      "ok": true,
      "note": ""
     }

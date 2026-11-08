@@ -231,6 +231,19 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
   - *De paso,* el paso 20 guarda Φ(∞) = 1,61·10⁻³ con la normalización antigua y la fracción de masa de la cola, 0,485 %. Ya no hay cifras tecleadas en el recuadro de la corrección.
   - *El «~0,16 %» de desplazamiento por la corrección* salía de un solo modo. Con los datos va del 0,03 % al 0,19 % (mediana ~0,1 %) en las 36 frecuencias del paso 10, y así lo dice ahora el informe.
 
+- **[H24 · CONFIRMADA] La condición exterior no depende del rayo complejo ni del punto de partida (segunda crítica, punto C; paso 22).**
+  - *Premisa:* `radial.exterior_psi` impone la onda saliente con la forma asintótica `e^{i(kr + η ln r)}/r`, que ya lleva la fase coulombiana η, en `r_m + S e^{iφ}`, con `|k|S = n_decay = 40`, y la integra hacia dentro por el rayo φ = π/2 − arg k. En ese rayo la onda saliente crece hacia dentro y la entrante se atenúa. Así, el error del desarrollo asintótico truncado (O(1/(kr)²)) y el de la fase se suprimen por ~e^{−2·n_decay}. Si es así, el cociente L = ψ'/ψ en r_m no debe depender ni del ángulo ni del punto de partida.
+  - *Predicción:*
+    - (a) Girar el rayo dφ = ±0,4 rad cambia L menos de 1e-8 relativo, en H1, en el antiguo artefacto 6,585 − 0,563i, en un cero profundo (6,29 − 4,48i) y en un nivel ligado (5,944 kHz).
+    - (b) Pasar de n_decay = 40 a 60 cambia L menos de 1e-8.
+  - *Controles negativos:* (1) con la onda entrante (sheet = −1), L cambia O(1); (2) con n_decay = 1 el truncado asintótico deja de suprimirse y L cambia mucho más que en (a)–(b).
+  - *Consecuencia para H23:* si (a)–(b) pasan también en el punto profundo, la dependencia del empalme del paso 21 no viene del exterior, sino de despreciar la cola de θ₀.
+  - *Resultado (paso 22, 4/4; `results/radial_contour.json`):*
+    - (a) Girar el rayo ±0,4 rad cambia L como mucho 6,5e-12 (el nivel ligado; ~1e-14 en los tres puntos por encima del umbral).
+    - (b) Con n_decay = 60, como mucho 9,3e-13.
+    - Controles negativos: con la onda entrante, L cambia al menos un 200 %; con n_decay = 1, al menos 2,3e-4.
+    - El punto profundo pasa igual que los demás. Por tanto, el exterior queda descartado como causa de que los ceros del paso 21 dependan del empalme, y lo que queda es la cola de θ₀ despreciada entre el empalme y el infinito (sin probar aún).
+
 - **[H23 · NO DECIDIDA (H23b confirmada)] ¿Análogo radial de los modos axiónicos muy amortiguados de la Tabla III de la secuela? (quinta revisión)**
   - *Dato:* la Tabla III del Paper II (l = 2, Cowling) da, a ν_a = 6 kHz, a0 = 9,0 − 3,8 i kHz y a1 = 27,95 − 3,61 i kHz. El recuento del paso 20 llegaba solo a Im ν = −1,5 kHz, así que a0 queda fuera: «no hay familia axiónica» solo valía en esa franja.
   - *Método:* el mismo recuento (convergido al doblar el muestreo) en Re ν ∈ [6,05; 12], Im ν ∈ [−5; −1,5] kHz. Si el índice es > 0, se localiza cada cero con Muller, y solo cuenta como modo si (i) |F| → 0 y (ii) se mueve menos de un 0,1 % al cambiar el radio de empalme (la prueba que retiró los artefactos de H17).

@@ -11,7 +11,7 @@ from . import (step1_background, step2_perturbations, step3_toy_model, step4_num
                step15_radial_star, step16_radial_stability,
                step17_radial_validation, step18_rydberg,
                step19_avoided_crossing, step20_damped_count,
-               step21_deep_artifacts)
+               step21_deep_artifacts, step22_exterior_contour)
 
 STEPS = [('Fondo (TOV + KG)', step1_background), ('Perturbaciones radiales', step2_perturbations),
          ('Modelo simplificado (Sec. IV)', step3_toy_model), ('Números y figura', step4_numerics),
@@ -28,7 +28,8 @@ STEPS = [('Fondo (TOV + KG)', step1_background), ('Perturbaciones radiales', ste
          ('Átomo gravitatorio: ley de Rydberg', step18_rydberg),
          ('Cruce evitado F - átomo gravitatorio', step19_avoided_crossing),
          ('Recuento en el semiplano amortiguado', step20_damped_count),
-         ('Ceros profundos frente al radio de empalme', step21_deep_artifacts)]
+         ('Ceros profundos frente al radio de empalme', step21_deep_artifacts),
+         ('Condición exterior frente al rayo complejo', step22_exterior_contour)]
 
 
 def _cpu():

@@ -92,7 +92,7 @@ def run():
     res.append((f'Exterior en el rayo complejo: cumple Cauchy-Riemann (desajuste {crc:.1e}). El de la recta real (axstar.exterior_L) '
                 f'se desvía {d_strong * 100:.0f} % en la resonancia muy amortiguada, {d_weak:.0e} en un modo poco amortiguado y '
                 f'{d_below:.0e} bajo el umbral', crc < 1e-2 and d_strong > 0.5 and d_weak < 1e-3 and d_below < 1e-8,
-                'la onda saliente crece con r y la integración hacia dentro es inestable; los pasos 9-10 (Im de pocos Hz) no se ven afectados'))
+                'la onda saliente crece con r y la integración hacia dentro es inestable; en los modos poco amortiguados de los pasos 9-10 este error es pequeño (no comprueba otras fuentes de error)'))
 
     # 4. nu_a = 6 kHz: modo F ligado (frecuencia real) y de carácter fluido
     F6 = real_root(st6, 3.40, 3.50, rm6)
@@ -133,8 +133,8 @@ def run():
     moved = abs(old_a - old_b)
     res.append((f'Artefacto retirado: con la normalización antigua del lapso, la «resonancia axiónica» se mueve de '
                 f'{old_a.real:.3f} {old_a.imag:+.3f}i a {old_b.real:.3f} {old_b.imag:+.3f}i al cambiar el empalme '
-                f'({rm6:.0f} → {r84:.0f} km); con la corrección no queda ninguna raíz en esa región (Muller sale hacia '
-                f'{new_z.real:.2f} {new_z.imag:+.2f}i)', moved > 0.1 and win(old_a) and not win(new_z),
+                f'({rm6:.0f} → {r84:.0f} km); con la corrección, Muller desde esa semilla sale de la región (hacia '
+                f'{new_z.real:.2f} {new_z.imag:+.2f}i); el recuento de la región lo hace el paso 20', moved > 0.1 and win(old_a) and not win(new_z),
                 'era una cavidad entre R y el radio de empalme'))
     d_ok = abs(RD.det(st6, AX.omega_of(H1), rm6, sheet=-1)) / max(abs(RD.det(st6, AX.omega_of(H1 + 0.05), rm6)), 1e-300)
     res.append((f'Control negativo 2 (onda entrante): en la raíz H1 el determinante deja de anularse (|det|/escala = {d_ok:.1e})',

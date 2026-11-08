@@ -165,7 +165,7 @@
   {
    "name": "Exterior en el rayo complejo: cumple Cauchy-Riemann (desajuste 3.3e-04). El de la recta real (axstar.exterior_L) se desv\u00eda 207 % en la resonancia muy amortiguada, 1e-04 en un modo poco amortiguado y 3e-13 bajo el umbral",
    "ok": true,
-   "note": "la onda saliente crece con r y la integraci\u00f3n hacia dentro es inestable; los pasos 9-10 (Im de pocos Hz) no se ven afectados"
+   "note": "la onda saliente crece con r y la integraci\u00f3n hacia dentro es inestable; en los modos poco amortiguados de los pasos 9-10 este error es peque\u00f1o (no comprueba otras fuentes de error)"
   },
   {
    "name": "\u03bd_a = 6 kHz: modo F en 3.4505 kHz < \u03bd_a, frecuencia real (|Im det|/|det| = 0e+00 en el eje), fracci\u00f3n fluida 0.976",
@@ -183,7 +183,7 @@
    "note": "H11(b)"
   },
   {
-   "name": "Artefacto retirado: con la normalizaci\u00f3n antigua del lapso, la \u00abresonancia axi\u00f3nica\u00bb se mueve de 6.585 -0.563i a 6.236 -0.712i al cambiar el empalme (117 \u2192 84 km); con la correcci\u00f3n no queda ninguna ra\u00edz en esa regi\u00f3n (Muller sale hacia 3.01 -0.15i)",
+   "name": "Artefacto retirado: con la normalizaci\u00f3n antigua del lapso, la \u00abresonancia axi\u00f3nica\u00bb se mueve de 6.585 -0.563i a 6.236 -0.712i al cambiar el empalme (117 \u2192 84 km); con la correcci\u00f3n, Muller desde esa semilla sale de la regi\u00f3n (hacia 3.01 -0.15i); el recuento de la regi\u00f3n lo hace el paso 20",
    "ok": true,
    "note": "era una cavidad entre R y el radio de empalme"
   },
