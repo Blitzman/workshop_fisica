@@ -116,11 +116,26 @@ def run():
     # 6. Por encima del umbral: H1 (fluido, poco amortiguado) y resonancia axiónica (muy amortiguada)
     H1, rH1 = complex_root(st6, 8.13 - 0.004j, rm6)
     fH1 = RD.fluid_fraction(st6, AX.omega_of(H1), rm6)
-    Ra, rRa = complex_root(st6, 6.6 - 0.55j, rm6)
-    fRa = RD.fluid_fraction(st6, AX.omega_of(Ra), rm6)
-    res.append((f'ν_a = 6 kHz: H1 = {H1.real:.4f} {H1.imag:+.4f}i kHz (fracción fluida {fH1:.3f}); resonancia axiónica '
-                f'{Ra.real:.3f} {Ra.imag:+.3f}i kHz (fracción fluida {fRa:.3f})',
-                rH1 < 1e-11 and rRa < 1e-11 and H1.imag < 0 and fH1 > 0.9 and Ra.imag < -0.3 and fRa < 0.05, 'H11(b) y H10'))
+    res.append((f'ν_a = 6 kHz: H1 = {H1.real:.4f} {H1.imag:+.4f}i kHz (fracción fluida {fH1:.3f})',
+                rH1 < 1e-11 and H1.imag < 0 and fH1 > 0.9, 'H11(b)'))
+    # Artefacto retirado (2026-11-08): la «rama axiónica» de resonancias muy amortiguadas (6,585 - 0,563i, ...) era una
+    # cavidad entre R y r_m creada por el salto de omega^2 e^{-2 Phi} en el empalme con la normalización antigua del lapso.
+    win = lambda z: 6.2 < z.real < 7.0 and -0.8 < z.imag < -0.3
+    Ps_new = st6.Phi_shift
+    m_R, _, Phi_R = st6.sol.sol(st6.R)[:3]
+    st6._Ps = 0.5 * np.log(1 - 2 * m_R / st6.R) - Phi_R          # normalización antigua, solo para esta prueba
+    rr6 = np.linspace(st6.R, rm6, 4000)
+    r84 = float(rr6[np.argmax(np.abs(st6.sol.sol(rr6)[3]) < 1e-5)])
+    old_a, _ = complex_root(st6, 6.585 - 0.563j, rm6)
+    old_b, _ = complex_root(st6, 6.585 - 0.563j, r84)
+    st6._Ps = Ps_new
+    new_z, _ = complex_root(st6, 6.585 - 0.563j, rm6)
+    moved = abs(old_a - old_b)
+    res.append((f'Artefacto retirado: con la normalización antigua del lapso, la «resonancia axiónica» se mueve de '
+                f'{old_a.real:.3f} {old_a.imag:+.3f}i a {old_b.real:.3f} {old_b.imag:+.3f}i al cambiar el empalme '
+                f'({rm6:.0f} → {r84:.0f} km); con la corrección no queda ninguna raíz en esa región (Muller sale hacia '
+                f'{new_z.real:.2f} {new_z.imag:+.2f}i)', moved > 0.1 and win(old_a) and not win(new_z),
+                'era una cavidad entre R y el radio de empalme'))
     d_ok = abs(RD.det(st6, AX.omega_of(H1), rm6, sheet=-1)) / max(abs(RD.det(st6, AX.omega_of(H1 + 0.05), rm6)), 1e-300)
     res.append((f'Control negativo 2 (onda entrante): en la raíz H1 el determinante deja de anularse (|det|/escala = {d_ok:.1e})',
                 d_ok > 1e-3, ''))
@@ -172,7 +187,9 @@ def run():
         'stability': stab, 'robustness': robust,
         'nu6': {'M_msun': st6.M / MSUN_KM, 'R_km': st6.R, 'alpha_g': alpha_g, 'F': F6, 'F_fluid': fF6,
                 'ladder': [{'n': n, 'nu': z, 'n_eff': ne} for n, z, ne, _ in ladder],
-                'H1': [H1.real, H1.imag], 'H1_fluid': fH1, 'axion_res': [Ra.real, Ra.imag], 'axion_res_fluid': fRa},
+                'H1': [H1.real, H1.imag], 'H1_fluid': fH1},
+        'artifact': {'old_rm': [old_a.real, old_a.imag], 'old_r84': [old_b.real, old_b.imag], 'rm': rm6, 'r84': r84,
+                     'new_escape': [new_z.real, new_z.imag]},
         'nu35': {'bound': b35, 'fluid': f35}, 'nu34': {'F': [F34.real, F34.imag], 'fluid': fF34},
         'exterior': {'cr_complex_ray': crc, 'cr_real_line': crr, 'old_vs_new_strong': d_strong, 'old_vs_new_weak': d_weak},
         'checks': [{'name': n_, 'ok': bool(o_), 'note': t_} for n_, o_, t_ in res],

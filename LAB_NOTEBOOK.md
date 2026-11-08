@@ -69,7 +69,7 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
     - Las dos últimas encajan con la escalera hidrogenoide H11(c): `α_g = G M m_a = 0,273` da `ν_n = ν_a[1 − α_g²/(2n²)]` = 5,776 (n = 1) y 5,944 (n = 2). El n = 2, cuyo radio de Bohr (~116 km) cae casi entero fuera de la estrella, coincide al 0,03 %. El n = 1 (radio ~29 km) se solapa con la estrella y se desvía. Falta comprobar n ≥ 3 (barrido fino entre 5,95 y 6 kHz).
     - **H11(c) CONFIRMADA:** el barrido fino entre 5,95 y 6 kHz da la escalera completa. Con `n_eff = α_g/√(2(1 − ν/ν_a))` y `α_g = 0,2748` (masa total con la cola axiónica), sale n_eff = 1,095; 2,042; 3,022; 4,011; 5,005; 6,000; … 12,990. Son enteros con ±0,01 hasta n = 13. El defecto cuántico es mayor para n = 1, cuya órbita se solapa con la estrella, y decrece con n, como en un átomo con núcleo finito. Para n ≥ 14, n_eff deja de ser entero: es un límite numérico, porque el radio de Bohr (miles de km) se acerca a la longitud de integración exterior. Es el «átomo gravitatorio» del axión, conocido en agujeros negros.
     - Por encima del umbral hay dos familias:
-      - **Rama axiónica** (mapa con `Im ∈ [−1,4; −0,05]`): resonancias muy amortiguadas y casi equiespaciadas en 6,585 − 0,563 i, 7,304 − 0,748 i, 8,142 − 0,884 i, 9,062 − 0,985 i y 10,039 − 1,058 i kHz.
+      - ~~**Rama axiónica** (mapa con `Im ∈ [−1,4; −0,05]`): resonancias muy amortiguadas y casi equiespaciadas en 6,585 − 0,563 i, 7,304 − 0,748 i, 8,142 − 0,884 i, 9,062 − 0,985 i y 10,039 − 1,058 i kHz.~~ **Artefacto, retirado: ver H17.**
       - **Rama fluida** (barrido a `Im = −0,003`): un solo modo poco amortiguado entre 6 y 11 kHz, H1 = 8,1323 − 0,0036 i kHz (3,6 Hz). Sin axión, H1 = 7,36 kHz, pero en una estrella mayor (R = 11,72 frente a 11,37 km).
       - La estructura es la del modelo simplificado (H10), más la escalera de la gravedad exterior.
   - *Transición realista del modo F (barrido en `ν_a`, carácter por fracción de energía en el fluido; `radial.fluid_fraction`):*
@@ -114,6 +114,33 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
 - **[H14 · CONFIRMADA] Método independiente para el modelo simplificado**
   - *Predicción:* el principio del argumento aplicado a `f/√D` en cajas del plano `k` cuenta exactamente las raíces que encuentra Muller, sin usar Muller.
   - *Resultado (`step14`, 12/12):* cuenta 1,00; 2,00; 1,00; 1,00; 1,00 en las cinco cajas (par cuasi-normal, par completo, ligado, virtual e inestable), como se esperaba.
+
+### Segunda revisión externa del informe radial (2026-11-08)
+
+- **(B) Aceptado:** el texto decía que el radio de empalme cambia `Im ν` «por debajo del 1 %», pero la tabla da 2,71 % para F (empalme a 131 km) y 0,56 % para H1. La comprobación medía solo el último paso hacia fuera (0,17 % y 0,29 %), y lo leí mal.
+- **(C) Comprobado:** cambiar el ángulo del rayo complejo en ±0,6 rad altera `L = ψ'/ψ` entre 10⁻¹² y 10⁻¹⁴ en las tres raíces (resonancia, H1 y F). Cambiar el punto de partida altera `Im ν` menos de un 0,004 %. La exterior converge a la solución saliente única.
+- **[H15 · REFUTADA] «La sensibilidad al radio de empalme viene de usar la masa total `M_t` en la exterior en vez de `M(r_m)`»:** `M(r_m) − M_t ≤ 6·10⁻⁹ km` y los resultados son idénticos.
+- **[H16 · CONFIRMADA] «La sensibilidad al empalme viene de la normalización del lapso»**
+  - *Resultado (2026-11-08):* normalizando con `M_t` al final del fondo, la dependencia con el radio de empalme desaparece hasta 5–6 cifras. F (3,4 kHz) = 3,410292 − 0,57548·10⁻³ i kHz (antes 3,415661 − 0,548·10⁻³ i); H1 (6 kHz) = 8,119209 − 3,6023·10⁻³ i (antes 8,132307 − 3,618·10⁻³ i). F sigue por encima del umbral.
+  - *Corregido `axstar.Phi_shift`* (sin commit todavía). Paso 9 repetido: sigue 8/8 frente a las tablas del Paper II; los desplazamientos cambian ~0,16 puntos y los amortiguamientos de más de 1 Hz casi nada (12,8 → 12,7 Hz). Falta comparar el máximo de desviación con el de antes.
+  - *Paso 9 con la corrección:* el acuerdo con el Paper II **mejora**. La desviación máxima baja de 0,55 a 0,45 puntos en la Tabla I y de 0,53 a 0,43 en la Tabla II. Parte de nuestra discrepancia anterior de ~0,5 % venía de este error. Indica que el Paper II normaliza Φ en el infinito con la masa total.
+  - *Paso 10 con la corrección: 8/9.* El modo f a ν_a = 10 kHz no se encontró (`nan`): Muller no alcanzaba la tolerancia de 10⁻¹¹ por el suelo de ruido. Ahora reintenta con 10⁻⁹. Los otros 35 modos se desplazan ~0,16 puntos y sus amortiguamientos casi no cambian (p2 a 5 kHz: 12,81 → 12,82 Hz). El f sube hasta un 7,5 % (antes 7,7 %).
+  - **[H17 · CONFIRMADA] ARTEFACTO RETIRADO: la «rama axiónica» de la estrella realista no existe.** Eran las resonancias muy amortiguadas y casi equiespaciadas (6,585 − 0,563 i; 7,304 − 0,748 i; 8,142 − 0,884 i; 9,062 − 0,985 i; 10,039 − 1,058 i kHz).
+    - Era una cavidad entre R y r_m, creada por el salto de `ω² e^{−2Φ}` en el empalme con la normalización antigua del lapso.
+    - *Pruebas:* (i) con la normalización antigua, la «resonancia» se mueve de 6,585 − 0,563 i a 6,236 − 0,712 i al pasar el empalme de 117 a 84 km. Un modo físico no depende del empalme. (ii) El espaciado de cavidad `Δν ≈ (c/2L)(k/ω)`, con L = r_m − R ≈ 106 km, da 713 Hz entre las dos primeras (observado 720). (iii) Con la corrección no queda ningún mínimo de |det| en esa región.
+    - Lo que sí era físico no cambia: F, H1 y el átomo gravitatorio solo se desplazan ~0,16 %.
+    - *Lección:* una familia de modos equiespaciados que no tiene análogo en el modelo físico debe probarse siempre frente al radio de empalme o de truncamiento antes de interpretarla. Aquí la estructura se parecía a la rama axiónica del modelo simplificado, y por eso la acepté sin esa prueba.
+    - *Pregunta abierta:* ¿tiene la estrella realista una rama axiónica física? En el interior, con `θ = π`, `m_eff² > m_a²` hace de barrera, no de pozo. Muller encuentra raíces de carácter axiónico bajo el umbral en la hoja no física (2,75 − 0,49 i; 3,00 − 0,15 i; 2,88 − 0,006 i), que hay que estudiar con un mapa antes de decir nada.
+  - *Paso 15 con la corrección: 11/12.*
+    - Sigue igual: el punto de retorno, F ligado (3,4505 kHz), H1 = 8,1192 − 0,0036 i, el cruce evitado a 3,5 kHz y F a 3,4 kHz (3,4103 kHz, Im = −0,58 Hz).
+    - El radio de empalme ya no influye (0,00 %).
+    - **FALLA la búsqueda de la resonancia axiónica:** la semilla 6,6 − 0,55 i converge ahora a otra raíz (2,879 − 0,006 i). Hay que actualizar la semilla o buscar la raíz con un mapa del plano complejo.
+    - **Átomo gravitatorio:** `n_eff` = 2,012; 2,990; 3,979; 4,972; 5,967. El defecto cuántico, negativo, crece con n (hasta −0,033). Antes era casi nulo. Hay que entender por qué antes de presentar la escalera como «enteros con ±0,01».
+  - *Estado final tras la corrección:* paso 9 8/8, paso 10 9/9 (búsqueda de f a 10 kHz reforzada; f sube hasta un 7,5 %), paso 15 13/13 (con la comprobación del artefacto) y paso 14 12/12.
+  - *PENDIENTE:* regenerar `informe_axiones` e `informe_radial`, y hacer commit. Para el informe radial faltan además: la estabilidad con el principio del argumento en el semiplano superior (crítica A), el barrido denso en el umbral (D), redactar como «no detectamos inestabilidades» y no como «es estable», y separar mejor lo demostrado de lo que es hipótesis.
+  - `axstar.Phi_shift` ajusta Φ a Schwarzschild en R con `m(R)`, pero la cola del condensado fuera de la estrella lleva un 0,5 % de la masa. Lejos, `Φ − ½ ln(1 − 2M_t/r) = +1,6·10⁻³` (a 6 y a 3,4 kHz), en vez de 0.
+  - *Predicción:* normalizando con `M_t` al final de la integración del fondo, (i) la dependencia de `Im ν` con el radio de empalme cae a ≲0,1 % y (ii) todas las frecuencias con axión se desplazan ~0,16 %.
+  - *Afecta a código compartido:* los pasos 9 (Cowling, tablas del Paper II) y 10 (GR no radial) usan el mismo `Phi_shift`.
 
 ## 2. Insights físicos y preguntas abiertas para los autores
 

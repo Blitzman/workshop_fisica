@@ -126,7 +126,7 @@ def exterior_matrix():
     return sp.lambdify((r, w, *AG.BG), M, 'numpy', cse=True)
 
 
-def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1):
+def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1, dphi=0.0):
     """(psi, psi') del axión en r_m con condición saliente (o ligada), integrando la ecuación exterior
     derivada (exterior_matrix con theta_0 = 0: Schwarzschild + KG masivo, = Ec. 3.7 del Paper I) a lo largo
     del rayo complejo r = r_m + s e^{i phi}, con phi = pi/2 - arg(k): ahí la onda saliente decae como e^{-|k| s}.
@@ -139,9 +139,9 @@ def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1)
     if k.imag < 0 and abs(k.real) < 1e-14:
         k = -k
     k = sheet * k                      # sheet = -1: onda entrante (control negativo)
-    phi = np.pi / 2 - np.angle(k)
+    phi = np.pi / 2 - np.angle(k) + dphi    # dphi != 0: prueba de independencia del contorno
     e = np.exp(1j * phi)
-    S = n_decay / abs(k)
+    S = n_decay / (abs(k) * np.cos(dphi))
     eta = M * (2 * omega**2 - ma**2) / k
     G2 = AX.g2(0.0)
 

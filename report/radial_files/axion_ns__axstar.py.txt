@@ -182,10 +182,14 @@ class Star:
 
     @property
     def Phi_shift(self):
-        """Constante que hace Phi -> 0 en el infinito (se ajusta en R con Schwarzschild)."""
+        """Constante que hace Phi -> 0 en el infinito. Se ajusta a Schwarzschild con la masa total al final de la
+        integración del fondo, no en R: con condensado, la cola del axión fuera de la estrella lleva ~0,5 % de la
+        masa y ajustar en R con m(R) dejaba Phi(inf) = +1,6e-3 (corregido el 2026-11-08, LAB_NOTEBOOK H16).
+        Sin axión, m es constante fuera de R y ambos ajustes coinciden."""
         if not hasattr(self, '_Ps'):
-            m, p, Phi = self.sol.sol(self.R)[:3]
-            self._Ps = 0.5 * np.log(1 - 2 * m / self.R) - Phi
+            rend = self.sol.t[-1]
+            m, p, Phi = self.sol.sol(rend)[:3]
+            self._Ps = 0.5 * np.log(1 - 2 * m / rend) - Phi
         return self._Ps
 
 
