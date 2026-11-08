@@ -15,6 +15,7 @@ from pathlib import Path
 
 import mpmath as mp
 import numpy as np
+from scipy.optimize import brentq
 from scipy.optimize import minimize_scalar
 
 from .pipeline import report
@@ -106,6 +107,37 @@ def threshold_track(lam2=1e-3, x_lo=0.80, x_hi=0.8525, dx=0.0025, **kw):
     return rows
 
 
+def collision(lam2, k0, x00):
+    """Colisión exacta del par cuasi-normal: raíz doble de g = f/sqrt(D) en (k, x0), con Newton complejo
+    (g = 0 y dg/dk = 0). Devuelve (x0, k, residuo)."""
+    P = lambda k, x: complex(g_k(k, lam2, ALPHA, CS2, x))
+
+    def F(v):
+        k, x = v
+        h = 1e-7
+        return np.array([P(k, x), (P(k + h, x) - P(k - h, x)) / (2 * h)], dtype=complex)
+    v = np.array([k0, x00], dtype=complex)
+    for _ in range(80):
+        Fv, J = F(v), np.zeros((2, 2), complex)
+        for j in range(2):
+            dv = np.zeros(2, complex)
+            dv[j] = 1e-8
+            J[:, j] = (F(v + dv) - F(v - dv)) / 2e-8
+        step = np.linalg.solve(J, -Fv)
+        v = v + step
+        if abs(step).max() < 1e-13:
+            break
+    return float(v[1].real), complex(v[0]), float(abs(F(v)).max())
+
+
+def k0_crossing(lam2, x_from, width=0.05):
+    """x0 en que un polo del eje imaginario pasa por k = 0 (w = 1): el virtual se convierte en ligado."""
+    g0 = lambda xx: complex(g_k(1e-13j, lam2, ALPHA, CS2, xx)).real
+    xs = np.linspace(x_from, x_from + width, 400)
+    v = [g0(t) for t in xs]
+    return next(brentq(g0, xs[i], xs[i + 1], xtol=1e-13) for i in range(len(xs) - 1) if v[i] * v[i + 1] < 0)
+
+
 def damping_exponent(lam2=1e-4):
     k = root(complex(0.376, -0.0008), (lam2, ALPHA, CS2, 0.80))
     pts = []
@@ -166,19 +198,30 @@ def run():
     virt = [x for x in ax86 if x < 0]
     seq_ok = pair_ok and len(bound) == 1 and len(virt) == 1
     wb = np.sqrt(1 - bound[0]**2) if bound else np.nan
-    res.append((f'H9: par cuasi-normal k = ±a - ib (b ≈ {-tr[0][1].imag:.4f}...{-tr[-2][1].imag:.4f}) colisiona en el eje '
-                f'imaginario negativo en x0 ≈ {tr[-1][0]:.4f}; en x0 = 0.86 queda un ligado (kappa = +{bound[0] if bound else 0:.4f}, '
-                f'w = {wb:.5f} real) y un virtual (kappa = {virt[0] if virt else 0:+.4f})', seq_ok, ''))
+    coll = {}
+    for l2, k0, x00 in ((1e-3, -0.004j, tr[-1][0]), (1e-4, -0.0013j, 0.8594)):
+        xc_, kc_, rc_ = collision(l2, k0, x00)
+        coll[l2] = {'x0': xc_, 'k': [kc_.real, kc_.imag], 'w_minus_1': float((w_of(kc_) - 1).real),
+                    'im_w': float(w_of(kc_).imag), 'resid': rc_, 'x0_k0': float(k0_crossing(l2, xc_))}
+    c3 = coll[1e-3]
+    res.append((f'H9: el par cuasi-normal k = ±a - ib (b ≈ {-tr[0][1].imag:.4f}...{-tr[-2][1].imag:.4f}) colisiona en el eje '
+                f'imaginario negativo en x0 = {c3["x0"]:.7f} (raíz doble, residuo {c3["resid"]:.0e}; λ² = 1e-3), con '
+                f'k = {c3["k"][1]:.7f}i y w - 1 = {c3["w_minus_1"]:.3e}: ya por debajo del umbral. Quedan dos virtuales; uno '
+                f'cruza k = 0 (w = 1) en x0 = {c3["x0_k0"]:.7f} y pasa a ligado. En x0 = 0.86: un ligado (kappa = '
+                f'+{bound[0] if bound else 0:.4f}, w = {wb:.5f}) y un virtual (kappa = {virt[0] if virt else 0:+.4f})',
+                seq_ok and c3['w_minus_1'] < 0 and c3['x0_k0'] > c3['x0'] and c3['resid'] < 1e-10, ''))
 
     # 3. H8: |Im w| ∝ (Re w - 1)^s cerca del umbral
     s, damp_pts = damping_exponent()
     fit = (damp_pts[:, 2] > 5 * damp_pts[:, 3]) & (damp_pts[:, 0] < 0.02)
     imk = damp_pts[fit, 3]
-    coll = damp_pts[-1, 0]                          # Re w - 1 del último punto antes de la colisión
+    c4 = coll[1e-4]
     res.append((f'H8: |Im w| ~ (Re w - 1)^{s:.3f} en el tramo intermedio Re k > 5|Im k| (λ² = 1e-4; ½ si Im k '
                 f'fuera constante, que varía un {100 * (imk.max() / imk.min() - 1):.0f} % en el tramo)', 0.40 < s < 0.52,
-                f'ajuste en un tramo finito, no una ley asintótica: más cerca del umbral domina la colisión de polos, '
-                f'y el amortiguamiento se anula en Re w - 1 = {coll:.1e}, antes de llegar a ω = m_a'))
+                f'ajuste en un tramo finito, no una ley asintótica: más cerca del umbral domina la colisión de polos. '
+                f'El amortiguamiento solo se anula en la colisión, x0 = {c4["x0"]:.10f}, con w - 1 = {c4["w_minus_1"]:.4e} '
+                f'(por debajo del umbral, = k²/2 a este orden, k = {c4["k"][1]:.7f}i); el virtual cruza k = 0 en '
+                f'x0 = {c4["x0_k0"]:.10f}'))
 
     # 4. H10: separación mínima del cruce evitado lineal en lambda
     gaps = [(l2, *min_gap(l2)) for l2 in (1e-6, 1e-5, 1e-4, 1e-3)]
@@ -244,6 +287,7 @@ def run():
         'unstable_x0_0p6_w2': float(1 - un[0]**2),
         'axis_x0_0p86': {'bound': bound, 'virtual': virt},
         'damping_exponent': s,
+        'collision': {str(k_): v_ for k_, v_ in coll.items()},
         'gaps': [{'lam2': l2, 'gap_w2': g, 'x0': x} for l2, g, x in gaps],
         'x0_unstable': xc, 'x0_unstable_analytic': float(xc_an),
         'winding': [{'box': lab, 'count': nw, 'expected': exp} for lab, nw, _, exp in wres],

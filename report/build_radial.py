@@ -131,7 +131,9 @@ _ks = [cmath.sqrt(complex(1 + x, -y) ** 2 - 1) for x, y in dp]
 _ks = [k if k.real > 0 else -k for k in _ks]
 _imk = [-k.imag for (x, _), k in zip(dp, _ks) if k.real > 5 * -k.imag and x < 0.02]
 imk_var = 100 * (max(_imk) / min(_imk) - 1)
-coll_x = min(x for x, _ in dp)
+C3, C4 = D['collision']['0.001'], D['collision']['0.0001']          # colisión exacta (raíz doble), paso 14
+sci = lambda v, d=1: (lambda m, e: f'{m}·10{str(int(e)).translate(str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹"))}')(
+    *f'{v:.{d}e}'.replace('.', ',').split('e'))
 xmin, xmax = min(a for a, _ in dp), max(a for a, _ in dp)
 ymin, ymax = min(b for _, b in dp), max(b for _, b in dp)
 p3 = Plot((10 ** math.floor(math.log10(xmin)), 10 ** math.ceil(math.log10(xmax))),
@@ -185,7 +187,7 @@ if VAL:
   <h3>Validación externa sin axión (paso 17)</h3>
   <p>El mismo código, sin cambiar nada y con el axión apagado, aplicado al politropo de referencia de Font et al. (2002, PRD 65, 084024, Tabla 2): <code>p = Kρ²</code>, <code>K = 100</code>, <code>ρ_c = 1,28·10⁻³</code> (G = c = M☉ = 1). El fondo sale con M = {fnum(VAL['M'], 4)} M☉ y R = {fnum(VAL['R'], 3)} km (ellos: 1,4 y 14,15). Sus frecuencias son las de la teoría de perturbaciones con la métrica dinámica:</p>
   <div class="tbl"><table><tr><th>modo</th><th>este cálculo (kHz)</th><th>Font et al. (kHz)</th><th>diferencia</th></tr>{_vrows}</table></div>
-  <p>Las cuatro coinciden dentro del redondeo de sus cuatro cifras. Los controles negativos comprueban que la comparación distingue: con Γ₁ = 2,1 en las perturbaciones, F se mueve un {VAL['neg_gamma1']:+.1f} %, y sin la energía interna en el fondo, un {VAL['neg_no_internal']:+.1f} %. La tabla del grupo de Garching para el mismo modelo da F = {VAL['garching']['F']} kHz, un {abs(VAL['dev_garching_pct']['F']):.1f} % por encima de nosotros y de Font et al.; no indica el método.</p>"""
+  <p>En relativo, la diferencia es como mucho un {max(abs(v) for v in VAL['dev_font_pct'].values()):.3f} %. En absoluto: {', '.join(f"{k} {1e3 * (VAL['modes'][k] - VAL['font'][k]):+.1f} Hz" for k in VAL['font'])}. Su tabla da tres decimales en kHz (redondeo ±0,5 Hz): F está {'dentro' if abs(1e3 * (VAL['modes']['F'] - VAL['font']['F'])) <= 0.5 else 'fuera'}, los sobretonos difieren algo más ({min(abs(1e3 * (VAL['modes'][k] - VAL['font'][k])) for k in ('H1', 'H2', 'H3')):.1f}–{max(abs(1e3 * (VAL['modes'][k] - VAL['font'][k])) for k in ('H1', 'H2', 'H3')):.1f} Hz). Esto valida el sector fluido en GR sin axión, no el acoplo con el axión ni los amortiguamientos pequeños. Los controles negativos comprueban que la comparación distingue: con Γ₁ = 2,1 en las perturbaciones, F se mueve un {VAL['neg_gamma1']:+.1f} %, y sin la energía interna en el fondo, un {VAL['neg_no_internal']:+.1f} %. La tabla del grupo de Garching para el mismo modelo da F = {VAL['garching']['F']} kHz, un {abs(VAL['dev_garching_pct']['F']):.1f} % por encima de nosotros y de Font et al.; no indica el método.</p>"""
 else:
     val_html = ''
 if S:
@@ -228,7 +230,7 @@ if S:
         ryd_html = (f'<p><b>Una ley de Rydberg, no hidrogenoide pura (paso 18).</b> Con la fórmula no relativista, <code>n − n_eff</code> '
                     f'parecía crecer con n (de {min(RYD["n_minus_neff"]):+.3f} a {max(RYD["n_minus_neff"]):+.3f}). Pero la ecuación exterior, '
                     f'reducida a la de Whittaker en el paso 5 (Ec. A14 de la secuela), tiene su propio parámetro de Coulomb relativista, '
-                    f'<code>κ = α_g(1 − 2q²)/q</code>, con <code>q² = 1 − (ν/ν_a)²</code>. Con él, <code>n − κ</code> es constante: '
+                    f'<code>κ = α_g(1 − 2q²)/q</code>, con <code>q² = 1 − (ν/ν_a)²</code>. Con él, <code>n − κ</code> es casi constante: '
                     f'{", ".join(f"{v:.4f}" for v in nk)}, dentro de {max(nk) - min(nk):.4f}, sin ajustar nada. Es un <b>defecto cuántico</b>, '
                     f'como en los átomos alcalinos: la región interior (la estrella y el campo fuerte) añade un desfase que no depende de la '
                     f'energía. Con la corrección de Ritz, <code>δ_n = δ₀ + δ₂/(n − δ₀)²</code>, sale δ₀ = {rz["delta0"]:.4f} y '
@@ -273,14 +275,14 @@ if S:
                      f"({', '.join(str(v_['sign_changes']) for v_ in stab.values())} cambios).</p>")
     rob_html = (f"""
   <h3>Robustez numérica y estabilidad</h3>
-  <p>Los amortiguamientos de unos pocos Hz son lo más delicado del cálculo. Los recalculamos variando la tolerancia del integrador, el radio inicial, la longitud de la integración exterior y el radio donde se empalma con la solución exterior. Ninguna variante mueve Re ν más de un {rob_re:.0e} relativo ni Im ν más de un {rob_im:.3f} %:</p>
+  <p>Los amortiguamientos de unos pocos Hz son lo más delicado del cálculo. Los recalculamos variando la tolerancia del integrador, el radio inicial, la longitud de la integración exterior y el radio donde se empalma con la solución exterior. Ninguna variante mueve Re ν más de un {rob_re:.0e} relativo ni Im ν más de un {rob_im:.3f} %. Es la incertidumbre numérica; la física (la ecuación de estado, el modelo de acoplo) puede mover las cifras mucho más:</p>
   <div class="tbl"><table><tr><th>modo</th><th>variante</th><th>Re ν (kHz)</th><th>Im ν (Hz)</th></tr>{rob_rows}</table></div>
 {stab_html}""" if rob else '')
     art = S.get('artifact')
     art_html = (f"""<div class="callout">
     <h3>Corrección: un artefacto retirado</h3>
     <p>La versión anterior de este informe mostraba una «rama axiónica» de resonancias muy amortiguadas en la estrella realista (6,585 − 0,563i kHz y otras casi equiespaciadas). Era un artefacto. Normalizábamos el lapso Φ en la superficie con la masa encerrada allí, sin contar la nube del axión fuera de la estrella (~0,5 % de la masa). Eso dejaba Φ(∞) = 1,6·10⁻³ en vez de 0, y el coeficiente <code>ω² e^(−2Φ)</code> daba un salto en el punto de empalme con la solución exterior. Ese salto refleja parte de la onda y forma una cavidad entre la superficie y el empalme.</p>
-    <p>Con la normalización antigua, la «resonancia» se mueve de {fnum(art['old_rm'][0], 3)} {fnum(art['old_rm'][1], 3)}i a {fnum(art['old_r84'][0], 3)} {fnum(art['old_r84'][1], 3)}i kHz al mover el empalme de {fnum(art['rm'], 0)} a {fnum(art['r84'], 0)} km, algo imposible para un modo físico. Con la corrección no queda ninguna raíz en esa región.</p>
+    <p>Con la normalización antigua, la «resonancia» se mueve de {fnum(art['old_rm'][0], 3)} {fnum(art['old_rm'][1], 3)}i a {fnum(art['old_r84'][0], 3)} {fnum(art['old_r84'][1], 3)}i kHz al mover el empalme de {fnum(art['rm'], 0)} a {fnum(art['r84'], 0)} km, algo imposible para un modo físico. Con la corrección no queda ninguna raíz en esa región. Eso retira esas resonancias concretas, pero no establece si existe o no una familia física de resonancias axiónicas muy amortiguadas: para eso habría que contar raíces en el semiplano amortiguado, y no lo hemos hecho.</p>
     <p>La corrección desplaza todas las frecuencias con axión un ~0,16 % y elimina la dependencia del radio de empalme. También mejora el acuerdo con las tablas del Paper II en nuestro paso 9 (el detalle está en el cuaderno de laboratorio). Lo detectó una revisión externa que señaló que la tabla de robustez no respaldaba nuestro «por debajo del 1 %».</p>
   </div>""" if art else '')
     star_html = f"""
@@ -314,7 +316,7 @@ if S:
   <h3>Cómo cruza el modo F el umbral</h3>
   <p>Al bajar ν_a, el umbral se acerca a F desde arriba, y el nivel n = 1 del átomo gravitatorio baja con él:</p>
   <ul>
-    <li>En <b>ν_a = 3,5 kHz</b> hay dos estados ligados ({fnum(n35['bound'][0], 4)} y {fnum(n35['bound'][1], 4)} kHz) con carácter mezclado ({fnum(n35['fluid'][0], 2)} y {fnum(n35['fluid'][1], 2)} de fluido): un cruce evitado entre F y el átomo.</li>
+    <li>En <b>ν_a = 3,5 kHz</b> hay dos estados ligados ({fnum(n35['bound'][0], 4)} y {fnum(n35['bound'][1], 4)} kHz) con carácter mezclado ({fnum(n35['fluid'][0], 2)} y {fnum(n35['fluid'][1], 2)} de fluido). Sugiere un cruce evitado entre F y el átomo; para demostrarlo hay que seguir las dos ramas al variar ν_a, y eso no está hecho.</li>
     <li>En <b>ν_a = 3,4 kHz</b>, F ya está por encima del umbral, en {fnum(n34['F'][0], 4)} kHz, con un amortiguamiento de solo {fnum(-n34['F'][1] * 1e3, 2)} Hz (fracción fluida {fnum(n34['fluid'], 2)}).</li>
   </ul>
   <p>La transición cuasi-normal → ligado de la estrella realista no es un cruce limpio como en el modelo simplificado: el modo fluido atraviesa una escalera densa de estados del axión que se acumula en el umbral.</p>
@@ -328,11 +330,11 @@ if S:
 </section>"""
     val_li = (f"<li><b>Validación externa:</b> sin axión, el mismo código reproduce las frecuencias radiales F, H1, H2 y H3 "
               f"del politropo de referencia de Font et al. (2002) con una diferencia máxima del "
-              f"{max(abs(v) for v in VAL['dev_font_pct'].values()):.2f} %, dentro del redondeo de sus cifras.</li>") if VAL else ''
+              f"{max(abs(v) for v in VAL['dev_font_pct'].values()):.3f} % (sector fluido sin axión).</li>") if VAL else ''
     star_summary = f"""
     {val_li}
-    <li><b>Estrella realista</b> (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua {fnum(-s6['H1'][1] * 1e3, 1)} Hz. Justo bajo el umbral aparece una escalera de estados ligados del axión, un «átomo gravitatorio»{(f", que sigue una ley de Rydberg con defecto cuántico constante, δ = {RYD['ritz']['delta0']:.3f}" if RYD else "")}.</li>
-    <li>En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con un cruce evitado con el nivel n = 1, y sale como cuasi-normal con un amortiguamiento muy pequeño ({fnum(-n34['F'][1] * 1e3, 2)} Hz a ν_a = 3,4 kHz).</li>"""
+    <li><b>Estrella realista</b> (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua {fnum(-s6['H1'][1] * 1e3, 1)} Hz. Justo bajo el umbral aparece una escalera de estados ligados del axión, un «átomo gravitatorio»{(f", que sigue una ley de Rydberg con un defecto cuántico casi constante, δ ≈ {RYD['ritz']['delta0']:.3f}" if RYD else "")}.</li>
+    <li>En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con lo que parece un cruce evitado con el nivel n = 1, y sale como cuasi-normal con un amortiguamiento muy pequeño ({fnum(-n34['F'][1] * 1e3, 2)} Hz a ν_a = 3,4 kHz).</li>"""
 else:
     star_html = None
     star_summary = ''
@@ -475,10 +477,10 @@ a {{ color: var(--accent); }}
   <h3>Resumen</h3>
   <ul>
     <li>Para <code>l = 0</code> no hay radiación gravitatoria, así que el único canal de pérdida es la emisión de axiones, con <code>k_out² = ω² − m_a²</code>. Escrita en la variable <code>k = k_out</code>, la función de dispersión del modelo (Ec. 4.13) no tiene la ambigüedad de hoja del umbral exterior.</li>
-    <li>La transición sigue la secuencia típica de onda con umbral: el par cuasi-normal <code>k = ±a − ib</code> colisiona en el eje imaginario negativo (entre <code>x₀ = {fnum(x_prev, 4)}</code> y <code>{fnum(x_coll, 4)}</code>) y se separa en un <b>estado ligado</b> (<code>Im k &gt; 0</code>, frecuencia real) y un <b>estado virtual</b> (<code>Im k &lt; 0</code>, frecuencia real pero no físico).</li>
-    <li>Cerca del umbral, <code>|Im w| ∝ (Re w − 1)^{fnum(s_fit, 2)}</code>, próximo a ½. El amortiguamiento no se anula exactamente en <code>ω = m_a</code>, sino a una distancia <code>∼ (Im k)²</code>.</li>
+    <li>La transición sigue la secuencia típica de onda con umbral: el par cuasi-normal <code>k = ±a − ib</code> colisiona en el eje imaginario negativo en <code>x₀ = {fnum(C3['x0'], 5)}</code> (raíz doble, λ² = 10⁻³), cuando su frecuencia ya está <b>por debajo</b> de <code>m_a</code> (<code>w − 1 = {sci(C3['w_minus_1'])}</code>). Se convierte en dos <b>estados virtuales</b> (<code>Im k &lt; 0</code>, frecuencia real pero no físicos). Uno de ellos sube, cruza <code>k = 0</code> (justo <code>ω = m_a</code>) en <code>x₀ = {fnum(C3['x0_k0'], 5)}</code> y pasa a <b>estado ligado</b> (<code>Im k &gt; 0</code>); el otro sigue virtual.</li>
+    <li>Cerca del umbral, <code>|Im w| ∝ (Re w − 1)^{fnum(s_fit, 2)}</code>, próximo a ½. Es una ley de tramo intermedio. El amortiguamiento solo se anula en la colisión, ya por debajo del umbral, a <code>w − 1 ≈ k²/2 ∼ −(Im k)²/2</code> (λ² = 10⁻⁴: <code>{sci(C4['w_minus_1'], 2)}</code>).</li>
     <li>Las ramas fluida y axiónica no se cruzan: la separación mínima es lineal en el acoplo, con <code>Δw²_min/λ = {fnum(min(ratios), 2)}–{fnum(max(ratios), 2)}</code> para λ² = 10⁻⁶…10⁻³.</li>
-    <li>Hallazgo no previsto: linealizado en <code>θ = 0</code>, el modelo contiene un modo inestable (<code>w² = {fnum(w2u, 2)}</code> con los parámetros de la figura), que no aparece en la ventana <code>Im w ≤ 0</code> habitual. Lo planteamos como pregunta abajo.</li>{star_summary}
+    <li>Hallazgo no previsto: con la masa efectiva taquiónica <code>m_a²(1 − α)</code> del modelo simplificado, este contiene un modo inestable (<code>w² = {fnum(w2u, 2)}</code> con los parámetros de la figura), que no aparece en la ventana <code>Im w ≤ 0</code> habitual. Lo planteamos como pregunta abajo.</li>{star_summary}
   </ul>
 </section>
 
@@ -511,7 +513,7 @@ a {{ color: var(--accent); }}
     {fig3}
     <figcaption>Tasa de amortiguamiento frente a la distancia al umbral (λ² = {D["params"]["lam2_damping"]:.0e}), en la zona asintótica <code>Re k &gt; 5|Im k|</code>. Ajuste: exponente {fnum(s_fit, 3)}; la línea discontinua es la pendiente ½ como referencia.</figcaption>
   </figure>
-  <p>La identidad exacta <code>Im w = Re k · Im k / Re w</code> (de <code>w² = 1 + k²</code>; la primera versión de este informe tenía el signo cambiado) explica el comportamiento: con <code>Im k</code> casi constante, la tasa es proporcional a <code>k_out ∝ √(ω² − m_a²)</code>, el espacio de fases de la onda emitida. El exponente ajustado queda algo por debajo de ½ porque <code>Im k</code> varía un {imk_var:.0f} % en el tramo. Es una ley de <b>tramo intermedio</b>, ajustada en un intervalo finito, no una ley asintótica: se rompe cuando <code>Re k ∼ |Im k|</code>. Ahí manda la colisión de los dos polos, a una distancia del umbral de orden <code>(Im k)²</code>, minúscula con acoplo débil. En esta figura el último punto con <code>Re k &gt; 0</code> está en <code>Re w − 1 = {coll_x:.1e}</code>: el amortiguamiento se anula ahí, antes de llegar a <code>ω = m_a</code>.</p>
+  <p>La identidad exacta <code>Im w = Re k · Im k / Re w</code> (de <code>w² = 1 + k²</code>; la primera versión de este informe tenía el signo cambiado) explica el comportamiento: con <code>Im k</code> casi constante, la tasa es proporcional a <code>k_out ∝ √(ω² − m_a²)</code>, el espacio de fases de la onda emitida. El exponente ajustado queda algo por debajo de ½ porque <code>Im k</code> varía un {imk_var:.0f} % en el tramo. Es una ley de <b>tramo intermedio</b>, ajustada en un intervalo finito, no una ley asintótica: se rompe cuando <code>Re k ∼ |Im k|</code>. Ahí manda la colisión de los dos polos, a una distancia del umbral de orden <code>(Im k)²</code>, minúscula con acoplo débil. El amortiguamiento solo se anula en la colisión, que calculamos como raíz doble y no del barrido: <code>x₀ = {C4['x0']:.10f}</code>, <code>k = {C4['k'][1]:.7f} i</code>, <code>w − 1 = {sci(C4['w_minus_1'], 4)}</code> (λ² = 10⁻⁴). Ocurre ya <b>por debajo</b> del umbral, como exige <code>w² = 1 + k²</code> con k imaginario negativo. Justo después hay dos estados virtuales, y uno cruza <code>k = 0</code> en <code>x₀ = {C4['x0_k0']:.10f}</code> para convertirse en ligado. La versión anterior de este informe situaba la anulación en el último punto del barrido (<code>Re w − 1 ≈ {sci(min(x for x, _ in dp))}</code>), donde el amortiguamiento todavía no es cero; lo señaló una revisión externa.</p>
 </section>
 
 <section>
@@ -534,8 +536,9 @@ a {{ color: var(--accent); }}
 </section>
 
 <section>
-  <h2>5. Un modo inestable en el modelo linealizado en θ = 0</h2>
-  <p>Con los parámetros de la Fig. 3 (<code>x₀ = 0.6</code>) hay un estado ligado con <code>w² = {fnum(w2u, 3)}</code>, es decir, una perturbación que crece como <code>e^({fnum(grow, 2)} m_a t)</code>. Es el estado fundamental del pozo taquiónico interior, con onda oscilante dentro y evanescente fuera. Aparece para <code>x₀ &gt; {fnum(xc, 5)}</code>, valor que coincide con la condición analítica <code>arctan(1/√(α−1))/√(α−1) = {fnum(xc_an, 5)}</code>.</p>
+  <h2>5. Un modo inestable en el modelo simplificado (masa efectiva m_a²(1 − α))</h2>
+  <p>Una precisión sobre qué modelo es. El de la Sec. IV del Paper I no es la linealización consistente de la acción en <code>θ = 0</code>: allí <code>∂m*/∂a = 0</code>, y el acoplo lineal se anularía. El paper combina la masa efectiva de <code>θ = 0</code>, <code>m_a²(1 − α)</code>, con un acoplo constante. Es un modelo fenomenológico, y lo que sigue es una propiedad de ese modelo, no del problema exacto de la condensación.</p>
+  <p>Con los parámetros de la Fig. 3 (<code>x₀ = 0.6</code>) hay un estado ligado con <code>w² = {fnum(w2u, 3)}</code>, es decir, una perturbación que crece como <code>e^({fnum(grow, 2)} m_a t)</code>. Es el estado fundamental del pozo taquiónico interior, con onda oscilante dentro y evanescente fuera. Aparece para <code>x₀ &gt; {fnum(xc, 5)}</code>, valor que coincide con la condición analítica <code>arctan(1/√(α−1))/√(α−1) = {fnum(xc_an, 5)}</code>. Esa condición no contiene el acoplo: la inestabilidad la produce el término de masa taquiónico, no el acoplo con el fluido.</p>
   <p>Nuestro paso 4 no lo detectaba porque buscaba raíces solo en <code>Im w ≤ 0.01</code>. Linealizando en <code>θ = π</code> (masa efectiva interior positiva, sin acoplo lineal) desaparece: no hay estados ligados ni inestables.</p>
   <div class="callout">
     <h3>Pregunta para el grupo</h3>

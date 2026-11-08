@@ -125,7 +125,7 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
   - *Corregido `axstar.Phi_shift`* (sin commit todavía). Paso 9 repetido: sigue 8/8 frente a las tablas del Paper II; los desplazamientos cambian ~0,16 puntos y los amortiguamientos de más de 1 Hz casi nada (12,8 → 12,7 Hz). Falta comparar el máximo de desviación con el de antes.
   - *Paso 9 con la corrección:* el acuerdo con el Paper II **mejora**. La desviación máxima baja de 0,55 a 0,45 puntos en la Tabla I y de 0,53 a 0,43 en la Tabla II. Parte de nuestra discrepancia anterior de ~0,5 % venía de este error. Indica que el Paper II normaliza Φ en el infinito con la masa total.
   - *Paso 10 con la corrección: 8/9.* El modo f a ν_a = 10 kHz no se encontró (`nan`): Muller no alcanzaba la tolerancia de 10⁻¹¹ por el suelo de ruido. Ahora reintenta con 10⁻⁹. Los otros 35 modos se desplazan ~0,16 puntos y sus amortiguamientos casi no cambian (p2 a 5 kHz: 12,81 → 12,82 Hz). El f sube hasta un 7,5 % (antes 7,7 %).
-  - **[H17 · CONFIRMADA] ARTEFACTO RETIRADO: la «rama axiónica» de la estrella realista no existe.** Eran las resonancias muy amortiguadas y casi equiespaciadas (6,585 − 0,563 i; 7,304 − 0,748 i; 8,142 − 0,884 i; 9,062 − 0,985 i; 10,039 − 1,058 i kHz).
+  - **[H17 · CONFIRMADA] ARTEFACTO RETIRADO: las resonancias de la «rama axiónica» de la estrella realista eran artefactos.** Esto no establece si existe o no una familia física de resonancias muy amortiguadas: no hemos contado raíces en el semiplano amortiguado (cuarta revisión). Eran las resonancias muy amortiguadas y casi equiespaciadas (6,585 − 0,563 i; 7,304 − 0,748 i; 8,142 − 0,884 i; 9,062 − 0,985 i; 10,039 − 1,058 i kHz).
     - Era una cavidad entre R y r_m, creada por el salto de `ω² e^{−2Φ}` en el empalme con la normalización antigua del lapso.
     - *Pruebas:* (i) con la normalización antigua, la «resonancia» se mueve de 6,585 − 0,563 i a 6,236 − 0,712 i al pasar el empalme de 117 a 84 km. Un modo físico no depende del empalme. (ii) El espaciado de cavidad `Δν ≈ (c/2L)(k/ω)`, con L = r_m − R ≈ 106 km, da 713 Hz entre las dos primeras (observado 720). (iii) Con la corrección no queda ningún mínimo de |det| en esa región.
     - Lo que sí era físico no cambia: F, H1 y el átomo gravitatorio solo se desplazan ~0,16 %.
@@ -190,10 +190,23 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
   - *Si (b) falla,* las ecuaciones radiales en GR de `radial.py` (o su paso a números) tienen un error que el punto de retorno no veía, y todo el paso 15 queda en cuestión.
   - *Resultado (paso 17, 5/5):*
     - (a) M = 1,4002 M☉, R = 14,155 km.
-    - (b) F = 1,4425, H1 = 3,9540, H2 = 5,9149, H3 = 7,7737 kHz: +0,034, −0,025, −0,019 y −0,029 % frente a Font et al., dentro del redondeo de sus cuatro cifras.
+    - (b) F = 1,4425, H1 = 3,9540, H2 = 5,9149, H3 = 7,7737 kHz: +0,034, −0,025, −0,019 y −0,029 % frente a Font et al. En absoluto: +0,5, −1,0, −1,1 y −2,3 Hz. F está dentro del redondeo de su tabla (±0,5 Hz); los sobretonos no, aunque por poco (corrección de la cuarta revisión: yo había escrito «dentro del redondeo» para los cuatro).
     - (c) Frente a Garching: F −1,06 % y H1 −0,43 %. Coincidimos con el cálculo de perturbaciones, no con esa tabla.
     - Controles negativos: Γ₁ = 2,1 mueve F un +12,2 %, y ε = ρ un −8,6 %.
   - *Qué valida y qué no:* valida el sistema radial en GR derivado desde la acción (`radial.interior`: ξ, Δp, δλ y δΦ), su paso a números y las condiciones en el centro y en la superficie, con el axión apagado. No valida los términos del axión ni el empalme exterior con la cola del condensado, que no tienen referencia publicada. Eso sigue siendo lo que el grupo debería revisar.
+
+- **[Errata · cuarta revisión] Dónde se anula el amortiguamiento en el umbral (paso 14).**
+  - *Lo que escribí en la ronda anterior:* «el amortiguamiento se anula en Re w − 1 = 2,6·10⁻⁵, antes de llegar a ω = m_a». Era el último punto del barrido, donde |Im w| = 9,4·10⁻⁶ ≠ 0. Error mío, introducido al responder a otra crítica.
+  - *Correcto, con la raíz doble calculada (g = 0, dg/dk = 0):*
+    - λ² = 10⁻⁴: colisión en x₀ = 0,8594224655, k = −0,0012944 i, w − 1 = −8,3769·10⁻⁷ (por debajo del umbral, = k²/2). El virtual cruza k = 0 en x₀ = 0,8594231785.
+    - λ² = 10⁻³: colisión en x₀ = 0,8514671 (no 0,8525: aquello era un punto de la rejilla), w − 1 = −7,32·10⁻⁵. Cruce de k = 0 en 0,8515243.
+  - *Secuencia:* el cuasi-normal baja por debajo de m_a todavía amortiguado. Los polos chocan en el eje (w < 1) y quedan dos virtuales; uno cruza k = 0 (w = 1) y pasa a ligado. El revisor obtuvo los mismos números de forma independiente.
+  - *Otras correcciones de la misma revisión:*
+    - El modelo de la Sec. IV no es la linealización consistente en θ = 0 (allí ∂m*/∂a = 0): combina m_a²(1 − α) con un acoplo constante. La inestabilidad es propiedad de ese modelo fenomenológico, y su umbral no depende del acoplo.
+    - «Cruce evitado» a 3,5 kHz pasa a «sugiere»: hay que seguir las ramas.
+    - El defecto cuántico es «casi constante».
+    - La robustez numérica no es incertidumbre física.
+  - *Lección:* una cifra «donde ocurre X» no se lee de un barrido; se resuelve la condición de X. Y una frase añadida para responder a una crítica necesita la misma verificación que el resto.
 
 - **[H20 · CONFIRMADA] El «defecto cuántico» de la escalera del átomo gravitatorio (ν_a = 6 kHz, paso 15).**
   - *Observación:* n − n_eff = −0,012; 0,010; 0,021; 0,028; 0,033 para n = 2…6, con `n_eff = α_g/√(2(1 − ν/ν_a))`, la fórmula hidrogenoide no relativista.

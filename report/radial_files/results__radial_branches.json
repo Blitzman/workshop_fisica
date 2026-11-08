@@ -17,14 +17,14 @@
    "note": ""
   },
   {
-   "name": "H9: par cuasi-normal k = \u00b1a - ib (b \u2248 0.0079...0.0119) colisiona en el eje imaginario negativo en x0 \u2248 0.8525; en x0 = 0.86 queda un ligado (kappa = +0.1339, w = 0.99099 real) y un virtual (kappa = -0.1605)",
+   "name": "H9: el par cuasi-normal k = \u00b1a - ib (b \u2248 0.0079...0.0119) colisiona en el eje imaginario negativo en x0 = 0.8514671 (ra\u00edz doble, residuo 1e-15; \u03bb\u00b2 = 1e-3), con k = -0.0120972i y w - 1 = -7.317e-05: ya por debajo del umbral. Quedan dos virtuales; uno cruza k = 0 (w = 1) en x0 = 0.8515243 y pasa a ligado. En x0 = 0.86: un ligado (kappa = +0.1339, w = 0.99099) y un virtual (kappa = -0.1605)",
    "ok": true,
    "note": ""
   },
   {
    "name": "H8: |Im w| ~ (Re w - 1)^0.457 en el tramo intermedio Re k > 5|Im k| (\u03bb\u00b2 = 1e-4; \u00bd si Im k fuera constante, que var\u00eda un 19 % en el tramo)",
    "ok": true,
-   "note": "ajuste en un tramo finito, no una ley asint\u00f3tica: m\u00e1s cerca del umbral domina la colisi\u00f3n de polos, y el amortiguamiento se anula en Re w - 1 = 2.6e-05, antes de llegar a \u03c9 = m_a"
+   "note": "ajuste en un tramo finito, no una ley asint\u00f3tica: m\u00e1s cerca del umbral domina la colisi\u00f3n de polos. El amortiguamiento solo se anula en la colisi\u00f3n, x0 = 0.8594224655, con w - 1 = -8.3769e-07 (por debajo del umbral, = k\u00b2/2 a este orden, k = -0.0012944i); el virtual cruza k = 0 en x0 = 0.8594231785"
   },
   {
    "name": "H10: cruce evitado fluido-axi\u00f3n, \u0394w\u00b2_min/\u03bb = 7.598, 7.598, 7.596, 7.577 para \u03bb\u00b2 = 1e-6\u20261e-3 (en x0 \u2248 1.073): separaci\u00f3n \u221d \u03bb",
@@ -1487,6 +1487,30 @@
   ]
  },
  "damping_exponent": 0.45697704146023516,
+ "collision": {
+  "0.001": {
+   "x0": 0.851467144820044,
+   "k": [
+    0.0,
+    -0.012097198664687453
+   ],
+   "w_minus_1": -7.317378496785043e-05,
+   "im_w": 0.0,
+   "resid": 1.0821520823744846e-15,
+   "x0_k0": 0.8515243341945975
+  },
+  "0.0001": {
+   "x0": 0.8594224655251337,
+   "k": [
+    0.0,
+    -0.001294366881445002
+   ],
+   "w_minus_1": -8.376931627251949e-07,
+   "im_w": 0.0,
+   "resid": 2.8248961404947603e-15,
+   "x0_k0": 0.8594231784885991
+  }
+ },
  "gaps": [
   {
    "lam2": 1e-06,
