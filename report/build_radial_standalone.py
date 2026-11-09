@@ -40,6 +40,6 @@ head = head.replace('</style>', '.srcs { display: grid; gap: 6px; }\n'
 out = ('<!doctype html>\n<html lang="es">\n<head>\n<meta charset="utf-8">\n'
        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
        f'{head}\n</head>\n<body>\n{body}\n</body>\n</html>\n')
-dst = ROOT / 'report' / 'informe_radial_completo.html'
-dst.write_text(out)
-print(dst, f'{len(out) // 1024} KB, {len(blocks)} ficheros incrustados')
+for dst in (ROOT / 'report' / 'informe_radial_completo.html', ROOT / 'results' / 'informe_radial_completo.html'):
+    dst.write_text(out)   # las dos copias, como build_radial.py con informe_radial.html
+    print(dst, f'{len(out) // 1024} KB, {len(blocks)} ficheros incrustados')

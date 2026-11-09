@@ -4862,9 +4862,9 @@ head = head.replace(&#x27;&lt;/style&gt;&#x27;, &#x27;.srcs { display: grid; gap
 out = (&#x27;&lt;!doctype html&gt;\n&lt;html lang=&quot;es&quot;&gt;\n&lt;head&gt;\n&lt;meta charset=&quot;utf-8&quot;&gt;\n&#x27;
        &#x27;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;\n&#x27;
        f&#x27;{head}\n&lt;/head&gt;\n&lt;body&gt;\n{body}\n&lt;/body&gt;\n&lt;/html&gt;\n&#x27;)
-dst = ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
-dst.write_text(out)
-print(dst, f&#x27;{len(out) // 1024} KB, {len(blocks)} ficheros incrustados&#x27;)
+for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;, ROOT / &#x27;results&#x27; / &#x27;informe_radial_completo.html&#x27;):
+    dst.write_text(out)   # las dos copias, como build_radial.py con informe_radial.html
+    print(dst, f&#x27;{len(out) // 1024} KB, {len(blocks)} ficheros incrustados&#x27;)
 </code></pre></details><details class="src"><summary><code>results/checks.json</code> <span class="small">(1138 líneas)</span></summary><pre class="code" data-path="results/checks.json"><code>{
  &quot;seconds&quot;: 28291,
  &quot;env&quot;: {
