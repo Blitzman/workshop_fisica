@@ -486,7 +486,7 @@ if S:
     <h3>Abierto</h3>
     <p>No hemos podido decidir si el amortiguamiento tiende a cero o a un valor finito justo encima del umbral (factor de Sommerfeld del potencial 1/r). Los dos puntos disponibles apuntan a que cae deprisa, pero hace falta un barrido denso en ν_a.</p>
     <p>El defecto cuántico δ ≈ 0,056 lo fija el interior (la estrella y el campo fuerte), y no lo hemos predicho desde ahí: es un dato que sale del cálculo, no una comprobación independiente. Tampoco hemos estudiado aparte el nivel n = 1, cuya órbita se solapa con la estrella.</p>
-    <p>No sabemos si hay modos radiales axiónicos con amortiguamiento de varios kHz (la región de a0 en la secuela): ahí nuestra F está mal condicionada y sus ceros dependen del empalme (paso 21).</p>
+    <p>No sabemos si hay modos radiales axiónicos con amortiguamiento de varios kHz (la región de a0 en la secuela): ahí nuestra F está en su suelo de ruido numérico y no conseguimos localizar sus ceros (pasos 20–21).</p>
   </div>
   <ul class="checks">{st_rows}</ul>
 </section>"""
@@ -506,9 +506,31 @@ if S:
     {val_li}
     <li><b>Estrella realista</b> (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua {fnum(-s6['H1'][1] * 1e3, 1)} Hz{scat_sum}. Justo bajo el umbral aparece una escalera de estados ligados del axión, un «átomo gravitatorio»{(f", que sigue una ley de Rydberg con un defecto cuántico casi constante, δ ≈ {RYD['ritz']['delta0']:.3f}" if RYD else "")}.</li>
     <li>En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con un cruce evitado con el nivel n = 1{f" (separación mínima {1e3 * CRS['gap_min_khz']:.0f} Hz)" if CRS else ""}, y sale como cuasi-normal con un amortiguamiento muy pequeño ({fnum(-n34['F'][1] * 1e3, 2)} Hz a ν_a = 3,4 kHz).</li>{sum_extra}"""
+    # ---- apertura: conclusiones e importancia (cifras desde los datos)
+    _h1w = f", y un segundo método independiente de la búsqueda de raíces da {fnum(SCAT['H1 (6 kHz)']['half_width'] * 1e3, 2)} Hz" if SCAT else ''
+    _font = (f"<li><b>El código es fiable donde se puede contrastar:</b> sin axión reproduce las vibraciones radiales publicadas por "
+             f"Font et al. (2002) con una diferencia máxima del {fnum(max(abs(v) for v in VAL['dev_font_pct'].values()), 3)} %.</li>") if VAL else ''
+    _stab = (f"<li><b>Estabilidad:</b> no encontramos vibraciones radiales que crezcan en la región explorada (paso 16). "
+             f"Es un resultado sobre esa región, no una demostración general.</li>") if STB else ''
+    intro_html = f"""
+<section class="sheet summary intro">
+  <h3>En pocas palabras</h3>
+  <p>Una estrella de neutrones puede «respirar»: hincharse y deshincharse entera. Si dentro hay un condensado de axiones, esa vibración puede escapar en forma de axiones, pero solo si su frecuencia supera la masa del axión (el umbral). José preguntó qué pasa exactamente cuando una vibración cruza ese umbral.</p>
+  <p><b>Conclusiones (preliminares)</b></p>
+  <ul>
+    {_font}
+    <li><b>Por encima del umbral, la vibración se apaga emitiendo axiones; por debajo, no.</b> Obtenemos que, en una estrella realista con axiones de 6 kHz, la vibración H1 (por encima) se amortigua a {fnum(-s6['H1'][1] * 1e3, 1)} Hz{_h1w}. La vibración fundamental F (por debajo) no pierde energía.</li>
+    <li><b>El cruce no es un interruptor.</b> Justo por debajo del umbral aparece una escalera de estados en los que el axión queda atrapado por la gravedad de la estrella, un «átomo gravitatorio»{(f" que sigue la misma ley que los átomos de Rydberg (defecto cuántico δ ≈ {RYD['ritz']['delta0']:.3f})" if RYD else "")}. La vibración F atraviesa esa escalera esquivando el primer peldaño{(f" (separación mínima {1e3 * CRS['gap_min_khz']:.0f} Hz)" if CRS else "")} y, recién cruzado el umbral, apenas pierde energía ({fnum(-n34['F'][1] * 1e3, 2)} Hz a ν_a = 3,4 kHz).</li>
+    {_stab}
+    <li><b>Queda abierto</b> si existe un análogo radial de los modos axiónicos muy amortiguados de la secuela: nuestro método no lo decide (pasos 20–21).</li>
+  </ul>
+  <p><b>Por qué importa</b> <span class="small">(borrador pendiente de revisión por José)</span></p>
+  <p>El primer artículo sugiere que la sismología de estrellas de neutrones podría servir para estudiar las propiedades del axión, y da la regla básica: las vibraciones por encima del umbral se amortiguan y las de debajo no. Nuestros resultados sugieren que cerca del umbral esa regla tiene matices: la transición pasa por el átomo gravitatorio, y justo por encima el amortiguamiento puede ser muy pequeño. Si la sismología llegara a usarse para acotar la masa del axión, es precisamente cerca del umbral donde la señal cambia de comportamiento, así que esa zona hay que entenderla bien. El propio artículo advierte de que las vibraciones radiales son difíciles de observar, así que esto es sobre todo una pieza teórica para cuando el análisis se extienda a vibraciones observables.</p>
+</section>"""
 else:
     star_html = None
     star_summary = ''
+    intro_html = ''
 
 # ------------------------------------------------------------------ respuesta a las revisiones externas
 REVIEWS = [
@@ -698,6 +720,7 @@ a {{ color: var(--accent); }}
   <h1>Del modo cuasi-normal al modo ligado: el umbral axiónico en las oscilaciones radiales</h1>
   <p class="lede">Respuesta a la pregunta de José A. Pons: cómo pasa un modo radial de cuasi-normal a evanescente cuando su frecuencia cruza la masa del axión, y cómo se interpretan las distintas ramas del espectro. Hipótesis anotadas antes de calcular; todas las cifras se insertan desde <code>results/radial_*.json</code> al generar la página.</p>
 </header>
+{intro_html}
 
 <section class="sheet summary">
   <h3>Resumen</h3>

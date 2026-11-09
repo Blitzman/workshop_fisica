@@ -204,6 +204,11 @@ mark.nuevo { background: var(--new-bg); color: var(--new); padding: 0 0.2em; bor
 mark.nuevo .antes { font: 400 0.8em var(--f-body); margin-left: 0.35em; opacity: 0.85; text-decoration: line-through; }
 .cambios { padding: 1.1rem 1.3rem; border-left: 4px solid var(--new); background: var(--new-bg); border-radius: 0 6px 6px 0; color: var(--ink); }
 .cambios h2 { font-size: 1.25rem; margin: 0 0 0.4rem; }
+.intro { padding: 1.1rem 1.3rem; border-left: 4px solid var(--accent); background: var(--code-bg); border-radius: 0 6px 6px 0; }
+.intro h2 { font-size: 1.35rem; margin: 0 0 0.4rem; }
+.intro h3 { font-size: 1.05rem; margin: 0.9rem 0 0.3rem; }
+.intro ul { margin: 0.2rem 0 0; padding-left: 1.2rem; }
+.intro li { margin: 0.3rem 0; }
 .cambios table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 0.6rem; }
 .cambios th, .cambios td { text-align: left; padding: 0.3rem 0.5rem; border-top: 1px solid var(--rule); vertical-align: top; }
 .cambios td.num { font-family: var(--f-mono); white-space: nowrap; }
@@ -254,6 +259,21 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
     <p class="eyebrow">arXiv:2510.16245 y 2610.37308 · Gómez-Bañón, Pnigouras &amp; Pons</p>
     <h1>Condensados axiónicos, rederivados desde la acción</h1>
   </header>
+
+  <section class="stack intro" id="en-pocas-palabras">
+    <h2>En pocas palabras</h2>
+    <p>Hemos rehecho desde cero, con cada paso comprobado, los dos artículos de Gómez-Bañón, Pnigouras y Pons sobre estrellas de neutrones con un condensado de axiones. Y hemos dado un paso que la secuela deja abierto: calcular cómo vibra la estrella cuando también vibra el espacio-tiempo, sin la aproximación de Cowling, que lo deja congelado.</p>
+    <h3>Conclusiones (preliminares)</h3>
+    <ul>
+      <li><b>Los artículos se sostienen.</b> El álgebra de los dos es correcta en todos los pasos. En el primero, 3 cifras del texto no cuadran con el recálculo (una lleva un factor \(2\pi\) de menos), y queda una pregunta sobre el punto en que se linealiza su modelo simplificado.</li>
+      <li><b>La secuela se reproduce con un cálculo propio:</b> sus tablas de frecuencias salen dentro de 0.45 puntos porcentuales.</li>
+      <li><b>Lo nuevo:</b> obtenemos que, cuando también vibra el espacio-tiempo, el axión sube la nota fundamental de la estrella (el modo \(f\)) hasta un 7.5 %, más que el 5.2 % de la aproximación de la secuela, y que esa vibración se apaga antes: de 0.174 s sin axión a 0.13 s con el axión más pesado estudiado (15 kHz).</li>
+      <li><b>Una regla de la secuela solo acierta en orden de magnitud:</b> la de sumar las dos formas de perder energía, ondas gravitacionales y axiones. Por ejemplo, para \(p_2\) a 8 kHz da 1.0 Hz frente a los 0.10 Hz del cálculo completo.</li>
+      <li><b>Límites:</b> las cifras con el espacio-tiempo vibrando no tienen referencia publicada. Sus términos nuevos solo los comprueban la derivación desde la acción y los controles negativos, y cerca del umbral hay una incertidumbre sistemática pequeña (paso 25). Hasta que alguien las repita por su cuenta, son preliminares.</li>
+    </ul>
+    <h3>Por qué importa <span class="chip chip-obs">borrador pendiente de revisión por José</span></h3>
+    <p>El axión es una partícula hipotética que se propuso para resolver un problema abierto de la física de partículas (el problema CP fuerte). El primer artículo sugiere que las vibraciones de las estrellas de neutrones podrían servir para estudiar sus propiedades. Las vibraciones no radiales emiten ondas gravitacionales; nuestro cálculo lo incluye, y el modo \(f\) se apaga así en 0.174 s sin axión. La secuela trabaja con el espacio-tiempo congelado, una aproximación que no permite calcular esa emisión. Nuestro cálculo da las primeras cifras sin esa aproximación y sugiere que el efecto del axión sobre el modo \(f\) es mayor de lo que indica la secuela. Si un cálculo independiente lo confirma, sería un ingrediente para estimar si el axión deja huella en las vibraciones de estas estrellas. De paso, el trabajo muestra que un artículo publicado y su secuela se pueden auditar en días, con cada paso comprobado y reproducible.</p>
+  </section>
 
 <section class="stack cambios" id="cambios">
     <p class="eyebrow">Versión 3 · 2026-11-09 · sustituye a la versión 2 del 2026-11-08</p>

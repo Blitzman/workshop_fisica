@@ -427,7 +427,7 @@ def main():
             .replace('{{N_OK6}}', str(ok6)).replace('{{N_TOT6}}', str(tot6))
             .replace('{{N_OK7}}', str(ok7)).replace('{{N_TOT7}}', str(tot7))
             .replace('{{N_OK8}}', str(ok8)).replace('{{N_TOT8}}', str(tot8))
-            .replace('{{N_RES}}', str(n_res)).replace('{{FAIL_TXT}}', html.escape(fail_txt))
+            .replace('{{N_RES}}', str(n_res)).replace('{{N_FAIL_P1}}', str(n4)).replace('{{FAIL_TXT}}', html.escape(fail_txt))
             .replace('{{CAMBIOS}}', cambios(V, V0, checks, json.loads((BASE / 'checks.json').read_text()), figs_changed))
             .replace('{{RADIAL_URL}}', RADIAL_URL)
             .replace('{{FIGDATA}}', figdata).replace('{{CHARTS_JS}}', charts_js).replace('{{ANIM_JS}}', anim_js)
