@@ -286,6 +286,20 @@ def fill(text, V, V0, plain=False):
     return re.sub(r'\{\{V:(\w+)\}\}', sub, text)
 
 
+def p1_obs():
+    # observación sobre la Tabla 2 del Paper I (paso 26); cifras desde results/radial_paper1.json
+    P1 = json.loads((RES / 'radial_paper1.json').read_text())
+    t2 = [m for k in P1['t2'] for m in P1['t2'][k]]
+    q = [m['nu'][1] * 1e3 / m['paper'][1] for m in t2 if not m['bound']]
+    n25 = sum(abs(x - 1) <= 0.25 for x in q)
+    return f'''      <article class="ob" id="obs-radial">
+        <header><span class="weight w-main">De fondo</span><h3>Amortiguamientos radiales frente a la Tabla 2</h3></header>
+        <p>Las {len(t2)} frecuencias de la Tabla 2 salen dentro de un {100 * P1['t2_maxdev_re']:.2f} %, y los modos sin amortiguar son los mismos. Los amortiguamientos no: solo {n25} de {len(q)} quedan dentro de un 25 %, con cocientes (este cálculo / paper) entre {min(q):.2f} y {max(q):.2f}, en los dos sentidos. Nuestro segundo método (la anchura de la resonancia) es coherente con el primero, pero los dos usan nuestras ecuaciones, así que no sabemos cuál de los dos cálculos se desvía.</p>
+        <p>Preguntas: cómo se fijó el lapso \\(\\Phi\\) en el infinito; qué valor de \\(m_a^2 f_a^2\\) usa el código (enlaza con la observación anterior); con qué precisión se dan las partes imaginarias; y si los mínimos de \\(|\\Delta p(R)|\\) se buscaron en el plano complejo o en frecuencia real. <a href="{RADIAL_URL}#preguntas-p1">Detalle en el informe radial ↗</a></p>
+      </article>
+'''
+
+
 def _decimals(text):
     # cifras decimales de un texto, sin LaTeX en línea ni números de ecuación («Ec. (4.13)», «(4.1)»)
     text = re.sub(r'\\\(.*?\\\)', ' ', text)
@@ -435,6 +449,7 @@ def main():
             .replace('{{N_OK8}}', str(ok8)).replace('{{N_TOT8}}', str(tot8))
             .replace('{{N_RES}}', str(n_res)).replace('{{N_FAIL_P1}}', str(n4)).replace('{{FAIL_TXT}}', html.escape(fail_txt))
             .replace('{{CAMBIOS}}', cambios(V, V0, checks, json.loads((BASE / 'checks.json').read_text()), figs_changed))
+            .replace('{{P1_OBS}}', p1_obs())
             .replace('{{RADIAL_URL}}', RADIAL_URL)
             .replace('{{FIGDATA}}', figdata).replace('{{CHARTS_JS}}', charts_js).replace('{{ANIM_JS}}', anim_js)
             .replace('{{SECS}}', str(data['seconds'])).replace('{{MINS}}', str(round(data['seconds'] / 60))).replace('{{STEPS}}', steps).replace('{{ENV}}', env)

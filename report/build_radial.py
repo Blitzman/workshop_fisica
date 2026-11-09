@@ -252,6 +252,16 @@ if P1:
     <li><b>Modos del axión (Tabla 3):</b> Muller converge en {_T3['n_conv']} de {_T3['n']} semillas, las de los modos menos amortiguados (|Im ν| ≤ {fnum(_T3['max_im_conv'], 1)} kHz). Ahí la parte real sale entre un {fnum(_T3['re_pct'][0], 1)} % y un {fnum(_T3['re_pct'][1], 1)} % por encima de la suya, un desplazamiento sistemático, y el amortiguamiento entre {fnum(_T3['im_ratio'][0], 2)} y {fnum(_T3['im_ratio'][1], 2)} veces el suyo. En los más amortiguados (|Im ν| ≥ {fnum(_T3['min_im_fail'], 2)} kHz) no converge, como en la región profunda de los pasos 20–21.</li>
   </ul>
   <p><b>Qué significa.</b> La estrella, las frecuencias y la frontera entre modos ligados y radiantes coinciden con el Paper I; también encontramos sus modos del axión menos amortiguados. Lo que no coincide es cuánto se amortiguan las vibraciones del fluido al emitir axiones. Nuestros amortiguamientos son coherentes con nuestro segundo método (la anchura de la resonancia, paso 24) y estables frente al empalme, pero los dos usan nuestras ecuaciones. No sabemos aún cuál de los dos cálculos se desvía. Diferencias posibles, sin probar: el método del paper (mínimos de |Δp(R)| y empalme cerca de la superficie con una forma de fase y amplitud), cómo se fija el lapso Φ en el infinito (el paper no lo dice) o alguna constante del acoplo. <b>Hasta aclararlo, los amortiguamientos con axión de este informe son preliminares.</b> La pregunta va a José, coautor del Paper I.</p>
+  <div class="callout" id="preguntas-p1">
+    <h3>Preguntas para José</h3>
+    <ol>
+      <li><b>El lapso Φ en el infinito.</b> ¿Cómo se fijó? El Paper I no lo dice, y de él depende cómo se traduce la frecuencia local a la que mide un observador lejano.</li>
+      <li><b>La constante del acoplo.</b> ¿Qué valor de m_a² f_a² (o de la escala de energía del condensado) usa el código? La cifra del texto del Paper I no cuadra con nuestro recálculo (observación del informe principal).</li>
+      <li><b>Precisión de la Tabla 2.</b> ¿Con cuántas cifras fiables se dan las partes imaginarias? El texto solo da la precisión de un modo.</li>
+      <li><b>Cómo se extrajo Im ν.</b> El texto habla de mínimos de |Δp(R)|: ¿buscados en el plano complejo, o a lo largo de la frecuencia real, con Im ν sacada de otra forma?</li>
+    </ol>
+    <p class="small">Con estas respuestas podemos repetir el cálculo con sus mismas elecciones y ver si la diferencia desaparece.</p>
+  </div>
   <div class="tbl"><table><tr><th>ν_a (kHz)</th><th>modo</th><th>Re ν (kHz)</th><th>Paper I</th><th>−Im ν (Hz)</th><th>Paper I</th><th>cociente</th></tr>{p1_rows}</table></div>
   <ul class="checks">{p1_checks}</ul>"""
     val_html += p1_html
@@ -393,7 +403,8 @@ if S:
         stab_html = (f"<p>Estabilidad: en el eje imaginario el determinante no cambia de signo "
                      f"({', '.join(str(v_['sign_changes']) for v_ in stab.values())} cambios).</p>")
     _p1open = (f'<p>Los amortiguamientos con axión no coinciden con los de la Tabla 2 del Paper I (hasta un factor {fnum(max(_qhi, 1 / _qlo), 1)}, en los dos sentidos), '
-               'aunque las frecuencias sí. No sabemos aún cuál de los dos cálculos se desvía (paso 26).</p>') if P1 else ''
+               'aunque las frecuencias sí. No sabemos aún cuál de los dos cálculos se desvía (paso 26). '
+               '<a href="#preguntas-p1">Preguntas concretas para José</a>.</p>') if P1 else ''
     rob_html = (f"""
   <h3>Robustez numérica y estabilidad</h3>
   <p>Los amortiguamientos de unos pocos Hz son lo más delicado del cálculo. Los recalculamos variando la tolerancia del integrador, el radio inicial, la longitud de la integración exterior y el radio donde se empalma con la solución exterior. Ninguna variante mueve Re ν más de un {rob_re:.0e} relativo ni Im ν más de un {rob_im:.0e} relativo. Es la variación observada en estos controles del integrador, no la incertidumbre total. Por eso las cifras con muchos decimales de este informe describen esta implementación concreta, no una precisión física demostrada.{eos_txt} La física (la ecuación de estado, el modelo de acoplo) puede mover las cifras mucho más:</p>
