@@ -28,10 +28,9 @@ MODES = ('f', 'p1', 'p2')
 def _mode(st, guess, dyn=True, **kw):
     """Cero complejo de la amplitud entrante cerca de `guess` (kHz)."""
     f = lambda z: AG.incoming(st, AX.omega_of(z), L, dyn=dyn, **kw)
-    try:
-        return complex(AX.muller(f, guess * 0.997, guess, guess * 1.003 - 1e-5j, tol=1e-11))
-    except RuntimeError:                 # suelo de ruido por encima de 1e-11: se acepta una tolerancia menor
-        return complex(AX.muller(f, guess * 0.997, guess, guess * 1.003 - 1e-5j, tol=1e-9))
+    # H29: con el arranque del interior integrado de verdad, el suelo de ruido está siempre por encima de 1e-11 |z|
+    # (antes se probaba 1e-11 y, tras 40 pasos perdidos, 1e-9). 1e-9 |z| son < 1e-5 Hz.
+    return complex(AX.muller(f, guess * 0.997, guess, guess * 1.003 - 1e-5j, tol=1e-9))
 
 
 def reference():

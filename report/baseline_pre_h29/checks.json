@@ -1,0 +1,1074 @@
+{
+ "seconds": 16946.8,
+ "env": {
+  "python": "3.14.4",
+  "platform": "Linux x86_64",
+  "cpu": "Intel(R) Core(TM) i5-9600K CPU @ 3.70GHz",
+  "date": "2026-11-08",
+  "sympy": "1.14.0",
+  "mpmath": "1.3.0",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "matplotlib": "3.11.2"
+ },
+ "steps": [
+  {
+   "step": "Fondo (TOV + KG)",
+   "module": "step1_background",
+   "seconds": 19.4,
+   "checks": [
+    {
+     "name": "Identidad nabla_mu T^mu_r(axion) = (box a + V') d_r a",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. G_tr del fondo estático se anula idénticamente",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Paper (2.6a) p' == derivada de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Paper (2.6b) Phi' == derivada de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Paper (2.6c) M' == derivada de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Paper (2.6d) KG == derivada de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Límite sin axión reproduce TOV estándar (p' = -(eps+p) Phi')",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "p = n d(eps)/dn - eps no depende de a (la Ec. (2.8) del paper es exacta)",
+     "ok": true,
+     "note": "el paper la presenta como aproximación (≈)"
+    }
+   ]
+  },
+  {
+   "step": "Perturbaciones radiales",
+   "module": "step2_perturbations",
+   "seconds": 4.8,
+   "checks": [
+    {
+     "name": "Paper (3.3a) KG == linealización de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Paper (3.3b) rr == linealización de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Paper (3.3c) tr == linealización de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Paper (3.3d) Euler == linealización de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Paper (3.3e) continuidad == linealización de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo: (3.3b) con 8 pi en vez de 4 pi -> se detecta",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo: (3.3a) con signo cambiado en el término 2 delta lambda -> se detecta",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo: (3.3e) sin el término delta lambda -> se detecta",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "G_tt linealizada es redundante (Bianchi + conservación bariónica)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Exterior: (3.3a) -> KG en Schwarzschild, Ec. (3.7)",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Modelo simplificado (Sec. IV)",
+   "module": "step3_toy_model",
+   "seconds": 1.0,
+   "checks": [
+    {
+     "name": "Toy (Ec. 4.2a) se sigue de (3.3d)+(3.3e) con las aproximaciones del paper",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Toy (Ec. 4.2b) se sigue de (3.3a) con las aproximaciones del paper",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Forma adimensional -> matriz M de la Ec. (4.6)",
+     "ok": true,
+     "note": "fila 1 = combinación de filas"
+    },
+    {
+     "name": "det(M - k^2) == Ec. (4.7) (salvo factor c_s^2)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Cuadrática en omegabar^2 == Ec. (4.8)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Raíces omegabar^2(k) == expresión del paper",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "k_+-^2 y Delta (Ec. 4.12) son raíces de det(M - k^2) = 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ajuste interior/exterior con dp(x0)=0 reproduce f(omega) de la Ec. (4.13)",
+     "ok": true,
+     "note": "sqrt(Delta) = k_+^2 - k_-^2"
+    },
+    {
+     "name": "Límite lambda->0: f ∝ k_a tan(k_a x0) + i k_out  (Ec. 4.11)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "V'' + n m*'' en theta=0 vale m_a^2 (1 - alpha)  [la aproximación del paper]",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "dm*/da = -beta sigma sin(theta)/(4 f_a g): se ANULA en theta = 0 y theta = pi",
+     "ok": true,
+     "note": "dm*/da = -sqrt(2)*beta*sigma_N*sin(theta)/(4*f_a*sqrt(beta*cos(theta) - beta + 2))"
+    },
+    {
+     "name": "En theta=pi (fondo del toy si alpha>1): m_eff^2/m_a^2 = (alpha-1)/sqrt(1-beta) > 0",
+     "ok": true,
+     "note": "el toy usa 1-alpha < 0 (taquiónico), que corresponde a theta=0"
+    }
+   ]
+  },
+  {
+   "step": "Números y figura",
+   "module": "step4_numerics",
+   "seconds": 93.3,
+   "checks": [
+    {
+     "name": "beta = 4z/(1+z)^2 = 0.877 (paper: 0.88)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Reducción de masa sigma_N [1-g(pi f_a)] = 32.4 MeV (paper: ~32 MeV)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "m_a = 3 kHz <-> 12.4 peV (paper: 12 peV)",
+     "ok": true,
+     "note": "E = h nu"
+    },
+    {
+     "name": "m_a R para 3 kHz y R=12 km = 0.75 (paper: 0.12)",
+     "ok": false,
+     "note": "el paper usa nu R/c = 0.12; m_a c^2/hbar = 2 pi nu  -> factor 2 pi"
+    },
+    {
+     "name": "m_a^2 f_a^2 = eps beta m_pi^2 f_pi^2 / 4 = eps x (4.4-4.8) MeV/fm^3 (paper: eps x 13)",
+     "ok": false,
+     "note": "m_pi^2 f_pi^2 = 20.1-21.9 MeV/fm^3; el paper siguiente (2610.37308) da eps m_pi^2 f_pi^2 ~ 2 MeV/fm^3 para eps=0.1, coherente con esto"
+    },
+    {
+     "name": "lambda^2 con (eps+p)=500 MeV/fm^3, c_s^2=0.3: eps x (0.029-0.032) (paper: eps x 0.02)",
+     "ok": false,
+     "note": "incluso con el 13 del paper: 13/150 = 0.087; las dos cifras del paper no son coherentes entre sí"
+    },
+    {
+     "name": "n_c(eps=1) = m_pi^2 f_pi^2/sigma_N = 0.40 fm^-3 = 2.5 n_sat (paper: ~2 n_sat)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Fig. 3 reproducida: 10 modos fluidos (Im~0) + 5 modos axiónicos",
+     "ok": true,
+     "note": "axiónicos: 3.56-2.15i, 9.53-3.25i, 15.01-3.89i, 20.39-4.35i, 25.71-4.71i"
+    },
+    {
+     "name": "Variante theta=pi (m_eff^2 = 25.6 m_a^2, sin acoplo): 10 modos fluidos SIN amortiguar + 6 axiónicos",
+     "ok": true,
+     "note": "axiónicos: 5.55-0.33i, 8.96-1.70i, 13.68-2.63i, 18.70-3.24i, 23.83-3.69i"
+    },
+    {
+     "name": "Figura guardada en results/toy_qnm_landscape.png",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Paper II: no radiales en Cowling",
+   "module": "step5_nonradial",
+   "seconds": 14.5,
+   "checks": [
+    {
+     "name": "Paper II (8a) momento radial == linealización de la acción (Cowling)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Paper II (8b) bariones == linealización de la acción (Cowling)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Paper II (8c) momento angular == linealización de la acción (Cowling)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Paper II (8d) KG interior == linealización de la acción (Cowling)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo: (8a) sin el término l/r en (dtheta' + l dtheta/r) -> se detecta",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo: (8b) sin Phi' en el lado izquierdo -> se detecta",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo: (8d) con 2l/r en vez de 2(l+1)/r -> se detecta",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Exterior: (8d) con n_b=0 y dtheta=(R/r)^l dtheta_ext es la Ec. (13)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (15): dtheta'/dtheta = L_ext - l/R",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (10b): el orden 1/r de (8d) impone dtheta'(0) = 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (10a): delta p(0) del orden 1/r de (8a)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "El orden 1/r de (8b) es compatible con (10a) (misma condición)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ecs. (16a,b): delta p'(0) = 0 y [(eps+p)W]'(0) = 0",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (16c): dtheta''(0)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (17): delta p(0) = c_s^2 (eps+p) delta n_b(0)/n_b es exacta con p = p(n)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ecs. (A2)-(A4): Liouville elimina la derivada primera y da el potencial U",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (A6): Psi = Q^{-1/2} e^{iw} resuelve (A3) si Q cumple la ecuación de Milne",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ecs. (A7) y (A18): derivadas logarítmicas L+- y su inversión para (Q, Q')",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (A10): L_ext a partir de L+",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (A13): U desarrollado hasta O(1/r~^2)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (A14): z = -2ik~r~, kappa, mu reducen (A13) a la ecuación de Whittaker",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ecs. (21)-(22): psi = r dtheta_ext en coordenada tortuga y potencial Delta V",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (23): k~_n^2 = -alpha^2/n^2 para el problema de Coulomb (n = l+1, l+2)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (B4): sqrt(-g) T^r_t del axión",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (B6): luminosidad promediada <L> = f_a^2/2 r^2 e^{Phi-lambda} Re w Im L_ext |dtheta_ext|^2",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (B7b): energía del modo axiónico",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Ec. (B7a): energía del modo fluido (término cuadrático de T^t_t)",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Paper II: números y niveles ligados",
+   "module": "step6_nonradial_numerics",
+   "seconds": 13.0,
+   "checks": [
+    {
+     "name": "lambda_a = hbar/(m_a c) = 19.7 km para m_a = 1e-11 eV (paper: ~20 km)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "nu_a = m_a/2pi = 2.42 kHz para m_a = 1e-11 eV (paper: ~2.4 kHz)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Tabla I: desplazamientos f, p1, p2 a 15 kHz = 18.1%, 14.5%, 19.0% (texto: 18%, 15%, 19%; resumen: hasta ~20%)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Texto vs tablas: f 2.43->2.87->2.50, p1 7.15->8.19->7.96, p2 10.18->12.11->12.00, máximo de f = 2.56 kHz en 5-6 kHz",
+     "ok": true,
+     "note": "el acoplo dinámico compensa el 84% del desplazamiento de f (\"almost entirely\")"
+    },
+    {
+     "name": "Tabla II: Im nu != 0 exactamente cuando Re nu > nu_a (36 entradas)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "tau_a mínimo = 1/(2 pi x 13 Hz) = 12 ms (texto: ~10 ms)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Tabla III: el asterisco marca exactamente Re nu < nu_a; Fig. 4 = fila de 4 kHz (10.2-3.8i, 22.4-5.7i)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Tabla IV: alpha = G M m_a reproduce la columna alpha (máx. dif. 0.0005)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Tabla IV: nu_n coherente con la columna -k~^2 n^2/alpha^2 (máx. dif. 0.005 kHz)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Tabla IV reproducida desde el exterior de Schwarzschild: para nu_a <= 10 kHz, máx. dif. 5 Hz (precisión de la tabla: 10 Hz)",
+     "ok": true,
+     "note": "independiente del interior (plano/Dirichlet, R = 10.5-12 km)"
+    },
+    {
+     "name": "Tabla IV, nu_a = 11-15 kHz: valores del paper dentro de la banda debida al interior",
+     "ok": true,
+     "note": "la banda crece con m_a R: 56 Hz a 15 kHz; todas dentro"
+    },
+    {
+     "name": "Cruces evitados: nivel n=3 a 12.19 kHz = 11.93-11.94 kHz y n=4 a 12.06 kHz = 11.92-11.92 kHz, frente a p2 = 11.93 kHz",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Figura guardada en results/paper2_atom_levels.png",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Más allá de Cowling (nuevo)",
+   "module": "step7_fullgr",
+   "seconds": 409.9,
+   "checks": [
+    {
+     "name": "Parte sin traza de las ecuaciones angulares: H2 = H0, sin contribución del axión",
+     "ok": true,
+     "note": "-(H0(r) - H2(r))/2"
+    },
+    {
+     "name": "Métrica congelada (H0 = H1 = K = 0): las cuatro ecuaciones de materia son las de Cowling (paso 5)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Bianchi: G_tt linealizada es redundante (con axión)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Bianchi: la traza angular linealizada es redundante (con axión)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "La ligadura algebraica de H0 se conserva al integrar (su derivada se anula con el sistema)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Sin axión: H1', K', W', H0 y V de Lindblom-Detweiler (Zhao y Lattimer, arXiv:2204.03037)",
+     "ok": true,
+     "note": "coinciden: [\"H1'\", \"K'\", \"W'\", 'H0', 'V']"
+    },
+    {
+     "name": "X' de Zhao y Lattimer: no coincide tal cual; con -2 w^2 en el término de W, sí (errata de signo)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Burgio et al. (arXiv:1106.2736): W' coincide; H1', K', X', H0 y V fallan tal cual y coinciden con una corrección mínima cada una",
+     "ok": true,
+     "note": "H1': falta el factor H_1 en el primer término; K': signo de psi'/2 en el coeficiente de K; X': falta H_0 y el signo de psi'/2 es el contrario: (1/r - psi'/2) H_0; H0: signo del último término de K; V: r^{(psi-lambda)/2} donde va e^{(psi-lambda)/2}"
+    },
+    {
+     "name": "Kunjipurayil et al. (arXiv:2205.02081, coautor T. Zhao): las seis coinciden, X' con -2 w^2",
+     "ok": true,
+     "note": "coinciden: [\"H1'\", \"K'\", \"W'\", \"X'\", 'H0', 'V']"
+    },
+    {
+     "name": "Zhang et al. (arXiv:2601.21911): H1', K', W', X' y H0 coinciden, escritas ya con las cinco correcciones de Burgio et al.; en V pone w^3 donde va w^2",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo: 16 pi -> 8 pi en H1' de LD se detecta",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Exterior sin axión: Z = r^{l+2}(K - e^psi H1)/(nr+3M) cumple la ecuación de Zerilli",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Exterior con axión (theta_0 = 0): delta theta no ve la métrica y cumple la Ec. (13) del Paper II",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Centro: H0(0) = K(0), H1(0) = [2l K(0) + 16 pi G (eps+p) W(0)]/[l(l+1)] y V(0) = -W(0)/l, como en LD, sin corrección axiónica",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Centro: X(0) = X_LD(0) + e^{Phi_c}[n dm*/dtheta Delta theta(0) - (8 pi G/3)(eps+p) V(theta_c) W(0)]",
+     "ok": true,
+     "note": "Delta theta(0) = delta theta(0) + theta_0''(0) W(0)"
+    },
+    {
+     "name": "Centro: delta theta''(0) = Ec. (16c) del Paper II - 3 K(0) theta_0''(0)/(2l+3)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Sistema extendido, H1': se sigue de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Sistema extendido, K': se sigue de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Sistema extendido, W' (sin cambios): se sigue de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Sistema extendido, X': se sigue de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Sistema extendido, relación algebraica de H0: se sigue de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Sistema extendido, relación algebraica de V: se sigue de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Sistema extendido, Klein-Gordon: Ec. (8d) + términos métricos: se sigue de la acción",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Todos los términos nuevos se anulan sin axión",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo: quitar el flujo 8 pi G r f_a^2 theta_0' delta theta de K' se detecta",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Más allá de Cowling: números y figuras",
+   "module": "step8_numerics",
+   "seconds": 633.6,
+   "checks": [
+    {
+     "name": "Fondo: el modelo de 1.4 M_sun con kappa = 1.3346e5 cgs tiene R = 14.449 km (LMI: 14.45 km)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Cowling, Ecs. (8a)-(8c) del paso 5: los 24 modos f, p1, p2 (l = 2-5, M/R = 0.1 y 0.2) de Yoshida y Kojima (1997): 23 dentro de media unidad de su última cifra, máx. dif. 0.0057",
+     "ok": true,
+     "note": "p2 l=4 M/R=0.1: 6.0157 vs 6.01"
+    },
+    {
+     "name": "Métrica dinámica, sistema extendido sin axión: Re w de los modos f l = 2-5 igual a las 5 cifras de Lindblom, Mendell e Ipser (1997) (máx. dif. 0.00002)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Im w (emisión de ondas gravitacionales) dentro del 2 % de LMI (máx. 0.4 %)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Métrica dinámica: los 24 modos \"exactos\" de Yoshida y Kojima dentro del 0.5 % (a 3 cifras; LMI, a 5, coincide entero)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Convergencia: otro punto de partida, corte en la superficie y extracción mueven Re w en 2e-06",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Errata de signo de Zhao y Lattimer: con su X' tal como está impreso, el modo f l = 2 sale en 0.8328 en vez de 1.2016 (-31 %)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Fondo con axión (politropo + KG, m_a R = 1.26): converge, theta_0 = 3.10 en el centro y 3e-06 fuera",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Fondo con axión (politropo + KG, m_a R = 3.77): converge, theta_0 = 3.14 en el centro y 5e-06 fuera",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Con axión en Cowling: Tablas I, II y IV del Paper II",
+   "module": "step9_axion_cowling",
+   "seconds": 700.1,
+   "checks": [
+    {
+     "name": "Fondo BSk26 sin axión, p_c = 100 MeV/fm^3: M = 1.536 M_sun, R = 11.72 km (Paper I: 1.53 M_sun, 11.7 km)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Cowling sin axión: f, p1, p2 = 2.429, 7.171, 10.194 kHz (Paper II: 2.43, 7.15, 10.18); máx. dif. 0.29 %",
+     "ok": true,
+     "note": "ajuste analítico de BSk26 frente a la tabla del grupo; el paper da un 0.3 % de acuerdo con otros cálculos"
+    },
+    {
+     "name": "Umbral del condensado: no hay a 2.5 kHz y sí a 2.8 kHz (Paper I: desaparece por debajo de ~2.8 kHz)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Tabla IV: masas de las estrellas con axión (6 valores, 8-15 kHz) dentro del 0.5 % (máx. 0.35 %)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Tabla I (solo fondo): los 24 desplazamientos nu/nu_0 - 1 coinciden con el paper dentro de 0.6 puntos (máx. 0.45)",
+     "ok": true,
+     "note": "nu_0: la nota sin axión de cada cálculo"
+    },
+    {
+     "name": "Tabla II (acoplado), parte real: los 36 desplazamientos dentro de 0.6 puntos (máx. 0.43; modo f, 0.33)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Tabla II: los modos amortiguados son los mismos (Im nu = 0 por debajo de nu_a), sin excepciones",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Tabla II, amortiguamiento: los 11 |Im nu| >= 1 Hz del paper, dentro de un factor 2 (cociente 0.59-1.56); tau_a mínimo = 12.5 ms (paper: 12 ms)",
+     "ok": true,
+     "note": "el amortiguamiento depende de delta theta(R), muy sensible al fondo (Fig. 6 del paper)"
+    }
+   ]
+  },
+  {
+   "step": "Con axión y métrica dinámica (nuevo)",
+   "module": "step10_axion_gr",
+   "seconds": 2229.7,
+   "checks": [
+    {
+     "name": "Conversión de fullgr.EXT a números: con el axión apagado, igual que la del paso 8 (máx. dif. relativa 9e-16)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Sustituciones del axión: 8/8 cantidades del Paper II (n dm*/dtheta, m_eff^2, eps(n, theta), c_s^2...)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Todo el programa, sin axión, con el politropo de LMI: Re w = 1.20162 (LMI: 1.2016), Im w = 3.944e-04 (LMI: 3.95e-4)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 6e-09 e Im nu en 0.0 %",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Sin axión, la métrica dinámica baja las notas de Cowling: f, p1, p2 = 1.961, 6.594, 9.872 kHz frente a 2.429, 7.171, 10.194 (-19 %, -8 %, -3 %); f amortiguado por ondas gravitacionales en 0.174 s",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Las 36 notas acopladas (f, p1, p2 para 12 masas del axión) encontradas y amortiguadas",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Umbral: los modos p solo radian axiones por encima de nu_a (|Im nu| > 0.05 Hz si Re nu > nu_a; por debajo, solo ondas gravitacionales, < 0.05 Hz)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Con la métrica dinámica, el axión sube el modo f hasta un 7.5 % (Cowling, paso 9: 5.2 %) y su amortiguamiento por ondas gravitacionales pasa de 0.17 a 0.13 s",
+     "ok": true,
+     "note": "resultado nuevo"
+    },
+    {
+     "name": "Amortiguamiento máximo por axiones: p2 a 5 kHz, 12.8 Hz (tau_a = 12.4 ms), como en Cowling; la suma 1/tau_GW + 1/tau_a con el tau_a de Cowling solo acierta en orden de magnitud (p2 a 8 kHz: 0.10 Hz frente a 1.0)",
+     "ok": true,
+     "note": "resultado nuevo"
+    }
+   ]
+  },
+  {
+   "step": "Modos radiales: umbral y ramas (modelo simplificado)",
+   "module": "step14_radial_branches",
+   "seconds": 38.8,
+   "checks": [
+    {
+     "name": "f(k) en la variable k coincide con f_toy(w) del paso 4 (Re w > 1): diferencia relativa 7.5e-31",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Modo fluido fundamental en x0 = 0.6: w = 1.43104-2.78e-03i (cuasi-normal, Im k = -0.0039 < 0)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "H9: el par cuasi-normal k = ±a - ib (b ≈ 0.0079...0.0119) colisiona en el eje imaginario negativo en x0 = 0.8514671 (raíz doble, residuo 1e-15; λ² = 1e-3), con k = -0.0120972i y w - 1 = -7.317e-05: ya por debajo del umbral. Quedan dos virtuales; uno cruza k = 0 (w = 1) en x0 = 0.8515243 y pasa a ligado. En x0 = 0.86: un ligado (kappa = +0.1339, w = 0.99099) y un virtual (kappa = -0.1605)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "H8: |Im w| ~ (Re w - 1)^0.457 en el tramo intermedio Re k > 5|Im k| (λ² = 1e-4; ½ si Im k fuera constante, que varía un 19 % en el tramo)",
+     "ok": true,
+     "note": "ajuste en un tramo finito, no una ley asintótica: más cerca del umbral domina la colisión de polos. El amortiguamiento solo se anula en la colisión, x0 = 0.8594224655, con w - 1 = -8.3769e-07 (por debajo del umbral, = k²/2 a este orden, k = -0.0012944i); el virtual cruza k = 0 en x0 = 0.8594231785"
+    },
+    {
+     "name": "H10: cruce evitado fluido-axión, Δw²_min/λ = 7.598, 7.598, 7.596, 7.577 para λ² = 1e-6…1e-3 (en x0 ≈ 1.073): separación ∝ λ",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Modo inestable del modelo simplificado (m²_in = m_a²(1 - α)): sin acoplo aparece para x0 > 0.10725018 (analítico arctan(1/√(α-1))/√(α-1) = 0.10725018); con λ² = 1e-3, para x0 > 0.10720993; en los parámetros de la figura (x0 = 0.6) w² = -6.177 (crece como e^(2.49 m_a t))",
+     "ok": true,
+     "note": "el paso 4 no lo veía: buscaba solo Im w ≤ 0.01; el acoplo apenas mueve el umbral"
+    },
+    {
+     "name": "Variante theta = pi (m²_in = 25.6 m_a², sin acoplo): sin estados ligados ni inestables",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Identidad Im w = +Re k·Im k/Re w (de w² = 1 + k²): residuo 0.0e+00; con el signo − que escribimos por error en el informe: 5.6e-03",
+     "ok": true,
+     "note": "errata señalada por la revisión"
+    },
+    {
+     "name": "Ninguna raíz reportada es un cero espurio de D (min |D| = 21.4)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Método independiente (principio del argumento sobre f/√D, sin Muller): par cuasi-normal, x0 = 0.80, Re k > 0: 1.00 (esperado 1); par completo, x0 = 0.80: 2.00 (esperado 2); ligado, x0 = 0.86: 1.00 (esperado 1); virtual, x0 = 0.86: 1.00 (esperado 1); inestable, x0 = 0.6: 1.00 (esperado 1)",
+     "ok": true,
+     "note": "H14"
+    },
+    {
+     "name": "Control negativo 1 (onda entrante, i k -> -i k): el estado ligado de x0 = 0.86 deja de estar en kappa > 0 en la misma posición",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2 (m²_in = 1 - α -> α - 1): desaparece el umbral de inestabilidad (x0_c = None)",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Modos radiales de la estrella con condensado (GR)",
+   "module": "step15_radial_star",
+   "seconds": 1242.1,
+   "checks": [
+    {
+     "name": "Ecuación exterior derivada (theta_0 = 0) = Ec. (3.7) del Paper I: error relativo 2.3e-16",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 1 (sin término de masa, el error real del 2026-11-07): error 2.67",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Sin axión (BSk26): masa máxima 2.1695 M☉ en p_c = 905.0 MeV/fm³; ω_F² = 0 en p_c = 904.9 (diferencia 0.01 %)",
+     "ok": true,
+     "note": "criterio de Chandrasekhar/punto de retorno"
+    },
+    {
+     "name": "Exterior en el rayo complejo: cumple Cauchy-Riemann (desajuste 3.3e-04). El de la recta real (axstar.exterior_L) se desvía 207 % en la resonancia muy amortiguada, 1e-04 en un modo poco amortiguado y 3e-13 bajo el umbral",
+     "ok": true,
+     "note": "la onda saliente crece con r y la integración hacia dentro es inestable; en los modos poco amortiguados de los pasos 9-10 este error es pequeño (no comprueba otras fuentes de error)"
+    },
+    {
+     "name": "ν_a = 6 kHz: modo F en 3.4505 kHz < ν_a, frecuencia real (|Im det|/|det| = 0e+00 en el eje), fracción fluida 0.976",
+     "ok": true,
+     "note": "H11(b)"
+    },
+    {
+     "name": "Átomo gravitatorio (α_g = 0.2748): n_eff = 2.012, 2.990, 3.979, 4.972, 5.967 para n = 2…6; carácter axiónico",
+     "ok": true,
+     "note": "H11(c)"
+    },
+    {
+     "name": "ν_a = 6 kHz: H1 = 8.1192 -0.0036i kHz (fracción fluida 0.973)",
+     "ok": true,
+     "note": "H11(b)"
+    },
+    {
+     "name": "Artefacto retirado: con la normalización antigua del lapso, la «resonancia axiónica» se mueve de 6.585 -0.563i a 6.236 -0.712i al cambiar el empalme (117 → 84 km); con la corrección, Muller desde esa semilla sale de la región (hacia 3.01 -0.15i); el recuento de la región lo hace el paso 20",
+     "ok": true,
+     "note": "era una cavidad entre R y el radio de empalme"
+    },
+    {
+     "name": "Control negativo 2 (onda entrante): en la raíz H1 el determinante deja de anularse (|det|/escala = 1.5e-01)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "ν_a = 3,5 kHz: dos ligados 3.4040 y 3.4544 kHz con carácter mezclado (0.22 y 0.75 de fluido): cruce evitado F – átomo n = 1",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "ν_a = 3,4 kHz: F ya por encima del umbral, Re ν = 3.4103 kHz e Im ν = -0.58 Hz (fracción fluida 0.968)",
+     "ok": true,
+     "note": "el modo fluido pasa a cuasi-normal al cruzar ν_a"
+    },
+    {
+     "name": "Estabilidad radial: sin raíces en ω = iγ, γ ∈ [0,01; 10] kHz, para ν_a = 6 y 3,4 kHz (6: 0 cambios de signo, 3.4: 0 cambios de signo)",
+     "ok": true,
+     "note": "H12; un barrido de signo puede no ver pares de raíces muy próximas"
+    },
+    {
+     "name": "Robustez de Im ν: rtol, r0 y longitud exterior cambian como mucho un 0.004 %; el radio de empalme (último paso hacia fuera) un 0.00 % en H1 (6 kHz), 0.00 % en F (3,4 kHz)",
+     "ok": true,
+     "note": "H13; el radio de empalme es la incertidumbre dominante"
+    }
+   ]
+  },
+  {
+   "step": "Estabilidad radial: principio del argumento",
+   "module": "step16_radial_stability",
+   "seconds": 4665.0,
+   "checks": [
+    {
+     "name": "Control positivo sin axión: índice 1 más allá de la masa máxima (p_c = 1000) y 0 antes (p_c = 800)",
+     "ok": true,
+     "note": "H18(b)"
+    },
+    {
+     "name": "Control positivo con axión (nu_a = 6 kHz, p_c = 1000): índice 1; cambio de signo en el eje imaginario en gamma = 0.58 kHz",
+     "ok": true,
+     "note": "H18(c)"
+    },
+    {
+     "name": "nu_a = 6.0 kHz: ningún cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [0, 0], [0, 0]]; 1545 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 1e-14",
+     "ok": true,
+     "note": "H18(a)"
+    },
+    {
+     "name": "Robustez (6 kHz, franja central baja): índice 0 con 192 puntos por lado y 0 con eps/2",
+     "ok": true,
+     "note": "H18(d)"
+    },
+    {
+     "name": "Control negativo 1: sin quitar el factor e^(i k r_m) y con muestreo grueso, el contorno pierde vueltas (índice 3 en vez de 0)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: con la rama principal de k también para Re omega < 0, la simetría F(-w*) = F(w)* se rompe (1.0e+00 frente a 1e-14)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "nu_a = 3.4 kHz: ningún cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [1, 0, 0], [0, 0]]; 1950 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 1e-14",
+     "ok": true,
+     "note": "H18(a)"
+    }
+   ]
+  },
+  {
+   "step": "Modos radiales sin axión: validación externa (Font et al. 2002)",
+   "module": "step17_radial_validation",
+   "seconds": 239.0,
+   "checks": [
+    {
+     "name": "Fondo: M = 1.4002 M_sun, R = 14.155 km (Font et al.: 1.4, 14.15)",
+     "ok": true,
+     "note": "H19(a)"
+    },
+    {
+     "name": "Modos radiales sin axión frente a Font et al. 2002, Tabla 2: F = 1.4425 kHz (ref. 1.442, +0.034 %), H1 = 3.9540 kHz (ref. 3.955, -0.025 %), H2 = 5.9149 kHz (ref. 5.916, -0.019 %), H3 = 7.7737 kHz (ref. 7.776, -0.029 %)",
+     "ok": true,
+     "note": "H19(b)"
+    },
+    {
+     "name": "Frente a la tabla de Garching (modelo B0): F -1.06 %, H1 -0.43 % (método no indicado en la tabla)",
+     "ok": true,
+     "note": "H19(c)"
+    },
+    {
+     "name": "Control negativo 1: Gamma_1 = 2.1 en las perturbaciones mueve F un +12.25 %",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: eps = rho (sin energía interna) mueve F un -8.63 %",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Átomo gravitatorio: ley de Rydberg",
+   "module": "step18_rydberg",
+   "seconds": 0.5,
+   "checks": [
+    {
+     "name": "H20(a): con el kappa de Whittaker (Ec. A14), n - kappa_n = 0.0579, 0.0570, 0.0568, 0.0566, 0.0565 para n = 2…6: constante dentro de 0.0013",
+     "ok": true,
+     "note": "sin ajuste"
+    },
+    {
+     "name": "H20(b): Rydberg-Ritz delta_n = delta_0 + delta_2/(n - delta_0)^2 con delta_0 = 0.0564, delta_2 = 0.0055; residuo máximo 1e-05",
+     "ok": true,
+     "note": "2 parámetros, 5 niveles"
+    },
+    {
+     "name": "Control negativo 1: con la fórmula hidrogenoide no relativista, n - n_eff varía 0.045 (lo que parecía un defecto creciente)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: con el Coulomb newtoniano alpha/q (sin el factor 2 omega^2 - m_a^2), n - kappa varía 0.048",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Cruce evitado F - átomo gravitatorio",
+   "module": "step19_avoided_crossing",
+   "seconds": 1902.0,
+   "checks": [
+    {
+     "name": "H21(a): separación de los dos ligados más bajos con mínimo 49.4 Hz en nu_a = 3.511 kHz (interior a la malla, refinada; 15 valores de nu_a)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "H21(b): intercambio de carácter: a nu_a = 3.46 kHz fracción fluida 0.04 (inferior) y 0.93 (superior); a 3.70 kHz, 0.89 y 0.07",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Recuento en el semiplano amortiguado",
+   "module": "step20_damped_count",
+   "seconds": 3850.0,
+   "checks": [
+    {
+     "name": "H22(a): nu_a = 6 kHz, índice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ahí: 8.1192-3.60i (fluido 0.97), 11.6786-21.70i (fluido 0.88)",
+     "ok": true,
+     "note": "sin ceros adicionales: ninguna familia axiónica en esa región"
+    },
+    {
+     "name": "H23: región profunda Re nu in [6.05, 12], Im nu in [-5, -1.5] kHz: índice 2 (piezas [2, 0], convergidas [[2, 2], [0, 0]]); ceros: 6.293-4.479i kHz (fluido 0.00; al cambiar el empalme se mueve un 33 %); 6.291-4.481i kHz (fluido 0.00; al cambiar el empalme se mueve un 33 %); 7.319-4.785i kHz (fluido 0.00; al cambiar el empalme se mueve un 13 %); 7.322-4.781i kHz (fluido 0.00; al cambiar el empalme se mueve un 13 %). Secuela, Tabla III (l = 2, Cowling): a0 = 9.0 -3.8i kHz",
+     "ok": false,
+     "note": "el resultado decide; no había predicción fuerte"
+    },
+    {
+     "name": "H22(b), control positivo: con la normalización antigua del lapso el índice sube a 8 (piezas [1, 1, 3, 3]): el recuento ve las resonancias de cavidad",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Ceros profundos frente al radio de empalme",
+   "module": "step21_deep_artifacts",
+   "seconds": 699.9,
+   "checks": [
+    {
+     "name": "H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1192 kHz, Im -3.60 Hz): 1.3e-07 % y 2.1e-07 % (Im: -1.1e-06 y -1.3e-06 Hz); (Re 11.6786 kHz, Im -21.70 Hz): 4.2e-08 % y 1.4e-07 % (Im: +5.3e-07 y -1.6e-05 Hz)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "H23b(ii): los ceros profundos se mueven con los dos radios alternativos: 6.293-4.480i kHz -> 4.867-5.111i (20 %) y 7.021-5.613i (17 %); 7.319-4.786i kHz -> 8.275-6.098i (19 %) y 8.283-6.001i (18 %)",
+     "ok": true,
+     "note": "si (i) y (ii) pasan: artefactos del empalme, no modos"
+    },
+    {
+     "name": "Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 3.3e-07 con la saliente)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0033 %, más que con los radios alternativos (2.1e-07 %)",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Condición exterior frente al rayo complejo",
+   "module": "step22_exterior_contour",
+   "seconds": 190.2,
+   "checks": [
+    {
+     "name": "H24(a): girar el rayo complejo ±0.4 rad cambia L = psi'/psi en r_m como mucho 6.5e-12 (relativo) en H1, artefacto antiguo, cero profundo, nivel ligado n = 2 H1: 5e-15; artefacto antiguo: 1e-14; cero profundo: 2e-15; nivel ligado n = 2: 6e-12",
+     "ok": true,
+     "note": "la condición saliente no depende del camino en el plano r complejo"
+    },
+    {
+     "name": "H24(b): alejar el punto de partida (n_decay 40 → 60) cambia L como mucho 9.3e-13: H1: 3e-16; artefacto antiguo: 1e-15; cero profundo: 5e-16; nivel ligado n = 2: 9e-13",
+     "ok": true,
+     "note": "el truncado del desarrollo asintótico (con la fase coulombiana) no influye"
+    },
+    {
+     "name": "Control negativo 1: con la onda entrante, L cambia al menos un 2 (relativo) en los puntos por encima del umbral",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: con n_decay = 1 el cambio mínimo es 2.3e-04, frente a 6.5e-12 en (a)-(b): la prueba detecta un punto de partida demasiado cercano",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  }
+ ]
+}

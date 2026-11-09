@@ -56,7 +56,9 @@ def _coupled(st, guess):
         z = _real_root(lambda x: det(x).real, guess - 0.35, min(guess + 0.15, st.nu_a - 1e-4), n=16)
         if np.isfinite(z):
             return complex(z)
-    return A.muller(det, guess * 0.997, guess, guess * 1.003 - 2e-4j, tol=1e-11)
+    # H29: con el arranque del interior integrado de verdad, el ruido de det deja z quieto solo hasta ~1e-9 |z|;
+    # con tol = 1e-11 Muller agotaba sus 40 pasos y la fila quedaba en nan. 1e-9 |z| son < 1e-5 Hz.
+    return A.muller(det, guess * 0.997, guess, guess * 1.003 - 2e-4j, tol=1e-9)
 
 
 def row(nu):

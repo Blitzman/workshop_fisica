@@ -13,14 +13,24 @@ head, body = page.split('<div class="wrap">', 1)
 body = '<div class="wrap">' + body
 blocks = []
 for key in sorted(files):
-    if key.endswith('uv.lock.txt'):
-        continue                                   # 130 KB de dependencias fijadas: no es código del cálculo
-    name = key.split('/', 1)[1].replace('__', '/').removesuffix('.txt')
+    name = key.split('/', 1)[1].removesuffix('.txt').replace('__', '/').replace('//init/.py', '/__init__.py')
     text = (ROOT / files[key]).read_text()
     blocks.append(f'<details class="src"><summary><code>{html.escape(name)}</code> '
                   f'<span class="small">({len(text.splitlines())} líneas)</span></summary>'
-                  f'<pre class="code"><code>{html.escape(text)}</code></pre></details>')
-embedded = '<div class="srcs">' + ''.join(blocks) + '</div>'
+                  f'<pre class="code" data-path="{html.escape(name)}"><code>{html.escape(text)}</code></pre></details>')
+EXTRACT = """import html, re, sys
+from pathlib import Path
+src, dst = Path(sys.argv[1]).read_text(), Path(sys.argv[2])
+for path, body in re.findall(r'<pre class="code" data-path="([^"]+)"><code>(.*?)</code></pre>', src, flags=re.S):
+    f = dst / html.unescape(path)
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text(html.unescape(body))
+    print(f)"""
+extract_html = ('<p><b>Extraer todos los ficheros</b> a una carpeta (con Python 3, sin dependencias): guarda esto como '
+                '<code>extraer.py</code> y ejecuta <code>python3 extraer.py informe_radial_completo.html carpeta</code>. '
+                'Después, dentro de <code>carpeta</code>, funcionan los comandos de arriba.</p>'
+                f'<pre class="code"><code>{html.escape(EXTRACT)}</code></pre>')
+embedded = extract_html + '<div class="srcs">' + ''.join(blocks) + '</div>'
 body = re.sub(r'<ul class="files">.*?</ul>', lambda m: embedded, body, count=1, flags=re.S)
 body = body.replace('El código y los datos están publicados junto a esta página (los <code>.py</code> van como <code>.py.txt</code>).',
                     'El código y los datos van incrustados abajo: despliega cada fichero para verlo.')

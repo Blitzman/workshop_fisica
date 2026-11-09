@@ -1,0 +1,59 @@
+{
+ "M": 1.4001597295165404,
+ "R": 14.15479812381404,
+ "modes": {
+  "F": 1.442490557866566,
+  "H1": 3.9539947583225303,
+  "H2": 5.9148514974708615,
+  "H3": 7.773742686387281
+ },
+ "font": {
+  "F": 1.442,
+  "H1": 3.955,
+  "H2": 5.916,
+  "H3": 7.776
+ },
+ "garching": {
+  "F": 1.458,
+  "H1": 3.971
+ },
+ "dev_font_pct": {
+  "F": 0.03401926952608658,
+  "H1": -0.02541698299544093,
+  "H2": -0.01941349778801227,
+  "H3": -0.02902923884670061
+ },
+ "dev_garching_pct": {
+  "F": -1.0637477457773548,
+  "H1": -0.42823575113245527
+ },
+ "neg_gamma1": 12.248031404338565,
+ "neg_no_internal": -8.634086883104564,
+ "checks": [
+  {
+   "name": "Fondo: M = 1.4002 M_sun, R = 14.155 km (Font et al.: 1.4, 14.15)",
+   "ok": true,
+   "note": "H19(a)"
+  },
+  {
+   "name": "Modos radiales sin axi\u00f3n frente a Font et al. 2002, Tabla 2: F = 1.4425 kHz (ref. 1.442, +0.034 %), H1 = 3.9540 kHz (ref. 3.955, -0.025 %), H2 = 5.9149 kHz (ref. 5.916, -0.019 %), H3 = 7.7737 kHz (ref. 7.776, -0.029 %)",
+   "ok": true,
+   "note": "H19(b)"
+  },
+  {
+   "name": "Frente a la tabla de Garching (modelo B0): F -1.06 %, H1 -0.43 % (m\u00e9todo no indicado en la tabla)",
+   "ok": true,
+   "note": "H19(c)"
+  },
+  {
+   "name": "Control negativo 1: Gamma_1 = 2.1 en las perturbaciones mueve F un +12.25 %",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2: eps = rho (sin energ\u00eda interna) mueve F un -8.63 %",
+   "ok": true,
+   "note": ""
+  }
+ ]
+}

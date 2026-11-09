@@ -73,7 +73,8 @@ def run():
         f"(Re {f['nu'][0]:.4f} kHz, Im {f['nu'][1] * 1e3:.2f} Hz): {f['shift_pct']['theta_1e-5']:.2g} % y {f['shift_pct']['theta_1e-6']:.2g} % "
         f"(Im: {f['dIm_Hz']['theta_1e-5']:+.2g} y {f['dIm_Hz']['theta_1e-6']:+.2g} Hz)" for f in fl), ok_i, ''))
     ok_ii = bool(deep) and all(min(d['shift_pct'].values()) > 5 for d in deep)
-    res.append(('H23b(ii): los ceros profundos se mueven con los dos radios alternativos: ' + '; '.join(
+    res.append(('H23b(ii): ' + ('ningún cero profundo que mover: Muller no converge en la región (paso 20); la prueba no '
+                                'decide' if not deep else 'los ceros profundos se mueven con los dos radios alternativos: ') + '; '.join(
         f"{d['nu'][0]:.3f}{d['nu'][1]:+.3f}i kHz -> {d['nu_1e-5'][0]:.3f}{d['nu_1e-5'][1]:+.3f}i ({d['shift_pct']['theta_1e-5']:.2g} %) "
         f"y {d['nu_1e-6'][0]:.3f}{d['nu_1e-6'][1]:+.3f}i ({d['shift_pct']['theta_1e-6']:.2g} %)" for d in deep),
         ok_ii, 'si (i) y (ii) pasan: artefactos del empalme, no modos'))

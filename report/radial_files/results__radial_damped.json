@@ -24,22 +24,42 @@
     0
    ]
   ],
-  "points": 1542,
+  "points": 1541,
+  "max_dphase": 0.9391577709241623,
   "total": 2,
   "fluid_modes": [
    [
-    8.119208560535224,
-    -0.0036022951762564844
+    8.11483203521561,
+    -0.003649496323781037
    ],
    [
-    11.678582442957348,
-    -0.021698874475199526
+    11.669744769057548,
+    -0.02168853614259636
    ]
   ],
   "fluid_fraction": [
-   0.9729218057823246,
-   0.879037707074947
+   0.9725931326995858,
+   0.8790542026970424
   ]
+ },
+ "thin": {
+  "per_tile": [
+   0,
+   0
+  ],
+  "tried": [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "points": 777,
+  "max_dphase": 0.9830416587989095,
+  "total": 0
  },
  "deep": {
   "per_tile": [
@@ -57,61 +77,9 @@
    ]
   ],
   "points": 770,
+  "max_dphase": 0.9354251201815561,
   "total": 2,
-  "roots": [
-   {
-    "nu": [
-     6.293147634689533,
-     -4.479490014398668
-    ],
-    "nu_alt_rm": [
-     8.275164123614656,
-     -6.098056828893872
-    ],
-    "r_alt": 84.05755953751199,
-    "shift_pct": 33.12706062169011,
-    "fluid": 9.439414066731003e-15
-   },
-   {
-    "nu": [
-     6.291170930046479,
-     -4.480824539247215
-    ],
-    "nu_alt_rm": [
-     8.27517571547283,
-     -6.09805311404386
-    ],
-    "r_alt": 84.05755953751199,
-    "shift_pct": 33.13964002561512,
-    "fluid": 9.355420171930117e-15
-   },
-   {
-    "nu": [
-     7.318753144353753,
-     -4.784747685776995
-    ],
-    "nu_alt_rm": [
-     6.61528467161773,
-     -5.689317180639477
-    ],
-    "r_alt": 84.05755953751199,
-    "shift_pct": 13.105085108371068,
-    "fluid": 5.340192337932384e-15
-   },
-   {
-    "nu": [
-     7.322059937923942,
-     -4.781287331488159
-    ],
-    "nu_alt_rm": [
-     6.615274422761622,
-     -5.689305811939148
-    ],
-    "r_alt": 84.05755953751199,
-    "shift_pct": 13.158193443567304,
-    "fluid": 5.4535555909148036e-15
-   }
-  ]
+  "roots": []
  },
  "lapse": {
   "phi_inf_old": 0.0016128417713554555,
@@ -142,7 +110,8 @@
     3
    ]
   ],
-  "points": 1542,
+  "points": 1543,
+  "max_dphase": 0.908837256792875,
   "total": 8
  },
  "old_lapse_deep": {
@@ -161,16 +130,22 @@
    ]
   ],
   "points": 768,
+  "max_dphase": 0.14967862896869089,
   "total": 0
  },
  "checks": [
   {
-   "name": "H22(a): nu_a = 6 kHz, \u00edndice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ah\u00ed: 8.1192-3.60i (fluido 0.97), 11.6786-21.70i (fluido 0.88)",
+   "name": "H22(a): nu_a = 6 kHz, \u00edndice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ah\u00ed: 8.1148-3.65i (fluido 0.97), 11.6697-21.69i (fluido 0.88)",
    "ok": true,
    "note": "sin ceros adicionales: ninguna familia axi\u00f3nica en esa regi\u00f3n"
   },
   {
-   "name": "H23: regi\u00f3n profunda Re nu in [6.05, 12], Im nu in [-5, -1.5] kHz: \u00edndice 2 (piezas [2, 0], convergidas [[2, 2], [0, 0]]); ceros: 6.293-4.479i kHz (fluido 0.00; al cambiar el empalme se mueve un 33 %); 6.291-4.481i kHz (fluido 0.00; al cambiar el empalme se mueve un 33 %); 7.319-4.785i kHz (fluido 0.00; al cambiar el empalme se mueve un 13 %); 7.322-4.781i kHz (fluido 0.00; al cambiar el empalme se mueve un 13 %). Secuela, Tabla III (l = 2, Cowling): a0 = 9.0 -3.8i kHz",
+   "name": "H26: franja casi real Re nu in [6.05, 12], Im nu in [-0.002, -1e-5] kHz: \u00edndice 0 (piezas [0, 0], convergidas [[0, 0], [0, 0]]; salto de fase m\u00e1ximo 0.98 rad)",
+   "ok": true,
+   "note": "fuera quedan |Im nu| < 0.01 Hz, Re nu < 6.05 kHz y Re nu > 12 kHz"
+  },
+  {
+   "name": "H23: regi\u00f3n profunda Re nu in [6.05, 12], Im nu in [-5, -1.5] kHz: \u00edndice 2 (piezas [2, 0], convergidas [[2, 2], [0, 0]]); ning\u00fan cero localizado: Muller no converge desde ninguna de las 13 semillas. Secuela, Tabla III (l = 2, Cowling): a0 = 9.0 -3.8i kHz",
    "ok": false,
    "note": "el resultado decide; no hab\u00eda predicci\u00f3n fuerte"
   },

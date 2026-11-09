@@ -231,6 +231,80 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
   - *De paso,* el paso 20 guarda Φ(∞) = 1,61·10⁻³ con la normalización antigua y la fracción de masa de la cola, 0,485 %. Ya no hay cifras tecleadas en el recuadro de la corrección.
   - *El «~0,16 %» de desplazamiento por la corrección* salía de un solo modo. Con los datos va del 0,03 % al 0,19 % (mediana ~0,1 %) en las 36 frecuencias del paso 10, y así lo dice ahora el informe.
 
+- **[H29 · CONFIRMADA] Fallo real destapado por H25: el arranque del interior nunca integraba (2026-11-08).**
+  - *Observación:* con `_ok`, `radial.interior` lanza en el primer tramo (BDF, r = 10⁻³ → 0,5 km) con «Required step size is less than spacing between numbers», a cualquier frecuencia: real, compleja, por encima o por debajo del umbral, con las dos semillas.
+  - El código antiguo no miraba `status`: tomaba `s.y[:, -1]`, que es el valor inicial en r = 10⁻³, y lo usaba como valor inicial en r = 0,5 km. Así, todos los resultados radiales (pasos 15–22) arrancaban en r = 0,5 km con la semilla pensada para r = 10⁻³.
+  - *Por qué los resultados parecían buenos:* la parte irregular que mete ese arranque decae hacia fuera (~1/r²) frente a la regular (~r), y queda suprimida en ~(0,5/R)³ ~ 10⁻⁴. Eso es compatible con el 0,03 % de acuerdo con Font et al. y con el 0,01 % del punto de retorno.
+  - *Hipótesis:* el fallo es del paso inicial de BDF con `atol = 1e-40` y componentes nulas en la semilla, no de las ecuaciones.
+  - *Predicciones:*
+    - (i) Con otro integrador o tolerancia en el primer tramo, la integración llega a r = 0,5 km.
+    - (ii) Con el arranque corregido, las frecuencias cambian ~10⁻⁴ relativo o menos, y el acuerdo con Font et al. no empeora.
+    - (iii) Hay que comprobar si `axgr` (pasos 9–10, no radiales) tiene el mismo patrón.
+  - *Resultados parciales:*
+    - (i) Confirmada. BDF falla en el primer paso con atol 1e-40 y 1e-30; llega con atol 1e-20. DOP853 llega en 61 pasos (semilla fluida) y 118 (axiónica), con el mismo resultado que BDF con 1e-20. El comentario de que el centro era «rígido» era falso.
+    - (iii) Confirmada: el mismo fallo silencioso estaba en `axstar.interior` (paso 9, Cowling) y en `axgr` (paso 10, métrica dinámica). Corregidos con DOP853 y `_ok`.
+    - (ii), punto testigo a ν_a = 6 kHz: F pasa de 3,450531 a 3,449212 kHz (−1,32 Hz, −3,8e-4) y H1 de 8,119209 − 3,6023i Hz a 8,114832 − 3,6495i Hz (−4,38 Hz; Im +1,3 %). El orden de magnitud es el previsto, y es mucho mayor que el «0,004 %» de los controles del integrador. Esos controles no lo podían ver: la variante «r0 = 1e-4 km» no cambiaba nada porque el arranque siempre era en 0,5 km.
+  - *Cierre (2026-11-09): pasos 9, 10 y 15–24 recalculados con el arranque corregido.* (ii) confirmada:
+    - Radiales (pasos 15–24): F a 6 kHz 3,450531 → 3,449212 kHz; H1 8,119209 − 3,6023i → 8,114832 − 3,6495i (Re en kHz, Im en Hz); F a 3,4 kHz 3,410292 − 0,5755 → 3,409091 − 0,5591. Desviación frente a Font et al. igual a 10⁻⁸. Los controles del integrador mueven ahora ≤ 10⁻⁶ relativo (antes «0,004 %», que era el propio defecto).
+    - Paso 9 (Cowling): Re de las 36 notas idéntico a la precisión guardada; Im cambia ≤ 10⁻³ Hz.
+    - Paso 10 (métrica dinámica): Re idéntico a la precisión guardada; Im cambia ≤ 1,3·10⁻³ relativo (< 10⁻³ Hz). Las 9 comprobaciones pasan con los mismos textos salvo la convergencia (4·10⁻⁹ frente a 6·10⁻⁹).
+    - Comprobaciones: 190/195 (fallan las 3 discrepancias con el paper ya conocidas del paso 4, H23 del paso 20 y H23b(ii) del paso 21, ambas por la retirada de H23b).
+  - *Efecto secundario de la corrección (2026-11-08):* con el primer tramo integrado de verdad, el determinante de los pasos 9–10 tiene un suelo de ruido de ~10⁻⁹|z| (traza de Muller en p1, ν_a = 6 kHz: z oscila en el noveno decimal con |det| ≈ 5·10⁻¹¹). Con `tol = 1e-11` Muller agotaba sus 40 pasos: en el paso 9 la fila quedaba en nan (el `except` lo tragaba) tras ~12 min por modo, y en el paso 10 se perdían 40 evaluaciones antes de caer a `tol = 1e-9`. Ambos usan ahora `tol = 1e-9` (< 10⁻⁵ Hz).
+  - *Causa de la lentitud (2026-11-08):* no era rigidez. Con `atol = 1e-40` y componentes que arrancan en 0 (la U de la semilla axiónica), DOP853 necesitaba ~9·10⁴ evaluaciones en 10⁻³ → 0,5 km (16 s por determinante). En `axgr` (paso 10) ni siquiera terminaba: «Required step size is less than spacing between numbers», que `_ok` detectó. Medido el estado en r = 0,5 km frente a `atol = 1e-40`:
+    - `axstar` (3 frecuencias, 2 semillas): `atol = 1e-18` coincide a ≤ 3·10⁻¹⁰ relativo con 600–1800 evaluaciones; `1e-22` ya cuesta 10⁴–10⁵.
+    - `axgr` (det completo a 7,95 y 2,55 kHz): `atol` de 10⁻¹² a 10⁻²¹ dan el mismo det a 4·10⁻⁸ relativo (el ruido de rtol = 1e-10, en un det que cancela cerca del cero); `1e-18` tarda 98 s a 2,55 kHz y `1e-15` 9 s. Se usa `ATOL0 = 1e-15`.
+    - Con el tramo rápido, Muller del paso 9 (p1, 6 kHz) converge en 11 evaluaciones; con rtol 1e-11 en el interior la raíz cambia 7·10⁻⁹ relativo en Re y 1,4·10⁻⁷ en Im.
+  - *Segundo atasco, en el tramo 0,5 km → R de `axgr` (2026-11-09):* el recálculo del paso 10 llevaba 7,5 h con un solo proceso vivo. Trazando las filas por separado: con `atol = 1e-40` en ese tramo, una evaluación del modo f acoplado tarda ~20 s a ν_a = 11 kHz, ~45 s a 12, ~125–200 s a 13 y más de 20 min a 15 (la semilla axiónica; las fluidas tardan 2 s). Las filas de 6–10 kHz terminan en 8–15 min. Antes de H29 no se veía porque el tramo arrancaba con el valor inicial sin integrar.
+    - *Hipótesis:* es el mismo mecanismo que en el primer tramo: con un atol absoluto ínfimo, componentes pequeñas frente a las demás obligan a pasos diminutos. Un atol relativo a la escala de la solución, `ATOL0·max|y(0,5 km)|`, da las mismas raíces.
+    - *Predicciones:* (a) |F| cambia por debajo de su ruido de rtol (~10⁻⁷ relativo) entre los dos atol; (b) las raíces del paso 10 a ν_a = 6, 10 y 12 kHz, comparadas con las obtenidas con 1e-40, cambian < 10⁻⁷ relativo; (c) la fila de 15 kHz baja a minutos.
+    - *Resultado de (a):* a ν_a = 13 kHz (z = 2 kHz, acoplado) F con 1e-40 frente a ATOL0 = 1e-15 relativo: 6·10⁻⁷; entre 1e-13 y 1e-15: 1,7·10⁻⁷. A 15 kHz, 1e-13 y 1e-17 frente a 1e-15: 1,6·10⁻⁷ y 1,5·10⁻⁷, sin tendencia con atol: es el ruido de rtol = 1e-10 en un F que cancela. Tiempos: 1e-40 201 s, 1e-15 40 s, 1e-13 18 s (13 kHz); 15 kHz con 1e-15 39 s.
+    - *Resultado de (b), CONFIRMADA:* raíz con `ATOL0·max|y|` frente a la raíz con 1e-40 (Muller completo, mismas semillas): f acoplado a 10 kHz 6,8·10⁻⁹ relativo; f acoplado a 12 kHz 1,3·10⁻⁹; p1 acoplado a 6 kHz 3,3·10⁻¹⁰; p2 acoplado a 10 kHz 2,4·10⁻⁹ (con 1e-13: 4,3·10⁻⁹). Todo por debajo de la tolerancia de Muller (10⁻⁹|z| salvo ruido). Se usa `ATOL0·max|y(0,5 km)|` en `axgr.basis`; solo lo usa el paso 10.
+    - *Resultado de (c):* el paso 10 completo baja de > 8,5 h (abortado con la fila de 15 kHz sin terminar) a 29 min.
+
+- **[H25 · CONFIRMADA en lo que importa; su predicción (i) refutada] Raíces y contornos con garantías explícitas (sexta revisión, punto 4).**
+  - *Hallazgo de la revisión, comprobado:*
+    - `radial.muller` devuelve su última aproximación sin comprobar nada: no lanza `RuntimeError`, así que los `except RuntimeError` de los pasos 20–21 eran código muerto.
+    - Ningún `solve_ivp` de `radial.py` mira `.success`.
+  - *Cambio:*
+    - Muller lanza `RuntimeError` si no converge en `maxit` o si el residuo normalizado `|F(z)|/|F(z(1+10⁻⁶))|` supera 0,1: con un cero simple el cociente es el paso de Newton pendiente en unidades de 10⁻⁶|z|, así que 0,1 exige un error < 10⁻⁷|z| (< 1 mHz a 8 kHz).
+    - *Ajuste tras el primer recálculo:* con el umbral inicial 10⁻² el paso 15 se detuvo en el empalme lejano de H1 (|θ0| < 10⁻⁶): Muller había convergido (|dz| < 10⁻⁹|z|) pero el ruido de det fija el cociente en 1,3·10⁻², es decir un error ~10⁻⁸|z| ≈ 0,1 mHz. Era el umbral el que estaba mal, no la raíz: 0,1 sigue separando una raíz (cociente ≪ 1) de un punto que no lo es (~1).
+    - Todo `solve_ivp` de `radial.py` lanza si `status < 0`.
+    - Cada recuento publica su salto de fase máximo entre muestras.
+  - *Predicción:* se repiten los pasos 15–22 y todas las raíces publicadas siguen ahí (mismos dígitos), ninguna integración falla y los saltos de fase máximos son < π/3 (lo que pide `winding`).
+  - *Lo que no cambia:* doblar el muestreo hasta que el índice no cambie sigue siendo una heurística, no una cota rigurosa. Lo decimos así.
+  - *Resultado (2026-11-09):*
+    - La predicción «mismos dígitos, ninguna integración falla» se refutó de la mejor forma: las guardas destaparon H29 (el primer tramo del interior nunca integraba) en `radial`, `axstar` y `axgr`, y además que `atol = 1e-40` ahogaba al integrador en componentes que arrancan en 0 (en `axgr` ni terminaba). También el control de onda entrante del paso 22 en el nivel ligado, que antes usaba un resultado a medias (1,5·10⁹), y el Muller de los pasos 9–10 con `tol = 1e-11`, inalcanzable con el ruido corregido.
+    - Muller con residuo destapó que los «ceros profundos» de H23b nunca habían convergido: H23b retirada.
+    - Con todo corregido, las raíces publicadas siguen ahí con desplazamientos de Hz (H29) y todas las integraciones terminan. Saltos de fase máximos entre muestras: 1,04 y 0,94 rad en el paso 16 (6 y 3,4 kHz); 0,94, 0,98 y 0,94 rad en las regiones principal, franja y profunda del paso 20. Todos por debajo de π/3 ≈ 1,047, aunque el de 6 kHz por poco.
+    - Sigue siendo heurística la convergencia del recuento al doblar el muestreo.
+
+- **[H26 · CONFIRMADA] Recuento de la franja casi real −2 Hz < Im ν < 0 (sexta revisión, punto 1).**
+  - El paso 20 contaba en `Im ν ≤ −0,002` kHz y el texto decía `< 0`. Se añaden dos piezas: `6,05 ≤ Re ν ≤ 12`, `−0,002 ≤ Im ν ≤ −10⁻⁵` kHz.
+  - *Predicción:* índice 0. Los modos fluidos conocidos están en −3,6 y −21,7 Hz, y un modo con |Im ν| < 2 Hz a ν_a = 6 kHz no tiene motivo.
+  - Lo que queda fuera se dice: |Im ν| < 0,01 Hz, Re ν < 6,05 kHz y Re ν > 12 kHz.
+  - *Resultado (paso 20, 2026-11-09):* índice 0 en las dos piezas, estable al doblar el muestreo; salto de fase máximo 0,98 rad.
+
+- **[H27 · CONFIRMADA] Sensibilidad a la inconsistencia termodinámica de los ajustes BSk26 (sexta revisión, punto 2).**
+  - *Medido:* con los ajustes ε(n) y P(ρ), `n dε/dn /(ε + p) − 1` vale 1,3e-4 (p = 1), −7,5e-5 (10), −2,1e-4 (100) y 1,4e-3 (500 MeV/fm³).
+  - El código usa `c_s² = dp/dε` sobre el ajuste y de ahí `δn/n = δp/(c_s²(ε + p))`, que supone la identidad.
+  - *Prueba:* repetir F y H1 (ν_a = 6 kHz) y F (3,4 kHz) con la otra definición, `c_s² = n (dp/dn)/(ε + p)`.
+  - *Predicción:* las frecuencias se mueven ~10⁻⁴–10⁻³ relativo (del orden del desajuste en el centro), mucho más que el 10⁻⁶ de los controles del integrador. Si es así, esa es la incertidumbre dominante del sector fluido y se dice.
+  - *Resultado (paso 23, 2026-11-09, con el arranque H29 corregido):* con `c_s² = n dp/dn/(ε + p)`, Re ν se mueve 5,8·10⁻⁴ en F (−2,01 Hz), 1,7·10⁻⁴ en H1 (−1,36 Hz) y 5,9·10⁻⁴ en F a 3,4 kHz (−2,00 Hz). Im ν cambia 2,6·10⁻³ relativo en H1 y 1,4·10⁻² en F (3,4 kHz). Desajuste en el centro (p_c = 100 MeV/fm³): −2,1·10⁻⁴. Es ~10³ veces lo que mueven los controles del integrador (≤ 10⁻⁶ tras H29), así que es la incertidumbre dominante del sector fluido medida. Controles: con P(ρ) desplazado un 1 % en lg ρ el desajuste sube a 0,12; con la media geométrica de las dos definiciones el desplazamiento es la mitad, así que viene de c_s².
+    - El Im ν de F a 3,4 kHz es el más sensible (1,4 %): el modo está a 9 Hz del umbral, lo que sugiere que su anchura es muy sensible a la distancia al umbral (no comprobado).
+
+- **[H28 · CONFIRMADA, con un primer ajuste fallido] Amortiguamiento desde la dispersión a frecuencia real (sexta revisión, punto 3; paso 24).**
+  - *Método independiente del plano complejo:* a ν real se lanza una onda de axión entrante y se mide `S(ν) = −W[u, ψ_in]/W[u, ψ_out]`, con ψ normalizadas a `e^{±i(kr + η ln r)}/r`. Cerca de un modo, arg S gira 2π con forma de Breit–Wigner, `arg S = c₀ + c₁(ν − ν_r) + 2 arctan((ν − ν_r)/(Γ/2))`, y el ajuste da ν_r y Γ/2 sin buscar raíces complejas.
+  - *Predicción:*
+    - (a) Γ/2 coincide con −Im ν de Muller dentro del 1 % para H1 (6 kHz, 3,6 Hz) y F (3,4 kHz, 0,58 Hz), y ν_r con Re ν dentro de Γ/10.
+    - (b) |S| = 1 a 10⁻⁸. Las ecuaciones son reales, así que esto comprueba la numérica del exterior, no la física.
+  - *Controles negativos:* (1) fuera de resonancia (desplazado 20Γ), arg S gira < 0,5 rad; (2) con la normalización antigua del lapso, la resonancia de dispersión ya no coincide con el modo de la normalización corregida.
+  - *Límite:* usa las mismas ecuaciones de perturbación; no es una validación de ellas, sino de la continuación compleja y de la búsqueda de raíces.
+  - *Resultado (2026-11-09, con el arranque H29 corregido):*
+    - Primer intento (41 puntos, fondo lineal en ±10 anchuras): H1 coincide a 2,5·10⁻⁶, pero F (3,4 kHz) sale un 26 % fuera, con residuo de 3 rad: el ajuste no cerraba. F está a 9 Hz del umbral, 16 anchuras, y ahí la fase de fondo (∝ √(ν − ν_a)) se curva. No es un fallo del cálculo de S sino del modelo de ajuste.
+    - Cambio: fondo polinómico de grado 1–4 en semiventanas de 10, 3, 2 y 1,5 anchuras, con 61 puntos; el resultado es grado 4 en ±1,5 y su error la diferencia con grado 3. Para F la escalera converge de forma monótona: lineal ±10 → 0,16 % pero con residuo 2 rad (acierto casual); grado 2 ±1,5 → 0,43 %; grado 3–4 ±1,5 → −0,0026 %, residuo 2·10⁻⁶ rad, y grado 3 frente a 4 cambia la anchura 2·10⁻⁷. H1 (umbral a 579 anchuras) da lo mismo con cualquier fondo (≤ 2·10⁻⁵).
+    - (a) Confirmada: Γ/2 = −Im ν de Muller a 0,002 % (H1) y 0,0026 % (F); ν_r a ≤ 5·10⁻⁵ anchuras de Re ν. (b) |S| = 1 a 3·10⁻¹⁶. Controles: fuera de resonancia arg S se aparta de una recta 0,14 rad; con la normalización antigua del lapso, la resonancia de H1 cae a 3,6 anchuras del modo corregido.
+    - *Lección:* cerca de un umbral, un Breit–Wigner con fondo lineal no basta; hay que mostrar la convergencia en el modelo de fondo, no elegir un ajuste.
+
 - **[H24 · CONFIRMADA] La condición exterior no depende del rayo complejo ni del punto de partida (segunda crítica, punto C; paso 22).**
   - *Premisa:* `radial.exterior_psi` impone la onda saliente con la forma asintótica `e^{i(kr + η ln r)}/r`, que ya lleva la fase coulombiana η, en `r_m + S e^{iφ}`, con `|k|S = n_decay = 40`, y la integra hacia dentro por el rayo φ = π/2 − arg k. En ese rayo la onda saliente crece hacia dentro y la entrante se atenúa. Así, el error del desarrollo asintótico truncado (O(1/(kr)²)) y el de la fase se suprimen por ~e^{−2·n_decay}. Si es así, el cociente L = ψ'/ψ en r_m no debe depender ni del ángulo ni del punto de partida.
   - *Predicción:*
@@ -244,7 +318,7 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
     - Controles negativos: con la onda entrante, L cambia al menos un 200 %; con n_decay = 1, al menos 2,3e-4.
     - El punto profundo pasa igual que los demás. Por tanto, el exterior queda descartado como causa de que los ceros del paso 21 dependan del empalme, y lo que queda es la cola de θ₀ despreciada entre el empalme y el infinito (sin probar aún).
 
-- **[H23 · NO DECIDIDA (H23b confirmada)] ¿Análogo radial de los modos axiónicos muy amortiguados de la Tabla III de la secuela? (quinta revisión)**
+- **[H23 · NO DECIDIDA (H23b retirada el 2026-11-09: no concluyente)] ¿Análogo radial de los modos axiónicos muy amortiguados de la Tabla III de la secuela? (quinta revisión)**
   - *Dato:* la Tabla III del Paper II (l = 2, Cowling) da, a ν_a = 6 kHz, a0 = 9,0 − 3,8 i kHz y a1 = 27,95 − 3,61 i kHz. El recuento del paso 20 llegaba solo a Im ν = −1,5 kHz, así que a0 queda fuera: «no hay familia axiónica» solo valía en esa franja.
   - *Método:* el mismo recuento (convergido al doblar el muestreo) en Re ν ∈ [6,05; 12], Im ν ∈ [−5; −1,5] kHz. Si el índice es > 0, se localiza cada cero con Muller, y solo cuenta como modo si (i) |F| → 0 y (ii) se mueve menos de un 0,1 % al cambiar el radio de empalme (la prueba que retiró los artefactos de H17).
   - *Predicción:* no tengo una razón fuerte para ninguno de los dos resultados. Para l = 0 no hay barrera centrífuga, y en el interior (θ = π) m_eff² > m_a², que hace de barrera; los modos de la Tabla III podrían ser propios de l ≥ 1 o de Cowling. Lo dejo como pregunta abierta y lo decide el recuento:
@@ -257,7 +331,9 @@ Hipótesis anotadas **antes** de calcular. Marco común: para `l = 0` no hay rad
     - Si (i) falla, el cambio de radio estropea todo y la prueba no discrimina.
     - Si (ii) falla, el cero es estable entre 117 y el tercer radio y hay que tomarlo en serio.
     - No hay un radio mayor que 117 sin extender el fondo, y eso queda pendiente.
-  - *Resultado (paso 21, 4/4; `results/radial_deep.json`):* H23b confirmada.
+  - *Revisión (2026-11-09, tras H25/H29): H23b RETIRADA, queda no concluyente.* Con Muller obligado a converger, ninguna semilla de la región profunda converge (pasos 20 y 21: lista de ceros vacía; la comprobación (ii) del paso 21 falla porque no queda nada que mover). Traza desde los antiguos ceros 6,29 − 4,48i y 7,32 − 4,78i (ν_a = 6 kHz, empalme por defecto): |F| oscila entre 3·10⁻¹³ y 6·10⁻¹² en toda la vecindad, sin bajar al acercarse; Muller se queda vagando en un entorno de ~10⁻⁶ kHz sin cumplir el criterio en 30 pasos. Es decir: F está en su suelo de ruido en esa región y los «ceros» del paso 20 anterior (y sus desplazamientos del 13–33 % con el empalme) eran salidas de un Muller que no había convergido, porque entonces no se comprobaba. Ese desplazamiento no prueba nada. El índice 2 del recuento sigue ahí, pero no sabemos si cuenta ceros reales de F o estructura del ruido. **No decidimos nada en esa región.**
+    - Para decidir haría falta más precisión en Im ν ≈ −4,5 kHz: integrar hacia dentro desde el exterior (`det_entire(inward=True)`), o aritmética de más dígitos, y un fondo extendido hasta θ₀ < 10⁻⁹.
+  - *Resultado original (paso 21, 4/4; `results/radial_deep.json`, ya sustituido):* H23b confirmada.
     - (i) Control: H1 y H2 se mueven ~1e-7 % al empalmar en r = 84 o r = 101 en vez de 117.
     - (ii) Los dos ceros profundos se mueven un 17–20 % con cada radio. Además, Muller desde el mismo punto de partida no repite el destino del paso 20 (6,29 − 4,48i iba a 8,28 − 6,10i allí y a 4,87 − 5,11i aquí): F está mal condicionada en esa región.
     - Controles negativos: con onda entrante, H1 deja de ser cero (cociente 0,15 frente a 3e-7). Empalmando en la superficie, H1 se mueve un 0,003 %: la prueba sí ve quitar la cola del campo.

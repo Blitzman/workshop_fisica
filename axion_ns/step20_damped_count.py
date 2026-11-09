@@ -22,6 +22,8 @@ from .pipeline import report
 OUT = Path(__file__).resolve().parent.parent / 'results'
 TILES = [(6.05, 9.0, -0.3, -0.002), (9.0, 12.0, -0.3, -0.002), (6.05, 9.0, -1.5, -0.3), (9.0, 12.0, -1.5, -0.3)]
 # región profunda (H23): ahí está a0 = 9.0 - 3.8i kHz de la Tabla III de la secuela (l = 2, Cowling, nu_a = 6 kHz)
+# franja casi real (H26): el texto decía Im nu < 0 y las piezas de arriba paraban en -0.002 kHz
+TILES_THIN = [(6.05, 9.0, -0.002, -1e-5), (9.0, 12.0, -0.002, -1e-5)]
 TILES_DEEP = [(6.05, 9.0, -5.0, -1.5), (9.0, 12.0, -5.0, -1.5)]
 PAPER2_A0 = 9.0 - 3.8j
 _S = {}
@@ -41,6 +43,7 @@ def count(st, tiles=TILES):
     with mp.get_context('fork').Pool(6) as pool:
         w = [RD.winding_converged(_F, _corners(b), pool=pool) for b in tiles]
     return {'per_tile': [x[0] for x in w], 'tried': [x[4] for x in w], 'points': sum(x[2] for x in w),
+            'max_dphase': float(max(x[3] for x in w)),
             'total': sum(x[0] for x in w) if all(x[0] is not None for x in w) else None}
 
 
@@ -63,6 +66,12 @@ def run():
                 f'(piezas {c["per_tile"]}, convergidas {c["tried"]}); Muller encuentra {len(found)} modos fluidos ahí: '
                 + ', '.join(f'{z.real:.4f}{z.imag * 1e3:+.2f}i (fluido {f:.2f})' for z, f in zip(found, fr)),
                 c['total'] == len(found), 'sin ceros adicionales: ninguna familia axiónica en esa región'))
+    # H26: franja casi real
+    ct = count(st, TILES_THIN)
+    out['thin'] = ct
+    res.append((f'H26: franja casi real Re nu in [6.05, 12], Im nu in [-0.002, -1e-5] kHz: índice {ct["total"]} (piezas '
+                f'{ct["per_tile"]}, convergidas {ct["tried"]}; salto de fase máximo {ct["max_dphase"]:.2f} rad)',
+                ct['total'] == 0, 'fuera quedan |Im nu| < 0.01 Hz, Re nu < 6.05 kHz y Re nu > 12 kHz'))
     # H23: región profunda, donde la secuela tiene su modo axiónico a0 (l = 2, Cowling)
     cd = count(st, TILES_DEEP)
     deep = {**cd, 'roots': []}
@@ -90,6 +99,8 @@ def run():
     robust = [r_ for r_ in deep['roots'] if r_['shift_pct'] < 0.1]
     if not cd['total']:
         txt = 'ningún cero: no hay análogo radial de a0 en esa región'
+    elif not deep['roots']:
+        txt = f'ningún cero localizado: Muller no converge desde ninguna de las {len(seeds)} semillas'
     else:
         txt = ('ceros: ' + '; '.join(f"{r_['nu'][0]:.3f}{r_['nu'][1]:+.3f}i kHz (fluido {r_['fluid']:.2f}; al cambiar el "
                                      f"empalme se mueve un {r_['shift_pct']:.2g} %)" for r_ in deep['roots']))

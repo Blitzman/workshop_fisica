@@ -129,7 +129,10 @@ def run():
     old_a, _ = complex_root(st6, 6.585 - 0.563j, rm6)
     old_b, _ = complex_root(st6, 6.585 - 0.563j, r84)
     st6._Ps = Ps_new
-    new_z, _ = complex_root(st6, 6.585 - 0.563j, rm6)
+    try:                                    # H25: Muller ya no devuelve una aproximación sin converger
+        new_z, _ = complex_root(st6, 6.585 - 0.563j, rm6)
+    except RuntimeError:
+        new_z = complex(np.nan, np.nan)
     moved = abs(old_a - old_b)
     res.append((f'Artefacto retirado: con la normalización antigua del lapso, la «resonancia axiónica» se mueve de '
                 f'{old_a.real:.3f} {old_a.imag:+.3f}i a {old_b.real:.3f} {old_b.imag:+.3f}i al cambiar el empalme '
@@ -179,8 +182,8 @@ def run():
     num = max(abs(v_[1] - r_['base'][1]) / abs(r_['base'][1]) for r_ in robust.values()
               for k, v_ in r_.items() if k in ('rtol 1e-12', 'r0 1e-4 km', 'exterior ×1,5'))
     emp = {lab: abs(list(r_.values())[-1][1] - r_['base'][1]) / abs(r_['base'][1]) for lab, r_ in robust.items()}
-    res.append((f'Robustez de Im ν: rtol, r0 y longitud exterior cambian como mucho un {num * 100:.3f} %; el radio de empalme '
-                '(último paso hacia fuera) un ' + ', '.join(f'{v_ * 100:.2f} % en {k}' for k, v_ in emp.items()),
+    res.append((f'Robustez de Im ν: rtol, r0 y longitud exterior la cambian como mucho {num:.0e} relativo; el radio de empalme '
+                '(último paso hacia fuera) ' + ', '.join(f'{v_:.0e} en {k}' for k, v_ in emp.items()),
                 num < 5e-4 and all(v_ < 0.01 for v_ in emp.values()), 'H13; el radio de empalme es la incertidumbre dominante'))
 
     out.update({

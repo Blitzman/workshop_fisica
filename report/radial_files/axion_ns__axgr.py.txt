@@ -175,6 +175,9 @@ def _rhs(st, A, omega, ll, keep=None):
     return f
 
 
+ATOL0 = 1e-15
+
+
 def basis(st, omega, ll, dyn=True, r0=1e-3, r1=0.5, rtol=1e-10, rm=None):
     """Soluciones regulares desde el centro hasta R, y su continuación fuera hasta r_m.
     dyn=False: delta theta apagado (solo el fondo con axión, como la Tabla I del Paper II)."""
@@ -187,15 +190,28 @@ def basis(st, omega, ll, dyn=True, r0=1e-3, r1=0.5, rtol=1e-10, rm=None):
     out = []
     for K0, W0, T0 in seeds:
         f = _rhs(st, Ai, omega, ll, ki)
-        s = solve_ivp(f, (r0, r1), center(st, omega, ll, K0, W0, T0, r0), method='BDF', rtol=rtol, atol=1e-40)
-        s = solve_ivp(f, (r1, R), s.y[:, -1], method='DOP853', rtol=rtol, atol=1e-40)
+        # H29: BDF fallaba en su primer paso y su resultado se usaba sin mirarlo. Cerca del centro hay componentes
+        # que arrancan en 0: con atol = 1e-40 cualquier integrador se ahoga ahí; ATOL0 es absoluto sobre semillas O(1)
+        s = _ok(solve_ivp(f, (r0, r1), center(st, omega, ll, K0, W0, T0, r0), method='DOP853', rtol=rtol, atol=ATOL0))
+        # Mismo mecanismo en 0,5 km -> R: con atol = 1e-40 la semilla axiónica a nu_a >= 13 kHz tardaba de minutos a
+        # horas por evaluación. Con atol relativo a la escala de la solución las raíces del paso 10 a 6, 10 y 12 kHz
+        # cambian <= 7e-9 relativo (cuaderno, H29: segundo atasco)
+        y1 = s.y[:, -1]
+        s = _ok(solve_ivp(f, (r1, R), y1, method='DOP853', rtol=rtol, atol=ATOL0 * np.max(np.abs(y1))))
         yR = s.y[:, -1]
         ye = np.array([yR[0], yR[1], yR[4], yR[5]])
         if rm > R:
-            s = solve_ivp(_rhs(st, Ae, omega, ll, ke), (R, rm), ye, method='DOP853', rtol=rtol, atol=1e-40)
+            s = _ok(solve_ivp(_rhs(st, Ae, omega, ll, ke), (R, rm), ye, method='DOP853', rtol=rtol, atol=1e-40))
             ye = s.y[:, -1]
         out.append((yR[3], ye))
     return out
+
+
+def _ok(sol):
+    """H29: si solve_ivp no llega al final, se lanza (antes se tomaba s.y[:, -1] sin mirar status)."""
+    if sol.status < 0:
+        raise RuntimeError(f'solve_ivp: {sol.message}')
+    return sol
 
 
 def r_match(st):

@@ -1,0 +1,332 @@
+{
+ "H1 (6 kHz)": {
+  "muller": [
+   8.114832029538919,
+   -0.003649497278791442
+  ],
+  "nu_r": 8.114832211593455,
+  "half_width": 0.0036495696264120863,
+  "fit_resid_rad": 3.993312586736408e-05,
+  "ladder": [
+   {
+    "deg": 1,
+    "win": 10.0,
+    "n": 61,
+    "nu_r": 8.11483197733213,
+    "half_width": 0.003649502290219111,
+    "resid_rad": 8.616156037621892e-05
+   },
+   {
+    "deg": 1,
+    "win": 3.0,
+    "n": 51,
+    "nu_r": 8.11483202879707,
+    "half_width": 0.0036495050351472787,
+    "resid_rad": 4.47242285881444e-05
+   },
+   {
+    "deg": 1,
+    "win": 2.0,
+    "n": 45,
+    "nu_r": 8.114832036490874,
+    "half_width": 0.0036495089302191223,
+    "resid_rad": 4.3817671246060286e-05
+   },
+   {
+    "deg": 1,
+    "win": 1.5,
+    "n": 41,
+    "nu_r": 8.11483204182887,
+    "half_width": 0.00364951320466714,
+    "resid_rad": 4.324845915126829e-05
+   },
+   {
+    "deg": 2,
+    "win": 10.0,
+    "n": 61,
+    "nu_r": 8.114832039240467,
+    "half_width": 0.0036495022901567213,
+    "resid_rad": 4.4159773276764014e-05
+   },
+   {
+    "deg": 2,
+    "win": 3.0,
+    "n": 51,
+    "nu_r": 8.114832051782335,
+    "half_width": 0.0036495050239391097,
+    "resid_rad": 4.3148814695914695e-05
+   },
+   {
+    "deg": 2,
+    "win": 2.0,
+    "n": 45,
+    "nu_r": 8.114832071888175,
+    "half_width": 0.0036495089270073126,
+    "resid_rad": 4.222355755079121e-05
+   },
+   {
+    "deg": 2,
+    "win": 1.5,
+    "n": 41,
+    "nu_r": 8.114832095943227,
+    "half_width": 0.0036495132017718467,
+    "resid_rad": 4.1503102634177225e-05
+   },
+   {
+    "deg": 3,
+    "win": 10.0,
+    "n": 61,
+    "nu_r": 8.114832039282879,
+    "half_width": 0.00364950282740513,
+    "resid_rad": 4.4134157709319055e-05
+   },
+   {
+    "deg": 3,
+    "win": 3.0,
+    "n": 51,
+    "nu_r": 8.114832051700462,
+    "half_width": 0.0036495137120627985,
+    "resid_rad": 4.2980136050640994e-05
+   },
+   {
+    "deg": 3,
+    "win": 2.0,
+    "n": 45,
+    "nu_r": 8.114832071978348,
+    "half_width": 0.0036495327175867665,
+    "resid_rad": 4.190545991455963e-05
+   },
+   {
+    "deg": 3,
+    "win": 1.5,
+    "n": 41,
+    "nu_r": 8.114832095910016,
+    "half_width": 0.003649569881002167,
+    "resid_rad": 4.096211597515165e-05
+   },
+   {
+    "deg": 4,
+    "win": 10.0,
+    "n": 61,
+    "nu_r": 8.114832042048088,
+    "half_width": 0.003649502766167544,
+    "resid_rad": 4.38833796199134e-05
+   },
+   {
+    "deg": 4,
+    "win": 3.0,
+    "n": 51,
+    "nu_r": 8.114832077313487,
+    "half_width": 0.0036495136404499557,
+    "resid_rad": 4.211277321219953e-05
+   },
+   {
+    "deg": 4,
+    "win": 2.0,
+    "n": 45,
+    "nu_r": 8.114832141082754,
+    "half_width": 0.0036495329332002597,
+    "resid_rad": 4.081177592141216e-05
+   },
+   {
+    "deg": 4,
+    "win": 1.5,
+    "n": 41,
+    "nu_r": 8.114832211593455,
+    "half_width": 0.0036495696264120863,
+    "resid_rad": 3.993312586736408e-05
+   }
+  ],
+  "conv": 6.975892752336676e-08,
+  "lin_rel_width": 1.3731830130758738e-06,
+  "nu_a": 6.0,
+  "thr_widths": 579.4858491411894,
+  "unitarity": 3.3306690738754696e-16,
+  "rel_width": 1.982399632538545e-05,
+  "dnu_over_width": 4.98848260107507e-05,
+  "phase_turn": 5.848954530450325,
+  "off_turn": 0.0030926815136588237,
+  "lin_resid_rad": 8.616156037621892e-05
+ },
+ "F (3,4 kHz)": {
+  "muller": [
+   3.409090719369412,
+   -0.000559117570823534
+  ],
+  "nu_r": 3.409090718774875,
+  "half_width": 0.0005591030655909058,
+  "fit_resid_rad": 2.3313421309012483e-06,
+  "ladder": [
+   {
+    "deg": 1,
+    "win": 10.0,
+    "n": 61,
+    "nu_r": 3.4087842567125652,
+    "half_width": 0.000560006775283799,
+    "resid_rad": 2.1665918031182194
+   },
+   {
+    "deg": 1,
+    "win": 3.0,
+    "n": 51,
+    "nu_r": 3.409025119954662,
+    "half_width": 0.0005637781546815834,
+    "resid_rad": 0.15188191551311903
+   },
+   {
+    "deg": 1,
+    "win": 2.0,
+    "n": 45,
+    "nu_r": 3.409051121946539,
+    "half_width": 0.0005609059844478812,
+    "resid_rad": 0.046170670331475705
+   },
+   {
+    "deg": 1,
+    "win": 1.5,
+    "n": 41,
+    "nu_r": 3.4090600460473217,
+    "half_width": 0.0005602127436626699,
+    "resid_rad": 0.022614897057332328
+   },
+   {
+    "deg": 2,
+    "win": 10.0,
+    "n": 61,
+    "nu_r": 3.4090226370160526,
+    "half_width": 0.0005738691485104201,
+    "resid_rad": 1.1745247623233475
+   },
+   {
+    "deg": 2,
+    "win": 3.0,
+    "n": 51,
+    "nu_r": 3.4090915919806593,
+    "half_width": 0.0005666040959519021,
+    "resid_rad": 0.01179814448002503
+   },
+   {
+    "deg": 2,
+    "win": 2.0,
+    "n": 45,
+    "nu_r": 3.409091033051129,
+    "half_width": 0.000562592583987032,
+    "resid_rad": 0.002380239265070472
+   },
+   {
+    "deg": 2,
+    "win": 1.5,
+    "n": 41,
+    "nu_r": 3.409090911287462,
+    "half_width": 0.0005615105278794286,
+    "resid_rad": 0.000921589651559529
+   },
+   {
+    "deg": 3,
+    "win": 10.0,
+    "n": 61,
+    "nu_r": 3.4090144496829122,
+    "half_width": 0.0006279890032858544,
+    "resid_rad": 1.0543299969483266
+   },
+   {
+    "deg": 3,
+    "win": 3.0,
+    "n": 51,
+    "nu_r": 3.409091571664748,
+    "half_width": 0.0005590188297861817,
+    "resid_rad": 0.0008093121674175308
+   },
+   {
+    "deg": 3,
+    "win": 2.0,
+    "n": 45,
+    "nu_r": 3.409091028298711,
+    "half_width": 0.0005590903732025823,
+    "resid_rad": 0.00011200401476507693
+   },
+   {
+    "deg": 3,
+    "win": 1.5,
+    "n": 41,
+    "nu_r": 3.4090909093143695,
+    "half_width": 0.0005591029744284365,
+    "resid_rad": 3.441639881351932e-05
+   },
+   {
+    "deg": 4,
+    "win": 10.0,
+    "n": 61,
+    "nu_r": 3.4091342959825024,
+    "half_width": 0.000627378852815428,
+    "resid_rad": 0.5525138826421863
+   },
+   {
+    "deg": 4,
+    "win": 3.0,
+    "n": 51,
+    "nu_r": 3.4090907085177253,
+    "half_width": 0.0005590197346375706,
+    "resid_rad": 5.880068870922628e-05
+   },
+   {
+    "deg": 4,
+    "win": 2.0,
+    "n": 45,
+    "nu_r": 3.409090717339622,
+    "half_width": 0.0005590905533276519,
+    "resid_rad": 5.188564866642764e-06
+   },
+   {
+    "deg": 4,
+    "win": 1.5,
+    "n": 41,
+    "nu_r": 3.409090718774875,
+    "half_width": 0.0005591030655909058,
+    "resid_rad": 2.3313421309012483e-06
+   }
+  ],
+  "conv": 1.6305130445815053e-07,
+  "lin_rel_width": 0.0015903711610338878,
+  "nu_a": 3.4,
+  "thr_widths": 16.259047906547103,
+  "unitarity": 2.220446049250313e-16,
+  "rel_width": 2.5943081357393538e-05,
+  "dnu_over_width": 1.0633485606773964e-06,
+  "phase_turn": 21.38342288439346,
+  "off_turn": 0.1379445041963021,
+  "lin_resid_rad": 2.1665918031182194
+ },
+ "old_lapse_H1": {
+  "nu_r": 8.12792204203746,
+  "half_width": 0.00366559118193113,
+  "dnu_over_width": 3.5867988105133675
+ },
+ "checks": [
+  {
+   "name": "H28(a) H1 (6 kHz): la dispersi\u00f3n a frecuencia real da Gamma/2 = 3.6496 Hz frente a -Im nu = 3.6495 Hz de Muller (0.002 %), y nu_r a 5.0e-05 anchuras de Re nu (fondo de grado 4 en +-1.5 anchuras; residuo 4e-05 rad; grado 3 cambia la anchura 7e-08). Con fondo lineal en +-10 anchuras: 0.00014 % con residuo 9e-05 rad (umbral a 579 anchuras)",
+   "ok": true,
+   "note": "sin plano complejo ni b\u00fasqueda de ra\u00edces; cerca del umbral el fondo de fase se curva"
+  },
+  {
+   "name": "H28(a) F (3,4 kHz): la dispersi\u00f3n a frecuencia real da Gamma/2 = 0.5591 Hz frente a -Im nu = 0.5591 Hz de Muller (0.0026 %), y nu_r a 1.1e-06 anchuras de Re nu (fondo de grado 4 en +-1.5 anchuras; residuo 2e-06 rad; grado 3 cambia la anchura 2e-07). Con fondo lineal en +-10 anchuras: 0.16 % con residuo 2e+00 rad (umbral a 16 anchuras)",
+   "ok": true,
+   "note": "sin plano complejo ni b\u00fasqueda de ra\u00edces; cerca del umbral el fondo de fase se curva"
+  },
+  {
+   "name": "H28(b): |S| = 1 a 3e-16 en las dos ventanas",
+   "ok": true,
+   "note": "lo garantizan unas ecuaciones reales: prueba la num\u00e9rica del exterior, no la f\u00edsica"
+  },
+  {
+   "name": "Control negativo 1: desplazando la ventana 20 Gamma, arg S se aparta de una recta como mucho 0.14 rad (frente a 2 pi en la resonancia)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2: con la normalizaci\u00f3n antigua del lapso, la resonancia de H1 cae a 3.6 anchuras del modo corregido",
+   "ok": true,
+   "note": ""
+  }
+ ]
+}

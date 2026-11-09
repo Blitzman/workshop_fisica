@@ -147,7 +147,9 @@ PRETTY = [
      r'Umbral: los modos \(p\) radian axiones solo con \(\mathrm{Re}\,\nu > \nu_a\)',
      (r'Con la métrica dinámica, el axión sube \(f\) hasta un {{V:c10_fmax}} (Cowling: {{V:c9_fmax}}) y acorta su amortiguamiento de {{V:c10_tau0}} a {{V:c10_tau15}}', 'obs'),
      (r'Amortiguamiento máximo: \(p_2\) a {{V:c10_p2nu}}, {{V:c10_p2}} (Cowling: {{V:c9_p2}}); la suma \(1/\tau_{GW}+1/\tau_a\) solo acierta en orden de magnitud', 'obs')],
-    # ---- Pasos 14 y 15: modos radiales (informe aparte); se muestran los nombres que genera el propio paso
+    # ---- Pasos 14 a 24: modos radiales (informe aparte); se muestran los nombres que genera el propio paso
+    None,
+    None,
     None,
     None,
     None,
@@ -160,8 +162,8 @@ PRETTY = [
 ]
 
 RADIAL_URL = 'https://claude.ai/artifact/9XoYYWX9wvNUKoav2HmQbB'
-BASE = Path(__file__).parent / 'baseline_v1'     # datos de la versión publicada antes de corregir el lapso
-BASE_DATE = '2026-11-05'
+BASE = Path(__file__).parent / 'baseline_pre_h29'   # versión 2, publicada antes de corregir el arranque del interior (H29)
+BASE_DATE = '2026-11-08'
 
 
 # ---------------------------------------------------------------- cifras del texto, generadas desde los datos
@@ -300,9 +302,9 @@ def cambios(V, V0, checks, base_checks, figs_changed):
     new_steps = [s['step'] for s in checks['steps'] if s['module'] not in base]
     better = float(V['c9_tmax']) < float(V0['c9_tmax'])
     return f'''<section class="stack cambios" id="cambios">
-    <p class="eyebrow">Versión 2 · {checks['env']['date']} · sustituye a la del {BASE_DATE}</p>
+    <p class="eyebrow">Versión 3 · {checks['env']['date']} · sustituye a la versión 2 del {BASE_DATE}</p>
     <h2>Qué cambia en esta versión</h2>
-    <p><b>Corrección en el código compartido de la estrella con axión.</b> El lapso se normalizaba con \\(\\Phi(\\infty)=0\\) imponiendo en la superficie \\(e^{{2\\Phi(R)}}=1-2M(R)/R\\), sin contar la masa de la cola del condensado que queda fuera de la estrella. Ahora la condición se impone al final de la integración, donde la cola ya ha decaído. Afecta a todo lo calculado con axión (cuarta y quinta parte); sin axión no cambia nada. Lo destapó una revisión externa del informe de modos radiales, en el que el resultado dependía del radio de empalme.</p>
+    <p><b>Corrección en el integrador de las perturbaciones con axión.</b> Cerca del centro (de r = 0,001 a 0,5 km) las perturbaciones se integraban con un método implícito (BDF) que fallaba en su primer paso, a cualquier frecuencia. El código no comprobaba si la integración había terminado y tomaba el valor inicial en r = 0,001 km como si fuera el de r = 0,5 km. Ahora ese tramo lo integra un método explícito (DOP853), y toda integración que no termina detiene el cálculo. El error que metía era pequeño, porque la parte mal arrancada decae hacia fuera, pero afecta a todo lo calculado con axión (cuarta y quinta parte). Lo destapó una revisión externa del informe de modos radiales, que señaló que el código no comprobaba el éxito de las integraciones. Se mantiene la corrección del lapso de la versión 2.</p>
     <p>Las cifras que cambian aparecen así: <mark class="nuevo">valor nuevo<span class="antes">valor anterior</span></mark>. Las gráficas de la cuarta y quinta parte están recalculadas{'' if figs_changed else ' (sin cambios visibles)'}. {nch} comprobaciones cambian de cifras y llevan la etiqueta «actualizada»; {nflip_txt}. El acuerdo con las Tablas I y II de la secuela {'mejora' if better else 'no mejora'}: la diferencia máxima pasa de {V0['c9_tmax']} a {V['c9_tmax']} puntos.{(' ' + _mark(V['c9_edge'], V0['c9_edge'])) if V['c9_edge'] != V0['c9_edge'] else ''}</p>
     <p>Se añaden {len(new_steps)} pasos ({', '.join(html.escape(x) for x in new_steps)}), con <a href="{RADIAL_URL}">informe propio</a>, y se retiran los enlaces a las tres «líneas abiertas», cuyo informe no resistió la auditoría.</p>
     <div class="tw"><table><thead><tr><th>Cifra</th><th>Antes</th><th>Ahora</th></tr></thead><tbody>{rows_}</tbody></table></div>
@@ -337,7 +339,7 @@ def rows(V, V0):
                 chip = '<span class="chip chip-obs">observación</span>'
             else:
                 chip = '<span class="chip chip-ok">coincide</span>'
-            if old is not None and c['name'] != old[i]['name']:
+            if old is not None and (i >= len(old) or c['name'] != old[i]['name']):   # comprobación nueva o cambiada
                 chip = f'<span class="chips">{chip}<span class="chip chip-new">actualizada</span></span>'
             items.append(f'<li title="{html.escape(c["name"])}">{chip}<span class="ck">{label}</span></li>')
         tag = '' if old is not None else ' <span class="chip chip-new">nuevo en esta versión</span>'
@@ -376,7 +378,7 @@ def main():
     ok4, tot4 = per_step[7]
     ok5, tot5 = per_step[8]
     ok6, tot6 = per_step[9]
-    ok7, tot7 = (sum(x[i] for x in per_step[10:19]) for i in (0, 1))
+    ok7, tot7 = (sum(x[i] for x in per_step[10:]) for i in (0, 1))
     figdata = json.dumps({k: json.loads((RES / f'fig_{f}.json').read_text())
                           for k, f in [('toy', 'toy'), ('levels', 'levels'), ('modes', 'modes'), ('meff', 'meff'),
                                        ('background', 'background'), ('axcow', 'axcow'), ('axgr', 'axgr')]}, separators=(',', ':')).replace('</', '<\\/')

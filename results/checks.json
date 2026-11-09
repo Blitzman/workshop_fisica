@@ -1,10 +1,10 @@
 {
- "seconds": 16946.8,
+ "seconds": 28291,
  "env": {
   "python": "3.14.4",
   "platform": "Linux x86_64",
   "cpu": "Intel(R) Core(TM) i5-9600K CPU @ 3.70GHz",
-  "date": "2026-11-08",
+  "date": "2026-11-09",
   "sympy": "1.14.0",
   "mpmath": "1.3.0",
   "numpy": "2.5.4",
@@ -641,7 +641,7 @@
   {
    "step": "Con axión en Cowling: Tablas I, II y IV del Paper II",
    "module": "step9_axion_cowling",
-   "seconds": 700.1,
+   "seconds": 805.0,
    "checks": [
     {
      "name": "Fondo BSk26 sin axión, p_c = 100 MeV/fm^3: M = 1.536 M_sun, R = 11.72 km (Paper I: 1.53 M_sun, 11.7 km)",
@@ -688,7 +688,7 @@
   {
    "step": "Con axión y métrica dinámica (nuevo)",
    "module": "step10_axion_gr",
-   "seconds": 2229.7,
+   "seconds": 1760.0,
    "checks": [
     {
      "name": "Conversión de fullgr.EXT a números: con el axión apagado, igual que la del paso 8 (máx. dif. relativa 9e-16)",
@@ -706,7 +706,7 @@
      "note": ""
     },
     {
-     "name": "Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 6e-09 e Im nu en 0.0 %",
+     "name": "Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 4e-09 e Im nu en 0.0 %",
      "ok": true,
      "note": ""
     },
@@ -807,7 +807,7 @@
   {
    "step": "Modos radiales de la estrella con condensado (GR)",
    "module": "step15_radial_star",
-   "seconds": 1242.1,
+   "seconds": 1969.0,
    "checks": [
     {
      "name": "Ecuación exterior derivada (theta_0 = 0) = Ec. (3.7) del Paper I: error relativo 2.3e-16",
@@ -830,7 +830,7 @@
      "note": "la onda saliente crece con r y la integración hacia dentro es inestable; en los modos poco amortiguados de los pasos 9-10 este error es pequeño (no comprueba otras fuentes de error)"
     },
     {
-     "name": "ν_a = 6 kHz: modo F en 3.4505 kHz < ν_a, frecuencia real (|Im det|/|det| = 0e+00 en el eje), fracción fluida 0.976",
+     "name": "ν_a = 6 kHz: modo F en 3.4492 kHz < ν_a, frecuencia real (|Im det|/|det| = 0e+00 en el eje), fracción fluida 0.976",
      "ok": true,
      "note": "H11(b)"
     },
@@ -840,12 +840,12 @@
      "note": "H11(c)"
     },
     {
-     "name": "ν_a = 6 kHz: H1 = 8.1192 -0.0036i kHz (fracción fluida 0.973)",
+     "name": "ν_a = 6 kHz: H1 = 8.1148 -0.0036i kHz (fracción fluida 0.973)",
      "ok": true,
      "note": "H11(b)"
     },
     {
-     "name": "Artefacto retirado: con la normalización antigua del lapso, la «resonancia axiónica» se mueve de 6.585 -0.563i a 6.236 -0.712i al cambiar el empalme (117 → 84 km); con la corrección, Muller desde esa semilla sale de la región (hacia 3.01 -0.15i); el recuento de la región lo hace el paso 20",
+     "name": "Artefacto retirado: con la normalización antigua del lapso, la «resonancia axiónica» se mueve de 6.585 -0.563i a 6.236 -0.712i al cambiar el empalme (117 → 84 km); con la corrección, Muller desde esa semilla sale de la región (hacia nan +nani); el recuento de la región lo hace el paso 20",
      "ok": true,
      "note": "era una cavidad entre R y el radio de empalme"
     },
@@ -855,12 +855,12 @@
      "note": ""
     },
     {
-     "name": "ν_a = 3,5 kHz: dos ligados 3.4040 y 3.4544 kHz con carácter mezclado (0.22 y 0.75 de fluido): cruce evitado F – átomo n = 1",
+     "name": "ν_a = 3,5 kHz: dos ligados 3.4037 y 3.4535 kHz con carácter mezclado (0.23 y 0.75 de fluido): cruce evitado F – átomo n = 1",
      "ok": true,
      "note": ""
     },
     {
-     "name": "ν_a = 3,4 kHz: F ya por encima del umbral, Re ν = 3.4103 kHz e Im ν = -0.58 Hz (fracción fluida 0.968)",
+     "name": "ν_a = 3,4 kHz: F ya por encima del umbral, Re ν = 3.4091 kHz e Im ν = -0.56 Hz (fracción fluida 0.968)",
      "ok": true,
      "note": "el modo fluido pasa a cuasi-normal al cruzar ν_a"
     },
@@ -870,7 +870,7 @@
      "note": "H12; un barrido de signo puede no ver pares de raíces muy próximas"
     },
     {
-     "name": "Robustez de Im ν: rtol, r0 y longitud exterior cambian como mucho un 0.004 %; el radio de empalme (último paso hacia fuera) un 0.00 % en H1 (6 kHz), 0.00 % en F (3,4 kHz)",
+     "name": "Robustez de Im ν: rtol, r0 y longitud exterior la cambian como mucho 6e-07 relativo; el radio de empalme (último paso hacia fuera) 8e-07 en H1 (6 kHz), 3e-07 en F (3,4 kHz)",
      "ok": true,
      "note": "H13; el radio de empalme es la incertidumbre dominante"
     }
@@ -879,7 +879,7 @@
   {
    "step": "Estabilidad radial: principio del argumento",
    "module": "step16_radial_stability",
-   "seconds": 4665.0,
+   "seconds": 9561.0,
    "checks": [
     {
      "name": "Control positivo sin axión: índice 1 más allá de la masa máxima (p_c = 1000) y 0 antes (p_c = 800)",
@@ -921,7 +921,7 @@
   {
    "step": "Modos radiales sin axión: validación externa (Font et al. 2002)",
    "module": "step17_radial_validation",
-   "seconds": 239.0,
+   "seconds": 241.0,
    "checks": [
     {
      "name": "Fondo: M = 1.4002 M_sun, R = 14.155 km (Font et al.: 1.4, 14.15)",
@@ -953,10 +953,10 @@
   {
    "step": "Átomo gravitatorio: ley de Rydberg",
    "module": "step18_rydberg",
-   "seconds": 0.5,
+   "seconds": 1.0,
    "checks": [
     {
-     "name": "H20(a): con el kappa de Whittaker (Ec. A14), n - kappa_n = 0.0579, 0.0570, 0.0568, 0.0566, 0.0565 para n = 2…6: constante dentro de 0.0013",
+     "name": "H20(a): con el kappa de Whittaker (Ec. A14), n - kappa_n = 0.0579, 0.0571, 0.0568, 0.0566, 0.0566 para n = 2…6: constante dentro de 0.0013",
      "ok": true,
      "note": "sin ajuste"
     },
@@ -980,10 +980,10 @@
   {
    "step": "Cruce evitado F - átomo gravitatorio",
    "module": "step19_avoided_crossing",
-   "seconds": 1902.0,
+   "seconds": 3007.0,
    "checks": [
     {
-     "name": "H21(a): separación de los dos ligados más bajos con mínimo 49.4 Hz en nu_a = 3.511 kHz (interior a la malla, refinada; 15 valores de nu_a)",
+     "name": "H21(a): separación de los dos ligados más bajos con mínimo 49.1 Hz en nu_a = 3.509 kHz (interior a la malla, refinada; 15 valores de nu_a)",
      "ok": true,
      "note": ""
     },
@@ -997,15 +997,20 @@
   {
    "step": "Recuento en el semiplano amortiguado",
    "module": "step20_damped_count",
-   "seconds": 3850.0,
+   "seconds": 6012.0,
    "checks": [
     {
-     "name": "H22(a): nu_a = 6 kHz, índice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ahí: 8.1192-3.60i (fluido 0.97), 11.6786-21.70i (fluido 0.88)",
+     "name": "H22(a): nu_a = 6 kHz, índice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ahí: 8.1148-3.65i (fluido 0.97), 11.6697-21.69i (fluido 0.88)",
      "ok": true,
      "note": "sin ceros adicionales: ninguna familia axiónica en esa región"
     },
     {
-     "name": "H23: región profunda Re nu in [6.05, 12], Im nu in [-5, -1.5] kHz: índice 2 (piezas [2, 0], convergidas [[2, 2], [0, 0]]); ceros: 6.293-4.479i kHz (fluido 0.00; al cambiar el empalme se mueve un 33 %); 6.291-4.481i kHz (fluido 0.00; al cambiar el empalme se mueve un 33 %); 7.319-4.785i kHz (fluido 0.00; al cambiar el empalme se mueve un 13 %); 7.322-4.781i kHz (fluido 0.00; al cambiar el empalme se mueve un 13 %). Secuela, Tabla III (l = 2, Cowling): a0 = 9.0 -3.8i kHz",
+     "name": "H26: franja casi real Re nu in [6.05, 12], Im nu in [-0.002, -1e-5] kHz: índice 0 (piezas [0, 0], convergidas [[0, 0], [0, 0]]; salto de fase máximo 0.98 rad)",
+     "ok": true,
+     "note": "fuera quedan |Im nu| < 0.01 Hz, Re nu < 6.05 kHz y Re nu > 12 kHz"
+    },
+    {
+     "name": "H23: región profunda Re nu in [6.05, 12], Im nu in [-5, -1.5] kHz: índice 2 (piezas [2, 0], convergidas [[2, 2], [0, 0]]); ningún cero localizado: Muller no converge desde ninguna de las 13 semillas. Secuela, Tabla III (l = 2, Cowling): a0 = 9.0 -3.8i kHz",
      "ok": false,
      "note": "el resultado decide; no había predicción fuerte"
     },
@@ -1019,25 +1024,25 @@
   {
    "step": "Ceros profundos frente al radio de empalme",
    "module": "step21_deep_artifacts",
-   "seconds": 699.9,
+   "seconds": 367.0,
    "checks": [
     {
-     "name": "H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1192 kHz, Im -3.60 Hz): 1.3e-07 % y 2.1e-07 % (Im: -1.1e-06 y -1.3e-06 Hz); (Re 11.6786 kHz, Im -21.70 Hz): 4.2e-08 % y 1.4e-07 % (Im: +5.3e-07 y -1.6e-05 Hz)",
+     "name": "H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1148 kHz, Im -3.65 Hz): 2.3e-07 % y 1.1e-07 % (Im: +2.4e-06 y +1.3e-06 Hz); (Re 11.6697 kHz, Im -21.69 Hz): 1.2e-07 % y 4.8e-08 % (Im: +1.3e-05 y -4.7e-06 Hz)",
      "ok": true,
      "note": ""
     },
     {
-     "name": "H23b(ii): los ceros profundos se mueven con los dos radios alternativos: 6.293-4.480i kHz -> 4.867-5.111i (20 %) y 7.021-5.613i (17 %); 7.319-4.786i kHz -> 8.275-6.098i (19 %) y 8.283-6.001i (18 %)",
-     "ok": true,
+     "name": "H23b(ii): ningún cero profundo que mover: Muller no converge en la región (paso 20); la prueba no decide",
+     "ok": false,
      "note": "si (i) y (ii) pasan: artefactos del empalme, no modos"
     },
     {
-     "name": "Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 3.3e-07 con la saliente)",
+     "name": "Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 8.5e-07 con la saliente)",
      "ok": true,
      "note": ""
     },
     {
-     "name": "Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0033 %, más que con los radios alternativos (2.1e-07 %)",
+     "name": "Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0033 %, más que con los radios alternativos (2.3e-07 %)",
      "ok": true,
      "note": ""
     }
@@ -1046,7 +1051,7 @@
   {
    "step": "Condición exterior frente al rayo complejo",
    "module": "step22_exterior_contour",
-   "seconds": 190.2,
+   "seconds": 270.0,
    "checks": [
     {
      "name": "H24(a): girar el rayo complejo ±0.4 rad cambia L = psi'/psi en r_m como mucho 6.5e-12 (relativo) en H1, artefacto antiguo, cero profundo, nivel ligado n = 2 H1: 5e-15; artefacto antiguo: 1e-14; cero profundo: 2e-15; nivel ligado n = 2: 6e-12",
@@ -1061,10 +1066,69 @@
     {
      "name": "Control negativo 1: con la onda entrante, L cambia al menos un 2 (relativo) en los puntos por encima del umbral",
      "ok": true,
-     "note": ""
+     "note": "en el nivel ligado la mutación es la solución creciente: la integración no termina y se detecta"
     },
     {
      "name": "Control negativo 2: con n_decay = 1 el cambio mínimo es 2.3e-04, frente a 6.5e-12 en (a)-(b): la prueba detecta un punto de partida demasiado cercano",
+     "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Consistencia termodinámica de la EOS",
+   "module": "step23_eos_consistency",
+   "seconds": 1207.0,
+   "checks": [
+    {
+     "name": "H27: inconsistencia de los ajustes BSk26, n deps/dn/(eps + p) - 1 = +1.3e-04 (p = 1), -7.5e-05 (p = 10), -2.1e-04 (p = 100), +1.5e-03 (p = 300), +1.4e-03 (p = 500), +1.9e-04 (p = 900) MeV/fm3; en el centro de la estrella de 6 kHz (p_c = 100): -2.1e-04",
+     "ok": true,
+     "note": "medido; no es un fallo del código sino de los ajustes publicados"
+    },
+    {
+     "name": "H27: con c_s^2 = n dp/dn/(eps + p) en vez de dp/deps, Re nu se mueve F6 5.8e-04 (-2.01 Hz), H1 1.7e-04 (-1.36 Hz), F34 5.9e-04 (-2.00 Hz); Im nu de H1 2.6e-03 y de F (3,4 kHz) 1.4e-02 relativo",
+     "ok": true,
+     "note": "mucho más que el 1e-6 de los controles del integrador: es la incertidumbre dominante del sector fluido"
+    },
+    {
+     "name": "Control negativo 1: con P(rho) desplazado un 1 % en lg rho, el desajuste a 100 MeV/fm3 sube a 1.2e-01 (frente a 2.1e-04)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: con la media geométrica de las dos definiciones, el desplazamiento es menor: F6 2.9e-04, H1 8.4e-05, F34 2.9e-04",
+     "ok": true,
+     "note": "el efecto viene de c_s^2"
+    }
+   ]
+  },
+  {
+   "step": "Anchura desde la dispersión a frecuencia real",
+   "module": "step24_scattering_width",
+   "seconds": 1863.0,
+   "checks": [
+    {
+     "name": "H28(a) H1 (6 kHz): la dispersión a frecuencia real da Gamma/2 = 3.6496 Hz frente a -Im nu = 3.6495 Hz de Muller (0.002 %), y nu_r a 5.0e-05 anchuras de Re nu (fondo de grado 4 en +-1.5 anchuras; residuo 4e-05 rad; grado 3 cambia la anchura 7e-08). Con fondo lineal en +-10 anchuras: 0.00014 % con residuo 9e-05 rad (umbral a 579 anchuras)",
+     "ok": true,
+     "note": "sin plano complejo ni búsqueda de raíces; cerca del umbral el fondo de fase se curva"
+    },
+    {
+     "name": "H28(a) F (3,4 kHz): la dispersión a frecuencia real da Gamma/2 = 0.5591 Hz frente a -Im nu = 0.5591 Hz de Muller (0.0026 %), y nu_r a 1.1e-06 anchuras de Re nu (fondo de grado 4 en +-1.5 anchuras; residuo 2e-06 rad; grado 3 cambia la anchura 2e-07). Con fondo lineal en +-10 anchuras: 0.16 % con residuo 2e+00 rad (umbral a 16 anchuras)",
+     "ok": true,
+     "note": "sin plano complejo ni búsqueda de raíces; cerca del umbral el fondo de fase se curva"
+    },
+    {
+     "name": "H28(b): |S| = 1 a 3e-16 en las dos ventanas",
+     "ok": true,
+     "note": "lo garantizan unas ecuaciones reales: prueba la numérica del exterior, no la física"
+    },
+    {
+     "name": "Control negativo 1: desplazando la ventana 20 Gamma, arg S se aparta de una recta como mucho 0.14 rad (frente a 2 pi en la resonancia)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: con la normalización antigua del lapso, la resonancia de H1 cae a 3.6 anchuras del modo corregido",
      "ok": true,
      "note": ""
     }

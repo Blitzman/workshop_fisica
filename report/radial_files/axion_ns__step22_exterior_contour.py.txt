@@ -37,9 +37,15 @@ def run():
     for name, nu in POINTS.items():
         L0 = L(nu)
         rel = lambda z: float(abs(z / L0 - 1))
+        try:
+            ing = rel(L(nu, sheet=-1))
+        except RuntimeError:
+            # bajo el umbral la «onda entrante» es la solución creciente e^{kappa r}: la integración no termina
+            # (antes se usaba el resultado a medias sin mirar status). Este punto no entra en el control negativo 1.
+            ing = None
         out['points'][name] = {'nu': [nu.real, nu.imag], 'L': [L0.real, L0.imag],
                                'dphi+0.4': rel(L(nu, dphi=0.4)), 'dphi-0.4': rel(L(nu, dphi=-0.4)),
-                               'n_decay60': rel(L(nu, n_decay=60.0)), 'ingoing': rel(L(nu, sheet=-1)),
+                               'n_decay60': rel(L(nu, n_decay=60.0)), 'ingoing': ing,
                                'n_decay1': rel(L(nu, n_decay=1.0))}
     P = out['points']
     ang = max(max(p['dphi+0.4'], p['dphi-0.4']) for p in P.values())
@@ -51,8 +57,11 @@ def run():
                 + '; '.join(f"{k}: {p['n_decay60']:.0e}" for k, p in P.items()), nd < 1e-8,
                 'el truncado del desarrollo asintótico (con la fase coulombiana) no influye'))
     ing = min(p['ingoing'] for k, p in P.items() if k != 'nivel ligado n = 2')
+    bound = P['nivel ligado n = 2']['ingoing']
     res.append((f'Control negativo 1: con la onda entrante, L cambia al menos un {ing:.2g} (relativo) en los puntos '
-                f'por encima del umbral', ing > 1e-2, ''))
+                f'por encima del umbral', ing > 1e-2,
+                'en el nivel ligado la mutación es la solución creciente: ' +
+                ('la integración no termina y se detecta' if bound is None else f'L cambia {bound:.1e}')))
     n1 = min(p['n_decay1'] for p in P.values())
     res.append((f'Control negativo 2: con n_decay = 1 el cambio mínimo es {n1:.1e}, frente a {max(ang, nd):.1e} en (a)-(b): '
                 'la prueba detecta un punto de partida demasiado cercano', n1 > 100 * max(ang, nd), ''))

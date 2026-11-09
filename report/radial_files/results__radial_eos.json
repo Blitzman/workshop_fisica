@@ -1,0 +1,102 @@
+{
+ "mismatch": {
+  "1": 0.0001292518509761198,
+  "10": -7.506232723930584e-05,
+  "100": -0.000210165622761882,
+  "300": 0.0014557126227081607,
+  "500": 0.0014197835903935196,
+  "900": 0.000190174127375764
+ },
+ "pc6_MeVfm3": 99.99999999984838,
+ "mismatch_center": -0.0002101656227643245,
+ "base": {
+  "F6": [
+   3.4492122854875804,
+   0.0
+  ],
+  "H1": [
+   8.114832034775006,
+   -0.00364949587814951
+  ],
+  "F34": [
+   3.409090719198893,
+   -0.0005591175682961987
+  ]
+ },
+ "alt": {
+  "F6": [
+   3.447205327194867,
+   0.0
+  ],
+  "H1": [
+   8.113467507620866,
+   -0.003658816292580981
+  ],
+  "F34": [
+   3.40709150150089,
+   -0.0005513179572874895
+  ]
+ },
+ "shift": {
+  "F6": {
+   "dRe_rel": 0.0005818598933900217,
+   "dIm_rel": 0.0,
+   "dRe_Hz": -2.0069582927133567,
+   "dIm_Hz": 0.0
+  },
+  "H1": {
+   "dRe_rel": 0.00016815223633614342,
+   "dIm_rel": 0.0025538909325188834,
+   "dRe_Hz": -1.3645271541395942,
+   "dIm_Hz": -0.009320414431471073
+  },
+  "F34": {
+   "dRe_rel": 0.0005864372240796862,
+   "dIm_rel": 0.013949858582474838,
+   "dRe_Hz": -1.9992176980028198,
+   "dIm_Hz": 0.0077996110087091884
+  }
+ },
+ "shift_mid": {
+  "F6": {
+   "dRe_rel": 0.0002909190953796997,
+   "dIm_rel": 0.0,
+   "dRe_Hz": -1.0034417178665933,
+   "dIm_Hz": 0.0
+  },
+  "H1": {
+   "dRe_rel": 8.406320581237886e-05,
+   "dIm_rel": 0.0012766921888204368,
+   "dRe_Hz": -0.6821587954721764,
+   "dIm_Hz": -0.00465928288076586
+  },
+  "F34": {
+   "dRe_rel": 0.0002932028017944178,
+   "dIm_rel": 0.006979934021949354,
+   "dRe_Hz": -0.9995549504404622,
+   "dIm_Hz": 0.0039026037372202286
+  }
+ },
+ "checks": [
+  {
+   "name": "H27: inconsistencia de los ajustes BSk26, n deps/dn/(eps + p) - 1 = +1.3e-04 (p = 1), -7.5e-05 (p = 10), -2.1e-04 (p = 100), +1.5e-03 (p = 300), +1.4e-03 (p = 500), +1.9e-04 (p = 900) MeV/fm3; en el centro de la estrella de 6 kHz (p_c = 100): -2.1e-04",
+   "ok": true,
+   "note": "medido; no es un fallo del c\u00f3digo sino de los ajustes publicados"
+  },
+  {
+   "name": "H27: con c_s^2 = n dp/dn/(eps + p) en vez de dp/deps, Re nu se mueve F6 5.8e-04 (-2.01 Hz), H1 1.7e-04 (-1.36 Hz), F34 5.9e-04 (-2.00 Hz); Im nu de H1 2.6e-03 y de F (3,4 kHz) 1.4e-02 relativo",
+   "ok": true,
+   "note": "mucho m\u00e1s que el 1e-6 de los controles del integrador: es la incertidumbre dominante del sector fluido"
+  },
+  {
+   "name": "Control negativo 1: con P(rho) desplazado un 1 % en lg rho, el desajuste a 100 MeV/fm3 sube a 1.2e-01 (frente a 2.1e-04)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2: con la media geom\u00e9trica de las dos definiciones, el desplazamiento es menor: F6 2.9e-04, H1 8.4e-05, F34 2.9e-04",
+   "ok": true,
+   "note": "el efecto viene de c_s^2"
+  }
+ ]
+}

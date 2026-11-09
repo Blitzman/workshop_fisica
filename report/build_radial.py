@@ -192,6 +192,15 @@ CTP = ROOT / 'results' / 'radial_contour.json'
 CTR = json.loads(CTP.read_text()) if CTP.exists() else None
 RYP = ROOT / 'results' / 'radial_rydberg.json'
 RYD = json.loads(RYP.read_text()) if RYP.exists() else None
+GUARD_TXT = ('\n  <p><b>Garantías de las raíces (desde la sexta revisión).</b> Muller lanza un error si no converge o si el residuo normalizado no es pequeño, y toda integración que no termina detiene el cálculo. '
+             'Antes, Muller devolvía su último intento sin comprobar nada, y las integraciones fallidas pasaban inadvertidas. Esa comprobación destapó el fallo del arranque del interior (recuadro siguiente). Todos los pasos se repitieron con estas garantías.</p>')
+_OLD = ROOT / 'report' / 'baseline_pre_h29'
+OLD_S = json.loads((_OLD / 'radial_star.json').read_text()) if (_OLD / 'radial_star.json').exists() else None
+OLD_V = json.loads((_OLD / 'radial_validation.json').read_text()) if (_OLD / 'radial_validation.json').exists() else None
+EOP = ROOT / 'results' / 'radial_eos.json'
+EOSD = json.loads(EOP.read_text()) if EOP.exists() else None
+SCP = ROOT / 'results' / 'radial_scattering.json'
+SCAT = json.loads(SCP.read_text()) if SCP.exists() else None
 VLP = ROOT / 'results' / 'radial_validation.json'
 VAL = json.loads(VLP.read_text()) if VLP.exists() else None
 if VAL:
@@ -205,6 +214,33 @@ if VAL:
 else:
     val_html = ''
 if S:
+    eos_txt = ''
+    if EOSD:
+        _sh = EOSD['shift']
+        eos_txt = (f" Los ajustes publicados de BSk26, ε(n) y P(ρ), no cumplen exactamente la identidad termodinámica dε/dn = (ε + p)/n: el desajuste es {sci(abs(EOSD['mismatch_center']), 1)} en el centro de la estrella de 6 kHz. "
+                   f"Calculando la velocidad del sonido de la otra forma posible, F se mueve {fnum(abs(_sh['F6']['dRe_Hz']), 2)} Hz, H1 {fnum(abs(_sh['H1']['dRe_Hz']), 2)} Hz y su Im ν un {fnum(100 * _sh['H1']['dIm_rel'], 2)} % "
+                   f"(paso 23). Eso es más que todo lo que mueven los controles del integrador: es la incertidumbre dominante de la parte fluida que hemos medido.")
+    _thin = DMD.get('thin') if DMD else None
+    _imtop = '−10⁻⁵' if _thin and _thin['total'] == 0 else '−0,002'
+    thin_txt = ((f" La franja casi real que dejaban fuera esas piezas, <code>−0,002 ≤ Im ν ≤ −10⁻⁵</code> kHz, da índice {_thin['total']} (salto de fase máximo {fnum(_thin['max_dphase'], 2)} rad). "
+                 "Quedan sin contar <code>|Im ν| &lt; 0,01</code> Hz, <code>Re ν &lt; 6,05</code> kHz y <code>Re ν &gt; 12</code> kHz.") if _thin else
+                " El recuento no cubre <code>−0,002 &lt; Im ν &lt; 0</code> kHz, <code>Re ν &lt; 6,05</code> kHz ni <code>Re ν &gt; 12</code> kHz.")
+    _jumps = [x for x in ((STB or {}).get('nu6.0', {}).get('max_dphase'), (STB or {}).get('nu3.4', {}).get('max_dphase')) if x is not None]
+    jump_txt = f" (el mayor en este paso: {fnum(max(_jumps), 2)} rad)" if _jumps else ''
+    guard_txt = GUARD_TXT
+    scat_sum = ''
+    scat_html = ''
+    if SCAT:
+        _h, _f = SCAT['H1 (6 kHz)'], SCAT['F (3,4 kHz)']
+        scat_sum = f" (lo confirma, sin plano complejo, la anchura de la resonancia en la dispersión a frecuencia real: {fnum(_h['half_width'] * 1e3, 2)} Hz, paso 24)"
+        scat_html = f'''
+  <h3>Una comprobación independiente del amortiguamiento (paso 24)</h3>
+  <p>Muller y el principio del argumento buscan ceros de la misma función, así que un error en ella los engañaría a los dos. Aquí el amortiguamiento se mide de otra forma, sin plano complejo ni búsqueda de raíces. A frecuencia real se lanza una onda de axión hacia la estrella y se mide la onda que vuelve, <code>S(ν) = −W[u, ψ_in]/W[u, ψ_out]</code>. Cerca de un modo, la fase de S gira 2π con la forma de Breit–Wigner, y su anchura es el amortiguamiento.</p>
+  <div class="tbl"><table><tr><th>modo</th><th>−Im ν, Muller (Hz)</th><th>Γ/2, dispersión (Hz)</th><th>diferencia</th><th>|ν_r − Re ν| / anchura</th></tr>
+  <tr><td>H1 (ν_a = 6 kHz)</td><td>{fnum(-_h['muller'][1] * 1e3, 4)}</td><td>{fnum(_h['half_width'] * 1e3, 4)}</td><td>{100 * _h['rel_width']:.2g} %</td><td>{_h['dnu_over_width']:.1e}</td></tr>
+  <tr><td>F (ν_a = 3,4 kHz)</td><td>{fnum(-_f['muller'][1] * 1e3, 4)}</td><td>{fnum(_f['half_width'] * 1e3, 4)}</td><td>{100 * _f['rel_width']:.2g} %</td><td>{_f['dnu_over_width']:.1e}</td></tr></table></div>
+  <p>El ajuste no salió a la primera. F a 3,4 kHz está a solo {_f['thr_widths']:.0f} anchuras del umbral, y ahí la fase «de fondo», la que no es de la resonancia, se curva: crece como la raíz de la distancia al umbral. Con un fondo recto, el ajuste no cierra: le quedan {fnum(_f['lin_resid_rad'], 0)} rad sin explicar, y en el primer recálculo, con menos puntos, la anchura salió muy desviada (el detalle está en el cuaderno, H28). Por eso el ajuste se repite con fondos de grado 1 a 4 en ventanas cada vez más estrechas, de ±10 a ±1,5 anchuras. La tabla da el de grado 4 en ±1,5 anchuras. Pasar del grado 3 al 4 cambia la anchura {sci(_f['conv'], 0)}, y lo que queda sin ajustar son {sci(_f['fit_resid_rad'], 0)} rad. H1, a {_h['thr_widths']:.0f} anchuras del umbral, da lo mismo con cualquier fondo.</p>
+  <p>Además, <code>|S| = 1</code> a {max(_h['unitarity'], _f['unitarity']):.0e}: lo que entra sale. Con unas ecuaciones reales eso está garantizado, así que comprueba la numérica del exterior, no la física. Lo que <b>no</b> comprueba esta prueba: usa las mismas ecuaciones de perturbación, de modo que valida la continuación al plano complejo y la búsqueda de raíces, no las ecuaciones (esas se comparan con el Paper I en el paso 2). Controles: desplazando la ventana 20 anchuras no aparece resonancia; con la normalización antigua del lapso, la de H1 cae a {SCAT['old_lapse_H1']['dnu_over_width']:.2g} anchuras del modo corregido.</p>'''
     s6 = S['nu6']
     # Figura 4: espectro a nu_a = 6 kHz en dos filas (frecuencia real / amortiguados)
     p4 = Plot((3.0, 9.0), (-1.6, 1.6), h=230, m=(16, 20, 46, 20))
@@ -294,7 +330,7 @@ if S:
         for k, v_ in r_.items():
             rob_rows += f'<tr><td>{lab}</td><td>{html.escape(k)}</td><td>{v_[0]:.6f}</td><td>{v_[1] * 1e3:.4f}</td></tr>'
     _dev = [(abs(v_[0] / r_['base'][0] - 1), abs(v_[1] / r_['base'][1] - 1)) for r_ in rob.values() for v_ in r_.values()]
-    rob_re, rob_im = (max(d[0] for d in _dev), 100 * max(d[1] for d in _dev)) if _dev else (0, 0)
+    rob_re, rob_im = (max(d[0] for d in _dev), max(d[1] for d in _dev)) if _dev else (0, 0)
     stab = S.get('stability', {})
     if STB:
         R_ = STB['region']
@@ -309,14 +345,14 @@ if S:
   <p>Una perturbación inestable crece en el tiempo: su frecuencia tiene <code>Im ω &gt; 0</code>. Ahí la onda exterior decae y la función del empalme, escrita sin polos (<code>radial.det_entire</code>), es analítica. El principio del argumento cuenta sus ceros dentro de un contorno sin buscarlos uno a uno. Región: <code>|Re ν| ≤ {fnum(R_['xmax'], 0)}</code> kHz, <code>{R_['eps']} ≤ Im ν ≤ {fnum(R_['ymax'], 0)}</code> kHz. Además, en el eje imaginario la función es real y contamos sus cambios de signo hasta {fnum(R_['gmax'], 0)} kHz.</p>
   <p><b>Resultado:</b> {res_}, sin ningún cambio de signo en el eje. <b>El método detecta inestabilidades cuando existen:</b> en estrellas más allá de la masa máxima da índice 1, sin axión y con axión, en este caso con el modo creciente en el eje, γ = {', '.join(fnum(g, 2) for g in cA['axis_sign_changes'])} kHz.</p>
   <p><b>Qué no cubre:</b> crecimientos más lentos que {R_['eps']} kHz, que solo ve el barrido del eje (paso 15, desde 0,01 kHz); crecimientos más rápidos que {fnum(R_['ymax'], 0)} kHz, muy por encima de la escala dinámica de la estrella; y perturbaciones no radiales. Lo que obtenemos es que <b>no encontramos modos radiales inestables en esa región</b>, no que la estrella sea estable frente a toda perturbación.</p>
-  <p><b>Una trampa que encontramos por el camino:</b> un único contorno grande «encontraba» 2, 4 u 8 ceros según el muestreo. La fase de la función gira muy deprisa en los bordes largos, y dos muestras seguidas podían distar más de una vuelta sin que el refinado lo notara. Dividiendo el contorno en piezas, y quitando el factor analítico e^(i k r_m), que no tiene ceros, el resultado es 0 en todas ellas. Aun así, cerca del umbral la escalera de estados ligados del átomo gravitatorio, que se acumula en ν_a justo bajo el borde inferior, hace girar la fase más deprisa de lo que resuelve un muestreo fijo: a 3,4 kHz una pieza dio 1 con 48 puntos por lado y 0 con 96. Por eso cada índice solo se acepta si no cambia al doblar el muestreo. Los dos controles negativos del paso comprueban que esos fallos se detectan.</p>
+  <p><b>Una trampa que encontramos por el camino:</b> un único contorno grande «encontraba» 2, 4 u 8 ceros según el muestreo. La fase de la función gira muy deprisa en los bordes largos, y dos muestras seguidas podían distar más de una vuelta sin que el refinado lo notara. Dividiendo el contorno en piezas, y quitando el factor analítico e^(i k r_m), que no tiene ceros, el resultado es 0 en todas ellas. Aun así, cerca del umbral la escalera de estados ligados del átomo gravitatorio, que se acumula en ν_a justo bajo el borde inferior, hace girar la fase más deprisa de lo que resuelve un muestreo fijo: a 3,4 kHz una pieza dio 1 con 48 puntos por lado y 0 con 96. Por eso cada índice solo se acepta si no cambia al doblar el muestreo y si ningún salto de fase entre muestras supera π/3{jump_txt}. Los dos controles negativos del paso comprueban que esos fallos se detectan. Es una comprobación práctica, no una cota rigurosa: una función que diera una vuelta entera entre dos muestras la burlaría.</p>{guard_txt}
   <ul class="checks">{stb_rows}</ul>"""
     else:
         stab_html = (f"<p>Estabilidad: en el eje imaginario el determinante no cambia de signo "
                      f"({', '.join(str(v_['sign_changes']) for v_ in stab.values())} cambios).</p>")
     rob_html = (f"""
   <h3>Robustez numérica y estabilidad</h3>
-  <p>Los amortiguamientos de unos pocos Hz son lo más delicado del cálculo. Los recalculamos variando la tolerancia del integrador, el radio inicial, la longitud de la integración exterior y el radio donde se empalma con la solución exterior. Ninguna variante mueve Re ν más de un {rob_re:.0e} relativo ni Im ν más de un {rob_im:.3f} %. Es la incertidumbre numérica; la física (la ecuación de estado, el modelo de acoplo) puede mover las cifras mucho más:</p>
+  <p>Los amortiguamientos de unos pocos Hz son lo más delicado del cálculo. Los recalculamos variando la tolerancia del integrador, el radio inicial, la longitud de la integración exterior y el radio donde se empalma con la solución exterior. Ninguna variante mueve Re ν más de un {rob_re:.0e} relativo ni Im ν más de un {rob_im:.0e} relativo. Es la variación observada en estos controles del integrador, no la incertidumbre total.{eos_txt} La física (la ecuación de estado, el modelo de acoplo) puede mover las cifras mucho más:</p>
   <div class="tbl"><table><tr><th>modo</th><th>variante</th><th>Re ν (kHz)</th><th>Im ν (Hz)</th></tr>{rob_rows}</table></div>
 {stab_html}""" if rob else '')
     art = S.get('artifact')
@@ -332,6 +368,13 @@ if S:
             _rob = [r_ for r_ in dp_['roots'] if r_['shift_pct'] < 0.1]
             if dp_['total'] == 0:
                 _res = '<b>ningún cero</b>: no hay análogo radial de ese modo en la región explorada'
+            elif DEEP is not None and not DEEP['deep'] and not dp_['roots']:
+                _res = (f"el índice es {dp_['total']}, pero <b>no conseguimos localizar esos ceros</b>. Muller no converge desde ninguna semilla: "
+                        "allí la función se queda en su suelo de ruido numérico y la búsqueda vaga por él sin fijar ningún punto. "
+                        "La versión anterior daba cuatro «ceros» y, en el paso 21, concluía que eran artefactos del radio de empalme. "
+                        "Esos «ceros» eran búsquedas que no habían convergido (entonces no se comprobaba), así que <b>retiramos esa conclusión</b>: "
+                        "con esta numérica <b>no decidimos</b> si en esa región hay un análogo radial de a0 ni qué son esos dos ceros del recuento. "
+                        "Para decidirlo haría falta más precisión ahí (por ejemplo, integrar hacia dentro desde el exterior o con aritmética de más dígitos)")
             elif DEEP:
                 _art = (all(max(f_['shift_pct']['theta_1e-5'], f_['shift_pct']['theta_1e-6']) < 0.1 for f_ in DEEP['fluid'])
                         and bool(DEEP['deep']) and all(min(d_['shift_pct'].values()) > 5 for d_ in DEEP['deep']))   # mismos criterios que el paso 21
@@ -357,8 +400,8 @@ if S:
             deep_html = ''
         damped_html = f'''
   <h3>¿Hay resonancias axiónicas muy amortiguadas? (paso 20)</h3>
-  <p>Contamos con el principio del argumento los modos en <code>6,05 ≤ Re ν ≤ 12</code> kHz, <code>−1,5 ≤ Im ν &lt; 0</code> (ν_a = 6 kHz), con la condición saliente. Cada pieza del contorno se acepta solo si su índice no cambia al doblar el muestreo. Resultado: <b>{DMD['nu6']['total']} modos</b>, y son los dos fluidos que encuentra Muller ({', '.join(f"Re ν = {fnum(z[0], 4)} kHz con Im ν = {fnum(z[1] * 1e3, 2)} Hz" for z in _fm)}; fracción fluida {', '.join(fnum(f, 2) for f in DMD['nu6']['fluid_fraction'])}). En esa región <b>no hay ninguna familia axiónica</b>.</p>
-  <p>El control positivo comprueba que el recuento ve resonancias muy amortiguadas cuando existen: con la normalización antigua del lapso, el índice sube a {DMD['old_lapse']['total']} (piezas {DMD['old_lapse']['per_tile']}), con las resonancias de cavidad que mostraba la versión anterior.</p>{deep_html}'''
+  <p>Contamos con el principio del argumento los modos en <code>6,05 ≤ Re ν ≤ 12</code> kHz, <code>−1,5 ≤ Im ν ≤ −0,002</code> kHz (ν_a = 6 kHz), con la condición saliente. Cada pieza del contorno se acepta solo si su índice no cambia al doblar el muestreo. Resultado: <b>{DMD['nu6']['total']} modos</b>, y son los dos fluidos que encuentra Muller ({', '.join(f"Re ν = {fnum(z[0], 4)} kHz con Im ν = {fnum(z[1] * 1e3, 2)} Hz" for z in _fm)}; fracción fluida {', '.join(fnum(f, 2) for f in DMD['nu6']['fluid_fraction'])}). En esa región <b>no hay ninguna familia axiónica</b>.{thin_txt}</p>
+  <p>El control positivo comprueba que el recuento ve resonancias muy amortiguadas cuando existen: con la normalización antigua del lapso, el índice sube a {DMD['old_lapse']['total']} (piezas {DMD['old_lapse']['per_tile']}), con las resonancias de cavidad que mostraba la versión anterior.</p>{deep_html}{scat_html}'''
     else:
         damped_html = ''
     ctr_li = ''
@@ -370,6 +413,24 @@ if S:
                   f"Girar el rayo ±0,4 rad cambia ψ'/ψ en el empalme como mucho {sci(_a, 1)} y alejar el punto de partida (|k|S = 60), {sci(_n, 1)}, en {len(_P)} puntos que van de un modo poco amortiguado a uno de Im ν ≈ −4,5 kHz y a un nivel ligado. "
                   "Con la onda entrante o con un punto de partida demasiado cercano, la prueba sí detecta el cambio (paso 22).</li>")
     _nf = DMD['nu6']['total'] if DMD else None
+    h29_html = ''
+    if OLD_S and OLD_S != S:
+        _o6, _n6 = OLD_S['nu6'], S['nu6']
+        _oh, _nh = complex(*_o6['H1']), complex(*s6['H1'])
+        _of, _nf34 = complex(*OLD_S['nu34']['F']), complex(*n34['F'])
+        _rows = (f"<tr><td>F (ν_a = 6 kHz)</td><td>{fnum(_o6['F'], 6)} kHz</td><td>{fnum(_n6['F'], 6)} kHz</td><td>{fnum(1e3 * (_n6['F'] - _o6['F']), 2)} Hz</td></tr>"
+                 f"<tr><td>H1 (ν_a = 6 kHz), Re ν</td><td>{fnum(_oh.real, 6)} kHz</td><td>{fnum(_nh.real, 6)} kHz</td><td>{fnum(1e3 * (_nh.real - _oh.real), 2)} Hz</td></tr>"
+                 f"<tr><td>H1, Im ν</td><td>{fnum(1e3 * _oh.imag, 4)} Hz</td><td>{fnum(1e3 * _nh.imag, 4)} Hz</td><td>{fnum(100 * (_nh.imag / _oh.imag - 1), 2)} %</td></tr>"
+                 f"<tr><td>F (ν_a = 3,4 kHz), Im ν</td><td>{fnum(1e3 * _of.imag, 4)} Hz</td><td>{fnum(1e3 * _nf34.imag, 4)} Hz</td><td>{fnum(100 * (_nf34.imag / _of.imag - 1), 2)} %</td></tr>")
+        if OLD_V and VAL:
+            _rows += ''.join(f"<tr><td>{k} sin axión, frente a Font et al.</td><td>{OLD_V['dev_font_pct'][k]:+.3f} %</td><td>{VAL['dev_font_pct'][k]:+.3f} %</td><td></td></tr>" for k in VAL['dev_font_pct'])
+        _h29_deep = ("\n    <p>La comprobación de que Muller converge retira además una conclusión de la versión anterior. Los «ceros profundos» de la región muy amortiguada, que dábamos por artefactos del radio de empalme, eran búsquedas que no habían convergido. Ahora esa región queda sin decidir (sección 6).</p>"
+                     if DEEP is not None and not DEEP['deep'] else '')
+        h29_html = f'''<div class="callout">
+    <h3>Corrección: el arranque del interior no integraba</h3>
+    <p>La sexta revisión señaló que el código no comprobaba si cada integración terminaba bien. Al añadir esa comprobación salió un fallo real. El primer tramo del interior (de r = 0,001 a 0,5 km) se integraba con un método implícito (BDF) que fallaba en su primer paso, a cualquier frecuencia. El código tomaba entonces el valor inicial en r = 0,001 km y lo usaba como si fuera el de r = 0,5 km. La parte mal arrancada decae hacia fuera, por eso el error era pequeño y los controles no lo veían. Ahora ese tramo lo integra DOP853, y toda integración que no termina detiene el cálculo. El mismo fallo estaba en los pasos 9 y 10 del informe principal, corregidos también. Todas las cifras de este informe están recalculadas:</p>
+    <div class="tbl"><table><tr><th>cifra</th><th>antes</th><th>ahora</th><th>cambio</th></tr>{_rows}</table></div>{_h29_deep}
+  </div>'''
     tail_txt = f"{fnum(100 * lap['tail_mass_frac'], 2)} % de la masa" if lap else "una fracción pequeña de la masa"
     phi_txt = sci(lap['phi_inf_old'], 1) if lap else "un valor distinto de 0"
     art_html = (f"""<div class="callout">
@@ -397,7 +458,7 @@ if S:
   <p>La estructura es la del modelo simplificado, con un añadido de la gravedad:</p>
   <ul>
     <li>Los modos fluidos por debajo del umbral tienen frecuencia real (F) y los de encima se amortiguan poco (H1).</li>
-    <li>Hasta <code>Im ν = −1,5</code> kHz no hay ninguna rama de resonancias axiónicas muy amortiguadas como la del modelo simplificado (paso 20): la que creímos ver era un artefacto (recuadro siguiente). Más abajo, nuestro método no decide (paso 21). Dentro de la estrella, con <code>θ ≈ π</code>, la masa efectiva del axión es mayor que <code>m_a</code> y hace de barrera, no de pozo.</li>
+    <li>En el rectángulo contado (<code>6,05 ≤ Re ν ≤ 12</code> kHz, hasta <code>Im ν = −1,5</code> kHz) no hay ninguna rama de resonancias axiónicas muy amortiguadas como la del modelo simplificado (paso 20): la que creímos ver era un artefacto (recuadro siguiente). Más abajo, nuestro método no decide (paso 21). Dentro de la estrella, con <code>θ ≈ π</code>, la masa efectiva del axión es mayor que <code>m_a</code> y hace de barrera, no de pozo.</li>
     <li>Justo por debajo del umbral, el potencial gravitatorio exterior atrapa al axión en una <b>escalera hidrogenoide</b>: un «átomo gravitatorio».</li>
   </ul>
   <figure>
@@ -415,6 +476,7 @@ if S:
   {cross_html}
   <p>La transición cuasi-normal → ligado de la estrella realista no es un cruce limpio como en el modelo simplificado: el modo fluido atraviesa una escalera densa de estados del axión que se acumula en el umbral.</p>
 {rob_html}
+  {h29_html}
   {art_html}
   {damped_html}
   <div class="callout">
@@ -430,20 +492,22 @@ if S:
         sum_extra += (f"\n    <li><b>Estabilidad:</b> no encontramos modos radiales inestables en <code>|Re ν| ≤ {fnum(STB['region']['xmax'], 0)}</code>, "
                       f"<code>{STB['region']['eps']} ≤ Im ν ≤ {fnum(STB['region']['ymax'], 0)}</code> kHz (principio del argumento, paso 16). Es un resultado sobre esa región, no una demostración de estabilidad.</li>")
     if DMD and DEEP:
-        sum_extra += (f"\n    <li><b>Semiplano amortiguado:</b> hasta <code>Im ν = −1,5</code> kHz solo están los {DMD['nu6']['total']} modos fluidos (paso 20). "
-                      "Más abajo, donde la secuela tiene su modo axiónico a0 (l = 2, Cowling), los ceros que salen son artefactos del empalme y el método <b>no decide</b> si hay un análogo radial (paso 21).</li>")
+        sum_extra += (f"\n    <li><b>Semiplano amortiguado:</b> en el rectángulo contado (<code>6,05 ≤ Re ν ≤ 12</code> kHz, <code>{_imtop} ≥ Im ν ≥ −1,5</code> kHz) solo están los {DMD['nu6']['total']} modos fluidos (paso 20). "
+                      + ("Más abajo, donde la secuela tiene su modo axiónico a0 (l = 2, Cowling), el recuento da ceros que nuestra numérica no consigue localizar, así que el método <b>no decide</b> si hay un análogo radial (pasos 20–21).</li>"
+                         if not DEEP['deep'] else
+                         "Más abajo, donde la secuela tiene su modo axiónico a0 (l = 2, Cowling), los ceros que salen son artefactos del empalme y el método <b>no decide</b> si hay un análogo radial (paso 21).</li>"))
     val_li = (f"<li><b>Validación externa:</b> sin axión, el mismo código reproduce las frecuencias radiales F, H1, H2 y H3 "
               f"del politropo de referencia de Font et al. (2002) con una diferencia máxima del "
               f"{max(abs(v) for v in VAL['dev_font_pct'].values()):.3f} % (sector fluido sin axión).</li>") if VAL else ''
     star_summary = f"""
     {val_li}
-    <li><b>Estrella realista</b> (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua {fnum(-s6['H1'][1] * 1e3, 1)} Hz. Justo bajo el umbral aparece una escalera de estados ligados del axión, un «átomo gravitatorio»{(f", que sigue una ley de Rydberg con un defecto cuántico casi constante, δ ≈ {RYD['ritz']['delta0']:.3f}" if RYD else "")}.</li>
+    <li><b>Estrella realista</b> (BSk26, relatividad general completa, ν_a = 6 kHz): el modo F por debajo del umbral tiene frecuencia real, H1 por encima se amortigua {fnum(-s6['H1'][1] * 1e3, 1)} Hz{scat_sum}. Justo bajo el umbral aparece una escalera de estados ligados del axión, un «átomo gravitatorio»{(f", que sigue una ley de Rydberg con un defecto cuántico casi constante, δ ≈ {RYD['ritz']['delta0']:.3f}" if RYD else "")}.</li>
     <li>En la estrella realista, el modo F cruza el umbral atravesando esa escalera, con un cruce evitado con el nivel n = 1{f" (separación mínima {1e3 * CRS['gap_min_khz']:.0f} Hz)" if CRS else ""}, y sale como cuasi-normal con un amortiguamiento muy pequeño ({fnum(-n34['F'][1] * 1e3, 2)} Hz a ν_a = 3,4 kHz).</li>{sum_extra}"""
 else:
     star_html = None
     star_summary = ''
 
-# ------------------------------------------------------------------ respuesta a las cinco revisiones externas
+# ------------------------------------------------------------------ respuesta a las revisiones externas
 REVIEWS = [
     ('1ª', 'Signo de la identidad Im w = Re k · Im k / Re w', 'Corregido; la comprobación evalúa el residuo con los dos signos', 'Sec. 3, 7', 'ok'),
     ('1ª', '«Función entera» no demostrada', 'Precisado: lo entero en k es f/√D; ninguna raíz es un cero espurio de D', 'Sec. 1, 7', 'ok'),
@@ -463,10 +527,15 @@ REVIEWS = [
     ('4ª 2', '«Linealizado en θ = 0» no describe el modelo', 'Precisado: masa de θ = 0 con acoplo constante, modelo fenomenológico', 'Sec. 5', 'ok'),
     ('4ª 3, 5ª 2', 'Font et al.: no todo está dentro del redondeo', 'Diferencias en Hz; solo F está dentro; valida el sector sin axión', 'Sec. 6', 'ok'),
     ('4ª 4, 5ª 3', 'Retirar un artefacto no prueba que no haya una familia axiónica', 'Recuento del semiplano amortiguado (paso 20): hasta Im ν = −1,5 kHz, solo modos fluidos', 'Sec. 6 (paso 20)', 'ok'),
-    ('5ª 3', 'La secuela tiene modos axiónicos muy amortiguados (Tabla III)', 'Recuento en esa región: los ceros son artefactos del empalme (paso 21); el método no decide', 'Sec. 6 (pasos 20–21)', 'open'),
+    ('5ª 3', 'La secuela tiene modos axiónicos muy amortiguados (Tabla III)', 'Recuento en esa región: índice 2, pero nuestra numérica no localiza esos ceros. La conclusión anterior («artefactos del empalme») se apoyaba en búsquedas sin converger y se retira; el método no decide', 'Sec. 6 (pasos 20–21)', 'open'),
     ('4ª 5, 5ª 5', 'Defecto cuántico «casi», no exactamente, constante', 'Dicho así; el ajuste de Ritz da la dependencia residual', 'Resumen, Sec. 6', 'ok'),
     ('4ª 5', 'Estabilidad numérica no es incertidumbre física', 'Dicho en la tabla de robustez (EOS, modelo y física omitida aparte)', 'Sec. 6', 'ok'),
     ('5ª 5', 'Umbral del modo inestable con λ ≠ 0; clasificación κ < 1; «único canal»', 'Umbral con λ² = 10⁻³ calculado; κ < 1 para frecuencia real; limitado al modelo idealizado', 'Resumen, Sec. 2, 5', 'ok'),
+    ('6ª 1', 'Dominio del recuento: el texto decía Im ν < 0, pero se contaba hasta −2 Hz y solo en 6,05–12 kHz', 'Franja casi real contada (paso 20); la conclusión se limita al rectángulo y se dice qué queda fuera', 'Resumen, Sec. 6', 'ok'),
+    ('6ª 2', '«Incertidumbre numérica» del 0,004 %; inconsistencia termodinámica de la EOS', 'Rebajado a «variación observada en estos controles»; inconsistencia de los ajustes BSk26 medida, con su efecto en las frecuencias (paso 23)', 'Sec. 6', 'ok'),
+    ('6ª 3', 'Falta una validación independiente del amortiguamiento con axión', 'Anchura de la resonancia en la dispersión a frecuencia real, sin plano complejo (paso 24): otro método, pero las mismas ecuaciones. Una prueba con otras ecuaciones (balance de energía radiada) queda pendiente', 'Sec. 6 (paso 24)', 'open'),
+    ('6ª 4', 'Muller sin residuo, solve_ivp.success sin comprobar, recuento heurístico', 'Muller y las integraciones fallan si no convergen. Eso destapó un fallo real en el arranque del interior, ya corregido y con todo recalculado; el recuento se presenta como heurística', 'Sec. 6 (recuadros)', 'ok'),
+    ('6ª 5', 'El HTML autocontenido no basta para reproducir', 'Incrustados los ficheros que faltaban (paper.py, __init__.py, checks.json, datos de referencia) y un extractor; probado en una carpeta vacía', 'Sec. 9', 'ok'),
 ]
 _CK = json.loads((ROOT / 'results' / 'checks.json').read_text())['steps']
 _dur = lambda t: '<1 s' if t < 1 else f'~{t:.0f} s' if t < 90 else f'~{t / 60:.0f} min'
@@ -478,7 +547,7 @@ _n_open = sum(r[4] == 'open' for r in REVIEWS)
 REV_HTML = f"""
 <section>
   <h2>8. Respuesta a las revisiones externas</h2>
-  <p>Este informe ha recibido cinco revisiones externas. Cada punto, con lo que hicimos y dónde está; {len(REVIEWS) - _n_open} están resueltos y {_n_open} quedan abiertos, declarados como tales en el texto. Las revisiones 4ª y 5ª coinciden en varios puntos porque la 5ª leyó una versión anterior.</p>
+  <p>Este informe ha recibido seis revisiones externas. Cada punto, con lo que hicimos y dónde está; {len(REVIEWS) - _n_open} están resueltos y {_n_open} quedan abiertos, declarados como tales en el texto. Las revisiones 4ª y 5ª coinciden en varios puntos porque la 5ª leyó una versión anterior.</p>
   <div class="tbl"><table class="rv"><tr><th>revisión</th><th>crítica</th><th>qué hicimos</th><th>dónde</th><th></th></tr>{_rv_rows}</table></div>
 </section>"""
 
@@ -495,16 +564,20 @@ PENDING = f'''<section>
 
 # ------------------------------------------------------------------ ficheros para reproducir (se publican junto a la página)
 import shutil
-FILES = ['axion_ns/model.py', 'axion_ns/geometry.py', 'axion_ns/compare.py', 'axion_ns/pipeline.py', 'axion_ns/nonradial.py',
+FILES = ['axion_ns/__init__.py', 'axion_ns/paper.py', 'axion_ns/figdata.py', 'axion_ns/model.py', 'axion_ns/geometry.py', 'axion_ns/compare.py', 'axion_ns/pipeline.py', 'axion_ns/nonradial.py',
          'axion_ns/fullgr.py', 'axion_ns/bsk26.py', 'axion_ns/axstar.py', 'axion_ns/axgr.py', 'axion_ns/radial.py',
          'axion_ns/step2_perturbations.py', 'axion_ns/step4_numerics.py', 'axion_ns/step14_radial_branches.py',
          'axion_ns/step15_radial_star.py', 'axion_ns/step16_radial_stability.py', 'axion_ns/step17_radial_validation.py', 'axion_ns/step18_rydberg.py', 'axion_ns/step19_avoided_crossing.py',
          'axion_ns/step20_damped_count.py', 'axion_ns/step21_deep_artifacts.py', 'axion_ns/step22_exterior_contour.py',
-         'report/build_radial.py',
+         'axion_ns/step23_eos_consistency.py', 'axion_ns/step24_scattering_width.py',
+         'report/build_radial.py', 'report/build_radial_standalone.py',
          'pyproject.toml', 'uv.lock']
 DATA = ['results/radial_branches.json', 'results/radial_star.json', 'results/radial_stability.json',
         'results/radial_validation.json', 'results/radial_rydberg.json',
-        'results/radial_crossing.json', 'results/radial_damped.json', 'results/radial_deep.json', 'results/radial_contour.json']
+        'results/radial_crossing.json', 'results/radial_damped.json', 'results/radial_deep.json', 'results/radial_contour.json',
+        'results/radial_eos.json', 'results/radial_scattering.json', 'results/checks.json',
+        'results/fig_axgr.json', 'report/baseline_v1/fig_axgr.json',
+        'report/baseline_pre_h29/radial_star.json', 'report/baseline_pre_h29/radial_validation.json']   # tabla «antes/ahora» de H29
 FD = ROOT / 'report' / 'radial_files'
 FD.mkdir(exist_ok=True)
 published = {}
@@ -617,7 +690,7 @@ a {{ color: var(--accent); }}
 </style>
 <div class="wrap">
 <header>
-  <div class="eyebrow">Workshop IA × física · pasos 14–22 · modelos radiales del Paper I</div>
+  <div class="eyebrow">Workshop IA × física · pasos 14–24 · modelos radiales del Paper I</div>
   <h1>Del modo cuasi-normal al modo ligado: el umbral axiónico en las oscilaciones radiales</h1>
   <p class="lede">Respuesta a la pregunta de José A. Pons: cómo pasa un modo radial de cuasi-normal a evanescente cuando su frecuencia cruza la masa del axión, y cómo se interpretan las distintas ramas del espectro. Hipótesis anotadas antes de calcular; todas las cifras se insertan desde <code>results/radial_*.json</code> al generar la página.</p>
 </header>
@@ -714,7 +787,7 @@ a {{ color: var(--accent); }}
   <pre class="code"><code>uv run python -m axion_ns.step2_perturbations     # ecuaciones (3.3) desde la acción (paso 2)
 {_repro}
 uv run python report/build_radial.py              # esta página, desde los JSON</code></pre>
-  <ul class="files">{"".join(f'<li><a href="{k}"><code>{k.split("/", 1)[1].replace("__", "/").removesuffix(".txt")}</code></a></li>' for k in sorted(published))}</ul>
+  <ul class="files">{"".join(f'<li><a href="{k}"><code>{k.split("/", 1)[1].removesuffix(".txt").replace("__", "/").replace("//init/.py", "/__init__.py")}</code></a></li>' for k in sorted(published))}</ul>
   <p class="small">La tabla de la EOS BSk26 la genera <code>axion_ns/bsk26.py</code> a partir de los ajustes analíticos publicados; no hace falta ningún fichero externo.</p>
 </section>
 
@@ -725,7 +798,7 @@ uv run python report/build_radial.py              # esta página, desde los JSON
   </div>
 </section>
 
-<footer>Generado por <code>report/build_radial.py</code> desde <code>results/radial_*.json</code> (pasos 14–22) y <code>results/checks.json</code>. Referencia: A. Gómez-Bañón, P. Pnigouras y J. A. Pons, <a href="https://arxiv.org/abs/2510.16245">arXiv:2510.16245</a>.</footer>
+<footer>Generado por <code>report/build_radial.py</code> desde <code>results/radial_*.json</code> (pasos 14–24) y <code>results/checks.json</code>. Referencia: A. Gómez-Bañón, P. Pnigouras y J. A. Pons, <a href="https://arxiv.org/abs/2510.16245">arXiv:2510.16245</a>.</footer>
 </div>
 '''
 

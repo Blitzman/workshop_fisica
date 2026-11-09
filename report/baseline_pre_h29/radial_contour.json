@@ -1,0 +1,86 @@
+{
+ "points": {
+  "H1": {
+   "nu": [
+    8.1192,
+    -0.0036
+   ],
+   "L": [
+    -0.00832131686608303,
+    0.12170187452612642
+   ],
+   "dphi+0.4": 4.802459746631103e-15,
+   "dphi-0.4": 4.200153220865745e-15,
+   "n_decay60": 2.7980183483353546e-16,
+   "ingoing": 1.995339381388782,
+   "n_decay1": 0.00023082224542105614
+  },
+  "artefacto antiguo": {
+   "nu": [
+    6.585,
+    -0.563
+   ],
+   "L": [
+    0.017485836001414463,
+    0.06824650919909916
+   ],
+   "dphi+0.4": 1.0268187795598885e-14,
+   "dphi-0.4": 9.590376868969669e-15,
+   "n_decay60": 1.1872800238059812e-15,
+   "ingoing": 2.067137670016187,
+   "n_decay1": 0.0007761168754085806
+  },
+  "cero profundo": {
+   "nu": [
+    6.293,
+    -4.48
+   ],
+   "L": [
+    0.12344661589188798,
+    0.1012795974973735
+   ],
+   "dphi+0.4": 1.9001521981683016e-15,
+   "dphi-0.4": 1.2296674930784358e-15,
+   "n_decay60": 4.60255073741641e-16,
+   "ingoing": 2.083416525341567,
+   "n_decay1": 0.00022970544066530023
+  },
+  "nivel ligado n = 2": {
+   "nu": [
+    5.94407,
+    0.0
+   ],
+   "L": [
+    0.0011675973470282768,
+    0.0
+   ],
+   "dphi+0.4": 6.4934594052836535e-12,
+   "dphi-0.4": 6.4934594052836535e-12,
+   "n_decay60": 9.300338277284936e-13,
+   "ingoing": 1541057587.218279,
+   "n_decay1": 3.1190476646360916
+  }
+ },
+ "checks": [
+  {
+   "name": "H24(a): girar el rayo complejo \u00b10.4 rad cambia L = psi'/psi en r_m como mucho 6.5e-12 (relativo) en H1, artefacto antiguo, cero profundo, nivel ligado n = 2 H1: 5e-15; artefacto antiguo: 1e-14; cero profundo: 2e-15; nivel ligado n = 2: 6e-12",
+   "ok": true,
+   "note": "la condici\u00f3n saliente no depende del camino en el plano r complejo"
+  },
+  {
+   "name": "H24(b): alejar el punto de partida (n_decay 40 \u2192 60) cambia L como mucho 9.3e-13: H1: 3e-16; artefacto antiguo: 1e-15; cero profundo: 5e-16; nivel ligado n = 2: 9e-13",
+   "ok": true,
+   "note": "el truncado del desarrollo asint\u00f3tico (con la fase coulombiana) no influye"
+  },
+  {
+   "name": "Control negativo 1: con la onda entrante, L cambia al menos un 2 (relativo) en los puntos por encima del umbral",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2: con n_decay = 1 el cambio m\u00ednimo es 2.3e-04, frente a 6.5e-12 en (a)-(b): la prueba detecta un punto de partida demasiado cercano",
+   "ok": true,
+   "note": ""
+  }
+ ]
+}

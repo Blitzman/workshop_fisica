@@ -160,7 +160,7 @@ def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1,
     dpsi = psi * (1j * (k + eta / rinf) - 1 / rinf)
     sc = psi
     rhs = lambda s, y: e * (np.asarray(Ae(r_m + s * e, omega, *bg(r_m + s * e)), dtype=complex) @ y)
-    sol = solve_ivp(rhs, (S, 0.0), [psi / sc, dpsi / sc], method='DOP853', rtol=rtol, atol=1e-60)
+    sol = _ok(solve_ivp(rhs, (S, 0.0), [psi / sc, dpsi / sc], method='DOP853', rtol=rtol, atol=1e-60))
     if raw == 'inf':   # solo la normalización en el infinito (control negativo del paso 16: el contorno pierde vueltas)
         return sol.y[0, -1] * sc, sol.y[1, -1] * sc
     if raw:     # normalizada a la forma asintótica e^{i(kr + eta ln r)}/r: no depende del camino, analítica en omega.
@@ -172,6 +172,13 @@ def exterior_psi(omega, M, r_m, ma, fa_v, E0, n_decay=40.0, rtol=1e-11, sheet=1,
 
 
 # ---------------------------------------------------------------- integración numérica y modos
+def _ok(sol):
+    """Toda integración de este módulo pasa por aquí: si solve_ivp no llega al final, se lanza (H25)."""
+    if sol.status < 0:
+        raise RuntimeError(f'solve_ivp: {sol.message}')
+    return sol
+
+
 def _bgvals(st, rr):
     return AG.bgvals(st, rr)
 
@@ -185,8 +192,9 @@ def interior(st, omega, seed, r0=1e-3, r1=0.5, rtol=1e-10, r_eval=None):
     xi, th, dxi = (r0, 0.0, 1.0) if seed == 'fluid' else (0.0, 1.0, 0.0)
     y0 = np.array([xi, (dxi - M[0, 0] * xi - M[0, 2] * th) / M[0, 1], th, 0.0], dtype=complex)
     f = lambda rr, y: np.asarray(A(rr, omega, *_bgvals(st, rr)), dtype=complex) @ y
-    s = solve_ivp(f, (r0, r1), y0, method='BDF', rtol=rtol, atol=1e-40)
-    s = solve_ivp(f, (r1, st.R), s.y[:, -1], method='DOP853', rtol=rtol, atol=1e-40, t_eval=r_eval)
+    # H29: BDF fallaba en su primer paso (atol = 1e-40 con componentes nulas) y el resultado se usaba sin mirarlo
+    s = _ok(solve_ivp(f, (r0, r1), y0, method='DOP853', rtol=rtol, atol=1e-40))
+    s = _ok(solve_ivp(f, (r1, st.R), s.y[:, -1], method='DOP853', rtol=rtol, atol=1e-40, t_eval=r_eval))
     return s
 
 
@@ -194,8 +202,8 @@ def outward(st, omega, y_R, rm, rtol=1e-10, r_eval=None):
     """(dth, dth') de R a r_m con la cola del condensado (exterior_matrix)."""
     from scipy.integrate import solve_ivp
     Ae = exterior_matrix()
-    return solve_ivp(lambda rr, u: np.asarray(Ae(rr, omega, *_bgvals(st, rr)), dtype=complex) @ u,
-                     (st.R, rm), y_R, method='DOP853', rtol=rtol, atol=1e-40, t_eval=r_eval)
+    return _ok(solve_ivp(lambda rr, u: np.asarray(Ae(rr, omega, *_bgvals(st, rr)), dtype=complex) @ u,
+                         (st.R, rm), y_R, method='DOP853', rtol=rtol, atol=1e-40, t_eval=r_eval))
 
 
 def det(st, omega, rm=None, sheet=1, rtol=1e-10, r0=1e-3, n_decay=40.0):
@@ -229,7 +237,8 @@ def det_entire(st, omega, rm=None, rtol=1e-10, n_decay=40.0, inward=True, sheet=
         from scipy.integrate import solve_ivp
         Ae = exterior_matrix()
         u = solve_ivp(lambda rr, v: np.asarray(Ae(rr, omega, *_bgvals(st, rr)), dtype=complex) @ v,
-                      (rm, st.R), [ps, dps], method='DOP853', rtol=rtol, atol=1e-300).y[:, -1]
+                      (rm, st.R), [ps, dps], method='DOP853', rtol=rtol, atol=1e-300)
+        u = _ok(u).y[:, -1]
         return y[3] * u[0] - y[2] * u[1]
     yo = outward(st, omega, y[2:], rm, rtol=rtol).y[:, -1]
     return yo[1] * ps - yo[0] * dps
@@ -275,7 +284,7 @@ def winding_converged(f, corners, n0=48, n_max=384, pool=None):
     while True:
         w = winding(f, corners, n0=n, pool=pool, cache=cache)
         tried.append(round(w[0]))
-        if len(tried) >= 2 and tried[-1] == tried[-2]:
+        if len(tried) >= 2 and tried[-1] == tried[-2] and w[3] <= np.pi / 3:   # H25: sin saltos sin resolver
             return tried[-1], n, len(cache), w[3], tried
         if n >= n_max:
             return None, n, len(cache), w[3], tried
@@ -302,7 +311,13 @@ def fluid_fraction(st, omega, rm=None):
     return float(Ef / (Ef + Ea))
 
 
-def muller(f, z, tol=1e-9, maxit=30):
+def muller(f, z, tol=1e-9, maxit=30, max_resid=0.1):
+    """Raíz compleja de f por Muller desde z. Lanza RuntimeError si no converge en maxit pasos o si el residuo
+    normalizado |f(z)|/|f(z (1 + 1e-6))| supera max_resid. Con un cero simple ese cociente es el paso de Newton
+    que falta en unidades de 1e-6 |z|: max_resid = 0,1 exige un error < 1e-7 |z| (< 1 mHz a 8 kHz). Separa una raíz
+    de un punto que no lo es (cociente ~1); no es la cota de precisión. Con 1e-2 fallaba en el empalme lejano del
+    paso 15, donde el ruido de det limita el cociente a ~1e-2 (H25). Antes devolvía la última aproximación sin
+    comprobar nada."""
     z0, z1, z2 = z, z + 0.01, z - 0.002j
     f0, f1, f2 = f(z0), f(z1), f(z2)
     for _ in range(maxit):
@@ -317,4 +332,9 @@ def muller(f, z, tol=1e-9, maxit=30):
         f0, f1, f2 = f1, f2, f(z2)
         if abs(dz) < tol * abs(z2):
             break
+    else:
+        raise RuntimeError(f'muller: sin converger en {maxit} pasos desde {z}')
+    ref = abs(f(z2 * (1 + 1e-6)))
+    if not np.isfinite(z2) or abs(f2) > max_resid * ref:
+        raise RuntimeError(f'muller: residuo normalizado {abs(f2) / ref:.1e} en {z2}')
     return z2

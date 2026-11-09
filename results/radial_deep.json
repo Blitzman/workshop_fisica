@@ -8,103 +8,64 @@
  "fluid": [
   {
    "nu": [
-    8.119208585548744,
-    -0.0036022927257150683
+    8.114832021410287,
+    -0.003649497935153149
    ],
    "shift_pct": {
-    "theta_1e-5": 1.2628528212170957e-07,
-    "theta_1e-6": 2.0756222978364473e-07,
-    "R": 0.0032927741577065345
+    "theta_1e-5": 2.2585178977697724e-07,
+    "theta_1e-6": 1.1135374924669605e-07,
+    "R": 0.003341683974576809
    },
    "dIm_Hz": {
-    "theta_1e-5": -1.0531779328845636e-06,
-    "theta_1e-6": -1.3340608691521372e-06,
-    "R": 0.07474125181398472
+    "theta_1e-5": 2.4119138270807527e-06,
+    "theta_1e-6": 1.285166783757119e-06,
+    "R": 0.076376308686663
    }
   },
   {
    "nu": [
-    11.678582412891904,
-    -0.021698873404184287
+    11.669744767691233,
+    -0.021688532995737152
    ],
    "shift_pct": {
-    "theta_1e-5": 4.213587955205503e-08,
-    "theta_1e-6": 1.4496342341906246e-07,
-    "R": 0.006293670538416096
+    "theta_1e-5": 1.1501739845706617e-07,
+    "theta_1e-6": 4.7967637475299293e-08,
+    "R": 0.0063057099774330915
    },
    "dIm_Hz": {
-    "theta_1e-5": 5.268075142783601e-07,
-    "theta_1e-6": -1.5558532105025558e-05,
-    "R": -0.6966776107071686
+    "theta_1e-5": 1.3073918260497752e-05,
+    "theta_1e-6": -4.668028838472615e-06,
+    "R": -0.6966550831439648
    }
   }
  ],
- "deep": [
-  {
-   "nu": [
-    6.292808282258874,
-    -4.480326100144246
-   ],
-   "nu_1e-5": [
-    4.866690033883566,
-    -5.111404330768691
-   ],
-   "nu_1e-6": [
-    7.02143397042295,
-    -5.613315067949477
-   ],
-   "shift_pct": {
-    "theta_1e-5": 20.18832310749094,
-    "theta_1e-6": 17.438034739965442
-   },
-   "fluid": 9.439414066731003e-15
-  },
-  {
-   "nu": [
-    7.318645183447712,
-    -4.785631052416306
-   ],
-   "nu_1e-5": [
-    8.275168629369064,
-    -6.098039241176277
-   ],
-   "nu_1e-6": [
-    8.283413414073655,
-    -6.000555086461897
-   ],
-   "shift_pct": {
-    "theta_1e-5": 18.571766263907097,
-    "theta_1e-6": 17.741517733295822
-   },
-   "fluid": 5.340192337932384e-15
-  }
- ],
+ "deep": [],
  "neg1": {
-  "ratio_ingoing": 0.14685092394278534,
-  "ratio_outgoing": 3.279276028167104e-07
+  "ratio_ingoing": 0.14878014085752794,
+  "ratio_outgoing": 8.479676074715435e-07
  },
  "neg2": {
-  "shift_R_pct": 0.0032927741577065345,
-  "shift_alt_pct": 2.0756222978364473e-07
+  "shift_R_pct": 0.003341683974576809,
+  "shift_alt_pct": 2.2585178977697724e-07
  },
  "checks": [
   {
-   "name": "H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1192 kHz, Im -3.60 Hz): 1.3e-07 % y 2.1e-07 % (Im: -1.1e-06 y -1.3e-06 Hz); (Re 11.6786 kHz, Im -21.70 Hz): 4.2e-08 % y 1.4e-07 % (Im: +5.3e-07 y -1.6e-05 Hz)",
+   "name": "H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1148 kHz, Im -3.65 Hz): 2.3e-07 % y 1.1e-07 % (Im: +2.4e-06 y +1.3e-06 Hz); (Re 11.6697 kHz, Im -21.69 Hz): 1.2e-07 % y 4.8e-08 % (Im: +1.3e-05 y -4.7e-06 Hz)",
    "ok": true,
    "note": ""
   },
   {
-   "name": "H23b(ii): los ceros profundos se mueven con los dos radios alternativos: 6.293-4.480i kHz -> 4.867-5.111i (20 %) y 7.021-5.613i (17 %); 7.319-4.786i kHz -> 8.275-6.098i (19 %) y 8.283-6.001i (18 %)",
-   "ok": true,
+   "name": "H23b(ii): ning\u00fan cero profundo que mover: Muller no converge en la regi\u00f3n (paso 20); la prueba no decide",
+   "ok": false,
    "note": "si (i) y (ii) pasan: artefactos del empalme, no modos"
   },
   {
-   "name": "Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 3.3e-07 con la saliente)",
+   "name": "Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 8.5e-07 con la saliente)",
    "ok": true,
    "note": ""
   },
   {
-   "name": "Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0033 %, m\u00e1s que con los radios alternativos (2.1e-07 %)",
+   "name": "Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0033 %, m\u00e1s que con los radios alternativos (2.3e-07 %)",
    "ok": true,
    "note": ""
   }

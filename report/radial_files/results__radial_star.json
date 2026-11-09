@@ -1,7 +1,7 @@
 {
  "turning": {
   "p0_Mmax": 904.9564679547649,
-  "p0_wF2_zero": 904.8861120049672,
+  "p0_wF2_zero": 904.886113142275,
   "Mmax_msun": 2.1694724950207496
  },
  "stability": {
@@ -17,54 +17,54 @@
  "robustness": {
   "H1 (6 kHz)": {
    "base": [
-    8.119208569451317,
-    -0.003602296802986678
+    8.114832029538919,
+    -0.003649497278791442
    ],
    "rtol 1e-12": [
-    8.119208565934583,
-    -0.003602294977457224
+    8.11483203692746,
+    -0.003649496355944916
    ],
    "r0 1e-4 km": [
-    8.119216291158041,
-    -0.0036022122428900328
+    8.11483204353527,
+    -0.003649495054001047
    ],
    "exterior \u00d71,5": [
-    8.11920855917138,
-    -0.00360229566175148
+    8.114832028997593,
+    -0.0036494970380718
    ],
    "empalme |\u03b80|<1e-05 (84 km)": [
-    8.11920856303094,
-    -0.003602294827421539
+    8.114832041212058,
+    -0.0036494951898811702
    ],
    "empalme |\u03b80|<1e-06 (101 km)": [
-    8.119208562185733,
-    -0.003602295283908227
+    8.114832026106544,
+    -0.003649494518663185
    ]
   },
   "F (3,4 kHz)": {
    "base": [
-    3.4102916056625148,
-    -0.0005754832199499475
+    3.409090719369412,
+    -0.000559117570823534
    ],
    "rtol 1e-12": [
-    3.410291605270238,
-    -0.0005754833808148304
+    3.4090907181207966,
+    -0.0005591175609149772
    ],
    "r0 1e-4 km": [
-    3.4102937647999876,
-    -0.0005755069318788656
+    3.409090719448285,
+    -0.0005591174690607757
    ],
    "exterior \u00d71,5": [
-    3.4102916047554,
-    -0.0005754827825439162
+    3.4090907192942166,
+    -0.000559117538956426
    ],
    "empalme |\u03b80|<1e-05 (131 km)": [
-    3.4102916054024512,
-    -0.0005754834884548253
+    3.4090907190757864,
+    -0.0005591174939768953
    ],
    "empalme |\u03b80|<1e-06 (160 km)": [
-    3.4102916051861207,
-    -0.0005754833091399343
+    3.4090907192279003,
+    -0.0005591174131670661
    ]
   }
  },
@@ -72,73 +72,73 @@
   "M_msun": 1.4725178383709063,
   "R_km": 11.364864951381225,
   "alpha_g": 0.2747596256184816,
-  "F": 3.4505305519327534,
-  "F_fluid": 0.9763530554922247,
+  "F": 3.4492122874718696,
+  "F_fluid": 0.9763728194707862,
   "ladder": [
    {
     "n": 2,
-    "nu": 5.944070415367074,
-    "n_eff": 2.0123000885296936
+    "nu": 5.94406915519557,
+    "n_eff": 2.012277418949774
    },
    {
     "n": 3,
-    "nu": 5.974671092475676,
-    "n_eff": 2.990234956028699
+    "nu": 5.974670702959747,
+    "n_eff": 2.9902119639057347
    },
    {
     "n": 4,
-    "nu": 5.985693813472583,
-    "n_eff": 3.9787953500277125
+    "nu": 5.985693647241521,
+    "n_eff": 3.9787722343772756
    },
    {
     "n": 5,
-    "nu": 5.990837930996186,
-    "n_eff": 4.97183565068656
+    "nu": 5.990837845578673,
+    "n_eff": 4.971812474760521
    },
    {
     "n": 6,
-    "nu": 5.9936395036065395,
-    "n_eff": 5.967164878095739
+    "nu": 5.993639454110592,
+    "n_eff": 5.967141660666111
    }
   ],
   "H1": [
-   8.119208569451317,
-   -0.003602296802986678
+   8.114832029538919,
+   -0.003649497278791442
   ],
-  "H1_fluid": 0.9729217882224123
+  "H1_fluid": 0.9725931718500753
  },
  "artifact": {
   "old_rm": [
-   6.584782132060396,
-   -0.5632227140469324
+   6.584768588136245,
+   -0.5632165144651922
   ],
   "old_r84": [
-   6.236169744517634,
-   -0.7119456971921932
+   6.236151865132621,
+   -0.7119360784622264
   ],
   "rm": 117.30440053809293,
   "r84": 84.05755953751199,
   "new_escape": [
-   3.006217229911192,
-   -0.15101281200074895
+   NaN,
+   NaN
   ]
  },
  "nu35": {
   "bound": [
-   3.4040368812175394,
-   3.454399551529916
+   3.403720678957182,
+   3.453540005384561
   ],
   "fluid": [
-   0.2176036950325729,
-   0.7548547106086496
+   0.22658143063724226,
+   0.7467271043878891
   ]
  },
  "nu34": {
   "F": [
-   3.4102916056625148,
-   -0.0005754832199499475
+   3.409090719369412,
+   -0.000559117570823534
   ],
-  "fluid": 0.9679385978441826
+  "fluid": 0.9683848246041841
  },
  "exterior": {
   "cr_complex_ray": 0.0003257306951017693,
@@ -168,7 +168,7 @@
    "note": "la onda saliente crece con r y la integraci\u00f3n hacia dentro es inestable; en los modos poco amortiguados de los pasos 9-10 este error es peque\u00f1o (no comprueba otras fuentes de error)"
   },
   {
-   "name": "\u03bd_a = 6 kHz: modo F en 3.4505 kHz < \u03bd_a, frecuencia real (|Im det|/|det| = 0e+00 en el eje), fracci\u00f3n fluida 0.976",
+   "name": "\u03bd_a = 6 kHz: modo F en 3.4492 kHz < \u03bd_a, frecuencia real (|Im det|/|det| = 0e+00 en el eje), fracci\u00f3n fluida 0.976",
    "ok": true,
    "note": "H11(b)"
   },
@@ -178,12 +178,12 @@
    "note": "H11(c)"
   },
   {
-   "name": "\u03bd_a = 6 kHz: H1 = 8.1192 -0.0036i kHz (fracci\u00f3n fluida 0.973)",
+   "name": "\u03bd_a = 6 kHz: H1 = 8.1148 -0.0036i kHz (fracci\u00f3n fluida 0.973)",
    "ok": true,
    "note": "H11(b)"
   },
   {
-   "name": "Artefacto retirado: con la normalizaci\u00f3n antigua del lapso, la \u00abresonancia axi\u00f3nica\u00bb se mueve de 6.585 -0.563i a 6.236 -0.712i al cambiar el empalme (117 \u2192 84 km); con la correcci\u00f3n, Muller desde esa semilla sale de la regi\u00f3n (hacia 3.01 -0.15i); el recuento de la regi\u00f3n lo hace el paso 20",
+   "name": "Artefacto retirado: con la normalizaci\u00f3n antigua del lapso, la \u00abresonancia axi\u00f3nica\u00bb se mueve de 6.585 -0.563i a 6.236 -0.712i al cambiar el empalme (117 \u2192 84 km); con la correcci\u00f3n, Muller desde esa semilla sale de la regi\u00f3n (hacia nan +nani); el recuento de la regi\u00f3n lo hace el paso 20",
    "ok": true,
    "note": "era una cavidad entre R y el radio de empalme"
   },
@@ -193,12 +193,12 @@
    "note": ""
   },
   {
-   "name": "\u03bd_a = 3,5 kHz: dos ligados 3.4040 y 3.4544 kHz con car\u00e1cter mezclado (0.22 y 0.75 de fluido): cruce evitado F \u2013 \u00e1tomo n = 1",
+   "name": "\u03bd_a = 3,5 kHz: dos ligados 3.4037 y 3.4535 kHz con car\u00e1cter mezclado (0.23 y 0.75 de fluido): cruce evitado F \u2013 \u00e1tomo n = 1",
    "ok": true,
    "note": ""
   },
   {
-   "name": "\u03bd_a = 3,4 kHz: F ya por encima del umbral, Re \u03bd = 3.4103 kHz e Im \u03bd = -0.58 Hz (fracci\u00f3n fluida 0.968)",
+   "name": "\u03bd_a = 3,4 kHz: F ya por encima del umbral, Re \u03bd = 3.4091 kHz e Im \u03bd = -0.56 Hz (fracci\u00f3n fluida 0.968)",
    "ok": true,
    "note": "el modo fluido pasa a cuasi-normal al cruzar \u03bd_a"
   },
@@ -208,7 +208,7 @@
    "note": "H12; un barrido de signo puede no ver pares de ra\u00edces muy pr\u00f3ximas"
   },
   {
-   "name": "Robustez de Im \u03bd: rtol, r0 y longitud exterior cambian como mucho un 0.004 %; el radio de empalme (\u00faltimo paso hacia fuera) un 0.00 % en H1 (6 kHz), 0.00 % en F (3,4 kHz)",
+   "name": "Robustez de Im \u03bd: rtol, r0 y longitud exterior la cambian como mucho 6e-07 relativo; el radio de empalme (\u00faltimo paso hacia fuera) 8e-07 en H1 (6 kHz), 3e-07 en F (3,4 kHz)",
    "ok": true,
    "note": "H13; el radio de empalme es la incertidumbre dominante"
   }

@@ -216,17 +216,27 @@ def _perturb_rhs(st, l, omega, dyn):
     return f
 
 
-def interior(st, l, omega, U0, t0, dyn=True, r0=1e-3, frac=1.0):
+def _ok(sol):
+    """H29: si solve_ivp no llega al final, se lanza (antes se tomaba s.y[:, -1] sin mirar status)."""
+    if sol.status < 0:
+        raise RuntimeError(f'solve_ivp: {sol.message}')
+    return sol
+
+
+def interior(st, l, omega, U0, t0, dyn=True, r0=1e-3, frac=1.0, rtol=1e-9):
     """Integra desde el centro con las condiciones (10); devuelve el estado en la superficie."""
     e, p, nb, cs2, q1, q2, dPhi, dlam, Phi, lam, t, tp = st.bg(r0)
     dp0 = np.exp(-2 * Phi) * omega**2 / l * U0 - q1 * t0
     y0 = np.array([dp0, U0, t0, 0.0], dtype=complex)
     Rs = st.R * frac
     f = _perturb_rhs(st, l, omega, dyn)
-    # cerca del centro los términos l/r y l(l+1)/r^2 hacen el sistema rígido: implícito hasta r1
+    # H29: aquí había BDF «por rigidez» hasta r1, pero BDF fallaba en su primer paso y s.y[:, -1] era el valor
+    # inicial en r0, usado como si fuera el de r1. El tramo no es rígido: lo que ahogaba al integrador era
+    # atol = 1e-40 sobre componentes que arrancan en 0 (con la semilla axiónica, DOP853 necesitaba ~1e5 pasos).
+    # Con atol = 1e-18, absoluto sobre semillas O(1), el estado en r1 coincide con el de 1e-40 a 1e-10 relativo.
     r1 = 0.5
-    s = solve_ivp(f, (r0, r1), y0, method='BDF', rtol=1e-9, atol=1e-40)
-    s = solve_ivp(f, (r1, Rs), s.y[:, -1], method='DOP853', rtol=1e-9, atol=1e-40)
+    s = _ok(solve_ivp(f, (r0, r1), y0, method='DOP853', rtol=rtol, atol=1e-18))
+    s = _ok(solve_ivp(f, (r1, Rs), s.y[:, -1], method='DOP853', rtol=rtol, atol=1e-40))
     return s.y[:, -1], Rs
 
 

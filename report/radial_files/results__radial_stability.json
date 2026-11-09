@@ -38,8 +38,8 @@
    96,
    96
   ],
-  "points": 1547,
-  "max_dphase": 1.0354737083273273,
+  "points": 1549,
+  "max_dphase": 1.026412844910755,
   "axis_sign_changes": [
    0.5790443980602487
   ],
@@ -81,17 +81,17 @@
    96
   ],
   "points": 1545,
-  "max_dphase": 1.043745696150156,
+  "max_dphase": 1.043759254279729,
   "axis_sign_changes": [],
   "axis_imag_rel": 0.0,
-  "symmetry": 1.4161159350699334e-14
+  "symmetry": 1.3935534318806268e-14
  },
  "robust6": {
-  "n0_96": -7.355032700884382e-16,
+  "n0_96": -3.975693351829396e-17,
   "eps_half": 0,
-  "neg_raw_inf": 2.9999999999999987
+  "neg_raw_inf": 2.9999999999999996
  },
- "neg_sheet_principal": 1.0000004896705152,
+ "neg_sheet_principal": 1.000000489610093,
  "nu3.4": {
   "total": 0,
   "converged": true,
@@ -129,10 +129,10 @@
    96
   ],
   "points": 1950,
-  "max_dphase": 0.9874318439402446,
+  "max_dphase": 0.93553319737604,
   "axis_sign_changes": [],
   "axis_imag_rel": 0.0,
-  "symmetry": 1.25021604947723e-14
+  "symmetry": 1.2536243172115801e-14
  },
  "region": {
   "eps": 0.05,

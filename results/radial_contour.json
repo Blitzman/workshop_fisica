@@ -57,7 +57,7 @@
    "dphi+0.4": 6.4934594052836535e-12,
    "dphi-0.4": 6.4934594052836535e-12,
    "n_decay60": 9.300338277284936e-13,
-   "ingoing": 1541057587.218279,
+   "ingoing": null,
    "n_decay1": 3.1190476646360916
   }
  },
@@ -75,7 +75,7 @@
   {
    "name": "Control negativo 1: con la onda entrante, L cambia al menos un 2 (relativo) en los puntos por encima del umbral",
    "ok": true,
-   "note": ""
+   "note": "en el nivel ligado la mutaci\u00f3n es la soluci\u00f3n creciente: la integraci\u00f3n no termina y se detecta"
   },
   {
    "name": "Control negativo 2: con n_decay = 1 el cambio m\u00ednimo es 2.3e-04, frente a 6.5e-12 en (a)-(b): la prueba detecta un punto de partida demasiado cercano",
