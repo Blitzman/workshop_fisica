@@ -17,7 +17,7 @@ import numpy as np
 
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / 'results'
 TILES = [(6.05, 9.0, -0.3, -0.002), (9.0, 12.0, -0.3, -0.002), (6.05, 9.0, -1.5, -0.3), (9.0, 12.0, -1.5, -0.3)]
@@ -120,7 +120,7 @@ def run():
     res.append((f'H22(b), control positivo: con la normalización antigua del lapso el índice sube a {co["total"]} '
                 f'(piezas {co["per_tile"]}): el recuento ve las resonancias de cavidad', co['total'] is not None
                 and c['total'] is not None and co['total'] >= c['total'] + 3, ''))
-    out['checks'] = [{'name': n_, 'ok': bool(o_), 'note': t_} for n_, o_, t_ in res]
+    out['checks'] = [{'name': n_, 'ok': ok_field(o_), 'note': t_} for n_, o_, t_ in res]
     OUT.mkdir(exist_ok=True)
     (OUT / 'radial_damped.json').write_text(json.dumps(out, indent=1))
     return report('Paso 20: recuento en el semiplano amortiguado', res)

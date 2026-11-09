@@ -1,0 +1,238 @@
+{
+ "branch": {
+  "below": [
+   {
+    "nu": [
+     2.102,
+     -0.001
+    ],
+    "k_principal": [
+     7.839255736486703e-06,
+     -0.1177812638184622
+    ],
+    "rel": 2.220580999663632e-16,
+    "rel_short": 1.3531570678652367
+   },
+   {
+    "nu": [
+     2.4,
+     -0.01
+    ],
+    "k_principal": [
+     9.146999574296608e-05,
+     -0.11525264835606848
+    ],
+    "rel": 1.0436097387100265e-14,
+    "rel_short": 1.3386313954872142
+   },
+   {
+    "nu": [
+     5.0,
+     -0.1
+    ],
+    "k_principal": [
+     0.0031549250956244717,
+     -0.0696144317678357
+    ],
+    "rel": 1.1754242054259657e-13,
+    "rel_short": 0.9748030865157075
+   },
+   {
+    "nu": [
+     5.9,
+     -0.5
+    ],
+    "k_principal": [
+     0.031899515055546016,
+     -0.040621528972316086
+    ],
+    "rel": 2.5829826903516474e-13,
+    "rel_short": 1.4238927971681423
+   }
+  ],
+  "above": [
+   {
+    "nu": [
+     7.4,
+     -0.001
+    ],
+    "rel": 0.0,
+    "rel_flipped": 1.9918801752679764
+   },
+   {
+    "nu": [
+     11.2,
+     -0.01
+    ],
+    "rel": 0.0,
+    "rel_flipped": 1.9984794995513806
+   }
+  ]
+ },
+ "delicate": [
+  {
+   "name": "p1, justo por debajo del umbral (menor amortiguamiento)",
+   "mode": "p1",
+   "nu_a": 8.0,
+   "nu": [
+    7.410319478009794,
+    -1.3734161896296722e-06
+   ],
+   "dre_rel": {
+    "rtol": 3.882202337379681e-10,
+    "rm": 2.0231505359902258e-09,
+    "n_far": 6.660425544424697e-10
+   },
+   "dim_Hz": {
+    "rtol": 3.1751696742541654e-06,
+    "rm": 1.1134817504965651e-06,
+    "n_far": 3.351508105611143e-06
+   }
+  },
+  {
+   "name": "p2, justo por debajo del umbral",
+   "mode": "p2",
+   "nu_a": 12.0,
+   "nu": [
+    11.521149010882668,
+    -3.2358938879653086e-06
+   ],
+   "dre_rel": {
+    "rtol": 3.8304932559185545e-09,
+    "rm": 8.59009641196451e-10,
+    "n_far": 2.8490912962197967e-09
+   },
+   "dim_Hz": {
+    "rtol": 2.1786966448541947e-09,
+    "rm": 2.3426795640302234e-07,
+    "n_far": 5.7326378291481866e-08
+   }
+  },
+  {
+   "name": "p1, justo por encima del umbral",
+   "mode": "p1",
+   "nu_a": 7.0,
+   "nu": [
+    7.404994084518564,
+    -0.0004787265729567046
+   ],
+   "dre_rel": {
+    "rtol": 1.0891132440349338e-10,
+    "rm": 1.3543294552498253e-07,
+    "n_far": 3.469100562369931e-10
+   },
+   "dim_Hz": {
+    "rtol": 1.6833485668756032e-08,
+    "rm": 0.000909624304917605,
+    "n_far": 5.075283569062547e-08
+   }
+  },
+  {
+   "name": "p2, justo por encima del umbral",
+   "mode": "p2",
+   "nu_a": 11.0,
+   "nu": [
+    11.493714536245292,
+    -0.005032268364989889
+   ],
+   "dre_rel": {
+    "rtol": 1.4385124202931365e-09,
+    "rm": 1.955611845572136e-06,
+    "n_far": 1.5329775227002074e-09
+   },
+   "dim_Hz": {
+    "rtol": 8.789559175978456e-07,
+    "rm": 0.0009832574397981853,
+    "n_far": 8.209217871452124e-07
+   }
+  },
+  {
+   "name": "p2, el que radia axiones con menor amortiguamiento",
+   "mode": "p2",
+   "nu_a": 8.0,
+   "nu": [
+    11.368513574368057,
+    -0.00010014893532090538
+   ],
+   "dre_rel": {
+    "rtol": 2.3821611350172134e-09,
+    "rm": 7.950606839557395e-11,
+    "n_far": 1.1607914629507832e-10
+   },
+   "dim_Hz": {
+    "rtol": 1.5987886675097786e-07,
+    "rm": 1.5252591092538518e-06,
+    "n_far": 1.5501775953380773e-07
+   }
+  },
+  {
+   "name": "f, axi\u00f3n m\u00e1s pesado",
+   "mode": "f",
+   "nu_a": 15.0,
+   "nu": [
+    2.0753353127955507,
+    -0.0011963714498106012
+   ],
+   "dre_rel": {
+    "rtol": 9.028376490860524e-09,
+    "rm": 1.427627183137048e-08,
+    "n_far": 3.18146012867615e-08
+   },
+   "dim_Hz": {
+    "rtol": 9.610838013016793e-07,
+    "rm": 7.198450470684986e-07,
+    "n_far": 4.513831647866284e-08
+   }
+  }
+ ],
+ "neg": {
+  "mode": "p1, justo por encima del umbral",
+  "nu_a": 7.0,
+  "dim_Hz": {
+   "rm=R": 0.0017306094787989984,
+   "n_far=1": 8.525506164209183e-07
+  }
+ },
+ "checks": [
+  {
+   "name": "H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k < 0 en 4/4 frecuencias, pero L = psi'/psi coincide con la de la rama que decae a 3e-13 relativo como mucho: 2.1-0.001i kHz: 2e-16, 2.4-0.01i kHz: 1e-14, 5-0.1i kHz: 1e-13, 5.9-0.5i kHz: 3e-13",
+   "ok": true,
+   "note": "la integraci\u00f3n hacia dentro (40 longitudes de decaimiento) filtra la soluci\u00f3n creciente"
+  },
+  {
+   "name": "H31: por encima del umbral la rama no cambia (diferencia 0e+00)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 1: arrancando a 2 longitudes de decaimiento, la rama principal cambia L al menos un 1e+00 relativo (frente a 3e-13 con 40)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2: por encima del umbral, la onda entrante cambia L al menos un 2 relativo",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracci\u00f3n mueven Re nu como mucho 2e-06 relativo: p1 a 8 kHz 2e-09; p2 a 12 kHz 4e-09; p1 a 7 kHz 1e-07; p2 a 11 kHz 2e-06; p2 a 8 kHz 2e-09; f a 15 kHz 3e-08",
+   "ok": false,
+   "note": ""
+  },
+  {
+   "name": "H33: e Im nu como mucho: p1 a 8 kHz (Im 0.00137 Hz) 3.4e-06 Hz; p2 a 12 kHz (Im 0.00324 Hz) 2.3e-07 Hz; p1 a 7 kHz (Im 0.479 Hz) 9.1e-04 Hz; p2 a 11 kHz (Im 5.03 Hz) 9.8e-04 Hz; p2 a 8 kHz (Im 0.1 Hz) 1.5e-06 Hz; f a 15 kHz (Im 1.2 Hz) 9.6e-07 Hz",
+   "ok": true,
+   "note": "criterio: 1 % de Im nu o la resoluci\u00f3n de Muller (1e-9 |nu|), lo que sea mayor"
+  },
+  {
+   "name": "Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.0017 Hz, frente a 9.1e-04 Hz con las variantes de arriba",
+   "ok": false,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 8.5e-07 Hz",
+   "ok": false,
+   "note": ""
+  }
+ ]
+}

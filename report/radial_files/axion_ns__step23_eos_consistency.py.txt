@@ -18,7 +18,7 @@ from . import axgr as AG
 from . import axstar as AX
 from . import bsk26 as B
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / 'results'
 E = AX._eos
@@ -71,7 +71,7 @@ def run():
     sh = out['shift']
     res.append((f'H27: inconsistencia de los ajustes BSk26, n deps/dn/(eps + p) - 1 = '
                 + ', '.join(f'{v:+.1e} (p = {k})' for k, v in out['mismatch'].items())
-                + f' MeV/fm3; en el centro de la estrella de 6 kHz (p_c = {base["pc6"]:.0f}): {out["mismatch_center"]:+.1e}', True,
+                + f' MeV/fm3; en el centro de la estrella de 6 kHz (p_c = {base["pc6"]:.0f}): {out["mismatch_center"]:+.1e}', None,
                 'medido; no es un fallo del código sino de los ajustes publicados'))
     big = max(sh[k]['dRe_rel'] for k in sh)
     res.append((f'H27: con c_s^2 = n dp/dn/(eps + p) en vez de dp/deps, Re nu se mueve '
@@ -94,7 +94,7 @@ def run():
     inter = all(sm[k]['dRe_rel'] < sh[k]['dRe_rel'] for k in sh)
     res.append(('Control negativo 2: con la media geométrica de las dos definiciones, el desplazamiento es menor: '
                 + ', '.join(f"{k} {sm[k]['dRe_rel']:.1e}" for k in sm), inter, 'el efecto viene de c_s^2'))
-    out['checks'] = [{'name': n_, 'ok': bool(o_), 'note': t_} for n_, o_, t_ in res]
+    out['checks'] = [{'name': n_, 'ok': ok_field(o_), 'note': t_} for n_, o_, t_ in res]
     OUT.mkdir(exist_ok=True)
     (OUT / 'radial_eos.json').write_text(json.dumps(out, indent=1))
     return report('Paso 23: sensibilidad a la consistencia termodinámica de la EOS', res)

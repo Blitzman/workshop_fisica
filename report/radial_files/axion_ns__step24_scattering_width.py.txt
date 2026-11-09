@@ -23,7 +23,7 @@ from scipy.optimize import curve_fit
 
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / 'results'
 _S = {}
@@ -142,7 +142,7 @@ def run():
     ol = out['old_lapse_H1']
     res.append((f"Control negativo 2: con la normalización antigua del lapso, la resonancia de H1 cae a {ol['dnu_over_width']:.2g} "
                 f"anchuras del modo corregido", not np.isfinite(ol['dnu_over_width']) or ol['dnu_over_width'] > 1, ''))
-    out['checks'] = [{'name': n_, 'ok': bool(o_), 'note': t_} for n_, o_, t_ in res]
+    out['checks'] = [{'name': n_, 'ok': ok_field(o_), 'note': t_} for n_, o_, t_ in res]
     OUT.mkdir(exist_ok=True)
     (OUT / 'radial_scattering.json').write_text(json.dumps(out, indent=1))
     return report('Paso 24: anchura de los modos desde la dispersión a frecuencia real', res)

@@ -242,8 +242,8 @@ def zerilli_amplitudes(st, omega, ll, ye, rm, n_far=40):
     VZ = lambda x_: f(x_) * (2 * nn**2 * (nn + 1) * x_**3 + 6 * nn**2 * M * x_**2 + 18 * nn * M**2 * x_ + 18 * M**3) \
         / (x_**3 * (nn * x_ + 3 * M)**2)
     r_far = rm + n_far * 2 * np.pi / abs(omega.real)
-    s = solve_ivp(lambda x_, u: [u[1] / f(x_), -(omega**2 - VZ(x_)) * u[0] / f(x_)], (rm, r_far),
-                  np.array([Z, f(rm) * dZ], dtype=complex), method='DOP853', rtol=1e-11, atol=1e-60)
+    s = _ok(solve_ivp(lambda x_, u: [u[1] / f(x_), -(omega**2 - VZ(x_)) * u[0] / f(x_)], (rm, r_far),
+                      np.array([Z, f(rm) * dZ], dtype=complex), method='DOP853', rtol=1e-11, atol=1e-60))   # H32
     Zf, Pf = s.y[0, -1], s.y[1, -1]
     L2 = ll * (ll + 1)
     rs = r_far + 2 * M * np.log(r_far / (2 * M) - 1)

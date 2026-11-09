@@ -12,7 +12,7 @@ from . import (step1_background, step2_perturbations, step3_toy_model, step4_num
                step17_radial_validation, step18_rydberg,
                step19_avoided_crossing, step20_damped_count,
                step21_deep_artifacts, step22_exterior_contour,
-               step23_eos_consistency, step24_scattering_width)
+               step23_eos_consistency, step24_scattering_width, step25_exterior_convergence)
 
 STEPS = [('Fondo (TOV + KG)', step1_background), ('Perturbaciones radiales', step2_perturbations),
          ('Modelo simplificado (Sec. IV)', step3_toy_model), ('Números y figura', step4_numerics),
@@ -32,7 +32,8 @@ STEPS = [('Fondo (TOV + KG)', step1_background), ('Perturbaciones radiales', ste
          ('Ceros profundos frente al radio de empalme', step21_deep_artifacts),
          ('Condición exterior frente al rayo complejo', step22_exterior_contour),
          ('Consistencia termodinámica de la EOS', step23_eos_consistency),
-         ('Anchura desde la dispersión a frecuencia real', step24_scattering_width)]
+         ('Anchura desde la dispersión a frecuencia real', step24_scattering_width),
+         ('Rama del exterior y convergencia de los modos delicados (paso 10)', step25_exterior_convergence)]
 
 
 def _cpu():
@@ -46,13 +47,14 @@ def main():
     t0, out = time.time(), []
     for title, step in STEPS:
         t1 = time.time()
-        checks = [{'name': n, 'ok': bool(ok), 'note': note} for n, ok, note in step.run()]
+        checks = [{'name': n, 'ok': None if ok is None else bool(ok), 'note': note} for n, ok, note in step.run()]
         out.append({'step': title, 'module': step.__name__.split('.')[-1], 'seconds': round(time.time() - t1, 1),
                     'checks': checks})
-    allc = [c for s in out for c in s['checks']]
+    allc = [c for s in out for c in s['checks'] if c['ok'] is not None]   # los resultados descriptivos no cuentan
+    nres = sum(c['ok'] is None for s in out for c in s['checks'])
     bad = [c['name'] for c in allc if not c['ok']]
     secs = time.time() - t0
-    print(f'\n{len(allc) - len(bad)}/{len(allc)} comprobaciones OK en {secs:.0f} s')
+    print(f'\n{len(allc) - len(bad)}/{len(allc)} comprobaciones OK (y {nres} resultados descriptivos) en {secs:.0f} s')
     for name in bad:
         print('  FAIL:', name)
     path = Path(__file__).resolve().parent.parent / 'results' / 'checks.json'

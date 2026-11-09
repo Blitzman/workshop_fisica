@@ -160,10 +160,13 @@ gap_rows = ''.join(
     f'<tr><td>10<sup>{round(math.log10(g["lam2"]))}</sup></td><td>{g["gap_w2"]:.5f}</td>'
     f'<td>{g["gap_w2"] / math.sqrt(g["lam2"]):.3f}</td><td>{g["x0"]:.4f}</td></tr>' for g in D['gaps'])
 ratios = [g['gap_w2'] / math.sqrt(g['lam2']) for g in D['gaps']]
+# ok = None: resultado descriptivo, no comprobación (revisión del informe principal)
+_cls = lambda c: 'res' if c['ok'] is None else ('ok' if c['ok'] else 'bad')
+_pill = lambda c: 'RESULTADO' if c['ok'] is None else ('OK' if c['ok'] else 'FALLA')
 checks = D['checks']
-n_ok = sum(c['ok'] for c in checks)
+n_ok = sum(bool(c['ok']) for c in checks)
 check_rows = ''.join(
-    f'<li class="{"ok" if c["ok"] else "bad"}"><span class="pill">{"OK" if c["ok"] else "FALLA"}</span>'
+    f'<li class="{_cls(c)}"><span class="pill">{_pill(c)}</span>'
     f'<span>{html.escape(c["name"])}{(" <em>(" + html.escape(c["note"]) + ")</em>") if c["note"] else ""}</span></li>'
     for c in checks)
 
@@ -321,7 +324,7 @@ if S:
     n35, n34 = S['nu35'], S['nu34']
     st_checks = S.get('checks', [])
     st_rows = ''.join(
-        f'<li class="{"ok" if c["ok"] else "bad"}"><span class="pill">{"OK" if c["ok"] else "FALLA"}</span>'
+        f'<li class="{_cls(c)}"><span class="pill">{_pill(c)}</span>'
         f'<span>{html.escape(c["name"])}{(" <em>(" + html.escape(c["note"]) + ")</em>") if c["note"] else ""}</span></li>'
         for c in st_checks)
     rob = S.get('robustness', {})
@@ -336,7 +339,7 @@ if S:
         R_ = STB['region']
         cA = STB['control_axion']
         stb_rows = ''.join(
-            f'<li class="{"ok" if c["ok"] else "bad"}"><span class="pill">{"OK" if c["ok"] else "FALLA"}</span>'
+            f'<li class="{_cls(c)}"><span class="pill">{_pill(c)}</span>'
             f'<span>{html.escape(c["name"])}{(" <em>(" + html.escape(c["note"]) + ")</em>") if c["note"] else ""}</span></li>'
             for c in STB['checks'])
         res_ = ' y '.join(f'{fnum(float(k[2:]), 1)} kHz: índice {STB[k]["total"]:.0f}' for k in STB if k.startswith('nu'))
@@ -673,6 +676,7 @@ th {{ font-weight: 600; color: var(--muted); font-size: 12px; letter-spacing: .0
 .checks li > span:last-child {{ min-width: 0; overflow-wrap: anywhere; }}
 .pill {{ font: 600 11px/1 var(--f-mono); padding: 4px 6px; border-radius: 3px; letter-spacing: .05em; }}
 .ok .pill {{ background: var(--ok-bg); color: var(--ok); }}
+.res .pill {{ background: var(--code-bg, #eee); color: inherit; }}
 .bad .pill {{ background: var(--bad-bg); color: var(--bad); }}
 .status {{ font: 600 12px var(--f-mono); color: var(--ok); }}
 .status.pend {{ color: var(--flag); }}

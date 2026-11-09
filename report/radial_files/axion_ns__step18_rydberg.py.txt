@@ -12,7 +12,7 @@ from pathlib import Path
 import numpy as np
 from scipy.optimize import least_squares
 
-from .pipeline import report
+from .pipeline import ok_field, report
 
 RES = Path(__file__).resolve().parent.parent / 'results'
 
@@ -53,7 +53,7 @@ def run():
     out = {'alpha_g': a, 'n': ns.tolist(), 'x': xs.tolist(), 'n_minus_kappa': d_w.tolist(),
            'n_minus_neff': d_h.tolist(), 'n_minus_kappa_newton': d_n.tolist(),
            'ritz': {'delta0': float(fit.x[0]), 'delta2': float(fit.x[1]), 'resid': float(abs(fit.fun).max())},
-           'checks': [{'name': n_, 'ok': bool(o_), 'note': t_} for n_, o_, t_ in res]}
+           'checks': [{'name': n_, 'ok': ok_field(o_), 'note': t_} for n_, o_, t_ in res]}
     (RES / 'radial_rydberg.json').write_text(json.dumps(out, indent=1))
     return report('Paso 18: ley de Rydberg del átomo gravitatorio', res)
 

@@ -86,6 +86,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; letter-spacing: .04
 .checks li > span:last-child { min-width: 0; overflow-wrap: anywhere; }
 .pill { font: 600 11px/1 var(--f-mono); padding: 4px 6px; border-radius: 3px; letter-spacing: .05em; }
 .ok .pill { background: var(--ok-bg); color: var(--ok); }
+.res .pill { background: var(--code-bg, #eee); color: inherit; }
 .bad .pill { background: var(--bad-bg); color: var(--bad); }
 .status { font: 600 12px var(--f-mono); color: var(--ok); }
 .status.pend { color: var(--flag); }
@@ -304,17 +305,18 @@ a { color: var(--accent); }
   <h2>9. Reproducirlo</h2>
   <p>El código y los datos van incrustados abajo: despliega cada fichero para verlo. Con el repositorio y <a href="https://docs.astral.sh/uv/">uv</a>:</p>
   <pre class="code"><code>uv run python -m axion_ns.step2_perturbations     # ecuaciones (3.3) desde la acción (paso 2)
-uv run python -m axion_ns.step14_radial_branches    # Modos radiales: umbral y ramas (modelo simplificado) (~39 s)
-uv run python -m axion_ns.step15_radial_star        # Modos radiales de la estrella con condensado (GR) (~33 min)
+uv run python -m axion_ns.step14_radial_branches    # Modos radiales: umbral y ramas (modelo simplificado) (~2 min)
+uv run python -m axion_ns.step15_radial_star        # Modos radiales de la estrella con condensado (GR) (~46 min)
 uv run python -m axion_ns.step16_radial_stability   # Estabilidad radial: principio del argumento (~159 min)
-uv run python -m axion_ns.step17_radial_validation  # Modos radiales sin axión: validación externa (Font et al. 2002) (~4 min)
+uv run python -m axion_ns.step17_radial_validation  # Modos radiales sin axión: validación externa (Font et al. 2002) (~7 min)
 uv run python -m axion_ns.step18_rydberg            # Átomo gravitatorio: ley de Rydberg (~1 s)
 uv run python -m axion_ns.step19_avoided_crossing   # Cruce evitado F - átomo gravitatorio (~50 min)
 uv run python -m axion_ns.step20_damped_count       # Recuento en el semiplano amortiguado (~100 min)
-uv run python -m axion_ns.step21_deep_artifacts     # Ceros profundos frente al radio de empalme (~6 min)
-uv run python -m axion_ns.step22_exterior_contour   # Condición exterior frente al rayo complejo (~4 min)
-uv run python -m axion_ns.step23_eos_consistency    # Consistencia termodinámica de la EOS (~20 min)
-uv run python -m axion_ns.step24_scattering_width   # Anchura desde la dispersión a frecuencia real (~31 min)
+uv run python -m axion_ns.step21_deep_artifacts     # Ceros profundos frente al radio de empalme (~10 min)
+uv run python -m axion_ns.step22_exterior_contour   # Condición exterior frente al rayo complejo (~6 min)
+uv run python -m axion_ns.step23_eos_consistency    # Consistencia termodinámica de la EOS (~33 min)
+uv run python -m axion_ns.step24_scattering_width   # Anchura desde la dispersión a frecuencia real (~18 min)
+uv run python -m axion_ns.step25_exterior_convergence  # Rama del exterior y convergencia de los modos delicados (paso 10) (~40 min)
 uv run python report/build_radial.py              # esta página, desde los JSON</code></pre>
   <p><b>Extraer todos los ficheros</b> a una carpeta (con Python 3, sin dependencias): guarda esto como <code>extraer.py</code> y ejecuta <code>python3 extraer.py informe_radial_completo.html carpeta</code>. Después, dentro de <code>carpeta</code>, funcionan los comandos de arriba.</p><pre class="code"><code>import html, re, sys
 from pathlib import Path
@@ -567,8 +569,8 @@ def zerilli_amplitudes(st, omega, ll, ye, rm, n_far=40):
     VZ = lambda x_: f(x_) * (2 * nn**2 * (nn + 1) * x_**3 + 6 * nn**2 * M * x_**2 + 18 * nn * M**2 * x_ + 18 * M**3) \
         / (x_**3 * (nn * x_ + 3 * M)**2)
     r_far = rm + n_far * 2 * np.pi / abs(omega.real)
-    s = solve_ivp(lambda x_, u: [u[1] / f(x_), -(omega**2 - VZ(x_)) * u[0] / f(x_)], (rm, r_far),
-                  np.array([Z, f(rm) * dZ], dtype=complex), method=&#x27;DOP853&#x27;, rtol=1e-11, atol=1e-60)
+    s = _ok(solve_ivp(lambda x_, u: [u[1] / f(x_), -(omega**2 - VZ(x_)) * u[0] / f(x_)], (rm, r_far),
+                      np.array([Z, f(rm) * dZ], dtype=complex), method=&#x27;DOP853&#x27;, rtol=1e-11, atol=1e-60))   # H32
     Zf, Pf = s.y[0, -1], s.y[1, -1]
     L2 = ll * (ll + 1)
     rs = r_far + 2 * M * np.log(r_far / (2 * M) - 1)
@@ -598,7 +600,7 @@ def incoming(st, omega, ll, dyn=True, rtol=1e-10, rm=None, n_far=40):
         c = np.array([c1[1], -c1[0]])
     ye = sum(ci * b[1] for ci, b in zip(c, B))
     return zerilli_amplitudes(st, omega, ll, ye, rm, n_far)[1]
-</code></pre></details><details class="src"><summary><code>axion_ns/axstar.py</code> <span class="small">(321 líneas)</span></summary><pre class="code" data-path="axion_ns/axstar.py"><code>&quot;&quot;&quot;Estrella de neutrones BSk26 con condensado axiónico y sus modos no radiales en Cowling.
+</code></pre></details><details class="src"><summary><code>axion_ns/axstar.py</code> <span class="small">(336 líneas)</span></summary><pre class="code" data-path="axion_ns/axstar.py"><code>&quot;&quot;&quot;Estrella de neutrones BSk26 con condensado axiónico y sus modos no radiales en Cowling.
 
 Etapa A del trabajo con axión: reproducir las Tablas I y II del Paper II (arXiv:2610.37308) con las
 ecuaciones derivadas desde la acción (pasos 1 y 5), integradas sobre un fondo realista:
@@ -723,6 +725,11 @@ class Star:
         turn.terminal, turn.direction = True, 1
         s = solve_ivp(self.rhs, (r0, rmax), self._start(r0, thc), events=[up, down, turn],
                       method=&#x27;DOP853&#x27;, rtol=1e-11, atol=1e-30, dense_output=keep, max_step=0.25)
+        # H32: un disparo que no termina no se clasifica en silencio. Excepción: el integrador se para justo en la
+        # superficie (p en el umbral p_min de la EOS, donde el lado derecho salta de la materia al vacío). Pasa con el
+        # politropo del paso 17: es la llegada a la superficie y R sale de ahí igual que antes (14,155 km)
+        if s.status &lt; 0 and not s.y[1, -1] / KGEO &lt;= _eos.p_min * 1.0002:
+            raise RuntimeError(f&#x27;Star._integrate: {s.message} (r = {s.t[-1]:.6g}, p = {s.y[1, -1] / KGEO:.3g})&#x27;)
         if keep:
             self.sol = s
         if not self.nu_a:
@@ -852,16 +859,24 @@ def surface_residual(st, l, omega, dyn=False):
     return delta_p(st, Rs, y).real
 
 
-def exterior_L(st, l, omega, r_stop=None, full=False):
+def exterior_L(st, l, omega, r_stop=None, full=False, branch=&#x27;auto&#x27;, n_decay=40):
     &quot;&quot;&quot;psi&#x27;/psi en R para psi = delta theta_ext, Ec. (13), con la condición de onda saliente
-    (o ligada si Im k &gt; 0) en r grande: psi ~ exp[i(k r + eta ln r)]/r, eta = M (2 w^2 - m_a^2)/k.&quot;&quot;&quot;
+    (o ligada si Im k &gt; 0) en r grande: psi ~ exp[i(k r + eta ln r)]/r, eta = M (2 w^2 - m_a^2)/k.
+    branch: &#x27;auto&#x27; (la física, H31), &#x27;principal&#x27; (la de antes) o &#x27;flipped&#x27; (la opuesta a la principal: controles).
+    n_decay: el arranque está a n_decay/min(|k|, m_a) del radio final.&quot;&quot;&quot;
     m2 = st.ma**2
     k = np.sqrt(complex(omega**2 - m2))
-    if k.imag &lt; 0 and abs(k.real) &lt; 1e-14:
+    # H31: por debajo del umbral el canal axiónico está cerrado y la solución debe decaer (Im k &gt; 0). La rama principal
+    # da Im k &lt; 0 si el modo está amortiguado; antes solo se corregía con Re k ~ 0. Por encima del umbral, la principal
+    # (Re k &gt; 0) es la saliente. Con la rama anterior L salía igual (&lt; 1e-13): la integración hacia dentro recorre
+    # ~40 longitudes de decaimiento y filtra la solución creciente (paso 25)
+    if branch == &#x27;flipped&#x27;:
+        k = -k
+    elif branch == &#x27;auto&#x27; and (omega**2 - m2).real &lt; 0 and k.imag &lt; 0:
         k = -k
     Mt, R, rend = st.sol.y[0, -1], st.R, st.sol.t[-1]
     r_stop = r_stop or R
-    rinf = min(r_stop + 40 / min(abs(k), st.ma), 6000.0)
+    rinf = min(r_stop + n_decay / min(abs(k), st.ma), 6000.0)
     eta = Mt * (2 * omega**2 - m2) / k
 
     def bgx(r):
@@ -887,6 +902,8 @@ def exterior_L(st, l, omega, r_stop=None, full=False):
     psi = np.exp(1j * (k * rinf + eta * np.log(rinf))) / rinf
     dpsi = psi * (1j * (k + eta / rinf) - 1 / rinf)
     s = solve_ivp(f, (rinf, r_stop), [psi / abs(psi), dpsi / abs(psi)], method=&#x27;DOP853&#x27;, rtol=1e-10, atol=1e-60)
+    if s.status &lt; 0:                                    # H32: no se usa una integración que no terminó
+        raise RuntimeError(f&#x27;exterior_L: {s.message}&#x27;)
     if full:                      # (psi, psi&#x27;) en r_stop, sin dividir: evita los polos de psi&#x27;/psi
         return s.y[0, -1], s.y[1, -1]
     return s.y[1, -1] / s.y[0, -1]
@@ -1711,7 +1728,7 @@ PERTURBATIONS = {
     &#x27;(3.3e) continuidad&#x27;: d((eps + p) * xi1) + (eps + p) * xi1 * (2 / r + d(lam0) + d(Phi0))
     + (dp / cs2 + (eps + p) * dlam),
 }
-</code></pre></details><details class="src"><summary><code>axion_ns/pipeline.py</code> <span class="small">(32 líneas)</span></summary><pre class="code" data-path="axion_ns/pipeline.py"><code>&quot;&quot;&quot;Derivaciones compartidas por los pasos (cacheadas).&quot;&quot;&quot;
+</code></pre></details><details class="src"><summary><code>axion_ns/pipeline.py</code> <span class="small">(39 líneas)</span></summary><pre class="code" data-path="axion_ns/pipeline.py"><code>&quot;&quot;&quot;Derivaciones compartidas por los pasos (cacheadas).&quot;&quot;&quot;
 from functools import lru_cache
 
 from .compare import Rules
@@ -1739,10 +1756,17 @@ def linear_equations():
 
 
 def report(title, results):
+    &quot;&quot;&quot;ok = True/False: comprobación que puede fallar. ok = None: resultado descriptivo (se informa, no se cuenta).&quot;&quot;&quot;
     print(f&#x27;\n== {title}&#x27;)
     for name, ok, note in results:
-        print(f&#x27;  [{&quot;OK &quot; if ok else &quot;FAIL&quot;}] {name}&#x27; + (f&#x27;  -- {note}&#x27; if note else &#x27;&#x27;))
+        tag = &#x27;RES &#x27; if ok is None else (&#x27;OK &#x27; if ok else &#x27;FAIL&#x27;)
+        print(f&#x27;  [{tag}] {name}&#x27; + (f&#x27;  -- {note}&#x27; if note else &#x27;&#x27;))
     return results
+
+
+def ok_field(ok):
+    &quot;&quot;&quot;Valor de &#x27;ok&#x27; en los JSON: None (resultado descriptivo) se conserva.&quot;&quot;&quot;
+    return None if ok is None else bool(ok)
 </code></pre></details><details class="src"><summary><code>axion_ns/radial.py</code> <span class="small">(340 líneas)</span></summary><pre class="code" data-path="axion_ns/radial.py"><code>&quot;&quot;&quot;Modos radiales (l = 0) en relatividad general completa con el condensado de axiones (hipótesis H11).
 
 Nada se transcribe a mano: se parte de las ecuaciones linealizadas desde la acción (pipeline.linear_equations,
@@ -2103,7 +2127,7 @@ import numpy as np
 from scipy.optimize import brentq
 from scipy.optimize import minimize_scalar
 
-from .pipeline import report
+from .pipeline import ok_field, report
 from .step4_numerics import f_toy
 
 OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
@@ -2366,7 +2390,7 @@ def run():
     OUT.mkdir(exist_ok=True)
     (OUT / &#x27;radial_branches.json&#x27;).write_text(json.dumps({
         &#x27;params&#x27;: {&#x27;alpha&#x27;: ALPHA, &#x27;cs2&#x27;: CS2, &#x27;lam2_track&#x27;: 1e-3, &#x27;lam2_damping&#x27;: 1e-4},
-        &#x27;checks&#x27;: [{&#x27;name&#x27;: n, &#x27;ok&#x27;: bool(o), &#x27;note&#x27;: nt} for n, o, nt in res],
+        &#x27;checks&#x27;: [{&#x27;name&#x27;: n, &#x27;ok&#x27;: ok_field(o), &#x27;note&#x27;: nt} for n, o, nt in res],
         &#x27;fluid_x0_0p6&#x27;: [wf.real, wf.imag, kf.real, kf.imag],
         &#x27;threshold_track&#x27;: [[x0, k.real, k.imag, w_of(k).real, w_of(k).imag] for x0, k in tr],
         &#x27;axis_after&#x27;: [{&#x27;x0&#x27;: x0, &#x27;kappa&#x27;: ks} for x0, ks in after],
@@ -2400,7 +2424,7 @@ from scipy.optimize import brentq, minimize_scalar
 from . import axgr as AG
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
 MSUN_KM = 1.476625
@@ -2582,7 +2606,7 @@ def run():
                      &#x27;new_escape&#x27;: [new_z.real, new_z.imag]},
         &#x27;nu35&#x27;: {&#x27;bound&#x27;: b35, &#x27;fluid&#x27;: f35}, &#x27;nu34&#x27;: {&#x27;F&#x27;: [F34.real, F34.imag], &#x27;fluid&#x27;: fF34},
         &#x27;exterior&#x27;: {&#x27;cr_complex_ray&#x27;: crc, &#x27;cr_real_line&#x27;: crr, &#x27;old_vs_new_strong&#x27;: d_strong, &#x27;old_vs_new_weak&#x27;: d_weak},
-        &#x27;checks&#x27;: [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res],
+        &#x27;checks&#x27;: [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: ok_field(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res],
     })
     OUT.mkdir(exist_ok=True)
     (OUT / &#x27;radial_star.json&#x27;).write_text(json.dumps(out, indent=1))
@@ -2617,7 +2641,7 @@ import numpy as np
 
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
 EPS, YMAX, XC, XMAX, GMAX = 0.05, 12.0, 2.0, 12.0, 20.0
@@ -2718,7 +2742,7 @@ def run():
                         f&#x27;F(-w*) = F(w)* se rompe ({symbad:.1e} frente a {sym:.0e})&#x27;, symbad &gt; 1e-3, &#x27;&#x27;))
     OUT.mkdir(exist_ok=True)
     out[&#x27;region&#x27;] = {&#x27;eps&#x27;: EPS, &#x27;ymax&#x27;: YMAX, &#x27;xmax&#x27;: XMAX, &#x27;gmax&#x27;: GMAX}
-    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
+    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: ok_field(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
     (OUT / &#x27;radial_stability.json&#x27;).write_text(json.dumps(out, indent=1))
     return report(&#x27;Paso 16: estabilidad radial por el principio del argumento&#x27;, res)
 
@@ -2743,7 +2767,7 @@ from scipy.optimize import brentq
 
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
 FONT = {&#x27;F&#x27;: 1.442, &#x27;H1&#x27;: 3.955, &#x27;H2&#x27;: 5.916, &#x27;H3&#x27;: 7.776}          # kHz, Tabla 2
@@ -2803,7 +2827,7 @@ def run():
                 len(nu) == 4 and all(abs(d) &lt; 0.1 for d in dev.values()), &#x27;H19(b)&#x27;))
     dg = {k: 100 * (v / GARCHING[k] - 1) for k, v in zip(GARCHING, nu)}
     res.append((&#x27;Frente a la tabla de Garching (modelo B0): &#x27; +
-                &#x27;, &#x27;.join(f&#x27;{k} {dg[k]:+.2f} %&#x27; for k in GARCHING) + &#x27; (método no indicado en la tabla)&#x27;, True, &#x27;H19(c)&#x27;))
+                &#x27;, &#x27;.join(f&#x27;{k} {dg[k]:+.2f} %&#x27; for k in GARCHING) + &#x27; (método no indicado en la tabla)&#x27;, None, &#x27;H19(c)&#x27;))
     _, _, nu_g = modes(Poly(gamma1=2.1), n=1)
     _, _, nu_e = modes(Poly(internal=False), n=1)
     d1, d2 = 100 * (nu_g[0] / FONT[&#x27;F&#x27;] - 1), 100 * (nu_e[0] / FONT[&#x27;F&#x27;] - 1)
@@ -2811,7 +2835,7 @@ def run():
     res.append((f&#x27;Control negativo 2: eps = rho (sin energía interna) mueve F un {d2:+.2f} %&#x27;, abs(d2) &gt; 0.1, &#x27;&#x27;))
     out = {&#x27;M&#x27;: M, &#x27;R&#x27;: R, &#x27;modes&#x27;: dict(zip(FONT, nu)), &#x27;font&#x27;: FONT, &#x27;garching&#x27;: GARCHING, &#x27;dev_font_pct&#x27;: dev,
            &#x27;dev_garching_pct&#x27;: dg, &#x27;neg_gamma1&#x27;: d1, &#x27;neg_no_internal&#x27;: d2,
-           &#x27;checks&#x27;: [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]}
+           &#x27;checks&#x27;: [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: ok_field(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]}
     OUT.mkdir(exist_ok=True)
     (OUT / &#x27;radial_validation.json&#x27;).write_text(json.dumps(out, indent=1))
     return report(&#x27;Paso 17: validación externa de los modos radiales (Font et al. 2002)&#x27;, res)
@@ -2833,7 +2857,7 @@ from pathlib import Path
 import numpy as np
 from scipy.optimize import least_squares
 
-from .pipeline import report
+from .pipeline import ok_field, report
 
 RES = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
 
@@ -2874,7 +2898,7 @@ def run():
     out = {&#x27;alpha_g&#x27;: a, &#x27;n&#x27;: ns.tolist(), &#x27;x&#x27;: xs.tolist(), &#x27;n_minus_kappa&#x27;: d_w.tolist(),
            &#x27;n_minus_neff&#x27;: d_h.tolist(), &#x27;n_minus_kappa_newton&#x27;: d_n.tolist(),
            &#x27;ritz&#x27;: {&#x27;delta0&#x27;: float(fit.x[0]), &#x27;delta2&#x27;: float(fit.x[1]), &#x27;resid&#x27;: float(abs(fit.fun).max())},
-           &#x27;checks&#x27;: [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]}
+           &#x27;checks&#x27;: [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: ok_field(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]}
     (RES / &#x27;radial_rydberg.json&#x27;).write_text(json.dumps(out, indent=1))
     return report(&#x27;Paso 18: ley de Rydberg del átomo gravitatorio&#x27;, res)
 
@@ -2896,7 +2920,7 @@ from scipy.optimize import brentq
 
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
 NU_A = [3.46, 3.48, 3.50, 3.52, 3.54, 3.57, 3.60, 3.65, 3.70]
@@ -2943,7 +2967,7 @@ def run(nus=NU_A):
          f&#x27;{hi_side[&quot;fluid&quot;][1]:.2f}&#x27;, swap, &#x27;&#x27;),
     ]
     out = {&#x27;rows&#x27;: rows, &#x27;gap_min_khz&#x27;: g_min, &#x27;nu_a_min&#x27;: nu_min,
-           &#x27;checks&#x27;: [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]}
+           &#x27;checks&#x27;: [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: ok_field(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]}
     OUT.mkdir(exist_ok=True)
     (OUT / &#x27;radial_crossing.json&#x27;).write_text(json.dumps(out, indent=1))
     return report(&#x27;Paso 19: cruce evitado F - átomo gravitatorio&#x27;, res)
@@ -2970,7 +2994,7 @@ import numpy as np
 
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
 TILES = [(6.05, 9.0, -0.3, -0.002), (9.0, 12.0, -0.3, -0.002), (6.05, 9.0, -1.5, -0.3), (9.0, 12.0, -1.5, -0.3)]
@@ -3073,7 +3097,7 @@ def run():
     res.append((f&#x27;H22(b), control positivo: con la normalización antigua del lapso el índice sube a {co[&quot;total&quot;]} &#x27;
                 f&#x27;(piezas {co[&quot;per_tile&quot;]}): el recuento ve las resonancias de cavidad&#x27;, co[&#x27;total&#x27;] is not None
                 and c[&#x27;total&#x27;] is not None and co[&#x27;total&#x27;] &gt;= c[&#x27;total&#x27;] + 3, &#x27;&#x27;))
-    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
+    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: ok_field(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
     OUT.mkdir(exist_ok=True)
     (OUT / &#x27;radial_damped.json&#x27;).write_text(json.dumps(out, indent=1))
     return report(&#x27;Paso 20: recuento en el semiplano amortiguado&#x27;, res)
@@ -3100,7 +3124,7 @@ import numpy as np
 from . import axgr as AG
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
 _S = {}
@@ -3176,7 +3200,7 @@ def run():
     out[&#x27;neg2&#x27;] = {&#x27;shift_R_pct&#x27;: sR, &#x27;shift_alt_pct&#x27;: s_alt}
     res.append((f&#x27;Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un {sR:.2g} %, &#x27;
                 f&#x27;más que con los radios alternativos ({s_alt:.2g} %)&#x27;, sR &gt; 3 * s_alt, &#x27;&#x27;))
-    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
+    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: ok_field(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
     OUT.mkdir(exist_ok=True)
     (OUT / &#x27;radial_deep.json&#x27;).write_text(json.dumps(out, indent=1))
     return report(&#x27;Paso 21: ceros profundos frente al radio de empalme&#x27;, res)
@@ -3202,7 +3226,7 @@ import numpy as np
 from . import axgr as AG
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
 # H1 (paso 20), el antiguo artefacto (paso 15), un cero profundo (paso 21) y el nivel ligado n = 2 (paso 18), en kHz
@@ -3251,7 +3275,7 @@ def run():
     n1 = min(p[&#x27;n_decay1&#x27;] for p in P.values())
     res.append((f&#x27;Control negativo 2: con n_decay = 1 el cambio mínimo es {n1:.1e}, frente a {max(ang, nd):.1e} en (a)-(b): &#x27;
                 &#x27;la prueba detecta un punto de partida demasiado cercano&#x27;, n1 &gt; 100 * max(ang, nd), &#x27;&#x27;))
-    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
+    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: ok_field(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
     OUT.mkdir(exist_ok=True)
     (OUT / &#x27;radial_contour.json&#x27;).write_text(json.dumps(out, indent=1))
     return report(&#x27;Paso 22: condición exterior frente al rayo complejo&#x27;, res)
@@ -3279,7 +3303,7 @@ from . import axgr as AG
 from . import axstar as AX
 from . import bsk26 as B
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
 E = AX._eos
@@ -3332,7 +3356,7 @@ def run():
     sh = out[&#x27;shift&#x27;]
     res.append((f&#x27;H27: inconsistencia de los ajustes BSk26, n deps/dn/(eps + p) - 1 = &#x27;
                 + &#x27;, &#x27;.join(f&#x27;{v:+.1e} (p = {k})&#x27; for k, v in out[&#x27;mismatch&#x27;].items())
-                + f&#x27; MeV/fm3; en el centro de la estrella de 6 kHz (p_c = {base[&quot;pc6&quot;]:.0f}): {out[&quot;mismatch_center&quot;]:+.1e}&#x27;, True,
+                + f&#x27; MeV/fm3; en el centro de la estrella de 6 kHz (p_c = {base[&quot;pc6&quot;]:.0f}): {out[&quot;mismatch_center&quot;]:+.1e}&#x27;, None,
                 &#x27;medido; no es un fallo del código sino de los ajustes publicados&#x27;))
     big = max(sh[k][&#x27;dRe_rel&#x27;] for k in sh)
     res.append((f&#x27;H27: con c_s^2 = n dp/dn/(eps + p) en vez de dp/deps, Re nu se mueve &#x27;
@@ -3355,7 +3379,7 @@ def run():
     inter = all(sm[k][&#x27;dRe_rel&#x27;] &lt; sh[k][&#x27;dRe_rel&#x27;] for k in sh)
     res.append((&#x27;Control negativo 2: con la media geométrica de las dos definiciones, el desplazamiento es menor: &#x27;
                 + &#x27;, &#x27;.join(f&quot;{k} {sm[k][&#x27;dRe_rel&#x27;]:.1e}&quot; for k in sm), inter, &#x27;el efecto viene de c_s^2&#x27;))
-    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
+    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: ok_field(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
     OUT.mkdir(exist_ok=True)
     (OUT / &#x27;radial_eos.json&#x27;).write_text(json.dumps(out, indent=1))
     return report(&#x27;Paso 23: sensibilidad a la consistencia termodinámica de la EOS&#x27;, res)
@@ -3388,7 +3412,7 @@ from scipy.optimize import curve_fit
 
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
 _S = {}
@@ -3507,7 +3531,7 @@ def run():
     ol = out[&#x27;old_lapse_H1&#x27;]
     res.append((f&quot;Control negativo 2: con la normalización antigua del lapso, la resonancia de H1 cae a {ol[&#x27;dnu_over_width&#x27;]:.2g} &quot;
                 f&quot;anchuras del modo corregido&quot;, not np.isfinite(ol[&#x27;dnu_over_width&#x27;]) or ol[&#x27;dnu_over_width&#x27;] &gt; 1, &#x27;&#x27;))
-    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: bool(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
+    out[&#x27;checks&#x27;] = [{&#x27;name&#x27;: n_, &#x27;ok&#x27;: ok_field(o_), &#x27;note&#x27;: t_} for n_, o_, t_ in res]
     OUT.mkdir(exist_ok=True)
     (OUT / &#x27;radial_scattering.json&#x27;).write_text(json.dumps(out, indent=1))
     return report(&#x27;Paso 24: anchura de los modos desde la dispersión a frecuencia real&#x27;, res)
@@ -3720,11 +3744,11 @@ def run():
     fl_pi = [z for z in roots_pi if abs(z.imag) &lt; 1e-8]
     ax_pi = [z for z in roots_pi if abs(z.imag) &gt;= 1e-8]
     res.append((f&#x27;Variante theta=pi (m_eff^2 = {m2pi:.1f} m_a^2, sin acoplo): {len(fl_pi)} modos fluidos SIN &#x27;
-                f&#x27;amortiguar + {len(ax_pi)} axiónicos&#x27;, True, &#x27;axiónicos: &#x27; + &#x27;, &#x27;.join(f&#x27;{z.real:.2f}{z.imag:+.2f}i&#x27; for z in ax_pi[:5])))
+                f&#x27;amortiguar + {len(ax_pi)} axiónicos&#x27;, None, &#x27;axiónicos: &#x27; + &#x27;, &#x27;.join(f&#x27;{z.real:.2f}{z.imag:+.2f}i&#x27; for z in ax_pi[:5])))
     plot([(&#x27;Modelo del paper (Ec. 4.13)\n&#x27; r&#x27;$\lambda^2=10^{-3}$, $\alpha=10$, $c_s^2=0.3$, $\bar x_0=0.6$&#x27;, X, Y, F, roots),
           (r&#x27;Linealizando en $\theta=\pi$: $m_\mathrm{eff}^2=(\alpha-1)/\sqrt{1-\beta}$, $\partial_a m^*=0$&#x27;, Xp, Yp, Fp,
            roots_pi)], OUT / &#x27;toy_qnm_landscape.png&#x27;)
-    res.append((&#x27;Figura guardada en results/toy_qnm_landscape.png&#x27;, True, &#x27;&#x27;))
+    res.append((&#x27;Figura guardada en results/toy_qnm_landscape.png&#x27;, None, &#x27;&#x27;))
     return report(&#x27;Paso 4: números y figura&#x27;, res)
 
 
@@ -4013,7 +4037,7 @@ dependencies = [
    &quot;note&quot;: &quot;&quot;
   }
  ]
-}</code></pre></details><details class="src"><summary><code>report/baseline_v1/fig_axgr.json</code> <span class="small">(1 líneas)</span></summary><pre class="code" data-path="report/baseline_v1/fig_axgr.json"><code>{&quot;nus&quot;:[2.8,3.0,4.0,5.0,6.0,7.0,8.0,10.0,11.0,12.0,13.0,15.0],&quot;gr0&quot;:[[1.9608,0.916559],[6.59435,0.0320684],[9.87192,0.000209785]],&quot;cow0&quot;:[2.42885,7.17056,10.1941],&quot;modes&quot;:[{&quot;name&quot;:&quot;f&quot;,&quot;cp&quot;:[0.828382,2.77427,7.25375,7.67124,7.35849,6.96604,6.62693,6.168,6.03269,5.94649,5.90066,5.90315],&quot;bg&quot;:[1.15146,3.94025,12.1846,15.4625,17.3215,18.6359,19.6881,21.402,22.1451,22.8375,23.489,24.6937],&quot;im&quot;:[0.940527,0.999335,1.17171,1.21093,1.21354,1.20413,1.1961,1.18893,1.18884,1.18999,1.1926,1.1997],&quot;re&quot;:[1.97705,2.0152,2.10303,2.11122,2.10509,2.09739,2.09074,2.08174,2.07909,2.0774,2.0765,2.07655]},{&quot;name&quot;:&quot;p1&quot;,&quot;cp&quot;:[0.988136,3.27861,9.30354,11.3795,12.1796,12.4515,12.5125,12.3833,12.2843,12.1855,12.0929,11.9354],&quot;bg&quot;:[1.18407,3.88836,10.4582,12.3392,13.1498,13.6237,13.9706,14.5312,14.7854,15.0314,15.2712,15.735],&quot;im&quot;:[0.30069,0.785627,0.24883,0.327988,1.11305,0.475173,0.00138126,0.00167573,0.00172886,0.00180692,0.00194664,0.00259602],&quot;re&quot;:[6.65951,6.81055,7.20786,7.34476,7.39752,7.41544,7.41947,7.41095,7.40442,7.3979,7.3918,7.38141]},{&quot;name&quot;:&quot;p2&quot;,&quot;cp&quot;:[0.867921,3.01141,10.1579,12.6945,13.8544,14.6564,15.3023,16.2268,16.5286,16.7968,17.0574,17.4494],&quot;bg&quot;:[0.950555,3.24245,10.4991,13.198,14.5125,15.3459,15.9724,16.9508,17.3666,17.7513,18.1114,18.7723],&quot;im&quot;:[0.842069,1.55761,2.73049,12.8078,9.97277,3.30069,0.10048,3.90914,5.00658,0.0032365,0.00864309,0.0225069],&quot;re&quot;:[9.9576,10.1692,10.8747,11.1251,11.2396,11.3188,11.3825,11.4738,11.5036,11.5301,11.5558,11.5945]}]}</code></pre></details><details class="src"><summary><code>report/build_radial.py</code> <span class="small">(807 líneas)</span></summary><pre class="code" data-path="report/build_radial.py"><code>&quot;&quot;&quot;Genera report/informe_radial.html (y la copia en results/) desde results/radial_branches.json.
+}</code></pre></details><details class="src"><summary><code>report/baseline_v1/fig_axgr.json</code> <span class="small">(1 líneas)</span></summary><pre class="code" data-path="report/baseline_v1/fig_axgr.json"><code>{&quot;nus&quot;:[2.8,3.0,4.0,5.0,6.0,7.0,8.0,10.0,11.0,12.0,13.0,15.0],&quot;gr0&quot;:[[1.9608,0.916559],[6.59435,0.0320684],[9.87192,0.000209785]],&quot;cow0&quot;:[2.42885,7.17056,10.1941],&quot;modes&quot;:[{&quot;name&quot;:&quot;f&quot;,&quot;cp&quot;:[0.828382,2.77427,7.25375,7.67124,7.35849,6.96604,6.62693,6.168,6.03269,5.94649,5.90066,5.90315],&quot;bg&quot;:[1.15146,3.94025,12.1846,15.4625,17.3215,18.6359,19.6881,21.402,22.1451,22.8375,23.489,24.6937],&quot;im&quot;:[0.940527,0.999335,1.17171,1.21093,1.21354,1.20413,1.1961,1.18893,1.18884,1.18999,1.1926,1.1997],&quot;re&quot;:[1.97705,2.0152,2.10303,2.11122,2.10509,2.09739,2.09074,2.08174,2.07909,2.0774,2.0765,2.07655]},{&quot;name&quot;:&quot;p1&quot;,&quot;cp&quot;:[0.988136,3.27861,9.30354,11.3795,12.1796,12.4515,12.5125,12.3833,12.2843,12.1855,12.0929,11.9354],&quot;bg&quot;:[1.18407,3.88836,10.4582,12.3392,13.1498,13.6237,13.9706,14.5312,14.7854,15.0314,15.2712,15.735],&quot;im&quot;:[0.30069,0.785627,0.24883,0.327988,1.11305,0.475173,0.00138126,0.00167573,0.00172886,0.00180692,0.00194664,0.00259602],&quot;re&quot;:[6.65951,6.81055,7.20786,7.34476,7.39752,7.41544,7.41947,7.41095,7.40442,7.3979,7.3918,7.38141]},{&quot;name&quot;:&quot;p2&quot;,&quot;cp&quot;:[0.867921,3.01141,10.1579,12.6945,13.8544,14.6564,15.3023,16.2268,16.5286,16.7968,17.0574,17.4494],&quot;bg&quot;:[0.950555,3.24245,10.4991,13.198,14.5125,15.3459,15.9724,16.9508,17.3666,17.7513,18.1114,18.7723],&quot;im&quot;:[0.842069,1.55761,2.73049,12.8078,9.97277,3.30069,0.10048,3.90914,5.00658,0.0032365,0.00864309,0.0225069],&quot;re&quot;:[9.9576,10.1692,10.8747,11.1251,11.2396,11.3188,11.3825,11.4738,11.5036,11.5301,11.5558,11.5945]}]}</code></pre></details><details class="src"><summary><code>report/build_radial.py</code> <span class="small">(811 líneas)</span></summary><pre class="code" data-path="report/build_radial.py"><code>&quot;&quot;&quot;Genera report/informe_radial.html (y la copia en results/) desde results/radial_branches.json.
 
 Regla (AGENTS.md §4): ninguna cifra se teclea a mano; todas salen del JSON que escribe
 axion_ns/step14_radial_branches.py.
@@ -4175,10 +4199,13 @@ gap_rows = &#x27;&#x27;.join(
     f&#x27;&lt;tr&gt;&lt;td&gt;10&lt;sup&gt;{round(math.log10(g[&quot;lam2&quot;]))}&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;{g[&quot;gap_w2&quot;]:.5f}&lt;/td&gt;&#x27;
     f&#x27;&lt;td&gt;{g[&quot;gap_w2&quot;] / math.sqrt(g[&quot;lam2&quot;]):.3f}&lt;/td&gt;&lt;td&gt;{g[&quot;x0&quot;]:.4f}&lt;/td&gt;&lt;/tr&gt;&#x27; for g in D[&#x27;gaps&#x27;])
 ratios = [g[&#x27;gap_w2&#x27;] / math.sqrt(g[&#x27;lam2&#x27;]) for g in D[&#x27;gaps&#x27;]]
+# ok = None: resultado descriptivo, no comprobación (revisión del informe principal)
+_cls = lambda c: &#x27;res&#x27; if c[&#x27;ok&#x27;] is None else (&#x27;ok&#x27; if c[&#x27;ok&#x27;] else &#x27;bad&#x27;)
+_pill = lambda c: &#x27;RESULTADO&#x27; if c[&#x27;ok&#x27;] is None else (&#x27;OK&#x27; if c[&#x27;ok&#x27;] else &#x27;FALLA&#x27;)
 checks = D[&#x27;checks&#x27;]
-n_ok = sum(c[&#x27;ok&#x27;] for c in checks)
+n_ok = sum(bool(c[&#x27;ok&#x27;]) for c in checks)
 check_rows = &#x27;&#x27;.join(
-    f&#x27;&lt;li class=&quot;{&quot;ok&quot; if c[&quot;ok&quot;] else &quot;bad&quot;}&quot;&gt;&lt;span class=&quot;pill&quot;&gt;{&quot;OK&quot; if c[&quot;ok&quot;] else &quot;FALLA&quot;}&lt;/span&gt;&#x27;
+    f&#x27;&lt;li class=&quot;{_cls(c)}&quot;&gt;&lt;span class=&quot;pill&quot;&gt;{_pill(c)}&lt;/span&gt;&#x27;
     f&#x27;&lt;span&gt;{html.escape(c[&quot;name&quot;])}{(&quot; &lt;em&gt;(&quot; + html.escape(c[&quot;note&quot;]) + &quot;)&lt;/em&gt;&quot;) if c[&quot;note&quot;] else &quot;&quot;}&lt;/span&gt;&lt;/li&gt;&#x27;
     for c in checks)
 
@@ -4336,7 +4363,7 @@ if S:
     n35, n34 = S[&#x27;nu35&#x27;], S[&#x27;nu34&#x27;]
     st_checks = S.get(&#x27;checks&#x27;, [])
     st_rows = &#x27;&#x27;.join(
-        f&#x27;&lt;li class=&quot;{&quot;ok&quot; if c[&quot;ok&quot;] else &quot;bad&quot;}&quot;&gt;&lt;span class=&quot;pill&quot;&gt;{&quot;OK&quot; if c[&quot;ok&quot;] else &quot;FALLA&quot;}&lt;/span&gt;&#x27;
+        f&#x27;&lt;li class=&quot;{_cls(c)}&quot;&gt;&lt;span class=&quot;pill&quot;&gt;{_pill(c)}&lt;/span&gt;&#x27;
         f&#x27;&lt;span&gt;{html.escape(c[&quot;name&quot;])}{(&quot; &lt;em&gt;(&quot; + html.escape(c[&quot;note&quot;]) + &quot;)&lt;/em&gt;&quot;) if c[&quot;note&quot;] else &quot;&quot;}&lt;/span&gt;&lt;/li&gt;&#x27;
         for c in st_checks)
     rob = S.get(&#x27;robustness&#x27;, {})
@@ -4351,7 +4378,7 @@ if S:
         R_ = STB[&#x27;region&#x27;]
         cA = STB[&#x27;control_axion&#x27;]
         stb_rows = &#x27;&#x27;.join(
-            f&#x27;&lt;li class=&quot;{&quot;ok&quot; if c[&quot;ok&quot;] else &quot;bad&quot;}&quot;&gt;&lt;span class=&quot;pill&quot;&gt;{&quot;OK&quot; if c[&quot;ok&quot;] else &quot;FALLA&quot;}&lt;/span&gt;&#x27;
+            f&#x27;&lt;li class=&quot;{_cls(c)}&quot;&gt;&lt;span class=&quot;pill&quot;&gt;{_pill(c)}&lt;/span&gt;&#x27;
             f&#x27;&lt;span&gt;{html.escape(c[&quot;name&quot;])}{(&quot; &lt;em&gt;(&quot; + html.escape(c[&quot;note&quot;]) + &quot;)&lt;/em&gt;&quot;) if c[&quot;note&quot;] else &quot;&quot;}&lt;/span&gt;&lt;/li&gt;&#x27;
             for c in STB[&#x27;checks&#x27;])
         res_ = &#x27; y &#x27;.join(f&#x27;{fnum(float(k[2:]), 1)} kHz: índice {STB[k][&quot;total&quot;]:.0f}&#x27; for k in STB if k.startswith(&#x27;nu&#x27;))
@@ -4688,6 +4715,7 @@ th {{ font-weight: 600; color: var(--muted); font-size: 12px; letter-spacing: .0
 .checks li &gt; span:last-child {{ min-width: 0; overflow-wrap: anywhere; }}
 .pill {{ font: 600 11px/1 var(--f-mono); padding: 4px 6px; border-radius: 3px; letter-spacing: .05em; }}
 .ok .pill {{ background: var(--ok-bg); color: var(--ok); }}
+.res .pill {{ background: var(--code-bg, #eee); color: inherit; }}
 .bad .pill {{ background: var(--bad-bg); color: var(--bad); }}
 .status {{ font: 600 12px var(--f-mono); color: var(--ok); }}
 .status.pend {{ color: var(--flag); }}
@@ -4865,8 +4893,8 @@ out = (&#x27;&lt;!doctype html&gt;\n&lt;html lang=&quot;es&quot;&gt;\n&lt;head&g
 for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;, ROOT / &#x27;results&#x27; / &#x27;informe_radial_completo.html&#x27;):
     dst.write_text(out)   # las dos copias, como build_radial.py con informe_radial.html
     print(dst, f&#x27;{len(out) // 1024} KB, {len(blocks)} ficheros incrustados&#x27;)
-</code></pre></details><details class="src"><summary><code>results/checks.json</code> <span class="small">(1138 líneas)</span></summary><pre class="code" data-path="results/checks.json"><code>{
- &quot;seconds&quot;: 28291,
+</code></pre></details><details class="src"><summary><code>results/checks.json</code> <span class="small">(1185 líneas)</span></summary><pre class="code" data-path="results/checks.json"><code>{
+ &quot;seconds&quot;: 34452,
  &quot;env&quot;: {
   &quot;python&quot;: &quot;3.14.4&quot;,
   &quot;platform&quot;: &quot;Linux x86_64&quot;,
@@ -4882,7 +4910,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Fondo (TOV + KG)&quot;,
    &quot;module&quot;: &quot;step1_background&quot;,
-   &quot;seconds&quot;: 19.4,
+   &quot;seconds&quot;: 20.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;Identidad nabla_mu T^mu_r(axion) = (box a + V&#x27;) d_r a&quot;,
@@ -4929,7 +4957,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Perturbaciones radiales&quot;,
    &quot;module&quot;: &quot;step2_perturbations&quot;,
-   &quot;seconds&quot;: 4.8,
+   &quot;seconds&quot;: 40.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;Paper (3.3a) KG == linealización de la acción&quot;,
@@ -4986,7 +5014,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Modelo simplificado (Sec. IV)&quot;,
    &quot;module&quot;: &quot;step3_toy_model&quot;,
-   &quot;seconds&quot;: 1.0,
+   &quot;seconds&quot;: 3.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;Toy (Ec. 4.2a) se sigue de (3.3d)+(3.3e) con las aproximaciones del paper&quot;,
@@ -5053,7 +5081,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Números y figura&quot;,
    &quot;module&quot;: &quot;step4_numerics&quot;,
-   &quot;seconds&quot;: 93.3,
+   &quot;seconds&quot;: 145.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;beta = 4z/(1+z)^2 = 0.877 (paper: 0.88)&quot;,
@@ -5097,12 +5125,12 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
     },
     {
      &quot;name&quot;: &quot;Variante theta=pi (m_eff^2 = 25.6 m_a^2, sin acoplo): 10 modos fluidos SIN amortiguar + 6 axiónicos&quot;,
-     &quot;ok&quot;: true,
+     &quot;ok&quot;: null,
      &quot;note&quot;: &quot;axiónicos: 5.55-0.33i, 8.96-1.70i, 13.68-2.63i, 18.70-3.24i, 23.83-3.69i&quot;
     },
     {
      &quot;name&quot;: &quot;Figura guardada en results/toy_qnm_landscape.png&quot;,
-     &quot;ok&quot;: true,
+     &quot;ok&quot;: null,
      &quot;note&quot;: &quot;&quot;
     }
    ]
@@ -5110,7 +5138,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Paper II: no radiales en Cowling&quot;,
    &quot;module&quot;: &quot;step5_nonradial&quot;,
-   &quot;seconds&quot;: 14.5,
+   &quot;seconds&quot;: 74.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;Paper II (8a) momento radial == linealización de la acción (Cowling)&quot;,
@@ -5252,7 +5280,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Paper II: números y niveles ligados&quot;,
    &quot;module&quot;: &quot;step6_nonradial_numerics&quot;,
-   &quot;seconds&quot;: 13.0,
+   &quot;seconds&quot;: 27.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;lambda_a = hbar/(m_a c) = 19.7 km para m_a = 1e-11 eV (paper: ~20 km)&quot;,
@@ -5324,7 +5352,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Más allá de Cowling (nuevo)&quot;,
    &quot;module&quot;: &quot;step7_fullgr&quot;,
-   &quot;seconds&quot;: 409.9,
+   &quot;seconds&quot;: 469.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;Parte sin traza de las ecuaciones angulares: H2 = H0, sin contribución del axión&quot;,
@@ -5456,7 +5484,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Más allá de Cowling: números y figuras&quot;,
    &quot;module&quot;: &quot;step8_numerics&quot;,
-   &quot;seconds&quot;: 633.6,
+   &quot;seconds&quot;: 1282.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;Fondo: el modelo de 1.4 M_sun con kappa = 1.3346e5 cgs tiene R = 14.449 km (LMI: 14.45 km)&quot;,
@@ -5508,7 +5536,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Con axión en Cowling: Tablas I, II y IV del Paper II&quot;,
    &quot;module&quot;: &quot;step9_axion_cowling&quot;,
-   &quot;seconds&quot;: 805.0,
+   &quot;seconds&quot;: 1473.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;Fondo BSk26 sin axión, p_c = 100 MeV/fm^3: M = 1.536 M_sun, R = 11.72 km (Paper I: 1.53 M_sun, 11.7 km)&quot;,
@@ -5555,7 +5583,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Con axión y métrica dinámica (nuevo)&quot;,
    &quot;module&quot;: &quot;step10_axion_gr&quot;,
-   &quot;seconds&quot;: 1760.0,
+   &quot;seconds&quot;: 2674.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;Conversión de fullgr.EXT a números: con el axión apagado, igual que la del paso 8 (máx. dif. relativa 9e-16)&quot;,
@@ -5573,7 +5601,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
      &quot;note&quot;: &quot;&quot;
     },
     {
-     &quot;name&quot;: &quot;Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 4e-09 e Im nu en 0.0 %&quot;,
+     &quot;name&quot;: &quot;Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 2e-09 e Im nu en 0.0 %&quot;,
      &quot;ok&quot;: true,
      &quot;note&quot;: &quot;&quot;
     },
@@ -5594,12 +5622,12 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
     },
     {
      &quot;name&quot;: &quot;Con la métrica dinámica, el axión sube el modo f hasta un 7.5 % (Cowling, paso 9: 5.2 %) y su amortiguamiento por ondas gravitacionales pasa de 0.17 a 0.13 s&quot;,
-     &quot;ok&quot;: true,
+     &quot;ok&quot;: null,
      &quot;note&quot;: &quot;resultado nuevo&quot;
     },
     {
      &quot;name&quot;: &quot;Amortiguamiento máximo por axiones: p2 a 5 kHz, 12.8 Hz (tau_a = 12.4 ms), como en Cowling; la suma 1/tau_GW + 1/tau_a con el tau_a de Cowling solo acierta en orden de magnitud (p2 a 8 kHz: 0.10 Hz frente a 1.0)&quot;,
-     &quot;ok&quot;: true,
+     &quot;ok&quot;: null,
      &quot;note&quot;: &quot;resultado nuevo&quot;
     }
    ]
@@ -5607,7 +5635,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Modos radiales: umbral y ramas (modelo simplificado)&quot;,
    &quot;module&quot;: &quot;step14_radial_branches&quot;,
-   &quot;seconds&quot;: 38.8,
+   &quot;seconds&quot;: 93.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;f(k) en la variable k coincide con f_toy(w) del paso 4 (Re w &gt; 1): diferencia relativa 7.5e-31&quot;,
@@ -5674,7 +5702,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Modos radiales de la estrella con condensado (GR)&quot;,
    &quot;module&quot;: &quot;step15_radial_star&quot;,
-   &quot;seconds&quot;: 1969.0,
+   &quot;seconds&quot;: 2748.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;Ecuación exterior derivada (theta_0 = 0) = Ec. (3.7) del Paper I: error relativo 2.3e-16&quot;,
@@ -5788,7 +5816,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Modos radiales sin axión: validación externa (Font et al. 2002)&quot;,
    &quot;module&quot;: &quot;step17_radial_validation&quot;,
-   &quot;seconds&quot;: 241.0,
+   &quot;seconds&quot;: 443.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;Fondo: M = 1.4002 M_sun, R = 14.155 km (Font et al.: 1.4, 14.15)&quot;,
@@ -5802,7 +5830,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
     },
     {
      &quot;name&quot;: &quot;Frente a la tabla de Garching (modelo B0): F -1.06 %, H1 -0.43 % (método no indicado en la tabla)&quot;,
-     &quot;ok&quot;: true,
+     &quot;ok&quot;: null,
      &quot;note&quot;: &quot;H19(c)&quot;
     },
     {
@@ -5891,7 +5919,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Ceros profundos frente al radio de empalme&quot;,
    &quot;module&quot;: &quot;step21_deep_artifacts&quot;,
-   &quot;seconds&quot;: 367.0,
+   &quot;seconds&quot;: 577.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1148 kHz, Im -3.65 Hz): 2.3e-07 % y 1.1e-07 % (Im: +2.4e-06 y +1.3e-06 Hz); (Re 11.6697 kHz, Im -21.69 Hz): 1.2e-07 % y 4.8e-08 % (Im: +1.3e-05 y -4.7e-06 Hz)&quot;,
@@ -5918,7 +5946,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Condición exterior frente al rayo complejo&quot;,
    &quot;module&quot;: &quot;step22_exterior_contour&quot;,
-   &quot;seconds&quot;: 270.0,
+   &quot;seconds&quot;: 345.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;H24(a): girar el rayo complejo ±0.4 rad cambia L = psi&#x27;/psi en r_m como mucho 6.5e-12 (relativo) en H1, artefacto antiguo, cero profundo, nivel ligado n = 2 H1: 5e-15; artefacto antiguo: 1e-14; cero profundo: 2e-15; nivel ligado n = 2: 6e-12&quot;,
@@ -5945,11 +5973,11 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Consistencia termodinámica de la EOS&quot;,
    &quot;module&quot;: &quot;step23_eos_consistency&quot;,
-   &quot;seconds&quot;: 1207.0,
+   &quot;seconds&quot;: 1998.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;H27: inconsistencia de los ajustes BSk26, n deps/dn/(eps + p) - 1 = +1.3e-04 (p = 1), -7.5e-05 (p = 10), -2.1e-04 (p = 100), +1.5e-03 (p = 300), +1.4e-03 (p = 500), +1.9e-04 (p = 900) MeV/fm3; en el centro de la estrella de 6 kHz (p_c = 100): -2.1e-04&quot;,
-     &quot;ok&quot;: true,
+     &quot;ok&quot;: null,
      &quot;note&quot;: &quot;medido; no es un fallo del código sino de los ajustes publicados&quot;
     },
     {
@@ -5972,7 +6000,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   {
    &quot;step&quot;: &quot;Anchura desde la dispersión a frecuencia real&quot;,
    &quot;module&quot;: &quot;step24_scattering_width&quot;,
-   &quot;seconds&quot;: 1863.0,
+   &quot;seconds&quot;: 1070.0,
    &quot;checks&quot;: [
     {
      &quot;name&quot;: &quot;H28(a) H1 (6 kHz): la dispersión a frecuencia real da Gamma/2 = 3.6496 Hz frente a -Im nu = 3.6495 Hz de Muller (0.002 %), y nu_r a 5.0e-05 anchuras de Re nu (fondo de grado 4 en +-1.5 anchuras; residuo 4e-05 rad; grado 3 cambia la anchura 7e-08). Con fondo lineal en +-10 anchuras: 0.00014 % con residuo 9e-05 rad (umbral a 579 anchuras)&quot;,
@@ -6000,9 +6028,56 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
      &quot;note&quot;: &quot;&quot;
     }
    ]
+  },
+  {
+   &quot;step&quot;: &quot;Rama del exterior y convergencia de los modos delicados (paso 10)&quot;,
+   &quot;module&quot;: &quot;step25_exterior_convergence&quot;,
+   &quot;seconds&quot;: 2390.0,
+   &quot;checks&quot;: [
+    {
+     &quot;name&quot;: &quot;H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k &lt; 0 en 4/4 frecuencias, pero L = psi&#x27;/psi coincide con la de la rama que decae a 3e-13 relativo como mucho: 2.1-0.001i kHz: 2e-16, 2.4-0.01i kHz: 1e-14, 5-0.1i kHz: 1e-13, 5.9-0.5i kHz: 3e-13&quot;,
+     &quot;ok&quot;: true,
+     &quot;note&quot;: &quot;la integración hacia dentro (40 longitudes de decaimiento) filtra la solución creciente&quot;
+    },
+    {
+     &quot;name&quot;: &quot;H31: por encima del umbral la rama no cambia (diferencia 0e+00)&quot;,
+     &quot;ok&quot;: true,
+     &quot;note&quot;: &quot;&quot;
+    },
+    {
+     &quot;name&quot;: &quot;Control negativo 1: arrancando a 2 longitudes de decaimiento, la rama principal cambia L al menos un 1e+00 relativo (frente a 3e-13 con 40)&quot;,
+     &quot;ok&quot;: true,
+     &quot;note&quot;: &quot;&quot;
+    },
+    {
+     &quot;name&quot;: &quot;Control negativo 2: por encima del umbral, la onda entrante cambia L al menos un 2 relativo&quot;,
+     &quot;ok&quot;: true,
+     &quot;note&quot;: &quot;&quot;
+    },
+    {
+     &quot;name&quot;: &quot;H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracción mueven Re nu como mucho 2e-06 relativo: p1 a 8 kHz 2e-09; p2 a 12 kHz 4e-09; p1 a 7 kHz 1e-07; p2 a 11 kHz 2e-06; p2 a 8 kHz 2e-09; f a 15 kHz 3e-08&quot;,
+     &quot;ok&quot;: false,
+     &quot;note&quot;: &quot;&quot;
+    },
+    {
+     &quot;name&quot;: &quot;H33: e Im nu como mucho: p1 a 8 kHz (Im 0.00137 Hz) 3.4e-06 Hz; p2 a 12 kHz (Im 0.00324 Hz) 2.3e-07 Hz; p1 a 7 kHz (Im 0.479 Hz) 9.1e-04 Hz; p2 a 11 kHz (Im 5.03 Hz) 9.8e-04 Hz; p2 a 8 kHz (Im 0.1 Hz) 1.5e-06 Hz; f a 15 kHz (Im 1.2 Hz) 9.6e-07 Hz&quot;,
+     &quot;ok&quot;: true,
+     &quot;note&quot;: &quot;criterio: 1 % de Im nu o la resolución de Muller (1e-9 |nu|), lo que sea mayor&quot;
+    },
+    {
+     &quot;name&quot;: &quot;Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.0017 Hz, frente a 9.1e-04 Hz con las variantes de arriba&quot;,
+     &quot;ok&quot;: false,
+     &quot;note&quot;: &quot;&quot;
+    },
+    {
+     &quot;name&quot;: &quot;Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 8.5e-07 Hz&quot;,
+     &quot;ok&quot;: false,
+     &quot;note&quot;: &quot;&quot;
+    }
+   ]
   }
  ]
-}</code></pre></details><details class="src"><summary><code>results/fig_axgr.json</code> <span class="small">(1 líneas)</span></summary><pre class="code" data-path="results/fig_axgr.json"><code>{&quot;nus&quot;:[2.8,3.0,4.0,5.0,6.0,7.0,8.0,10.0,11.0,12.0,13.0,15.0],&quot;gr0&quot;:[[1.9608,0.916559],[6.59435,0.0320685],[9.87192,0.000210386]],&quot;cow0&quot;:[2.42885,7.17056,10.1941],&quot;modes&quot;:[{&quot;name&quot;:&quot;f&quot;,&quot;cp&quot;:[0.796695,2.67892,7.05318,7.47582,7.18554,6.81545,6.4955,6.06561,5.94126,5.86426,5.82625,5.84112],&quot;bg&quot;:[1.11967,3.84381,11.9749,15.253,17.1323,18.4689,19.5407,21.285,22.0397,22.742,23.4022,24.6206],&quot;im&quot;:[0.939911,0.997417,1.17109,1.20842,1.20948,1.20306,1.19645,1.18849,1.18732,1.18774,1.18953,1.19637],&quot;re&quot;:[1.97642,2.01333,2.0991,2.10739,2.1017,2.09444,2.08817,2.07974,2.0773,2.07579,2.07504,2.07534]},{&quot;name&quot;:&quot;p1&quot;,&quot;cp&quot;:[0.9564,3.18281,9.09903,11.1775,11.9988,12.293,12.3738,12.275,12.1876,12.0985,12.0141,11.8697],&quot;bg&quot;:[1.15227,3.79198,10.2515,12.1355,12.9674,13.4637,13.83,14.4208,14.6866,14.9422,15.1903,15.6672],&quot;im&quot;:[0.300682,0.784517,0.248915,0.327943,1.1061,0.478726,0.00137682,0.00167463,0.00172773,0.00180363,0.00194739,0.00259171],&quot;re&quot;:[6.65742,6.80424,7.19437,7.33143,7.3856,7.40499,7.41032,7.40381,7.39804,7.39217,7.38661,7.37708]},{&quot;name&quot;:&quot;p2&quot;,&quot;cp&quot;:[0.836221,2.91586,9.95183,12.4899,13.671,14.4949,15.1601,16.115,16.4284,16.7063,16.9752,17.3806],&quot;bg&quot;:[0.918831,3.14667,10.2923,12.9927,14.3279,15.1834,15.8294,16.8382,17.2655,17.66,18.0284,18.7027],&quot;im&quot;:[0.842048,1.5553,2.72604,12.815,9.98093,3.28863,0.100149,3.91059,5.03227,0.00323563,0.00864018,0.0224811],&quot;re&quot;:[9.95447,10.1598,10.8544,11.1049,11.2215,11.3028,11.3685,11.4628,11.4937,11.5211,11.5477,11.5877]}]}</code></pre></details><details class="src"><summary><code>results/radial_branches.json</code> <span class="small">(1566 líneas)</span></summary><pre class="code" data-path="results/radial_branches.json"><code>{
+}</code></pre></details><details class="src"><summary><code>results/fig_axgr.json</code> <span class="small">(1 líneas)</span></summary><pre class="code" data-path="results/fig_axgr.json"><code>{&quot;nus&quot;:[2.8,3.0,4.0,5.0,6.0,7.0,8.0,10.0,11.0,12.0,13.0,15.0],&quot;gr0&quot;:[[1.9608,0.916559],[6.59435,0.0320685],[9.87192,0.000210386]],&quot;cow0&quot;:[2.42885,7.17056,10.1941],&quot;modes&quot;:[{&quot;name&quot;:&quot;f&quot;,&quot;cp&quot;:[0.796695,2.67892,7.05318,7.47582,7.18554,6.81545,6.4955,6.06561,5.94126,5.86427,5.82625,5.84112],&quot;bg&quot;:[1.11967,3.84381,11.9749,15.253,17.1323,18.4689,19.5407,21.285,22.0397,22.742,23.4022,24.6206],&quot;im&quot;:[0.939911,0.997417,1.17109,1.20842,1.20948,1.20306,1.19645,1.18849,1.18732,1.18774,1.18953,1.19637],&quot;re&quot;:[1.97642,2.01333,2.0991,2.10739,2.1017,2.09444,2.08817,2.07974,2.0773,2.07579,2.07504,2.07534]},{&quot;name&quot;:&quot;p1&quot;,&quot;cp&quot;:[0.9564,3.18281,9.09903,11.1775,11.9988,12.293,12.3738,12.275,12.1876,12.0985,12.0141,11.8697],&quot;bg&quot;:[1.15227,3.79198,10.2515,12.1355,12.9674,13.4637,13.83,14.4208,14.6866,14.9422,15.1903,15.6672],&quot;im&quot;:[0.300682,0.784517,0.248915,0.327943,1.1061,0.478726,0.00137682,0.00167462,0.00172773,0.00180228,0.00194498,0.00259169],&quot;re&quot;:[6.65742,6.80424,7.19437,7.33143,7.3856,7.40499,7.41032,7.40381,7.39804,7.39217,7.38661,7.37708]},{&quot;name&quot;:&quot;p2&quot;,&quot;cp&quot;:[0.836221,2.91586,9.95183,12.4899,13.671,14.4949,15.1601,16.115,16.4284,16.7063,16.9752,17.3806],&quot;bg&quot;:[0.918831,3.14667,10.2923,12.9927,14.3279,15.1834,15.8294,16.8382,17.2655,17.66,18.0284,18.7027],&quot;im&quot;:[0.842048,1.5553,2.72604,12.815,9.98093,3.28863,0.100149,3.91059,5.03227,0.00323585,0.00864025,0.0224812],&quot;re&quot;:[9.95447,10.1598,10.8544,11.1049,11.2215,11.3028,11.3685,11.4628,11.4937,11.5211,11.5477,11.5877]}]}</code></pre></details><details class="src"><summary><code>results/radial_branches.json</code> <span class="small">(1566 líneas)</span></summary><pre class="code" data-path="results/radial_branches.json"><code>{
  &quot;params&quot;: {
   &quot;alpha&quot;: 10.0,
   &quot;cs2&quot;: 0.3,
@@ -8160,7 +8235,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
  &quot;checks&quot;: [
   {
    &quot;name&quot;: &quot;H27: inconsistencia de los ajustes BSk26, n deps/dn/(eps + p) - 1 = +1.3e-04 (p = 1), -7.5e-05 (p = 10), -2.1e-04 (p = 100), +1.5e-03 (p = 300), +1.4e-03 (p = 500), +1.9e-04 (p = 900) MeV/fm3; en el centro de la estrella de 6 kHz (p_c = 100): -2.1e-04&quot;,
-   &quot;ok&quot;: true,
+   &quot;ok&quot;: null,
    &quot;note&quot;: &quot;medido; no es un fallo del c\u00f3digo sino de los ajustes publicados&quot;
   },
   {
@@ -8384,14 +8459,14 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   ],
   &quot;conv&quot;: 6.975892752336676e-08,
   &quot;lin_rel_width&quot;: 1.3731830130758738e-06,
+  &quot;lin_resid_rad&quot;: 8.616156037621892e-05,
   &quot;nu_a&quot;: 6.0,
   &quot;thr_widths&quot;: 579.4858491411894,
   &quot;unitarity&quot;: 3.3306690738754696e-16,
   &quot;rel_width&quot;: 1.982399632538545e-05,
   &quot;dnu_over_width&quot;: 4.98848260107507e-05,
   &quot;phase_turn&quot;: 5.848954530450325,
-  &quot;off_turn&quot;: 0.0030926815136588237,
-  &quot;lin_resid_rad&quot;: 8.616156037621892e-05
+  &quot;off_turn&quot;: 0.0030926815136588237
  },
  &quot;F (3,4 kHz)&quot;: {
   &quot;muller&quot;: [
@@ -8533,14 +8608,14 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   ],
   &quot;conv&quot;: 1.6305130445815053e-07,
   &quot;lin_rel_width&quot;: 0.0015903711610338878,
+  &quot;lin_resid_rad&quot;: 2.1665918031182194,
   &quot;nu_a&quot;: 3.4,
   &quot;thr_widths&quot;: 16.259047906547103,
   &quot;unitarity&quot;: 2.220446049250313e-16,
   &quot;rel_width&quot;: 2.5943081357393538e-05,
   &quot;dnu_over_width&quot;: 1.0633485606773964e-06,
   &quot;phase_turn&quot;: 21.38342288439346,
-  &quot;off_turn&quot;: 0.1379445041963021,
-  &quot;lin_resid_rad&quot;: 2.1665918031182194
+  &quot;off_turn&quot;: 0.1379445041963021
  },
  &quot;old_lapse_H1&quot;: {
   &quot;nu_r&quot;: 8.12792204203746,
@@ -9012,7 +9087,7 @@ for dst in (ROOT / &#x27;report&#x27; / &#x27;informe_radial_completo.html&#x27;
   },
   {
    &quot;name&quot;: &quot;Frente a la tabla de Garching (modelo B0): F -1.06 %, H1 -0.43 % (m\u00e9todo no indicado en la tabla)&quot;,
-   &quot;ok&quot;: true,
+   &quot;ok&quot;: null,
    &quot;note&quot;: &quot;H19(c)&quot;
   },
   {

@@ -1,5 +1,5 @@
 {
- "seconds": 28291,
+ "seconds": 34452,
  "env": {
   "python": "3.14.4",
   "platform": "Linux x86_64",
@@ -15,7 +15,7 @@
   {
    "step": "Fondo (TOV + KG)",
    "module": "step1_background",
-   "seconds": 19.4,
+   "seconds": 20.0,
    "checks": [
     {
      "name": "Identidad nabla_mu T^mu_r(axion) = (box a + V') d_r a",
@@ -62,7 +62,7 @@
   {
    "step": "Perturbaciones radiales",
    "module": "step2_perturbations",
-   "seconds": 4.8,
+   "seconds": 40.0,
    "checks": [
     {
      "name": "Paper (3.3a) KG == linealización de la acción",
@@ -119,7 +119,7 @@
   {
    "step": "Modelo simplificado (Sec. IV)",
    "module": "step3_toy_model",
-   "seconds": 1.0,
+   "seconds": 3.0,
    "checks": [
     {
      "name": "Toy (Ec. 4.2a) se sigue de (3.3d)+(3.3e) con las aproximaciones del paper",
@@ -186,7 +186,7 @@
   {
    "step": "Números y figura",
    "module": "step4_numerics",
-   "seconds": 93.3,
+   "seconds": 145.0,
    "checks": [
     {
      "name": "beta = 4z/(1+z)^2 = 0.877 (paper: 0.88)",
@@ -230,12 +230,12 @@
     },
     {
      "name": "Variante theta=pi (m_eff^2 = 25.6 m_a^2, sin acoplo): 10 modos fluidos SIN amortiguar + 6 axiónicos",
-     "ok": true,
+     "ok": null,
      "note": "axiónicos: 5.55-0.33i, 8.96-1.70i, 13.68-2.63i, 18.70-3.24i, 23.83-3.69i"
     },
     {
      "name": "Figura guardada en results/toy_qnm_landscape.png",
-     "ok": true,
+     "ok": null,
      "note": ""
     }
    ]
@@ -243,7 +243,7 @@
   {
    "step": "Paper II: no radiales en Cowling",
    "module": "step5_nonradial",
-   "seconds": 14.5,
+   "seconds": 74.0,
    "checks": [
     {
      "name": "Paper II (8a) momento radial == linealización de la acción (Cowling)",
@@ -385,7 +385,7 @@
   {
    "step": "Paper II: números y niveles ligados",
    "module": "step6_nonradial_numerics",
-   "seconds": 13.0,
+   "seconds": 27.0,
    "checks": [
     {
      "name": "lambda_a = hbar/(m_a c) = 19.7 km para m_a = 1e-11 eV (paper: ~20 km)",
@@ -457,7 +457,7 @@
   {
    "step": "Más allá de Cowling (nuevo)",
    "module": "step7_fullgr",
-   "seconds": 409.9,
+   "seconds": 469.0,
    "checks": [
     {
      "name": "Parte sin traza de las ecuaciones angulares: H2 = H0, sin contribución del axión",
@@ -589,7 +589,7 @@
   {
    "step": "Más allá de Cowling: números y figuras",
    "module": "step8_numerics",
-   "seconds": 633.6,
+   "seconds": 1282.0,
    "checks": [
     {
      "name": "Fondo: el modelo de 1.4 M_sun con kappa = 1.3346e5 cgs tiene R = 14.449 km (LMI: 14.45 km)",
@@ -641,7 +641,7 @@
   {
    "step": "Con axión en Cowling: Tablas I, II y IV del Paper II",
    "module": "step9_axion_cowling",
-   "seconds": 805.0,
+   "seconds": 1473.0,
    "checks": [
     {
      "name": "Fondo BSk26 sin axión, p_c = 100 MeV/fm^3: M = 1.536 M_sun, R = 11.72 km (Paper I: 1.53 M_sun, 11.7 km)",
@@ -688,7 +688,7 @@
   {
    "step": "Con axión y métrica dinámica (nuevo)",
    "module": "step10_axion_gr",
-   "seconds": 1760.0,
+   "seconds": 2674.0,
    "checks": [
     {
      "name": "Conversión de fullgr.EXT a números: con el axión apagado, igual que la del paso 8 (máx. dif. relativa 9e-16)",
@@ -706,7 +706,7 @@
      "note": ""
     },
     {
-     "name": "Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 4e-09 e Im nu en 0.0 %",
+     "name": "Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 2e-09 e Im nu en 0.0 %",
      "ok": true,
      "note": ""
     },
@@ -727,12 +727,12 @@
     },
     {
      "name": "Con la métrica dinámica, el axión sube el modo f hasta un 7.5 % (Cowling, paso 9: 5.2 %) y su amortiguamiento por ondas gravitacionales pasa de 0.17 a 0.13 s",
-     "ok": true,
+     "ok": null,
      "note": "resultado nuevo"
     },
     {
      "name": "Amortiguamiento máximo por axiones: p2 a 5 kHz, 12.8 Hz (tau_a = 12.4 ms), como en Cowling; la suma 1/tau_GW + 1/tau_a con el tau_a de Cowling solo acierta en orden de magnitud (p2 a 8 kHz: 0.10 Hz frente a 1.0)",
-     "ok": true,
+     "ok": null,
      "note": "resultado nuevo"
     }
    ]
@@ -740,7 +740,7 @@
   {
    "step": "Modos radiales: umbral y ramas (modelo simplificado)",
    "module": "step14_radial_branches",
-   "seconds": 38.8,
+   "seconds": 93.0,
    "checks": [
     {
      "name": "f(k) en la variable k coincide con f_toy(w) del paso 4 (Re w > 1): diferencia relativa 7.5e-31",
@@ -807,7 +807,7 @@
   {
    "step": "Modos radiales de la estrella con condensado (GR)",
    "module": "step15_radial_star",
-   "seconds": 1969.0,
+   "seconds": 2748.0,
    "checks": [
     {
      "name": "Ecuación exterior derivada (theta_0 = 0) = Ec. (3.7) del Paper I: error relativo 2.3e-16",
@@ -921,7 +921,7 @@
   {
    "step": "Modos radiales sin axión: validación externa (Font et al. 2002)",
    "module": "step17_radial_validation",
-   "seconds": 241.0,
+   "seconds": 443.0,
    "checks": [
     {
      "name": "Fondo: M = 1.4002 M_sun, R = 14.155 km (Font et al.: 1.4, 14.15)",
@@ -935,7 +935,7 @@
     },
     {
      "name": "Frente a la tabla de Garching (modelo B0): F -1.06 %, H1 -0.43 % (método no indicado en la tabla)",
-     "ok": true,
+     "ok": null,
      "note": "H19(c)"
     },
     {
@@ -1024,7 +1024,7 @@
   {
    "step": "Ceros profundos frente al radio de empalme",
    "module": "step21_deep_artifacts",
-   "seconds": 367.0,
+   "seconds": 577.0,
    "checks": [
     {
      "name": "H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1148 kHz, Im -3.65 Hz): 2.3e-07 % y 1.1e-07 % (Im: +2.4e-06 y +1.3e-06 Hz); (Re 11.6697 kHz, Im -21.69 Hz): 1.2e-07 % y 4.8e-08 % (Im: +1.3e-05 y -4.7e-06 Hz)",
@@ -1051,7 +1051,7 @@
   {
    "step": "Condición exterior frente al rayo complejo",
    "module": "step22_exterior_contour",
-   "seconds": 270.0,
+   "seconds": 345.0,
    "checks": [
     {
      "name": "H24(a): girar el rayo complejo ±0.4 rad cambia L = psi'/psi en r_m como mucho 6.5e-12 (relativo) en H1, artefacto antiguo, cero profundo, nivel ligado n = 2 H1: 5e-15; artefacto antiguo: 1e-14; cero profundo: 2e-15; nivel ligado n = 2: 6e-12",
@@ -1078,11 +1078,11 @@
   {
    "step": "Consistencia termodinámica de la EOS",
    "module": "step23_eos_consistency",
-   "seconds": 1207.0,
+   "seconds": 1998.0,
    "checks": [
     {
      "name": "H27: inconsistencia de los ajustes BSk26, n deps/dn/(eps + p) - 1 = +1.3e-04 (p = 1), -7.5e-05 (p = 10), -2.1e-04 (p = 100), +1.5e-03 (p = 300), +1.4e-03 (p = 500), +1.9e-04 (p = 900) MeV/fm3; en el centro de la estrella de 6 kHz (p_c = 100): -2.1e-04",
-     "ok": true,
+     "ok": null,
      "note": "medido; no es un fallo del código sino de los ajustes publicados"
     },
     {
@@ -1105,7 +1105,7 @@
   {
    "step": "Anchura desde la dispersión a frecuencia real",
    "module": "step24_scattering_width",
-   "seconds": 1863.0,
+   "seconds": 1070.0,
    "checks": [
     {
      "name": "H28(a) H1 (6 kHz): la dispersión a frecuencia real da Gamma/2 = 3.6496 Hz frente a -Im nu = 3.6495 Hz de Muller (0.002 %), y nu_r a 5.0e-05 anchuras de Re nu (fondo de grado 4 en +-1.5 anchuras; residuo 4e-05 rad; grado 3 cambia la anchura 7e-08). Con fondo lineal en +-10 anchuras: 0.00014 % con residuo 9e-05 rad (umbral a 579 anchuras)",
@@ -1130,6 +1130,53 @@
     {
      "name": "Control negativo 2: con la normalización antigua del lapso, la resonancia de H1 cae a 3.6 anchuras del modo corregido",
      "ok": true,
+     "note": ""
+    }
+   ]
+  },
+  {
+   "step": "Rama del exterior y convergencia de los modos delicados (paso 10)",
+   "module": "step25_exterior_convergence",
+   "seconds": 2390.0,
+   "checks": [
+    {
+     "name": "H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k < 0 en 4/4 frecuencias, pero L = psi'/psi coincide con la de la rama que decae a 3e-13 relativo como mucho: 2.1-0.001i kHz: 2e-16, 2.4-0.01i kHz: 1e-14, 5-0.1i kHz: 1e-13, 5.9-0.5i kHz: 3e-13",
+     "ok": true,
+     "note": "la integración hacia dentro (40 longitudes de decaimiento) filtra la solución creciente"
+    },
+    {
+     "name": "H31: por encima del umbral la rama no cambia (diferencia 0e+00)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 1: arrancando a 2 longitudes de decaimiento, la rama principal cambia L al menos un 1e+00 relativo (frente a 3e-13 con 40)",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 2: por encima del umbral, la onda entrante cambia L al menos un 2 relativo",
+     "ok": true,
+     "note": ""
+    },
+    {
+     "name": "H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracción mueven Re nu como mucho 2e-06 relativo: p1 a 8 kHz 2e-09; p2 a 12 kHz 4e-09; p1 a 7 kHz 1e-07; p2 a 11 kHz 2e-06; p2 a 8 kHz 2e-09; f a 15 kHz 3e-08",
+     "ok": false,
+     "note": ""
+    },
+    {
+     "name": "H33: e Im nu como mucho: p1 a 8 kHz (Im 0.00137 Hz) 3.4e-06 Hz; p2 a 12 kHz (Im 0.00324 Hz) 2.3e-07 Hz; p1 a 7 kHz (Im 0.479 Hz) 9.1e-04 Hz; p2 a 11 kHz (Im 5.03 Hz) 9.8e-04 Hz; p2 a 8 kHz (Im 0.1 Hz) 1.5e-06 Hz; f a 15 kHz (Im 1.2 Hz) 9.6e-07 Hz",
+     "ok": true,
+     "note": "criterio: 1 % de Im nu o la resolución de Muller (1e-9 |nu|), lo que sea mayor"
+    },
+    {
+     "name": "Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.0017 Hz, frente a 9.1e-04 Hz con las variantes de arriba",
+     "ok": false,
+     "note": ""
+    },
+    {
+     "name": "Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 8.5e-07 Hz",
+     "ok": false,
      "note": ""
     }
    ]

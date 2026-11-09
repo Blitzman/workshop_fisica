@@ -162,13 +162,13 @@ def checks(ref, rows, conv, lmi, worst, subs):
     res.append((f'Con la métrica dinámica, el axión sube el modo f hasta un {max(sf):.1f} % '
                 f'(Cowling, paso 9: {max(axcow["modes"][0]["cp"]):.1f} %) '
                 f'y su amortiguamiento por ondas gravitacionales pasa de {1 / (2 * np.pi * -ref["gr"][0].imag * 1e3):.2f} '
-                f'a {1 / (2 * np.pi * -rows[15.0]["cp"][0].imag * 1e3):.2f} s', True, 'resultado nuevo'))
+                f'a {1 / (2 * np.pi * -rows[15.0]["cp"][0].imag * 1e3):.2f} s', None, 'resultado nuevo'))
     p2 = {nu: -rows[nu]['cp'][2].imag * 1e3 for nu in rows}
     num = max(p2, key=p2.get)
     res.append((f'Amortiguamiento máximo por axiones: p2 a {num:.0f} kHz, {p2[num]:.1f} Hz '
                 f'(tau_a = {1e3 / (2 * np.pi * p2[num]):.1f} ms), como en Cowling; la suma 1/tau_GW + 1/tau_a con el '
                 f'tau_a de Cowling solo acierta en orden de magnitud (p2 a 8 kHz: {p2[8.0]:.2f} Hz frente a {cow_im[8.0]:.1f})',
-                True, 'resultado nuevo'))
+                None, 'resultado nuevo'))
     return res
 
 

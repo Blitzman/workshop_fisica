@@ -116,6 +116,8 @@ def axion_background(maR, alpha_c=19.0, compactness=0.172):
     b0[2] = st.Phic
     bgs = solve_ivp(lambda rr, y: st.bg(rr, *y)[1], (r0, R * (1 - 1e-9)), b0, dense_output=True,
                     rtol=1e-11, atol=1e-30)
+    if bgs.status < 0:                                  # H32
+        raise RuntimeError(f'paso 8, fondo: {bgs.message}')
 
     def bgx(x):
         if x >= 1:

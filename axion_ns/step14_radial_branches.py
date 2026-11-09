@@ -18,7 +18,7 @@ import numpy as np
 from scipy.optimize import brentq
 from scipy.optimize import minimize_scalar
 
-from .pipeline import report
+from .pipeline import ok_field, report
 from .step4_numerics import f_toy
 
 OUT = Path(__file__).resolve().parent.parent / 'results'
@@ -281,7 +281,7 @@ def run():
     OUT.mkdir(exist_ok=True)
     (OUT / 'radial_branches.json').write_text(json.dumps({
         'params': {'alpha': ALPHA, 'cs2': CS2, 'lam2_track': 1e-3, 'lam2_damping': 1e-4},
-        'checks': [{'name': n, 'ok': bool(o), 'note': nt} for n, o, nt in res],
+        'checks': [{'name': n, 'ok': ok_field(o), 'note': nt} for n, o, nt in res],
         'fluid_x0_0p6': [wf.real, wf.imag, kf.real, kf.imag],
         'threshold_track': [[x0, k.real, k.imag, w_of(k).real, w_of(k).imag] for x0, k in tr],
         'axis_after': [{'x0': x0, 'kappa': ks} for x0, ks in after],

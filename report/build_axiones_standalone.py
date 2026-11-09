@@ -20,7 +20,8 @@ STEPS = ['step1_background', 'step2_perturbations', 'step3_toy_model', 'step4_nu
          'step6_nonradial_numerics', 'step7_fullgr', 'step8_numerics', 'step9_axion_cowling', 'step10_axion_gr',
          'step14_radial_branches', 'step15_radial_star', 'step16_radial_stability', 'step17_radial_validation',
          'step18_rydberg', 'step19_avoided_crossing', 'step20_damped_count', 'step21_deep_artifacts',
-         'step22_exterior_contour', 'step23_eos_consistency', 'step24_scattering_width']
+         'step22_exterior_contour', 'step23_eos_consistency', 'step24_scattering_width',
+         'step25_exterior_convergence']
 CODE = ([f'axion_ns/{m}.py' for m in ('__init__', 'geometry', 'model', 'paper', 'compare', 'pipeline', 'nonradial',
                                        'fullgr', 'fmodes', 'bsk26', 'axstar', 'axgr', 'radial', 'figdata', 'run_all')]
         + [f'axion_ns/{s}.py' for s in STEPS]
@@ -31,7 +32,8 @@ CODE = ([f'axion_ns/{m}.py' for m in ('__init__', 'geometry', 'model', 'paper', 
 DATA = (['results/checks.json'] + [f'results/fig_{n}.json' for n in ('toy', 'levels', 'modes', 'meff', 'background',
                                                                      'axcow', 'axgr')]
         + [f'report/baseline_pre_h29/{n}' for n in ('checks.json', 'fig_axcow.json', 'fig_axgr.json')]
-        + sorted(str(p.relative_to(ROOT)) for p in (ROOT / 'results').glob('radial_*.json')))
+        + sorted(str(p.relative_to(ROOT)) for p in (ROOT / 'results').glob('radial_*.json'))
+        + ['results/exterior_convergence.json'])
 EXTRACT = """import html, re, sys
 from pathlib import Path
 src, dst = Path(sys.argv[1]).read_text(), Path(sys.argv[2])

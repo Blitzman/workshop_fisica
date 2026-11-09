@@ -26,7 +26,14 @@ def linear_equations():
 
 
 def report(title, results):
+    """ok = True/False: comprobación que puede fallar. ok = None: resultado descriptivo (se informa, no se cuenta)."""
     print(f'\n== {title}')
     for name, ok, note in results:
-        print(f'  [{"OK " if ok else "FAIL"}] {name}' + (f'  -- {note}' if note else ''))
+        tag = 'RES ' if ok is None else ('OK ' if ok else 'FAIL')
+        print(f'  [{tag}] {name}' + (f'  -- {note}' if note else ''))
     return results
+
+
+def ok_field(ok):
+    """Valor de 'ok' en los JSON: None (resultado descriptivo) se conserva."""
+    return None if ok is None else bool(ok)

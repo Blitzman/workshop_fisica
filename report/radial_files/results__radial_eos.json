@@ -80,7 +80,7 @@
  "checks": [
   {
    "name": "H27: inconsistencia de los ajustes BSk26, n deps/dn/(eps + p) - 1 = +1.3e-04 (p = 1), -7.5e-05 (p = 10), -2.1e-04 (p = 100), +1.5e-03 (p = 300), +1.4e-03 (p = 500), +1.9e-04 (p = 900) MeV/fm3; en el centro de la estrella de 6 kHz (p_c = 100): -2.1e-04",
-   "ok": true,
+   "ok": null,
    "note": "medido; no es un fallo del c\u00f3digo sino de los ajustes publicados"
   },
   {

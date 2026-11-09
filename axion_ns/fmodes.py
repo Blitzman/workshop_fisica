@@ -135,6 +135,8 @@ class Star:
         surf.terminal = True
         s = solve_ivp(lambda rr, y: self.bg(rr, *y)[1], (r0, 50), self._start(nc, r0), events=surf,
                       method='DOP853', rtol=1e-12, atol=1e-30)
+        if s.status < 0:                                # H32
+            raise RuntimeError(f'fmodes: {s.message}')
         R = s.t[-1]
         M = s.y[0, -1]
         Phic = 0.5 * np.log(1 - 2 * M / R) - s.y[2, -1]
@@ -151,6 +153,8 @@ class Star:
             B, dB = self.bg(rr, *y[:3])
             return np.concatenate([dB, np.asarray(A(rr, omega, ll, *B), dtype=float) @ y[3:]])
         s = solve_ivp(rhs, (r0, r1), np.concatenate([b0, y0]), method='DOP853', rtol=1e-11, atol=1e-14)
+        if s.status < 0:                                # H32
+            raise RuntimeError(f'fmodes: {s.message}')
         return s.y[:, -1]
 
     def center(self, omega, ll, K0, W0):
@@ -202,6 +206,8 @@ def outgoing_amplitude(star, A, omega, ll, n_far=40):
     r_far = R + n_far * 2 * np.pi / omega
     s = solve_ivp(lambda x, u: [u[1] / f(x), -(omega**2 - VZ(x)) * u[0] / f(x)], (R, r_far), [Z, f(R) * dZ],
                   method='DOP853', rtol=1e-11, atol=1e-14)
+    if s.status < 0:                                # H32
+        raise RuntimeError(f'fmodes: {s.message}')
     Zf, Pf = s.y[0, -1], s.y[1, -1]                 # Z y dZ/dr*
     L2 = ll * (ll + 1)
     rs = r_far + 2 * M * np.log(r_far / (2 * M) - 1)

@@ -159,6 +159,8 @@ PRETTY = [
     None,
     None,
     None,
+    # ---- Paso 25: rama del exterior y convergencia de los modos delicados del paso 10 (revisión del informe principal)
+    None,
 ]
 
 RADIAL_URL = 'https://claude.ai/artifact/9XoYYWX9wvNUKoav2HmQbB'
@@ -297,14 +299,16 @@ def cambios(V, V0, checks, base_checks, figs_changed):
     nch = sum(1 for s in checks['steps'] if s['module'] in base
               for c, c0 in zip(s['checks'], base[s['module']]) if c['name'] != c0['name'])
     flips = [c['name'] for s in checks['steps'] if s['module'] in base
-             for c, c0 in zip(s['checks'], base[s['module']]) if c['ok'] != c0['ok']]
+             for c, c0 in zip(s['checks'], base[s['module']]) if None not in (c['ok'], c0['ok']) and c['ok'] != c0['ok']]
     nflip_txt = 'ninguna cambia de resultado' if not flips else f'{len(flips)} cambian de resultado'
     new_steps = [s['step'] for s in checks['steps'] if s['module'] not in base]
+    n_res = sum(c['ok'] is None for s in checks['steps'] for c in s['checks'])
     better = float(V['c9_tmax']) < float(V0['c9_tmax'])
     return f'''<section class="stack cambios" id="cambios">
     <p class="eyebrow">Versión 3 · {checks['env']['date']} · sustituye a la versión 2 del {BASE_DATE}</p>
     <h2>Qué cambia en esta versión</h2>
     <p><b>Corrección en el integrador de las perturbaciones con axión.</b> Cerca del centro (de r = 0,001 a 0,5 km) las perturbaciones se integraban con un método implícito (BDF) que fallaba en su primer paso, a cualquier frecuencia. El código no comprobaba si la integración había terminado y tomaba el valor inicial en r = 0,001 km como si fuera el de r = 0,5 km. Ahora ese tramo lo integra un método explícito (DOP853), y toda integración que no termina detiene el cálculo. El error que metía era pequeño, porque la parte mal arrancada decae hacia fuera, pero afecta a todo lo calculado con axión (cuarta y quinta parte). Lo destapó una revisión externa del informe de modos radiales, que señaló que el código no comprobaba el éxito de las integraciones. Se mantiene la corrección del lapso de la versión 2.</p>
+    <p><b>Tras una revisión externa de esta versión.</b> (1) Por debajo del umbral, la condición del axión fuera de la estrella arrancaba con la solución que crece hacia fuera en vez de la que decae. La integración hacia dentro la filtraba, así que las cifras no cambian (diferencia {V['c25_branch']}); ahora se escoge la buena de forma explícita. (2) Quedaban integraciones sin comprobar si terminaban: ya no queda ninguna. Al repetir los pasos afectados, la guarda solo saltó en la superficie de los dos politropos de referencia, donde el integrador se para al llegar al vacío; ese caso se acepta de forma explícita y las cifras no cambian. (3) Las {n_res} líneas que solo informan de una cifra nueva ya no cuentan como comprobaciones: se marcan como «resultado». (4) La convergencia del paso 10 se ha repetido en sus modos más delicados (paso 25): en dos modos que radian axiones justo por encima del umbral, la frecuencia depende del radio de empalme más de lo que predijimos, y queda como incertidumbre sistemática. (5) La frase sobre los FAIL esperados se genera desde los datos.</p>
     <p>Las cifras que cambian aparecen así: <mark class="nuevo">valor nuevo<span class="antes">valor anterior</span></mark>. Las gráficas de la cuarta y quinta parte están recalculadas{'' if figs_changed else ' (sin cambios visibles)'}. {nch} comprobaciones cambian de cifras y llevan la etiqueta «actualizada»; {nflip_txt}. El acuerdo con las Tablas I y II de la secuela {'mejora' if better else 'no mejora'}: la diferencia máxima pasa de {V0['c9_tmax']} a {V['c9_tmax']} puntos.{(' ' + _mark(V['c9_edge'], V0['c9_edge'])) if V['c9_edge'] != V0['c9_edge'] else ''}</p>
     <p>Se añaden {len(new_steps)} pasos ({', '.join(html.escape(x) for x in new_steps)}), con <a href="{RADIAL_URL}">informe propio</a>, y se retiran los enlaces a las tres «líneas abiertas», cuyo informe no resistió la auditoría.</p>
     <div class="tw"><table><thead><tr><th>Cifra</th><th>Antes</th><th>Ahora</th></tr></thead><tbody>{rows_}</tbody></table></div>
@@ -331,9 +335,14 @@ def rows(V, V0):
             missing = _decimals(fill(label, V, V0, plain=True)) - _decimals(c['name'])
             assert not missing or '{{V:' in label, (step['module'], i, sorted(missing), c['name'])
             label = fill(label, V, V0)
-            n_tot += 1
-            n_ok += c['ok']
-            if not c['ok']:
+            if c['ok'] is None:                       # resultado descriptivo: se muestra, no se cuenta
+                chip = '<span class="chip chip-obs">resultado</span>'
+            else:
+                n_tot += 1
+                n_ok += c['ok']
+            if c['ok'] is None:
+                pass
+            elif not c['ok']:
                 chip = '<span class="chip chip-bad">no cuadra</span>'
             elif kind == 'obs':
                 chip = '<span class="chip chip-obs">observación</span>'
@@ -345,15 +354,16 @@ def rows(V, V0):
         tag = '' if old is not None else ' <span class="chip chip-new">nuevo en esta versión</span>'
         out.append(f'<section class="steplist"><h3>{html.escape(step["step"])}{tag}</h3><ul class="checks">'
                    + ''.join(items) + '</ul></section>')
-        per_step.append((sum(c['ok'] for c in checks), len(checks)))
+        cc = [c for c in checks if c['ok'] is not None]
+        per_step.append((sum(c['ok'] for c in cc), len(cc), len(checks) - len(cc)))
     return '\n'.join(out), n_ok, n_tot, data, per_step
 
 
 def repro(data, per_step):
     steps = ''.join(
         f'<tr><td>{i}</td><td>{html.escape(s["step"])}</td><td class="mod"><code>{s["module"]}</code></td>'
-        f'<td class="num">{ok}/{tot}</td><td class="num">{s["seconds"]:.0f} s</td></tr>'
-        for i, (s, (ok, tot)) in enumerate(zip(data['steps'], per_step), 1))
+        f'<td class="num">{ok}/{tot}{f" (+{nr} res.)" if nr else ""}</td><td class="num">{s["seconds"]:.0f} s</td></tr>'
+        for s, (ok, tot, nr) in zip(data['steps'], per_step) for i in [int(re.search(r'step(\d+)', s['module']).group(1))])
     env = data['env']
     envrows = [('Python', env['python']), ('SymPy', env['sympy']), ('mpmath', env['mpmath']),
                ('NumPy', env['numpy']), ('SciPy', env['scipy']), ('Matplotlib', env['matplotlib']),
@@ -369,16 +379,40 @@ def main():
     V = values(checks, load(RES, 'axcow'), load(RES, 'axgr'))
     V0 = values(json.loads((BASE / 'checks.json').read_text()), load(BASE, 'axcow'), load(BASE, 'axgr'))
     figs_changed = any(load(RES, n) != load(BASE, n) for n in ('axcow', 'axgr'))
+    # paso 25: convergencia de los modos delicados del paso 10 (revisión del informe principal)
+    E = json.loads((RES / 'exterior_convergence.json').read_text())
+    _sci = lambda x: (lambda m, e: rf'\({int(m)}\times10^{{{int(e)}}}\)')(*f'{x:.0e}'.split('e')) if x > 0 else '0'
+    V['c25_n'] = str(len(E['delicate']))
+    V['c25_re'] = _sci(max(max(r['dre_rel'].values()) for r in E['delicate']))
+    V['c25_im'] = _sci(max(max(r['dim_Hz'].values()) for r in E['delicate'])) + ' Hz'
+    V['c25_branch'] = _sci(max(b['rel'] for b in E['branch']['below']))
     table, n_ok, n_tot, data, per_step = rows(V, V0)
     steps, env = repro(data, per_step)
-    fails = '\n'.join('  FAIL: ' + html.escape(c['name']) for s in data['steps'] for c in s['checks'] if not c['ok'])
+    bad = [(s['module'], c['name']) for s in data['steps'] for c in s['checks'] if c['ok'] is False]
+    fails = '\n'.join('  FAIL: ' + html.escape(n) for _, n in bad)
+    n_res = sum(c['ok'] is None for s in data['steps'] for c in s['checks'])
+    # la frase sobre los FAIL esperados, desde los datos (antes decía «tres» tecleado a mano)
+    n4 = sum(m == 'step4_numerics' for m, _ in bad)
+    nrad = sum(m in ('step20_damped_count', 'step21_deep_artifacts') for m, _ in bad)
+    n25 = sum(m == 'step25_exterior_convergence' for m, _ in bad)
+    other = [n for m, n in bad if m not in ('step4_numerics', 'step20_damped_count', 'step21_deep_artifacts',
+                                            'step25_exterior_convergence')]
+    fail_txt = (f'Hay {len(bad)} FAIL. {n4} son esperados: cifras del texto del primer paper que no cuadran con el recálculo (paso 4). '
+                f'{nrad} marcan una pregunta que queda sin decidir: la región de modos muy amortiguados del informe radial (pasos 20 y 21). '
+                + (f'{n25} son del paso 25: en dos modos que radian axiones justo por encima del umbral la frecuencia depende '
+                   'del radio de empalme más de lo que predijimos, y dos controles negativos no distinguen esa dependencia; '
+                   'queda como incertidumbre sistemática, sin cambiar los criterios a posteriori. ' if n25 else '')
+                + (f'Los otros {len(other)} no son esperados y hay que mirarlos. ' if other else '')
+                + 'Cualquier otro FAIL indica que algo ha cambiado. Las líneas marcadas como resultado no son comprobaciones: '
+                f'informan de una cifra nueva y no cuentan en el total ({n_res}).')
     ok1, tot1 = (sum(x[i] for x in per_step[0:4]) for i in (0, 1))
     ok2, tot2 = (sum(x[i] for x in per_step[4:6]) for i in (0, 1))
-    ok3, tot3 = per_step[6]
-    ok4, tot4 = per_step[7]
-    ok5, tot5 = per_step[8]
-    ok6, tot6 = per_step[9]
-    ok7, tot7 = (sum(x[i] for x in per_step[10:]) for i in (0, 1))
+    ok3, tot3 = per_step[6][:2]
+    ok4, tot4 = per_step[7][:2]
+    ok5, tot5 = per_step[8][:2]
+    ok6, tot6 = per_step[9][:2]
+    ok7, tot7 = (sum(x[i] for x in per_step[10:21]) for i in (0, 1))
+    ok8, tot8 = per_step[21][:2]
     figdata = json.dumps({k: json.loads((RES / f'fig_{f}.json').read_text())
                           for k, f in [('toy', 'toy'), ('levels', 'levels'), ('modes', 'modes'), ('meff', 'meff'),
                                        ('background', 'background'), ('axcow', 'axcow'), ('axgr', 'axgr')]}, separators=(',', ':')).replace('</', '<\\/')
@@ -392,6 +426,8 @@ def main():
             .replace('{{N_OK5}}', str(ok5)).replace('{{N_TOT5}}', str(tot5))
             .replace('{{N_OK6}}', str(ok6)).replace('{{N_TOT6}}', str(tot6))
             .replace('{{N_OK7}}', str(ok7)).replace('{{N_TOT7}}', str(tot7))
+            .replace('{{N_OK8}}', str(ok8)).replace('{{N_TOT8}}', str(tot8))
+            .replace('{{N_RES}}', str(n_res)).replace('{{FAIL_TXT}}', html.escape(fail_txt))
             .replace('{{CAMBIOS}}', cambios(V, V0, checks, json.loads((BASE / 'checks.json').read_text()), figs_changed))
             .replace('{{RADIAL_URL}}', RADIAL_URL)
             .replace('{{FIGDATA}}', figdata).replace('{{CHARTS_JS}}', charts_js).replace('{{ANIM_JS}}', anim_js)

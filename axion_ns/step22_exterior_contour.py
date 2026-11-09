@@ -16,7 +16,7 @@ import numpy as np
 from . import axgr as AG
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / 'results'
 # H1 (paso 20), el antiguo artefacto (paso 15), un cero profundo (paso 21) y el nivel ligado n = 2 (paso 18), en kHz
@@ -65,7 +65,7 @@ def run():
     n1 = min(p['n_decay1'] for p in P.values())
     res.append((f'Control negativo 2: con n_decay = 1 el cambio mínimo es {n1:.1e}, frente a {max(ang, nd):.1e} en (a)-(b): '
                 'la prueba detecta un punto de partida demasiado cercano', n1 > 100 * max(ang, nd), ''))
-    out['checks'] = [{'name': n_, 'ok': bool(o_), 'note': t_} for n_, o_, t_ in res]
+    out['checks'] = [{'name': n_, 'ok': ok_field(o_), 'note': t_} for n_, o_, t_ in res]
     OUT.mkdir(exist_ok=True)
     (OUT / 'radial_contour.json').write_text(json.dumps(out, indent=1))
     return report('Paso 22: condición exterior frente al rayo complejo', res)

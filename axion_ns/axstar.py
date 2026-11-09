@@ -123,6 +123,11 @@ class Star:
         turn.terminal, turn.direction = True, 1
         s = solve_ivp(self.rhs, (r0, rmax), self._start(r0, thc), events=[up, down, turn],
                       method='DOP853', rtol=1e-11, atol=1e-30, dense_output=keep, max_step=0.25)
+        # H32: un disparo que no termina no se clasifica en silencio. Excepción: el integrador se para justo en la
+        # superficie (p en el umbral p_min de la EOS, donde el lado derecho salta de la materia al vacío). Pasa con el
+        # politropo del paso 17: es la llegada a la superficie y R sale de ahí igual que antes (14,155 km)
+        if s.status < 0 and not s.y[1, -1] / KGEO <= _eos.p_min * 1.0002:
+            raise RuntimeError(f'Star._integrate: {s.message} (r = {s.t[-1]:.6g}, p = {s.y[1, -1] / KGEO:.3g})')
         if keep:
             self.sol = s
         if not self.nu_a:
@@ -252,16 +257,24 @@ def surface_residual(st, l, omega, dyn=False):
     return delta_p(st, Rs, y).real
 
 
-def exterior_L(st, l, omega, r_stop=None, full=False):
+def exterior_L(st, l, omega, r_stop=None, full=False, branch='auto', n_decay=40):
     """psi'/psi en R para psi = delta theta_ext, Ec. (13), con la condición de onda saliente
-    (o ligada si Im k > 0) en r grande: psi ~ exp[i(k r + eta ln r)]/r, eta = M (2 w^2 - m_a^2)/k."""
+    (o ligada si Im k > 0) en r grande: psi ~ exp[i(k r + eta ln r)]/r, eta = M (2 w^2 - m_a^2)/k.
+    branch: 'auto' (la física, H31), 'principal' (la de antes) o 'flipped' (la opuesta a la principal: controles).
+    n_decay: el arranque está a n_decay/min(|k|, m_a) del radio final."""
     m2 = st.ma**2
     k = np.sqrt(complex(omega**2 - m2))
-    if k.imag < 0 and abs(k.real) < 1e-14:
+    # H31: por debajo del umbral el canal axiónico está cerrado y la solución debe decaer (Im k > 0). La rama principal
+    # da Im k < 0 si el modo está amortiguado; antes solo se corregía con Re k ~ 0. Por encima del umbral, la principal
+    # (Re k > 0) es la saliente. Con la rama anterior L salía igual (< 1e-13): la integración hacia dentro recorre
+    # ~40 longitudes de decaimiento y filtra la solución creciente (paso 25)
+    if branch == 'flipped':
+        k = -k
+    elif branch == 'auto' and (omega**2 - m2).real < 0 and k.imag < 0:
         k = -k
     Mt, R, rend = st.sol.y[0, -1], st.R, st.sol.t[-1]
     r_stop = r_stop or R
-    rinf = min(r_stop + 40 / min(abs(k), st.ma), 6000.0)
+    rinf = min(r_stop + n_decay / min(abs(k), st.ma), 6000.0)
     eta = Mt * (2 * omega**2 - m2) / k
 
     def bgx(r):
@@ -287,6 +300,8 @@ def exterior_L(st, l, omega, r_stop=None, full=False):
     psi = np.exp(1j * (k * rinf + eta * np.log(rinf))) / rinf
     dpsi = psi * (1j * (k + eta / rinf) - 1 / rinf)
     s = solve_ivp(f, (rinf, r_stop), [psi / abs(psi), dpsi / abs(psi)], method='DOP853', rtol=1e-10, atol=1e-60)
+    if s.status < 0:                                    # H32: no se usa una integración que no terminó
+        raise RuntimeError(f'exterior_L: {s.message}')
     if full:                      # (psi, psi') en r_stop, sin dividir: evita los polos de psi'/psi
         return s.y[0, -1], s.y[1, -1]
     return s.y[1, -1] / s.y[0, -1]

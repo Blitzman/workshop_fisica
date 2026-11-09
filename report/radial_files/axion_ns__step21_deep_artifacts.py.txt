@@ -17,7 +17,7 @@ import numpy as np
 from . import axgr as AG
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / 'results'
 _S = {}
@@ -93,7 +93,7 @@ def run():
     out['neg2'] = {'shift_R_pct': sR, 'shift_alt_pct': s_alt}
     res.append((f'Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un {sR:.2g} %, '
                 f'más que con los radios alternativos ({s_alt:.2g} %)', sR > 3 * s_alt, ''))
-    out['checks'] = [{'name': n_, 'ok': bool(o_), 'note': t_} for n_, o_, t_ in res]
+    out['checks'] = [{'name': n_, 'ok': ok_field(o_), 'note': t_} for n_, o_, t_ in res]
     OUT.mkdir(exist_ok=True)
     (OUT / 'radial_deep.json').write_text(json.dumps(out, indent=1))
     return report('Paso 21: ceros profundos frente al radio de empalme', res)

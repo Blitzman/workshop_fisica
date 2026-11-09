@@ -144,11 +144,11 @@ def run():
     fl_pi = [z for z in roots_pi if abs(z.imag) < 1e-8]
     ax_pi = [z for z in roots_pi if abs(z.imag) >= 1e-8]
     res.append((f'Variante theta=pi (m_eff^2 = {m2pi:.1f} m_a^2, sin acoplo): {len(fl_pi)} modos fluidos SIN '
-                f'amortiguar + {len(ax_pi)} axiónicos', True, 'axiónicos: ' + ', '.join(f'{z.real:.2f}{z.imag:+.2f}i' for z in ax_pi[:5])))
+                f'amortiguar + {len(ax_pi)} axiónicos', None, 'axiónicos: ' + ', '.join(f'{z.real:.2f}{z.imag:+.2f}i' for z in ax_pi[:5])))
     plot([('Modelo del paper (Ec. 4.13)\n' r'$\lambda^2=10^{-3}$, $\alpha=10$, $c_s^2=0.3$, $\bar x_0=0.6$', X, Y, F, roots),
           (r'Linealizando en $\theta=\pi$: $m_\mathrm{eff}^2=(\alpha-1)/\sqrt{1-\beta}$, $\partial_a m^*=0$', Xp, Yp, Fp,
            roots_pi)], OUT / 'toy_qnm_landscape.png')
-    res.append(('Figura guardada en results/toy_qnm_landscape.png', True, ''))
+    res.append(('Figura guardada en results/toy_qnm_landscape.png', None, ''))
     return report('Paso 4: números y figura', res)
 
 

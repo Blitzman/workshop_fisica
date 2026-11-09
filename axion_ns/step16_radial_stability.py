@@ -24,7 +24,7 @@ import numpy as np
 
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / 'results'
 EPS, YMAX, XC, XMAX, GMAX = 0.05, 12.0, 2.0, 12.0, 20.0
@@ -125,7 +125,7 @@ def run():
                         f'F(-w*) = F(w)* se rompe ({symbad:.1e} frente a {sym:.0e})', symbad > 1e-3, ''))
     OUT.mkdir(exist_ok=True)
     out['region'] = {'eps': EPS, 'ymax': YMAX, 'xmax': XMAX, 'gmax': GMAX}
-    out['checks'] = [{'name': n_, 'ok': bool(o_), 'note': t_} for n_, o_, t_ in res]
+    out['checks'] = [{'name': n_, 'ok': ok_field(o_), 'note': t_} for n_, o_, t_ in res]
     (OUT / 'radial_stability.json').write_text(json.dumps(out, indent=1))
     return report('Paso 16: estabilidad radial por el principio del argumento', res)
 

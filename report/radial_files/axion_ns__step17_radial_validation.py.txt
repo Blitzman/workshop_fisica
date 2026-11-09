@@ -16,7 +16,7 @@ from scipy.optimize import brentq
 
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / 'results'
 FONT = {'F': 1.442, 'H1': 3.955, 'H2': 5.916, 'H3': 7.776}          # kHz, Tabla 2
@@ -76,7 +76,7 @@ def run():
                 len(nu) == 4 and all(abs(d) < 0.1 for d in dev.values()), 'H19(b)'))
     dg = {k: 100 * (v / GARCHING[k] - 1) for k, v in zip(GARCHING, nu)}
     res.append(('Frente a la tabla de Garching (modelo B0): ' +
-                ', '.join(f'{k} {dg[k]:+.2f} %' for k in GARCHING) + ' (método no indicado en la tabla)', True, 'H19(c)'))
+                ', '.join(f'{k} {dg[k]:+.2f} %' for k in GARCHING) + ' (método no indicado en la tabla)', None, 'H19(c)'))
     _, _, nu_g = modes(Poly(gamma1=2.1), n=1)
     _, _, nu_e = modes(Poly(internal=False), n=1)
     d1, d2 = 100 * (nu_g[0] / FONT['F'] - 1), 100 * (nu_e[0] / FONT['F'] - 1)
@@ -84,7 +84,7 @@ def run():
     res.append((f'Control negativo 2: eps = rho (sin energía interna) mueve F un {d2:+.2f} %', abs(d2) > 0.1, ''))
     out = {'M': M, 'R': R, 'modes': dict(zip(FONT, nu)), 'font': FONT, 'garching': GARCHING, 'dev_font_pct': dev,
            'dev_garching_pct': dg, 'neg_gamma1': d1, 'neg_no_internal': d2,
-           'checks': [{'name': n_, 'ok': bool(o_), 'note': t_} for n_, o_, t_ in res]}
+           'checks': [{'name': n_, 'ok': ok_field(o_), 'note': t_} for n_, o_, t_ in res]}
     OUT.mkdir(exist_ok=True)
     (OUT / 'radial_validation.json').write_text(json.dumps(out, indent=1))
     return report('Paso 17: validación externa de los modos radiales (Font et al. 2002)', res)

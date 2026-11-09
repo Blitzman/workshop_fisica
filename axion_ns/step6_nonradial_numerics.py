@@ -77,8 +77,11 @@ def _rhs(q, al):
 
 def _integrate(q, al, xR, dense=False):
     xinf = xR + 30 / q
-    return solve_ivp(_rhs(q, al), [xinf, xR], [1.0, _seed(q, al, xinf)], rtol=1e-10, atol=1e-14,
-                     method='DOP853', dense_output=dense)
+    s = solve_ivp(_rhs(q, al), [xinf, xR], [1.0, _seed(q, al, xinf)], rtol=1e-10, atol=1e-14,
+                  method='DOP853', dense_output=dense)
+    if s.status < 0:                                    # H32
+        raise RuntimeError(f'paso 6: {s.message}')
+    return s
 
 
 def _mismatch(q, al, xR, bc):

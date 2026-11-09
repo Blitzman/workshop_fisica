@@ -13,7 +13,7 @@ from scipy.optimize import brentq
 
 from . import axstar as AX
 from . import radial as RD
-from .pipeline import report
+from .pipeline import ok_field, report
 
 OUT = Path(__file__).resolve().parent.parent / 'results'
 NU_A = [3.46, 3.48, 3.50, 3.52, 3.54, 3.57, 3.60, 3.65, 3.70]
@@ -60,7 +60,7 @@ def run(nus=NU_A):
          f'{hi_side["fluid"][1]:.2f}', swap, ''),
     ]
     out = {'rows': rows, 'gap_min_khz': g_min, 'nu_a_min': nu_min,
-           'checks': [{'name': n_, 'ok': bool(o_), 'note': t_} for n_, o_, t_ in res]}
+           'checks': [{'name': n_, 'ok': ok_field(o_), 'note': t_} for n_, o_, t_ in res]}
     OUT.mkdir(exist_ok=True)
     (OUT / 'radial_crossing.json').write_text(json.dumps(out, indent=1))
     return report('Paso 19: cruce evitado F - átomo gravitatorio', res)
