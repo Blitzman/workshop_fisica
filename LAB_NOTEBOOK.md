@@ -380,6 +380,31 @@ Cinco puntos: (1) rama de k en `axstar.exterior_L`; (2) `exterior_L` y `axgr.zer
 - *Punto 3, primera parte:* las dos entradas del paso 10 con `True` fijo son resultados, no comprobaciones. Se registran como tales (`ok = None`), se cuentan aparte y se muestran como «resultado».
 - *Punto 5:* la frase de los FAIL se genera desde `checks.json`.
 
+### Séptima revisión del informe radial (2026-11-09)
+
+La revisión señala que, a ν_a = 6 kHz, la Tabla 2 del Paper I da H1 = 8,11 kHz − 2,05 Hz i y nosotros 8,114832 kHz − 3,6495 Hz i. **Nunca habíamos comparado el espectro radial con las tablas del Paper I** (H11 lo pedía: «contrastar con lo que dice el Paper I sobre su espectro radial»). Validamos con Font et al. y con la secuela, pero no con el artículo que rederivamos.
+
+- *Datos del Paper I (arXiv:2510.16245v2, Sec. V; BSk26, ε = 0,1, p₀ = 100 MeV/fm³, GR completa; dependencia e^{−iωt}; Re en kHz, Im en Hz salvo la Tabla 3, en kHz):*
+  - Tabla 1 (fondo con axión, sin perturbación del axión): f0–f3 para ν_a = 2,8; 3; 4; 5; 6; 8; 12 kHz, solo parte real.
+  - Tabla 2 (problema completo): f0–f3 con Re e Im en las mismas siete masas. Por debajo del umbral, Im = 0.
+  - Tabla 3: modos del axión f0a–f2a, con Im de −1 a −6 kHz. Advierten que f0a depende del punto de empalme («factor 2» para ν_a ≥ 8) y que Im de f2 a 12 kHz tiene un 25 % de incertidumbre.
+  - No dicen cómo normalizan Φ en el infinito. Empalman con una forma de fase y amplitud a una distancia de orden 1/m_a de la superficie, con `solve_bvp`, y toman los modos como mínimos de |Δp(R)|.
+- *Prueba previa, sin axión (scratchpad, misma estrella: 1,5359 M☉ y 11,719 km, como su 1,53 y 11,7):* F, H1, H2, H3 = 3,094; 7,279; 10,222; 11,646 kHz frente a 3,10; 7,27; 10,22; 11,63. Coinciden dentro de su redondeo (como mucho un 0,2 %). El fluido y el fondo son los mismos; la diferencia de H1 está en la parte del axión.
+
+- **[H34 · (a) REFUTADA por poco; (b) CONFIRMADA; (c) REFUTADA; (d) descriptivo] Reproducción de las Tablas 1–3 del Paper I (paso 26).**
+  - *(a) Tabla 1:* con δθ apagado (la submatriz (ξ, Δp) de las mismas ecuaciones derivadas, igual que en la Tabla I del paso 9) reproducimos las 28 frecuencias con una desviación ≤ 1 % (su redondeo a tres cifras es ~0,1–0,3 %).
+  - *(b) Tabla 2, partes reales:* ≤ 1 %. Los modos con Im = 0 en el paper son también los nuestros por debajo del umbral, con frecuencia real.
+  - *(c) Tabla 2, amortiguamientos:* no tengo una predicción fiable, porque ya sabemos que H1 a 6 kHz se desvía un 78 %. Hipótesis de trabajo: el desacuerdo es aislado (cerca de alguna resonancia con el axión, donde Im cambia deprisa con ν_a) y el resto concuerda dentro de un 25 % (criterio fijado antes de calcular: como mucho uno de los modos amortiguados se desvía más de un 25 %). Si es general y con un factor parecido en todos, apuntaría a una diferencia de convenio o de método (empalme, Φ en el infinito), no de ecuaciones.
+  - *(d) Tabla 3:* solo descriptivo. Lanzamos Muller desde sus valores de f1a y f2a; en esa región nuestra F estaba en su suelo de ruido (paso 21), así que no espero que converja.
+  - *Controles negativos:* (1) la estrella sin axión frente a la Tabla 1 debe desviarse más de un 5 % para ν_a ≥ 4 kHz; (2) con la onda entrante en lugar de la saliente, el determinante deja de anularse en las raíces de la Tabla 2.
+  - *Resultado (paso 26, `results/radial_paper1.json`; ~25 min con 6 procesos):*
+    - (a) 28/28 frecuencias halladas. Desviación ≤ 0,52 % para ν_a ≥ 4 kHz, pero 0,5–1,1 % a 2,8 y 3 kHz, todas por encima (f0 a 2,8 kHz: +1,09 %). **Falla el criterio del 1 %** por esa entrada. Cerca del umbral de condensación (~2,8 kHz) el fondo cambia deprisa con ν_a, y un desajuste pequeño en la cantidad de condensado se nota más.
+    - (b) 28/28 modos, partes reales ≤ 0,86 %; los 6 modos con Im = 0 del paper son ligados también aquí. Clasificación idéntica.
+    - (c) **Refutada:** solo 11 de 22 amortiguamientos están dentro del 25 %. El cociente nuestro/paper va de 0,55 a 2,04, **en los dos sentidos**, así que no es un factor de convenio común. A 2,8 kHz los cuatro salen entre 1,7 y 2,0 veces mayores (la misma fila donde la Tabla 1 ya se separa: probablemente fondo). En el resto, el desacuerdo cambia de signo de un modo a otro. H1 a 6 kHz: 1,78.
+    - (d) Muller converge en 6 de 14 semillas de la Tabla 3: los modos del axión con |Im| ≤ 2,5 kHz. Ahí Re ν sale entre un 1,2 % y un 1,5 % por encima del paper (sistemático) e Im ν entre 0,97 y 1,00 veces el suyo. En los 8 más amortiguados (|Im| ≥ 3,45 kHz) no converge, como en el paso 21.
+    - Controles negativos: los dos se cumplen (≥ 9,1 %; |det|/escala ≥ 2,4·10⁻²).
+  - *Lectura:* la parte real reproduce el Paper I en sus 28 modos y también encontramos sus modos del axión menos amortiguados (con un desplazamiento sistemático del ~1,4 %). Los amortiguamientos de los modos fluidos no se reproducen: difieren hasta un factor 2 en los dos sentidos. Nuestros amortiguamientos son coherentes con nuestro propio segundo método (anchura de la resonancia, paso 24) y estables frente al empalme (paso 25), pero los dos usan nuestras ecuaciones. Causas posibles, sin probar: su método (mínimos de |Δp(R)| con `solve_bvp` y empalme con la forma de fase y amplitud a ~1/m_a de la superficie), la normalización de Φ en el infinito (no la dicen) o alguna constante del acoplo (en el texto del Paper I la cifra de m_a² f_a² no cuadra con la nuestra; I2). El desplazamiento del 1,4 % de los modos del axión apunta a una diferencia pequeña en el sector del axión. Pregunta para José, coautor del Paper I: ver I8.
+
 ## 2. Insights físicos y preguntas abiertas para los autores
 
 - **[I1 · Punto de linealización en Sec. IV del Paper I (`axion_ns/step3_toy_model.py:112-128`)]**
@@ -402,7 +427,12 @@ Cinco puntos: (1) rama de k en `axstar.exterior_L`; (2) `exterior_L` y `axgr.zer
   - Con los parámetros de la Fig. 3 (α = 10, λ² = 10⁻³, `x_0 = 0,6`) hay un modo con `w² = −6,18`, que crece como `e^{2,49 m_a t}`. Es el estado ligado fundamental del pozo taquiónico interior (`m²_in = 1 − α < 0`): onda oscilante dentro y evanescente fuera. Existe para `x_0 > arctan(1/√(α−1))/√(α−1) = 0,10725` (analítico = numérico).
   - Nuestro paso 4 no lo veía porque buscaba solo en `Im w ≤ 0,01`. Si la figura del paper usa una ventana parecida, tampoco aparece en ella.
   - Físicamente es la inestabilidad que produce la condensación. Linealizando en `θ = π` (variante del paso 4) desaparece: no hay estados ligados ni inestables.
-  - *Pregunta para el grupo:* ¿el modelo simplificado se pensó como perturbación del estado sin condensar (y entonces el modo inestable es parte esencial de la historia) o del condensado? En el segundo caso, el punto de linealización correcto sería `θ = π` (ver I1).
+  - *Pregunta para el grupo (I7):* ¿el modelo simplificado se pensó como perturbación del estado sin condensar (y entonces el modo inestable es parte esencial de la historia) o del condensado? En el segundo caso, el punto de linealización correcto sería `θ = π` (ver I1).
+
+- **[I8 · Amortiguamientos radiales frente a la Tabla 2 del Paper I (`axion_ns/step26_paper1_tables.py`, H34)]**
+  - Las 28 partes reales coinciden (≤ 0,86 %) y la clasificación ligado / radiante es la misma. Los amortiguamientos no: 11 de 22 difieren más de un 25 %, con cocientes entre 0,55 y 2,04 en los dos sentidos (H1 a 6 kHz: 3,65 frente a 2,05 Hz).
+  - Los modos del axión de la Tabla 3 que localizamos (|Im| ≤ 2,5 kHz) salen un 1,2–1,5 % más altos en Re y con el mismo Im (±3 %).
+  - *Preguntas para José:* ¿cómo se fijó Φ en el infinito? ¿Qué valor de m_a² f_a² (o de E0) usa el código? ¿Cuál es la precisión de los Im de la Tabla 2 (el texto la da solo para f2 a 12 kHz)? ¿Se tomó Im del mínimo de |Δp(R)| en el plano complejo o de otro modo?
 
 ## 3. Caso de estudio: un informe fabricado que cazamos (2026-11-07)
 

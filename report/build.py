@@ -161,6 +161,8 @@ PRETTY = [
     None,
     # ---- Paso 25: rama del exterior y convergencia de los modos delicados del paso 10 (revisión del informe principal)
     None,
+    # ---- Paso 26: modos radiales frente a las Tablas 1-3 del Paper I (informe radial, séptima revisión)
+    None,
 ]
 
 RADIAL_URL = 'https://claude.ai/artifact/9XoYYWX9wvNUKoav2HmQbB'
@@ -395,13 +397,17 @@ def main():
     n4 = sum(m == 'step4_numerics' for m, _ in bad)
     nrad = sum(m in ('step20_damped_count', 'step21_deep_artifacts') for m, _ in bad)
     n25 = sum(m == 'step25_exterior_convergence' for m, _ in bad)
+    n26 = sum(m == 'step26_paper1_tables' for m, _ in bad)
     other = [n for m, n in bad if m not in ('step4_numerics', 'step20_damped_count', 'step21_deep_artifacts',
-                                            'step25_exterior_convergence')]
+                                            'step25_exterior_convergence', 'step26_paper1_tables')]
     fail_txt = (f'Hay {len(bad)} FAIL. {n4} son esperados: cifras del texto del primer paper que no cuadran con el recálculo (paso 4). '
                 f'{nrad} marcan una pregunta que queda sin decidir: la región de modos muy amortiguados del informe radial (pasos 20 y 21). '
                 + (f'{n25} son del paso 25: en dos modos que radian axiones justo por encima del umbral la frecuencia depende '
                    'del radio de empalme más de lo que predijimos, y dos controles negativos no distinguen esa dependencia; '
                    'queda como incertidumbre sistemática, sin cambiar los criterios a posteriori. ' if n25 else '')
+                + (f'{n26} son del paso 26, la comparación radial con las tablas del primer paper: las frecuencias coinciden, '
+                   'pero muchos de los amortiguamientos con axión no, y la Tabla 1 se separa algo más del 1 % cerca del umbral '
+                   'de condensación; la causa está sin identificar (informe radial). ' if n26 else '')
                 + (f'Los otros {len(other)} no son esperados y hay que mirarlos. ' if other else '')
                 + 'Cualquier otro FAIL indica que algo ha cambiado. Las líneas marcadas como resultado no son comprobaciones: '
                 f'informan de una cifra nueva y no cuentan en el total ({n_res}).')

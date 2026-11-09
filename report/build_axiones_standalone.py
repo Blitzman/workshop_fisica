@@ -21,7 +21,7 @@ STEPS = ['step1_background', 'step2_perturbations', 'step3_toy_model', 'step4_nu
          'step14_radial_branches', 'step15_radial_star', 'step16_radial_stability', 'step17_radial_validation',
          'step18_rydberg', 'step19_avoided_crossing', 'step20_damped_count', 'step21_deep_artifacts',
          'step22_exterior_contour', 'step23_eos_consistency', 'step24_scattering_width',
-         'step25_exterior_convergence']
+         'step25_exterior_convergence', 'step26_paper1_tables']
 CODE = ([f'axion_ns/{m}.py' for m in ('__init__', 'geometry', 'model', 'paper', 'compare', 'pipeline', 'nonradial',
                                        'fullgr', 'fmodes', 'bsk26', 'axstar', 'axgr', 'radial', 'figdata', 'run_all')]
         + [f'axion_ns/{s}.py' for s in STEPS]

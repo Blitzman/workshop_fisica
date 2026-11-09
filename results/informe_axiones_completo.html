@@ -401,9 +401,9 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     <p class="eyebrow">Versión 3 · 2026-11-09 · sustituye a la versión 2 del 2026-11-08</p>
     <h2>Qué cambia en esta versión</h2>
     <p><b>Corrección en el integrador de las perturbaciones con axión.</b> Cerca del centro (de r = 0,001 a 0,5 km) las perturbaciones se integraban con un método implícito (BDF) que fallaba en su primer paso, a cualquier frecuencia. El código no comprobaba si la integración había terminado y tomaba el valor inicial en r = 0,001 km como si fuera el de r = 0,5 km. Ahora ese tramo lo integra un método explícito (DOP853), y toda integración que no termina detiene el cálculo. El error que metía era pequeño, porque la parte mal arrancada decae hacia fuera, pero afecta a todo lo calculado con axión (cuarta y quinta parte). Lo destapó una revisión externa del informe de modos radiales, que señaló que el código no comprobaba el éxito de las integraciones. Se mantiene la corrección del lapso de la versión 2.</p>
-    <p><b>Tras una revisión externa de esta versión.</b> (1) Por debajo del umbral, la condición del axión fuera de la estrella arrancaba con la solución que crece hacia fuera en vez de la que decae. La integración hacia dentro la filtraba, así que las cifras no cambian (diferencia <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex;" xmlns="http://www.w3.org/2000/svg" width="9.192ex" height="2.005ex" role="img" focusable="false" viewBox="0 -864 4062.7 886" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><use data-c="33" xlink:href="#MJX-TEX-N-33"></use></g><g data-mml-node="mo" transform="translate(722.2,0)"><use data-c="D7" xlink:href="#MJX-TEX-N-D7"></use></g><g data-mml-node="msup" transform="translate(1722.4,0)"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-TEX-N-31"></use><use data-c="30" xlink:href="#MJX-TEX-N-30" transform="translate(500,0)"></use></g><g data-mml-node="TeXAtom" transform="translate(1033,393.1) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mo"><use data-c="2212" xlink:href="#MJX-TEX-N-2212"></use></g><g data-mml-node="mn" transform="translate(778,0)"><use data-c="31" xlink:href="#MJX-TEX-N-31"></use><use data-c="33" xlink:href="#MJX-TEX-N-33" transform="translate(500,0)"></use></g></g></g></g></g></svg></mjx-container>); ahora se escoge la buena de forma explícita. (2) Quedaban integraciones sin comprobar si terminaban: ya no queda ninguna. Al repetir los pasos afectados, la guarda solo saltó en la superficie de los dos politropos de referencia, donde el integrador se para al llegar al vacío; ese caso se acepta de forma explícita y las cifras no cambian. (3) Las 6 líneas que solo informan de una cifra nueva ya no cuentan como comprobaciones: se marcan como «resultado». (4) La convergencia del paso 10 se ha repetido en sus modos más delicados (paso 25): en dos modos que radian axiones justo por encima del umbral, la frecuencia depende del radio de empalme más de lo que predijimos, y queda como incertidumbre sistemática. (5) La frase sobre los FAIL esperados se genera desde los datos.</p>
+    <p><b>Tras una revisión externa de esta versión.</b> (1) Por debajo del umbral, la condición del axión fuera de la estrella arrancaba con la solución que crece hacia fuera en vez de la que decae. La integración hacia dentro la filtraba, así que las cifras no cambian (diferencia <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex;" xmlns="http://www.w3.org/2000/svg" width="9.192ex" height="2.005ex" role="img" focusable="false" viewBox="0 -864 4062.7 886" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><use data-c="33" xlink:href="#MJX-TEX-N-33"></use></g><g data-mml-node="mo" transform="translate(722.2,0)"><use data-c="D7" xlink:href="#MJX-TEX-N-D7"></use></g><g data-mml-node="msup" transform="translate(1722.4,0)"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-TEX-N-31"></use><use data-c="30" xlink:href="#MJX-TEX-N-30" transform="translate(500,0)"></use></g><g data-mml-node="TeXAtom" transform="translate(1033,393.1) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mo"><use data-c="2212" xlink:href="#MJX-TEX-N-2212"></use></g><g data-mml-node="mn" transform="translate(778,0)"><use data-c="31" xlink:href="#MJX-TEX-N-31"></use><use data-c="33" xlink:href="#MJX-TEX-N-33" transform="translate(500,0)"></use></g></g></g></g></g></svg></mjx-container>); ahora se escoge la buena de forma explícita. (2) Quedaban integraciones sin comprobar si terminaban: ya no queda ninguna. Al repetir los pasos afectados, la guarda solo saltó en la superficie de los dos politropos de referencia, donde el integrador se para al llegar al vacío; ese caso se acepta de forma explícita y las cifras no cambian. (3) Las 8 líneas que solo informan de una cifra nueva ya no cuentan como comprobaciones: se marcan como «resultado». (4) La convergencia del paso 10 se ha repetido en sus modos más delicados (paso 25): en dos modos que radian axiones justo por encima del umbral, la frecuencia depende del radio de empalme más de lo que predijimos, y queda como incertidumbre sistemática. (5) La frase sobre los FAIL esperados se genera desde los datos.</p>
     <p>Las cifras que cambian aparecen así: <mark class="nuevo">valor nuevo<span class="antes">valor anterior</span></mark>. Las gráficas de la cuarta y quinta parte están recalculadas. 16 comprobaciones cambian de cifras y llevan la etiqueta «actualizada»; 3 cambian de resultado. El acuerdo con las Tablas I y II de la secuela no mejora: la diferencia máxima pasa de 0.45 a 0.45 puntos.</p>
-    <p>Se añaden 3 pasos (Consistencia termodinámica de la EOS, Anchura desde la dispersión a frecuencia real, Rama del exterior y convergencia de los modos delicados (paso 10)), con <a href="https://claude.ai/artifact/9XoYYWX9wvNUKoav2HmQbB">informe propio</a>, y se retiran los enlaces a las tres «líneas abiertas», cuyo informe no resistió la auditoría.</p>
+    <p>Se añaden 4 pasos (Consistencia termodinámica de la EOS, Anchura desde la dispersión a frecuencia real, Rama del exterior y convergencia de los modos delicados (paso 10), Modos radiales frente a las Tablas 1-3 del Paper I), con <a href="https://claude.ai/artifact/9XoYYWX9wvNUKoav2HmQbB">informe propio</a>, y se retiran los enlaces a las tres «líneas abiertas», cuyo informe no resistió la auditoría.</p>
     <div class="tw"><table><thead><tr><th>Cifra</th><th>Antes</th><th>Ahora</th></tr></thead><tbody><tr><td>Métrica dinámica: estabilidad de Re ν del modo f (6 kHz)</td><td class="num"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex;" xmlns="http://www.w3.org/2000/svg" width="8.392ex" height="2.005ex" role="img" focusable="false" viewBox="0 -864 3709.1 886" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><use data-c="36" xlink:href="#MJX-TEX-N-36"></use></g><g data-mml-node="mo" transform="translate(722.2,0)"><use data-c="D7" xlink:href="#MJX-TEX-N-D7"></use></g><g data-mml-node="msup" transform="translate(1722.4,0)"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-TEX-N-31"></use><use data-c="30" xlink:href="#MJX-TEX-N-30" transform="translate(500,0)"></use></g><g data-mml-node="TeXAtom" transform="translate(1033,393.1) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mo"><use data-c="2212" xlink:href="#MJX-TEX-N-2212"></use></g><g data-mml-node="mn" transform="translate(778,0)"><use data-c="39" xlink:href="#MJX-TEX-N-39"></use></g></g></g></g></g></svg></mjx-container></td><td class="num"><b><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex;" xmlns="http://www.w3.org/2000/svg" width="8.392ex" height="2.005ex" role="img" focusable="false" viewBox="0 -864 3709.1 886" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-TEX-N-32"></use></g><g data-mml-node="mo" transform="translate(722.2,0)"><use data-c="D7" xlink:href="#MJX-TEX-N-D7"></use></g><g data-mml-node="msup" transform="translate(1722.4,0)"><g data-mml-node="mn"><use data-c="31" xlink:href="#MJX-TEX-N-31"></use><use data-c="30" xlink:href="#MJX-TEX-N-30" transform="translate(500,0)"></use></g><g data-mml-node="TeXAtom" transform="translate(1033,393.1) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mo"><use data-c="2212" xlink:href="#MJX-TEX-N-2212"></use></g><g data-mml-node="mn" transform="translate(778,0)"><use data-c="39" xlink:href="#MJX-TEX-N-39"></use></g></g></g></g></g></svg></mjx-container></b></td></tr></tbody></table></div>
   </section>
 
@@ -442,7 +442,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       <div>
         <h3>Otros informes</h3>
         <ol>
-          <li><a href="https://claude.ai/artifact/9XoYYWX9wvNUKoav2HmQbB">Modos radiales: umbral, ramas, estrella realista, estabilidad y validación (pasos 14–24) ↗</a></li>
+          <li><a href="https://claude.ai/artifact/9XoYYWX9wvNUKoav2HmQbB">Modos radiales: umbral, ramas, estrella realista, estabilidad y validación (pasos 14–24 y 26) ↗</a></li>
           <li><a href="#f-report-guia_departamento.html">Guía de implantación para el Departamento ↗</a></li>
         </ol>
         <p class="muted">Las tres «líneas abiertas» que enlazaba la versión anterior (modos <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.464ex;" xmlns="http://www.w3.org/2000/svg" width="1.079ex" height="1.464ex" role="img" focusable="false" viewBox="0 -442 477 647" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D454" xlink:href="#MJX-TEX-I-1D454"></use></g></g></g></svg></mjx-container>, rotación lenta, axión + magnetar) se han retirado: el informe que las sostenía no resistió la auditoría (cuaderno de laboratorio, §3).</p>
@@ -470,7 +470,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       <li><h3>Con axión, en Cowling</h3><p class="refs">Paso 9. Una estrella realista (BSk26) con su condensado de axiones, y sus modos con la perturbación del axión: las Tablas I, II y IV de la secuela salen dentro de 0.45 puntos porcentuales (8/8). Es la base de la última etapa.</p></li>
       <li><h3>Con axión, sin Cowling</h3><p class="refs">Paso 10. Las ecuaciones de la etapa 3, integradas con el axión encendido sobre esa estrella: el resultado que la secuela deja abierto (7/7). Sin referencia publicada; el programa se comprueba con el caso sin axión.</p></li>
     </ol>
-    <p class="muted">Todo se reproduce con un comando en unos 574 minutos; el código está en <a href="#reproducirlo">GitHub</a>.</p>
+    <p class="muted">Todo se reproduce con un comando en unos 600 minutos; el código está en <a href="#reproducirlo">GitHub</a>.</p>
   </section>
 
   <section class="stack wide" id="cadena">
@@ -516,7 +516,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       </article>
       <article class="ob">
         <header><span class="weight w-ok">Se comprueba</span><h3>No hay que fiarse de la IA</h3></header>
-        <p>Una ecuación solo se da por buena si su diferencia con la del paper se reduce <em>exactamente</em> a cero, sin tolerancias numéricas. El comparador también tiene que detectar errores plantados a propósito. Las ecuaciones nuevas, integradas sin axión, dan las frecuencias publicadas de un caso de referencia con todas sus cifras. Y cualquiera puede volver a ejecutarlo todo en unos 574 minutos (<a href="#reproducirlo">cómo</a>).</p>
+        <p>Una ecuación solo se da por buena si su diferencia con la del paper se reduce <em>exactamente</em> a cero, sin tolerancias numéricas. El comparador también tiene que detectar errores plantados a propósito. Las ecuaciones nuevas, integradas sin axión, dan las frecuencias publicadas de un caso de referencia con todas sus cifras. Y cualquiera puede volver a ejecutarlo todo en unos 600 minutos (<a href="#reproducirlo">cómo</a>).</p>
       </article>
       <article class="ob">
         <header><span class="weight w-main">Revisa</span><h3>Como un árbitro con tiempo</h3></header>
@@ -876,11 +876,12 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
 <section class="steplist"><h3>Átomo gravitatorio: ley de Rydberg</h3><ul class="checks"><li title="H20(a): con el kappa de Whittaker (Ec. A14), n - kappa_n = 0.0579, 0.0571, 0.0568, 0.0566, 0.0566 para n = 2…6: constante dentro de 0.0013"><span class="chips"><span class="chip chip-ok">coincide</span><span class="chip chip-new">actualizada</span></span><span class="ck">H20(a): con el kappa de Whittaker (Ec. A14), n - kappa_n = 0.0579, 0.0571, 0.0568, 0.0566, 0.0566 para n = 2…6: constante dentro de 0.0013</span></li><li title="H20(b): Rydberg-Ritz delta_n = delta_0 + delta_2/(n - delta_0)^2 con delta_0 = 0.0564, delta_2 = 0.0055; residuo máximo 1e-05"><span class="chip chip-ok">coincide</span><span class="ck">H20(b): Rydberg-Ritz delta_n = delta_0 + delta_2/(n - delta_0)^2 con delta_0 = 0.0564, delta_2 = 0.0055; residuo máximo 1e-05</span></li><li title="Control negativo 1: con la fórmula hidrogenoide no relativista, n - n_eff varía 0.045 (lo que parecía un defecto creciente)"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 1: con la fórmula hidrogenoide no relativista, n - n_eff varía 0.045 (lo que parecía un defecto creciente)</span></li><li title="Control negativo 2: con el Coulomb newtoniano alpha/q (sin el factor 2 omega^2 - m_a^2), n - kappa varía 0.048"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 2: con el Coulomb newtoniano alpha/q (sin el factor 2 omega^2 - m_a^2), n - kappa varía 0.048</span></li></ul></section>
 <section class="steplist"><h3>Cruce evitado F - átomo gravitatorio</h3><ul class="checks"><li title="H21(a): separación de los dos ligados más bajos con mínimo 49.1 Hz en nu_a = 3.509 kHz (interior a la malla, refinada; 15 valores de nu_a)"><span class="chips"><span class="chip chip-ok">coincide</span><span class="chip chip-new">actualizada</span></span><span class="ck">H21(a): separación de los dos ligados más bajos con mínimo 49.1 Hz en nu_a = 3.509 kHz (interior a la malla, refinada; 15 valores de nu_a)</span></li><li title="H21(b): intercambio de carácter: a nu_a = 3.46 kHz fracción fluida 0.04 (inferior) y 0.93 (superior); a 3.70 kHz, 0.89 y 0.07"><span class="chip chip-ok">coincide</span><span class="ck">H21(b): intercambio de carácter: a nu_a = 3.46 kHz fracción fluida 0.04 (inferior) y 0.93 (superior); a 3.70 kHz, 0.89 y 0.07</span></li></ul></section>
 <section class="steplist"><h3>Recuento en el semiplano amortiguado</h3><ul class="checks"><li title="H22(a): nu_a = 6 kHz, índice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ahí: 8.1148-3.65i (fluido 0.97), 11.6697-21.69i (fluido 0.88)"><span class="chips"><span class="chip chip-ok">coincide</span><span class="chip chip-new">actualizada</span></span><span class="ck">H22(a): nu_a = 6 kHz, índice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ahí: 8.1148-3.65i (fluido 0.97), 11.6697-21.69i (fluido 0.88)</span></li><li title="H26: franja casi real Re nu in [6.05, 12], Im nu in [-0.002, -1e-5] kHz: índice 0 (piezas [0, 0], convergidas [[0, 0], [0, 0]]; salto de fase máximo 0.98 rad)"><span class="chips"><span class="chip chip-ok">coincide</span><span class="chip chip-new">actualizada</span></span><span class="ck">H26: franja casi real Re nu in [6.05, 12], Im nu in [-0.002, -1e-5] kHz: índice 0 (piezas [0, 0], convergidas [[0, 0], [0, 0]]; salto de fase máximo 0.98 rad)</span></li><li title="H23: región profunda Re nu in [6.05, 12], Im nu in [-5, -1.5] kHz: índice 2 (piezas [2, 0], convergidas [[2, 2], [0, 0]]); ningún cero localizado: Muller no converge desde ninguna de las 13 semillas. Secuela, Tabla III (l = 2, Cowling): a0 = 9.0 -3.8i kHz"><span class="chips"><span class="chip chip-bad">no cuadra</span><span class="chip chip-new">actualizada</span></span><span class="ck">H23: región profunda Re nu in [6.05, 12], Im nu in [-5, -1.5] kHz: índice 2 (piezas [2, 0], convergidas [[2, 2], [0, 0]]); ningún cero localizado: Muller no converge desde ninguna de las 13 semillas. Secuela, Tabla III (l = 2, Cowling): a0 = 9.0 -3.8i kHz</span></li><li title="H22(b), control positivo: con la normalización antigua del lapso el índice sube a 8 (piezas [1, 1, 3, 3]): el recuento ve las resonancias de cavidad"><span class="chips"><span class="chip chip-ok">coincide</span><span class="chip chip-new">actualizada</span></span><span class="ck">H22(b), control positivo: con la normalización antigua del lapso el índice sube a 8 (piezas [1, 1, 3, 3]): el recuento ve las resonancias de cavidad</span></li></ul></section>
-<section class="steplist"><h3>Ceros profundos frente al radio de empalme</h3><ul class="checks"><li title="H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1148 kHz, Im -3.65 Hz): 2.3e-07 % y 1.1e-07 % (Im: +2.4e-06 y +1.3e-06 Hz); (Re 11.6697 kHz, Im -21.69 Hz): 1.2e-07 % y 4.8e-08 % (Im: +1.3e-05 y -4.7e-06 Hz)"><span class="chips"><span class="chip chip-ok">coincide</span><span class="chip chip-new">actualizada</span></span><span class="ck">H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1148 kHz, Im -3.65 Hz): 2.3e-07 % y 1.1e-07 % (Im: +2.4e-06 y +1.3e-06 Hz); (Re 11.6697 kHz, Im -21.69 Hz): 1.2e-07 % y 4.8e-08 % (Im: +1.3e-05 y -4.7e-06 Hz)</span></li><li title="H23b(ii): ningún cero profundo que mover: Muller no converge en la región (paso 20); la prueba no decide"><span class="chips"><span class="chip chip-bad">no cuadra</span><span class="chip chip-new">actualizada</span></span><span class="ck">H23b(ii): ningún cero profundo que mover: Muller no converge en la región (paso 20); la prueba no decide</span></li><li title="Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 8.5e-07 con la saliente)"><span class="chips"><span class="chip chip-ok">coincide</span><span class="chip chip-new">actualizada</span></span><span class="ck">Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 8.5e-07 con la saliente)</span></li><li title="Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0033 %, más que con los radios alternativos (2.3e-07 %)"><span class="chips"><span class="chip chip-ok">coincide</span><span class="chip chip-new">actualizada</span></span><span class="ck">Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0033 %, más que con los radios alternativos (2.3e-07 %)</span></li></ul></section>
+<section class="steplist"><h3>Ceros profundos: intento de localizarlos (no concluyente)</h3><ul class="checks"><li title="H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1148 kHz, Im -3.65 Hz): 2.3e-07 % y 1.1e-07 % (Im: +2.4e-06 y +1.3e-06 Hz); (Re 11.6697 kHz, Im -21.69 Hz): 1.2e-07 % y 4.8e-08 % (Im: +1.3e-05 y -4.7e-06 Hz)"><span class="chips"><span class="chip chip-ok">coincide</span><span class="chip chip-new">actualizada</span></span><span class="ck">H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1148 kHz, Im -3.65 Hz): 2.3e-07 % y 1.1e-07 % (Im: +2.4e-06 y +1.3e-06 Hz); (Re 11.6697 kHz, Im -21.69 Hz): 1.2e-07 % y 4.8e-08 % (Im: +1.3e-05 y -4.7e-06 Hz)</span></li><li title="H23b(ii): ningún cero profundo que mover: Muller no converge en la región (paso 20); la prueba no decide"><span class="chips"><span class="chip chip-bad">no cuadra</span><span class="chip chip-new">actualizada</span></span><span class="ck">H23b(ii): ningún cero profundo que mover: Muller no converge en la región (paso 20); la prueba no decide</span></li><li title="Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 8.5e-07 con la saliente)"><span class="chips"><span class="chip chip-ok">coincide</span><span class="chip chip-new">actualizada</span></span><span class="ck">Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 8.5e-07 con la saliente)</span></li><li title="Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0033 %, más que con los radios alternativos (2.3e-07 %)"><span class="chips"><span class="chip chip-ok">coincide</span><span class="chip chip-new">actualizada</span></span><span class="ck">Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0033 %, más que con los radios alternativos (2.3e-07 %)</span></li></ul></section>
 <section class="steplist"><h3>Condición exterior frente al rayo complejo</h3><ul class="checks"><li title="H24(a): girar el rayo complejo ±0.4 rad cambia L = psi'/psi en r_m como mucho 6.5e-12 (relativo) en H1, artefacto antiguo, cero profundo, nivel ligado n = 2 H1: 5e-15; artefacto antiguo: 1e-14; cero profundo: 2e-15; nivel ligado n = 2: 6e-12"><span class="chip chip-ok">coincide</span><span class="ck">H24(a): girar el rayo complejo ±0.4 rad cambia L = psi'/psi en r_m como mucho 6.5e-12 (relativo) en H1, artefacto antiguo, cero profundo, nivel ligado n = 2 H1: 5e-15; artefacto antiguo: 1e-14; cero profundo: 2e-15; nivel ligado n = 2: 6e-12</span></li><li title="H24(b): alejar el punto de partida (n_decay 40 → 60) cambia L como mucho 9.3e-13: H1: 3e-16; artefacto antiguo: 1e-15; cero profundo: 5e-16; nivel ligado n = 2: 9e-13"><span class="chip chip-ok">coincide</span><span class="ck">H24(b): alejar el punto de partida (n_decay 40 → 60) cambia L como mucho 9.3e-13: H1: 3e-16; artefacto antiguo: 1e-15; cero profundo: 5e-16; nivel ligado n = 2: 9e-13</span></li><li title="Control negativo 1: con la onda entrante, L cambia al menos un 2 (relativo) en los puntos por encima del umbral"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 1: con la onda entrante, L cambia al menos un 2 (relativo) en los puntos por encima del umbral</span></li><li title="Control negativo 2: con n_decay = 1 el cambio mínimo es 2.3e-04, frente a 6.5e-12 en (a)-(b): la prueba detecta un punto de partida demasiado cercano"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 2: con n_decay = 1 el cambio mínimo es 2.3e-04, frente a 6.5e-12 en (a)-(b): la prueba detecta un punto de partida demasiado cercano</span></li></ul></section>
 <section class="steplist"><h3>Consistencia termodinámica de la EOS <span class="chip chip-new">nuevo en esta versión</span></h3><ul class="checks"><li title="H27: inconsistencia de los ajustes BSk26, n deps/dn/(eps + p) - 1 = +1.3e-04 (p = 1), -7.5e-05 (p = 10), -2.1e-04 (p = 100), +1.5e-03 (p = 300), +1.4e-03 (p = 500), +1.9e-04 (p = 900) MeV/fm3; en el centro de la estrella de 6 kHz (p_c = 100): -2.1e-04"><span class="chip chip-obs">resultado</span><span class="ck">H27: inconsistencia de los ajustes BSk26, n deps/dn/(eps + p) - 1 = +1.3e-04 (p = 1), -7.5e-05 (p = 10), -2.1e-04 (p = 100), +1.5e-03 (p = 300), +1.4e-03 (p = 500), +1.9e-04 (p = 900) MeV/fm3; en el centro de la estrella de 6 kHz (p_c = 100): -2.1e-04</span></li><li title="H27: con c_s^2 = n dp/dn/(eps + p) en vez de dp/deps, Re nu se mueve F6 5.8e-04 (-2.01 Hz), H1 1.7e-04 (-1.36 Hz), F34 5.9e-04 (-2.00 Hz); Im nu de H1 2.6e-03 y de F (3,4 kHz) 1.4e-02 relativo"><span class="chip chip-ok">coincide</span><span class="ck">H27: con c_s^2 = n dp/dn/(eps + p) en vez de dp/deps, Re nu se mueve F6 5.8e-04 (-2.01 Hz), H1 1.7e-04 (-1.36 Hz), F34 5.9e-04 (-2.00 Hz); Im nu de H1 2.6e-03 y de F (3,4 kHz) 1.4e-02 relativo</span></li><li title="Control negativo 1: con P(rho) desplazado un 1 % en lg rho, el desajuste a 100 MeV/fm3 sube a 1.2e-01 (frente a 2.1e-04)"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 1: con P(rho) desplazado un 1 % en lg rho, el desajuste a 100 MeV/fm3 sube a 1.2e-01 (frente a 2.1e-04)</span></li><li title="Control negativo 2: con la media geométrica de las dos definiciones, el desplazamiento es menor: F6 2.9e-04, H1 8.4e-05, F34 2.9e-04"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 2: con la media geométrica de las dos definiciones, el desplazamiento es menor: F6 2.9e-04, H1 8.4e-05, F34 2.9e-04</span></li></ul></section>
 <section class="steplist"><h3>Anchura desde la dispersión a frecuencia real <span class="chip chip-new">nuevo en esta versión</span></h3><ul class="checks"><li title="H28(a) H1 (6 kHz): la dispersión a frecuencia real da Gamma/2 = 3.6496 Hz frente a -Im nu = 3.6495 Hz de Muller (0.002 %), y nu_r a 5.0e-05 anchuras de Re nu (fondo de grado 4 en +-1.5 anchuras; residuo 4e-05 rad; grado 3 cambia la anchura 7e-08). Con fondo lineal en +-10 anchuras: 0.00014 % con residuo 9e-05 rad (umbral a 579 anchuras)"><span class="chip chip-ok">coincide</span><span class="ck">H28(a) H1 (6 kHz): la dispersión a frecuencia real da Gamma/2 = 3.6496 Hz frente a -Im nu = 3.6495 Hz de Muller (0.002 %), y nu_r a 5.0e-05 anchuras de Re nu (fondo de grado 4 en +-1.5 anchuras; residuo 4e-05 rad; grado 3 cambia la anchura 7e-08). Con fondo lineal en +-10 anchuras: 0.00014 % con residuo 9e-05 rad (umbral a 579 anchuras)</span></li><li title="H28(a) F (3,4 kHz): la dispersión a frecuencia real da Gamma/2 = 0.5591 Hz frente a -Im nu = 0.5591 Hz de Muller (0.0026 %), y nu_r a 1.1e-06 anchuras de Re nu (fondo de grado 4 en +-1.5 anchuras; residuo 2e-06 rad; grado 3 cambia la anchura 2e-07). Con fondo lineal en +-10 anchuras: 0.16 % con residuo 2e+00 rad (umbral a 16 anchuras)"><span class="chip chip-ok">coincide</span><span class="ck">H28(a) F (3,4 kHz): la dispersión a frecuencia real da Gamma/2 = 0.5591 Hz frente a -Im nu = 0.5591 Hz de Muller (0.0026 %), y nu_r a 1.1e-06 anchuras de Re nu (fondo de grado 4 en +-1.5 anchuras; residuo 2e-06 rad; grado 3 cambia la anchura 2e-07). Con fondo lineal en +-10 anchuras: 0.16 % con residuo 2e+00 rad (umbral a 16 anchuras)</span></li><li title="H28(b): |S| = 1 a 3e-16 en las dos ventanas"><span class="chip chip-ok">coincide</span><span class="ck">H28(b): |S| = 1 a 3e-16 en las dos ventanas</span></li><li title="Control negativo 1: desplazando la ventana 20 Gamma, arg S se aparta de una recta como mucho 0.14 rad (frente a 2 pi en la resonancia)"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 1: desplazando la ventana 20 Gamma, arg S se aparta de una recta como mucho 0.14 rad (frente a 2 pi en la resonancia)</span></li><li title="Control negativo 2: con la normalización antigua del lapso, la resonancia de H1 cae a 3.6 anchuras del modo corregido"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 2: con la normalización antigua del lapso, la resonancia de H1 cae a 3.6 anchuras del modo corregido</span></li></ul></section>
 <section class="steplist"><h3>Rama del exterior y convergencia de los modos delicados (paso 10) <span class="chip chip-new">nuevo en esta versión</span></h3><ul class="checks"><li title="H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k < 0 en 4/4 frecuencias, pero L = psi'/psi coincide con la de la rama que decae a 3e-13 relativo como mucho: 2.1-0.001i kHz: 2e-16, 2.4-0.01i kHz: 1e-14, 5-0.1i kHz: 1e-13, 5.9-0.5i kHz: 3e-13"><span class="chip chip-ok">coincide</span><span class="ck">H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k &lt; 0 en 4/4 frecuencias, pero L = psi'/psi coincide con la de la rama que decae a 3e-13 relativo como mucho: 2.1-0.001i kHz: 2e-16, 2.4-0.01i kHz: 1e-14, 5-0.1i kHz: 1e-13, 5.9-0.5i kHz: 3e-13</span></li><li title="H31: por encima del umbral la rama no cambia (diferencia 0e+00)"><span class="chip chip-ok">coincide</span><span class="ck">H31: por encima del umbral la rama no cambia (diferencia 0e+00)</span></li><li title="Control negativo 1: arrancando a 2 longitudes de decaimiento, la rama principal cambia L al menos un 1e+00 relativo (frente a 3e-13 con 40)"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 1: arrancando a 2 longitudes de decaimiento, la rama principal cambia L al menos un 1e+00 relativo (frente a 3e-13 con 40)</span></li><li title="Control negativo 2: por encima del umbral, la onda entrante cambia L al menos un 2 relativo"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 2: por encima del umbral, la onda entrante cambia L al menos un 2 relativo</span></li><li title="H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracción mueven Re nu como mucho 2e-06 relativo: p1 a 8 kHz 2e-09; p2 a 12 kHz 4e-09; p1 a 7 kHz 1e-07; p2 a 11 kHz 2e-06; p2 a 8 kHz 2e-09; f a 15 kHz 3e-08"><span class="chip chip-bad">no cuadra</span><span class="ck">H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracción mueven Re nu como mucho 2e-06 relativo: p1 a 8 kHz 2e-09; p2 a 12 kHz 4e-09; p1 a 7 kHz 1e-07; p2 a 11 kHz 2e-06; p2 a 8 kHz 2e-09; f a 15 kHz 3e-08</span></li><li title="H33: e Im nu como mucho: p1 a 8 kHz (Im 0.00137 Hz) 3.4e-06 Hz; p2 a 12 kHz (Im 0.00324 Hz) 2.3e-07 Hz; p1 a 7 kHz (Im 0.479 Hz) 9.1e-04 Hz; p2 a 11 kHz (Im 5.03 Hz) 9.8e-04 Hz; p2 a 8 kHz (Im 0.1 Hz) 1.5e-06 Hz; f a 15 kHz (Im 1.2 Hz) 9.6e-07 Hz"><span class="chip chip-ok">coincide</span><span class="ck">H33: e Im nu como mucho: p1 a 8 kHz (Im 0.00137 Hz) 3.4e-06 Hz; p2 a 12 kHz (Im 0.00324 Hz) 2.3e-07 Hz; p1 a 7 kHz (Im 0.479 Hz) 9.1e-04 Hz; p2 a 11 kHz (Im 5.03 Hz) 9.8e-04 Hz; p2 a 8 kHz (Im 0.1 Hz) 1.5e-06 Hz; f a 15 kHz (Im 1.2 Hz) 9.6e-07 Hz</span></li><li title="Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.0017 Hz, frente a 9.1e-04 Hz con las variantes de arriba"><span class="chip chip-bad">no cuadra</span><span class="ck">Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.0017 Hz, frente a 9.1e-04 Hz con las variantes de arriba</span></li><li title="Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 8.5e-07 Hz"><span class="chip chip-bad">no cuadra</span><span class="ck">Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 8.5e-07 Hz</span></li></ul></section>
+<section class="steplist"><h3>Modos radiales frente a las Tablas 1-3 del Paper I <span class="chip chip-new">nuevo en esta versión</span></h3><ul class="checks"><li title="Tabla 1 (fondo con axión, δθ apagado): 28/28 frecuencias halladas; desviación máxima 1.09 % (f0 a 2.8 kHz)"><span class="chip chip-bad">no cuadra</span><span class="ck">Tabla 1 (fondo con axión, δθ apagado): 28/28 frecuencias halladas; desviación máxima 1.09 % (f0 a 2.8 kHz)</span></li><li title="Sin axión frente a la fila sin axión de la Tabla 1: -0.19 %, +0.12 %, +0.02 %, +0.14 %"><span class="chip chip-obs">resultado</span><span class="ck">Sin axión frente a la fila sin axión de la Tabla 1: -0.19 %, +0.12 %, +0.02 %, +0.14 %</span></li><li title="Tabla 2, partes reales: 28/28 modos hallados; desviación máxima 0.86 %; los 6 modos con Im = 0 del paper son ligados también aquí (frecuencia real)"><span class="chip chip-ok">coincide</span><span class="ck">Tabla 2, partes reales: 28/28 modos hallados; desviación máxima 0.86 %; los 6 modos con Im = 0 del paper son ligados también aquí (frecuencia real)</span></li><li title="Tabla 2, amortiguamientos: 11/22 dentro del 25 %; cociente nuestro/paper entre 0.55 y 2.04; fuera: f0 a 2.8 kHz (2.04), f1 a 2.8 kHz (1.77), f2 a 2.8 kHz (1.73), f3 a 2.8 kHz (1.72), f3 a 4.0 kHz (0.55), f1 a 5.0 kHz (0.67), f1 a 6.0 kHz (1.78), f3 a 6.0 kHz (0.68), f1 a 8.0 kHz (1.31), f2 a 8.0 kHz (0.72), f2 a 12.0 kHz (1.55)"><span class="chip chip-bad">no cuadra</span><span class="ck">Tabla 2, amortiguamientos: 11/22 dentro del 25 %; cociente nuestro/paper entre 0.55 y 2.04; fuera: f0 a 2.8 kHz (2.04), f1 a 2.8 kHz (1.77), f2 a 2.8 kHz (1.73), f3 a 2.8 kHz (1.72), f3 a 4.0 kHz (0.55), f1 a 5.0 kHz (0.67), f1 a 6.0 kHz (1.78), f3 a 6.0 kHz (0.68), f1 a 8.0 kHz (1.31), f2 a 8.0 kHz (0.72), f2 a 12.0 kHz (1.55)</span></li><li title="Tabla 3 (modos del axión): Muller converge en 6/14 semillas y en 0 queda cerca del valor del paper (a menos de un 10 % de su |Im|). En las que convergen, Re ν se desvía entre +1.16 % y +1.48 % e Im ν / paper va de 0.968 a 0.996. Las que no convergen tienen |Im| ≥ 3.45 kHz en el paper; las que sí, ≤ 2.50"><span class="chip chip-obs">resultado</span><span class="ck">Tabla 3 (modos del axión): Muller converge en 6/14 semillas y en 0 queda cerca del valor del paper (a menos de un 10 % de su |Im|). En las que convergen, Re ν se desvía entre +1.16 % y +1.48 % e Im ν / paper va de 0.968 a 0.996. Las que no convergen tienen |Im| ≥ 3.45 kHz en el paper; las que sí, ≤ 2.50</span></li><li title="Control negativo 1: la estrella sin axión se desvía de la Tabla 1 al menos un 9.1 % para ν_a ≥ 4 kHz"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 1: la estrella sin axión se desvía de la Tabla 1 al menos un 9.1 % para ν_a ≥ 4 kHz</span></li><li title="Control negativo 2 (onda entrante): en las 22 raíces amortiguadas el determinante deja de anularse (|det|/escala ≥ 2.4e-02)"><span class="chip chip-ok">coincide</span><span class="ck">Control negativo 2 (onda entrante): en las 22 raíces amortiguadas el determinante deja de anularse (|det|/escala ≥ 2.4e-02)</span></li></ul></section>
     </div>
   </section>
 
@@ -899,7 +900,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 git clone https://github.com/Blitzman/workshop_fisica.git &amp;&amp; cd workshop_fisica
 uv sync --frozen
 
-# 3. ejecutar las 197 comprobaciones (unos 574 min)
+# 3. ejecutar las 202 comprobaciones (unos 600 min)
 uv run python -m axion_ns.run_all
 
 # 4. regenerar esta página y las figuras en results/
@@ -907,7 +908,7 @@ uv run python report/build.py</pre>
     <p>Cada paso se puede ejecutar por separado, por ejemplo <code>uv run python -m axion_ns.step5_nonradial</code>, e imprime cada comprobación con una nota que da los valores calculados.</p>
 
     <h3>Salida esperada</h3>
-    <pre>189/197 comprobaciones OK (y 6 resultados descriptivos) en 34452 s
+    <pre>192/202 comprobaciones OK (y 8 resultados descriptivos) en 35984 s
   FAIL: m_a R para 3 kHz y R=12 km = 0.75 (paper: 0.12)
   FAIL: m_a^2 f_a^2 = eps beta m_pi^2 f_pi^2 / 4 = eps x (4.4-4.8) MeV/fm^3 (paper: eps x 13)
   FAIL: lambda^2 con (eps+p)=500 MeV/fm^3, c_s^2=0.3: eps x (0.029-0.032) (paper: eps x 0.02)
@@ -915,8 +916,10 @@ uv run python report/build.py</pre>
   FAIL: H23b(ii): ningún cero profundo que mover: Muller no converge en la región (paso 20); la prueba no decide
   FAIL: H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracción mueven Re nu como mucho 2e-06 relativo: p1 a 8 kHz 2e-09; p2 a 12 kHz 4e-09; p1 a 7 kHz 1e-07; p2 a 11 kHz 2e-06; p2 a 8 kHz 2e-09; f a 15 kHz 3e-08
   FAIL: Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.0017 Hz, frente a 9.1e-04 Hz con las variantes de arriba
-  FAIL: Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 8.5e-07 Hz</pre>
-    <p>Hay 8 FAIL. 3 son esperados: cifras del texto del primer paper que no cuadran con el recálculo (paso 4). 2 marcan una pregunta que queda sin decidir: la región de modos muy amortiguados del informe radial (pasos 20 y 21). 3 son del paso 25: en dos modos que radian axiones justo por encima del umbral la frecuencia depende del radio de empalme más de lo que predijimos, y dos controles negativos no distinguen esa dependencia; queda como incertidumbre sistemática, sin cambiar los criterios a posteriori. Cualquier otro FAIL indica que algo ha cambiado. Las líneas marcadas como resultado no son comprobaciones: informan de una cifra nueva y no cuentan en el total (6).</p>
+  FAIL: Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 8.5e-07 Hz
+  FAIL: Tabla 1 (fondo con axión, δθ apagado): 28/28 frecuencias halladas; desviación máxima 1.09 % (f0 a 2.8 kHz)
+  FAIL: Tabla 2, amortiguamientos: 11/22 dentro del 25 %; cociente nuestro/paper entre 0.55 y 2.04; fuera: f0 a 2.8 kHz (2.04), f1 a 2.8 kHz (1.77), f2 a 2.8 kHz (1.73), f3 a 2.8 kHz (1.72), f3 a 4.0 kHz (0.55), f1 a 5.0 kHz (0.67), f1 a 6.0 kHz (1.78), f3 a 6.0 kHz (0.68), f1 a 8.0 kHz (1.31), f2 a 8.0 kHz (0.72), f2 a 12.0 kHz (1.55)</pre>
+    <p>Hay 10 FAIL. 3 son esperados: cifras del texto del primer paper que no cuadran con el recálculo (paso 4). 2 marcan una pregunta que queda sin decidir: la región de modos muy amortiguados del informe radial (pasos 20 y 21). 3 son del paso 25: en dos modos que radian axiones justo por encima del umbral la frecuencia depende del radio de empalme más de lo que predijimos, y dos controles negativos no distinguen esa dependencia; queda como incertidumbre sistemática, sin cambiar los criterios a posteriori. 2 son del paso 26, la comparación radial con las tablas del primer paper: las frecuencias coinciden, pero muchos de los amortiguamientos con axión no, y la Tabla 1 se separa algo más del 1 % cerca del umbral de condensación; la causa está sin identificar (informe radial). Cualquier otro FAIL indica que algo ha cambiado. Las líneas marcadas como resultado no son comprobaciones: informan de una cifra nueva y no cuentan en el total (8).</p>
 
     <details class="more">
     <summary>Detalles técnicos: tiempos, entorno y parámetros numéricos</summary>
@@ -924,8 +927,8 @@ uv run python report/build.py</pre>
     <h3>Tiempo por paso</h3>
     <div class="tablewrap"><table class="steps">
       <thead><tr><th>#</th><th>Paso</th><th class="mod">Módulo</th><th class="num">OK</th><th class="num">Tiempo</th></tr></thead>
-      <tbody><tr><td>1</td><td>Fondo (TOV + KG)</td><td class="mod"><code>step1_background</code></td><td class="num">8/8</td><td class="num">20 s</td></tr><tr><td>2</td><td>Perturbaciones radiales</td><td class="mod"><code>step2_perturbations</code></td><td class="num">10/10</td><td class="num">40 s</td></tr><tr><td>3</td><td>Modelo simplificado (Sec. IV)</td><td class="mod"><code>step3_toy_model</code></td><td class="num">12/12</td><td class="num">3 s</td></tr><tr><td>4</td><td>Números y figura</td><td class="mod"><code>step4_numerics</code></td><td class="num">5/8 (+2 res.)</td><td class="num">145 s</td></tr><tr><td>5</td><td>Paper II: no radiales en Cowling</td><td class="mod"><code>step5_nonradial</code></td><td class="num">27/27</td><td class="num">74 s</td></tr><tr><td>6</td><td>Paper II: números y niveles ligados</td><td class="mod"><code>step6_nonradial_numerics</code></td><td class="num">13/13</td><td class="num">27 s</td></tr><tr><td>7</td><td>Más allá de Cowling (nuevo)</td><td class="mod"><code>step7_fullgr</code></td><td class="num">25/25</td><td class="num">469 s</td></tr><tr><td>8</td><td>Más allá de Cowling: números y figuras</td><td class="mod"><code>step8_numerics</code></td><td class="num">9/9</td><td class="num">1282 s</td></tr><tr><td>9</td><td>Con axión en Cowling: Tablas I, II y IV del Paper II</td><td class="mod"><code>step9_axion_cowling</code></td><td class="num">8/8</td><td class="num">1473 s</td></tr><tr><td>10</td><td>Con axión y métrica dinámica (nuevo)</td><td class="mod"><code>step10_axion_gr</code></td><td class="num">7/7 (+2 res.)</td><td class="num">2674 s</td></tr><tr><td>14</td><td>Modos radiales: umbral y ramas (modelo simplificado)</td><td class="mod"><code>step14_radial_branches</code></td><td class="num">12/12</td><td class="num">93 s</td></tr><tr><td>15</td><td>Modos radiales de la estrella con condensado (GR)</td><td class="mod"><code>step15_radial_star</code></td><td class="num">13/13</td><td class="num">2748 s</td></tr><tr><td>16</td><td>Estabilidad radial: principio del argumento</td><td class="mod"><code>step16_radial_stability</code></td><td class="num">7/7</td><td class="num">9561 s</td></tr><tr><td>17</td><td>Modos radiales sin axión: validación externa (Font et al. 2002)</td><td class="mod"><code>step17_radial_validation</code></td><td class="num">4/4 (+1 res.)</td><td class="num">443 s</td></tr><tr><td>18</td><td>Átomo gravitatorio: ley de Rydberg</td><td class="mod"><code>step18_rydberg</code></td><td class="num">4/4</td><td class="num">1 s</td></tr><tr><td>19</td><td>Cruce evitado F - átomo gravitatorio</td><td class="mod"><code>step19_avoided_crossing</code></td><td class="num">2/2</td><td class="num">3007 s</td></tr><tr><td>20</td><td>Recuento en el semiplano amortiguado</td><td class="mod"><code>step20_damped_count</code></td><td class="num">3/4</td><td class="num">6012 s</td></tr><tr><td>21</td><td>Ceros profundos frente al radio de empalme</td><td class="mod"><code>step21_deep_artifacts</code></td><td class="num">3/4</td><td class="num">577 s</td></tr><tr><td>22</td><td>Condición exterior frente al rayo complejo</td><td class="mod"><code>step22_exterior_contour</code></td><td class="num">4/4</td><td class="num">345 s</td></tr><tr><td>23</td><td>Consistencia termodinámica de la EOS</td><td class="mod"><code>step23_eos_consistency</code></td><td class="num">3/3 (+1 res.)</td><td class="num">1998 s</td></tr><tr><td>24</td><td>Anchura desde la dispersión a frecuencia real</td><td class="mod"><code>step24_scattering_width</code></td><td class="num">5/5</td><td class="num">1070 s</td></tr><tr><td>25</td><td>Rama del exterior y convergencia de los modos delicados (paso 10)</td><td class="mod"><code>step25_exterior_convergence</code></td><td class="num">5/8</td><td class="num">2390 s</td></tr></tbody>
-      <tfoot><tr><td></td><td>Total</td><td class="mod"></td><td class="num">189/197</td><td class="num">34452 s</td></tr></tfoot>
+      <tbody><tr><td>1</td><td>Fondo (TOV + KG)</td><td class="mod"><code>step1_background</code></td><td class="num">8/8</td><td class="num">20 s</td></tr><tr><td>2</td><td>Perturbaciones radiales</td><td class="mod"><code>step2_perturbations</code></td><td class="num">10/10</td><td class="num">40 s</td></tr><tr><td>3</td><td>Modelo simplificado (Sec. IV)</td><td class="mod"><code>step3_toy_model</code></td><td class="num">12/12</td><td class="num">3 s</td></tr><tr><td>4</td><td>Números y figura</td><td class="mod"><code>step4_numerics</code></td><td class="num">5/8 (+2 res.)</td><td class="num">145 s</td></tr><tr><td>5</td><td>Paper II: no radiales en Cowling</td><td class="mod"><code>step5_nonradial</code></td><td class="num">27/27</td><td class="num">74 s</td></tr><tr><td>6</td><td>Paper II: números y niveles ligados</td><td class="mod"><code>step6_nonradial_numerics</code></td><td class="num">13/13</td><td class="num">27 s</td></tr><tr><td>7</td><td>Más allá de Cowling (nuevo)</td><td class="mod"><code>step7_fullgr</code></td><td class="num">25/25</td><td class="num">469 s</td></tr><tr><td>8</td><td>Más allá de Cowling: números y figuras</td><td class="mod"><code>step8_numerics</code></td><td class="num">9/9</td><td class="num">1282 s</td></tr><tr><td>9</td><td>Con axión en Cowling: Tablas I, II y IV del Paper II</td><td class="mod"><code>step9_axion_cowling</code></td><td class="num">8/8</td><td class="num">1473 s</td></tr><tr><td>10</td><td>Con axión y métrica dinámica (nuevo)</td><td class="mod"><code>step10_axion_gr</code></td><td class="num">7/7 (+2 res.)</td><td class="num">2674 s</td></tr><tr><td>14</td><td>Modos radiales: umbral y ramas (modelo simplificado)</td><td class="mod"><code>step14_radial_branches</code></td><td class="num">12/12</td><td class="num">93 s</td></tr><tr><td>15</td><td>Modos radiales de la estrella con condensado (GR)</td><td class="mod"><code>step15_radial_star</code></td><td class="num">13/13</td><td class="num">2748 s</td></tr><tr><td>16</td><td>Estabilidad radial: principio del argumento</td><td class="mod"><code>step16_radial_stability</code></td><td class="num">7/7</td><td class="num">9561 s</td></tr><tr><td>17</td><td>Modos radiales sin axión: validación externa (Font et al. 2002)</td><td class="mod"><code>step17_radial_validation</code></td><td class="num">4/4 (+1 res.)</td><td class="num">443 s</td></tr><tr><td>18</td><td>Átomo gravitatorio: ley de Rydberg</td><td class="mod"><code>step18_rydberg</code></td><td class="num">4/4</td><td class="num">1 s</td></tr><tr><td>19</td><td>Cruce evitado F - átomo gravitatorio</td><td class="mod"><code>step19_avoided_crossing</code></td><td class="num">2/2</td><td class="num">3007 s</td></tr><tr><td>20</td><td>Recuento en el semiplano amortiguado</td><td class="mod"><code>step20_damped_count</code></td><td class="num">3/4</td><td class="num">6012 s</td></tr><tr><td>21</td><td>Ceros profundos: intento de localizarlos (no concluyente)</td><td class="mod"><code>step21_deep_artifacts</code></td><td class="num">3/4</td><td class="num">577 s</td></tr><tr><td>22</td><td>Condición exterior frente al rayo complejo</td><td class="mod"><code>step22_exterior_contour</code></td><td class="num">4/4</td><td class="num">345 s</td></tr><tr><td>23</td><td>Consistencia termodinámica de la EOS</td><td class="mod"><code>step23_eos_consistency</code></td><td class="num">3/3 (+1 res.)</td><td class="num">1998 s</td></tr><tr><td>24</td><td>Anchura desde la dispersión a frecuencia real</td><td class="mod"><code>step24_scattering_width</code></td><td class="num">5/5</td><td class="num">1070 s</td></tr><tr><td>25</td><td>Rama del exterior y convergencia de los modos delicados (paso 10)</td><td class="mod"><code>step25_exterior_convergence</code></td><td class="num">5/8</td><td class="num">2390 s</td></tr><tr><td>26</td><td>Modos radiales frente a las Tablas 1-3 del Paper I</td><td class="mod"><code>step26_paper1_tables</code></td><td class="num">3/5 (+2 res.)</td><td class="num">1532 s</td></tr></tbody>
+      <tfoot><tr><td></td><td>Total</td><td class="mod"></td><td class="num">192/202</td><td class="num">35984 s</td></tr></tfoot>
     </table></div>
     <p>Los pasos 7 y 8 son los más lentos. En el 7, comprobar la identidad de Bianchi y la conservación de la ligadura de <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.375ex;" xmlns="http://www.w3.org/2000/svg" width="2.868ex" height="1.92ex" role="img" focusable="false" viewBox="0 -683 1267.6 848.6" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><use data-c="1D43B" xlink:href="#MJX-TEX-I-1D43B"></use></g><g data-mml-node="mn" transform="translate(864,-150) scale(0.707)"><use data-c="30" xlink:href="#MJX-TEX-N-30"></use></g></g></g></g></svg></mjx-container> obliga a reducir expresiones muy grandes. El 8 integra unos cuantos miles de problemas de valores iniciales, repartidos en seis procesos; es lo único paralelizado. Le sigue el paso 4, que evalúa la ecuación trascendente (4.13) con mpmath en una rejilla de 600 × 250 puntos del plano complejo para dibujar la Fig. 3.</p>
 
@@ -2991,7 +2994,7 @@ def r(x, d=4):
 def save(name, data):
     RES.mkdir(exist_ok=True)
     (RES / f&#x27;fig_{name}.json&#x27;).write_text(json.dumps(data, ensure_ascii=False, separators=(&#x27;,&#x27;, &#x27;:&#x27;)))
-</code></pre></details><details class="src" id="f-axion_ns-run_all.py"><summary><code>axion_ns/run_all.py</code> <span class="small">(68 líneas)</span></summary><pre class="code" data-path="axion_ns/run_all.py"><code>&quot;&quot;&quot;Ejecuta todo el pipeline: acción -&gt; fondo -&gt; perturbaciones -&gt; modelo simplificado -&gt; números.&quot;&quot;&quot;
+</code></pre></details><details class="src" id="f-axion_ns-run_all.py"><summary><code>axion_ns/run_all.py</code> <span class="small">(70 líneas)</span></summary><pre class="code" data-path="axion_ns/run_all.py"><code>&quot;&quot;&quot;Ejecuta todo el pipeline: acción -&gt; fondo -&gt; perturbaciones -&gt; modelo simplificado -&gt; números.&quot;&quot;&quot;
 import json
 import platform
 import time
@@ -3005,7 +3008,8 @@ from . import (step1_background, step2_perturbations, step3_toy_model, step4_num
                step17_radial_validation, step18_rydberg,
                step19_avoided_crossing, step20_damped_count,
                step21_deep_artifacts, step22_exterior_contour,
-               step23_eos_consistency, step24_scattering_width, step25_exterior_convergence)
+               step23_eos_consistency, step24_scattering_width, step25_exterior_convergence,
+               step26_paper1_tables)
 
 STEPS = [(&#x27;Fondo (TOV + KG)&#x27;, step1_background), (&#x27;Perturbaciones radiales&#x27;, step2_perturbations),
          (&#x27;Modelo simplificado (Sec. IV)&#x27;, step3_toy_model), (&#x27;Números y figura&#x27;, step4_numerics),
@@ -3022,11 +3026,12 @@ STEPS = [(&#x27;Fondo (TOV + KG)&#x27;, step1_background), (&#x27;Perturbaciones
          (&#x27;Átomo gravitatorio: ley de Rydberg&#x27;, step18_rydberg),
          (&#x27;Cruce evitado F - átomo gravitatorio&#x27;, step19_avoided_crossing),
          (&#x27;Recuento en el semiplano amortiguado&#x27;, step20_damped_count),
-         (&#x27;Ceros profundos frente al radio de empalme&#x27;, step21_deep_artifacts),
+         (&#x27;Ceros profundos: intento de localizarlos (no concluyente)&#x27;, step21_deep_artifacts),
          (&#x27;Condición exterior frente al rayo complejo&#x27;, step22_exterior_contour),
          (&#x27;Consistencia termodinámica de la EOS&#x27;, step23_eos_consistency),
          (&#x27;Anchura desde la dispersión a frecuencia real&#x27;, step24_scattering_width),
-         (&#x27;Rama del exterior y convergencia de los modos delicados (paso 10)&#x27;, step25_exterior_convergence)]
+         (&#x27;Rama del exterior y convergencia de los modos delicados (paso 10)&#x27;, step25_exterior_convergence),
+         (&#x27;Modos radiales frente a las Tablas 1-3 del Paper I&#x27;, step26_paper1_tables)]
 
 
 def _cpu():
@@ -6473,7 +6478,213 @@ def run():
 
 if __name__ == &#x27;__main__&#x27;:
     run()
-</code></pre></details><details class="src" id="f-report-build.py"><summary><code>report/build.py</code> <span class="small">(453 líneas)</span></summary><pre class="code" data-path="report/build.py"><code>&quot;&quot;&quot;Genera results/informe_axiones.html a partir de results/checks.json y las figuras.&quot;&quot;&quot;
+</code></pre></details><details class="src" id="f-axion_ns-step26_paper1_tables.py"><summary><code>axion_ns/step26_paper1_tables.py</code> <span class="small">(206 líneas)</span></summary><pre class="code" data-path="axion_ns/step26_paper1_tables.py"><code>&quot;&quot;&quot;Paso 26: los modos radiales frente a las Tablas 1-3 del Paper I (hipótesis H34, séptima revisión del informe radial).
+
+Referencia: Gómez-Bañón, Pnigouras y Pons, PRD 113, 023053 (arXiv:2510.16245v2), Sec. V. BSk26, eps = 0,1,
+p0 = 100 MeV/fm^3, relatividad general completa, dependencia e^{-i omega t}. Re en kHz; Im en Hz (Tabla 2) o en kHz
+(Tabla 3). Los valores del paper solo se usan como semillas y como referencia: cada raíz se acepta si el
+determinante se anula (Muller con residuo, o cambio de signo en el eje real).
+
+- Tabla 1: fondo con axión y delta theta apagado. Es la submatriz (xi, Delta p) de las mismas ecuaciones derivadas
+  (radial.interior_matrix), igual que la Tabla I del paso 9 para la secuela.
+- Tabla 2: problema completo (radial.det).
+- Tabla 3: modos del axión, muy amortiguados. Solo descriptivo (en esa región F está en su suelo de ruido, paso 21).
+&quot;&quot;&quot;
+import json
+import time
+from multiprocessing import Pool
+from pathlib import Path
+
+import numpy as np
+from scipy.integrate import solve_ivp
+from scipy.optimize import brentq
+
+from . import axgr as AG
+from . import axstar as AX
+from . import radial as RD
+from .pipeline import ok_field, report
+
+OUT = Path(__file__).resolve().parent.parent / &#x27;results&#x27;
+NUA = (2.8, 3.0, 4.0, 5.0, 6.0, 8.0, 12.0)
+# Tabla 1 (kHz): f0, f1, f2, f3; None = sin axión
+T1 = {None: (3.10, 7.27, 10.22, 11.63), 2.8: (3.14, 7.32, 10.26, 11.67), 3.0: (3.32, 7.54, 10.46, 11.86),
+      4.0: (3.63, 8.03, 11.25, 12.84), 5.0: (3.67, 8.14, 11.56, 13.45), 6.0: (3.68, 8.18, 11.71, 13.87),
+      8.0: (3.69, 8.22, 11.88, 14.45), 12.0: (3.72, 8.27, 12.07, 15.16)}
+# Tabla 2: (Re kHz, Im Hz) de f0, f1, f2, f3
+T2 = {2.8: ((3.13, -8.80), (7.31, -2.60), (10.25, -1.04), (11.66, -0.394)),
+      3.0: ((3.26, -43.7), (7.49, -6.10), (10.46, -2.15), (11.84, -0.854)),
+      4.0: ((3.49, 0.0), (7.96, -38.9), (11.21, -4.55), (12.82, -1.06)),
+      5.0: ((3.50, 0.0), (8.05, -8.38), (11.52, -7.74), (13.44, -4.02)),
+      6.0: ((3.47, 0.0), (8.11, -2.05), (11.66, -22.5), (13.85, -2.01)),
+      8.0: ((3.42, 0.0), (8.12, -36.2), (11.80, -6.71), (14.42, -5.22)),
+      12.0: ((3.36, 0.0), (8.09, 0.0), (11.98, -12.0), (15.08, -11.4))}
+# Tabla 3: (Re kHz, Im kHz) de f1a y f2a (f0a: los autores lo dan con una cifra y lo declaran poco fiable)
+T3 = {2.8: ((10.50, -4.30), (19.29, -5.82)), 3.0: ((11.23, -4.31), (20.06, -5.94)),
+      4.0: ((16.36, -3.45), (22.99, -5.37)), 5.0: ((20.30, -2.22), (25.54, -4.70)),
+      6.0: ((23.51, -1.50), (28.22, -3.81)), 8.0: ((29.86, -0.98), (33.55, -2.50)),
+      12.0: ((42.97, -1.08), (45.19, -1.50))}
+
+
+def decoupled_dp(st, nu, r0=1e-3, r1=0.5, rtol=1e-10):
+    &quot;&quot;&quot;Delta p(R) con delta theta apagado: submatriz (xi, Delta p) de radial.interior_matrix (Tabla 1).&quot;&quot;&quot;
+    A = RD.interior_matrix()
+    om = AX.omega_of(nu)
+    sub = lambda rr: np.asarray(A(rr, om, *RD._bgvals(st, rr)), dtype=complex)[:2, :2].real
+    M = sub(r0)
+    y0 = np.array([r0, (1.0 - M[0, 0] * r0) / M[0, 1]])
+    f = lambda rr, y: sub(rr) @ y
+    s = RD._ok(solve_ivp(f, (r0, r1), y0, method=&#x27;DOP853&#x27;, rtol=rtol, atol=1e-40))
+    s = RD._ok(solve_ivp(f, (r1, st.R), s.y[:, -1], method=&#x27;DOP853&#x27;, rtol=rtol, atol=1e-40))
+    return s.y[1, -1]
+
+
+def bracket_root(g, seed, rel=0.04, n=9):
+    &quot;&quot;&quot;Raíz de g (real) cerca de seed: barrido en seed (1 ± rel) y brentq en el cambio de signo más cercano.&quot;&quot;&quot;
+    xs = np.linspace(seed * (1 - rel), seed * (1 + rel), n)
+    v = [g(x) for x in xs]
+    cands = [(xs[i], xs[i + 1]) for i in range(n - 1) if v[i] * v[i + 1] &lt; 0]
+    if not cands:
+        return None
+    a, b = min(cands, key=lambda ab: abs(0.5 * (ab[0] + ab[1]) - seed))
+    return brentq(g, a, b, xtol=1e-9)
+
+
+def _table1(nu_a, n):
+    return bracket_root(lambda nu: decoupled_dp(_star(nu_a), nu), T1[nu_a][n])
+
+
+_STARS = {}
+
+
+def _star(nu_a):
+    &quot;&quot;&quot;Una estrella por proceso y masa: construirla cuesta ~2 min.&quot;&quot;&quot;
+    if nu_a not in _STARS:
+        _STARS[nu_a] = AX.Star(nu_a) if nu_a else AX.Star(None)
+    return _STARS[nu_a]
+
+
+def _table2(nu_a, n):
+    st = _star(nu_a)
+    rm = AG.r_match(st)
+    f = lambda nu: RD.det(st, AX.omega_of(nu), rm)
+    re_, im_ = T2[nu_a][n]
+    if im_ == 0.0:
+        hi = min(re_ * 1.04, nu_a * (1 - 1e-6))
+        xs = np.linspace(re_ * 0.96, hi, 9)
+        v = [f(x).real for x in xs]
+        c = [i for i in range(8) if v[i] * v[i + 1] &lt; 0]
+        if not c:
+            return {&#x27;paper&#x27;: [re_, im_]}
+        i = min(c, key=lambda i: abs(0.5 * (xs[i] + xs[i + 1]) - re_))
+        z = brentq(lambda nu: f(nu).real, xs[i], xs[i + 1], xtol=1e-9)
+        return {&#x27;paper&#x27;: [re_, im_], &#x27;nu&#x27;: [z, 0.0], &#x27;bound&#x27;: True,
+                &#x27;im_det_rel&#x27;: float(abs(f(z + 0.01).imag) / abs(f(z + 0.01)))}
+    try:
+        z = RD.muller(f, complex(re_, im_ * 1e-3))
+    except RuntimeError as e:
+        return {&#x27;paper&#x27;: [re_, im_], &#x27;err&#x27;: str(e)[:120]}
+    scale = max(abs(f(z + 0.05)), 1e-300)
+    return {&#x27;paper&#x27;: [re_, im_], &#x27;nu&#x27;: [z.real, z.imag], &#x27;bound&#x27;: bool(z.imag == 0.0),
+            &#x27;incoming&#x27;: float(abs(RD.det(st, AX.omega_of(z), rm, sheet=-1)) / scale)}
+
+
+def _table3(nu_a, k):
+    st = _star(nu_a)
+    rm = AG.r_match(st)
+    f = lambda nu: RD.det(st, AX.omega_of(nu), rm)
+    re_, im_ = T3[nu_a][k]
+    try:
+        z = RD.muller(f, complex(re_, im_))
+        return {&#x27;paper&#x27;: [re_, im_], &#x27;nu&#x27;: [z.real, z.imag]}
+    except RuntimeError as e:
+        return {&#x27;paper&#x27;: [re_, im_], &#x27;nu&#x27;: None, &#x27;err&#x27;: str(e)[:120]}
+
+
+def _task(args):
+    kind, nu_a, n = args
+    t = time.time()
+    r = {&#x27;t1&#x27;: _table1, &#x27;t2&#x27;: _table2, &#x27;t3&#x27;: _table3}[kind](nu_a, n)
+    return kind, nu_a, n, r, time.time() - t
+
+
+def run():
+    # Ordenadas por masa para que cada proceso reutilice su estrella; las caras (t2, t3) primero
+    tasks = ([(&#x27;t2&#x27;, x, n) for x in NUA for n in range(4)] + [(&#x27;t3&#x27;, x, k) for x in NUA for k in range(2)]
+             + [(&#x27;t1&#x27;, x, n) for x in (None,) + NUA for n in range(4)])
+    with Pool(6) as p:
+        got = p.map(_task, tasks, chunksize=1)
+    D = {&#x27;t1&#x27;: {}, &#x27;t2&#x27;: {}, &#x27;t3&#x27;: {}, &#x27;seconds&#x27;: {}}
+    for kind, nu_a, n, r, sec in got:
+        D[kind].setdefault(str(nu_a), {})[n] = r
+        D[&#x27;seconds&#x27;][f&#x27;{kind}:{nu_a}:{n}&#x27;] = sec
+    for kind in (&#x27;t1&#x27;, &#x27;t2&#x27;, &#x27;t3&#x27;):
+        D[kind] = {k: [v[i] for i in sorted(v)] for k, v in D[kind].items()}
+    D[&#x27;source&#x27;] = &#x27;Paper I (arXiv:2510.16245v2), Tablas 1-3&#x27;
+    D[&#x27;t1_paper&#x27;] = {str(k): v for k, v in T1.items()}
+    res = []
+
+    # (a) Tabla 1
+    dev1 = [(nu_a, n, (z - T1[nu_a][n]) / T1[nu_a][n]) for nu_a in NUA for n, z in enumerate(D[&#x27;t1&#x27;][str(nu_a)])
+            if z is not None]
+    miss1 = sum(z is None for nu_a in NUA for z in D[&#x27;t1&#x27;][str(nu_a)])
+    m1 = max(abs(d) for *_, d in dev1)
+    worst1 = max(dev1, key=lambda t: abs(t[2]))
+    D[&#x27;t1_maxdev&#x27;] = m1
+    res.append((f&#x27;Tabla 1 (fondo con axión, δθ apagado): {len(dev1)}/28 frecuencias halladas; desviación máxima &#x27;
+                f&#x27;{m1 * 100:.2f} % (f{worst1[1]} a {worst1[0]} kHz)&#x27;, miss1 == 0 and m1 &lt;= 0.01, &#x27;H34(a)&#x27;))
+    d0 = [(z - T1[None][n]) / T1[None][n] for n, z in enumerate(D[&#x27;t1&#x27;][&#x27;None&#x27;])]
+    res.append((f&#x27;Sin axión frente a la fila sin axión de la Tabla 1: &#x27; + &#x27;, &#x27;.join(f&#x27;{d * 100:+.2f} %&#x27; for d in d0),
+                None, &#x27;descriptivo: la prueba previa del cuaderno, ahora en el paso&#x27;))
+
+    # (b) y (c) Tabla 2
+    rows = [(nu_a, n, m) for nu_a in NUA for n, m in enumerate(D[&#x27;t2&#x27;][str(nu_a)])]
+    found = [(nu_a, n, m) for nu_a, n, m in rows if &#x27;nu&#x27; in m]
+    dre = [abs(m[&#x27;nu&#x27;][0] - m[&#x27;paper&#x27;][0]) / m[&#x27;paper&#x27;][0] for *_, m in found]
+    cls = all((m[&#x27;paper&#x27;][1] == 0.0) == m[&#x27;bound&#x27;] for *_, m in found)
+    bound_real = all(m[&#x27;im_det_rel&#x27;] &lt; 1e-8 for *_, m in found if m[&#x27;bound&#x27;])
+    D[&#x27;t2_maxdev_re&#x27;] = max(dre)
+    res.append((f&#x27;Tabla 2, partes reales: {len(found)}/28 modos hallados; desviación máxima {max(dre) * 100:.2f} %; &#x27;
+                f&#x27;los {sum(m[&quot;bound&quot;] for *_, m in found)} modos con Im = 0 del paper son ligados también aquí &#x27;
+                f&#x27;(frecuencia real)&#x27;, len(found) == 28 and max(dre) &lt;= 0.01 and cls and bound_real, &#x27;H34(b)&#x27;))
+    damped = [(nu_a, n, m) for nu_a, n, m in found if not m[&#x27;bound&#x27;]]
+    ratios = [(nu_a, n, (m[&#x27;nu&#x27;][1] * 1e3) / m[&#x27;paper&#x27;][1]) for nu_a, n, m in damped]
+    D[&#x27;t2_im_ratio&#x27;] = [[nu_a, n, q] for nu_a, n, q in ratios]
+    out25 = [(nu_a, n, q) for nu_a, n, q in ratios if abs(q - 1) &gt; 0.25]
+    res.append((f&#x27;Tabla 2, amortiguamientos: {len(ratios) - len(out25)}/{len(ratios)} dentro del 25 %; cociente &#x27;
+                f&#x27;nuestro/paper entre {min(q for *_, q in ratios):.2f} y {max(q for *_, q in ratios):.2f}; fuera: &#x27;
+                + (&#x27;, &#x27;.join(f&#x27;f{n} a {nu_a} kHz ({q:.2f})&#x27; for nu_a, n, q in out25) or &#x27;ninguno&#x27;),
+                len(out25) &lt;= 1, &#x27;H34(c): criterio fijado antes de calcular, como mucho un modo fuera&#x27;))
+
+    # (d) Tabla 3
+    t3 = [(nu_a, k, m) for nu_a in NUA for k, m in enumerate(D[&#x27;t3&#x27;][str(nu_a)])]
+    conv = [(nu_a, k, m) for nu_a, k, m in t3 if m[&#x27;nu&#x27;]]
+    near = [(nu_a, k, m) for nu_a, k, m in conv if abs(complex(*m[&#x27;nu&#x27;]) - complex(*m[&#x27;paper&#x27;])) &lt; 0.1 * abs(m[&#x27;paper&#x27;][1])]
+    dre3 = [100 * (m[&#x27;nu&#x27;][0] / m[&#x27;paper&#x27;][0] - 1) for *_, m in conv]
+    rim3 = [m[&#x27;nu&#x27;][1] / m[&#x27;paper&#x27;][1] for *_, m in conv]
+    D[&#x27;t3_stats&#x27;] = {&#x27;n_conv&#x27;: len(conv), &#x27;n&#x27;: len(t3), &#x27;re_pct&#x27;: [min(dre3), max(dre3)], &#x27;im_ratio&#x27;: [min(rim3), max(rim3)],
+                     &#x27;max_im_conv&#x27;: max(abs(m[&#x27;paper&#x27;][1]) for *_, m in conv),
+                     &#x27;min_im_fail&#x27;: min(abs(m[&#x27;paper&#x27;][1]) for *_, m in t3 if not m[&#x27;nu&#x27;])}
+    res.append((f&#x27;Tabla 3 (modos del axión): Muller converge en {len(conv)}/{len(t3)} semillas y en {len(near)} queda &#x27;
+                f&#x27;cerca del valor del paper (a menos de un 10 % de su |Im|). En las que convergen, Re ν se desvía entre &#x27;
+                f&#x27;{min(dre3):+.2f} % y {max(dre3):+.2f} % e Im ν / paper va de {min(rim3):.3f} a {max(rim3):.3f}. Las que no convergen &#x27;
+                f&#x27;tienen |Im| ≥ {D[&quot;t3_stats&quot;][&quot;min_im_fail&quot;]:.2f} kHz en el paper; las que sí, ≤ {D[&quot;t3_stats&quot;][&quot;max_im_conv&quot;]:.2f}&#x27;, None, &#x27;H34(d), descriptivo&#x27;))
+
+    # Controles negativos
+    neg1 = min(abs(D[&#x27;t1&#x27;][&#x27;None&#x27;][n] - T1[x][n]) / T1[x][n] for x in NUA if x &gt;= 4 for n in range(4))
+    res.append((f&#x27;Control negativo 1: la estrella sin axión se desvía de la Tabla 1 al menos un {neg1 * 100:.1f} % &#x27;
+                f&#x27;para ν_a ≥ 4 kHz&#x27;, neg1 &gt; 0.05, &#x27;&#x27;))
+    inc = [m[&#x27;incoming&#x27;] for *_, m in damped]
+    res.append((f&#x27;Control negativo 2 (onda entrante): en las {len(inc)} raíces amortiguadas el determinante deja de &#x27;
+                f&#x27;anularse (|det|/escala ≥ {min(inc):.1e})&#x27;, min(inc) &gt; 1e-3, &#x27;&#x27;))
+
+    D[&#x27;checks&#x27;] = [{&#x27;name&#x27;: t, &#x27;ok&#x27;: ok_field(o), &#x27;note&#x27;: n_} for t, o, n_ in res]
+    (OUT / &#x27;radial_paper1.json&#x27;).write_text(json.dumps(D, indent=1, ensure_ascii=False, default=lambda o: o.item()))
+    return report(&#x27;Paso 26: modos radiales frente a las Tablas 1-3 del Paper I&#x27;, res)
+
+
+if __name__ == &#x27;__main__&#x27;:
+    run()
+</code></pre></details><details class="src" id="f-report-build.py"><summary><code>report/build.py</code> <span class="small">(459 líneas)</span></summary><pre class="code" data-path="report/build.py"><code>&quot;&quot;&quot;Genera results/informe_axiones.html a partir de results/checks.json y las figuras.&quot;&quot;&quot;
 import html
 import json
 import math
@@ -6635,6 +6846,8 @@ PRETTY = [
     None,
     None,
     # ---- Paso 25: rama del exterior y convergencia de los modos delicados del paso 10 (revisión del informe principal)
+    None,
+    # ---- Paso 26: modos radiales frente a las Tablas 1-3 del Paper I (informe radial, séptima revisión)
     None,
 ]
 
@@ -6870,13 +7083,17 @@ def main():
     n4 = sum(m == &#x27;step4_numerics&#x27; for m, _ in bad)
     nrad = sum(m in (&#x27;step20_damped_count&#x27;, &#x27;step21_deep_artifacts&#x27;) for m, _ in bad)
     n25 = sum(m == &#x27;step25_exterior_convergence&#x27; for m, _ in bad)
+    n26 = sum(m == &#x27;step26_paper1_tables&#x27; for m, _ in bad)
     other = [n for m, n in bad if m not in (&#x27;step4_numerics&#x27;, &#x27;step20_damped_count&#x27;, &#x27;step21_deep_artifacts&#x27;,
-                                            &#x27;step25_exterior_convergence&#x27;)]
+                                            &#x27;step25_exterior_convergence&#x27;, &#x27;step26_paper1_tables&#x27;)]
     fail_txt = (f&#x27;Hay {len(bad)} FAIL. {n4} son esperados: cifras del texto del primer paper que no cuadran con el recálculo (paso 4). &#x27;
                 f&#x27;{nrad} marcan una pregunta que queda sin decidir: la región de modos muy amortiguados del informe radial (pasos 20 y 21). &#x27;
                 + (f&#x27;{n25} son del paso 25: en dos modos que radian axiones justo por encima del umbral la frecuencia depende &#x27;
                    &#x27;del radio de empalme más de lo que predijimos, y dos controles negativos no distinguen esa dependencia; &#x27;
                    &#x27;queda como incertidumbre sistemática, sin cambiar los criterios a posteriori. &#x27; if n25 else &#x27;&#x27;)
+                + (f&#x27;{n26} son del paso 26, la comparación radial con las tablas del primer paper: las frecuencias coinciden, &#x27;
+                   &#x27;pero muchos de los amortiguamientos con axión no, y la Tabla 1 se separa algo más del 1 % cerca del umbral &#x27;
+                   &#x27;de condensación; la causa está sin identificar (informe radial). &#x27; if n26 else &#x27;&#x27;)
                 + (f&#x27;Los otros {len(other)} no son esperados y hay que mirarlos. &#x27; if other else &#x27;&#x27;)
                 + &#x27;Cualquier otro FAIL indica que algo ha cambiado. Las líneas marcadas como resultado no son comprobaciones: &#x27;
                 f&#x27;informan de una cifra nueva y no cuentan en el total ({n_res}).&#x27;)
@@ -7240,7 +7457,7 @@ window.MathJax = { tex: { inlineMath: [[&#x27;\\(&#x27;, &#x27;\\)&#x27;]], disp
       &lt;div&gt;
         &lt;h3&gt;Otros informes&lt;/h3&gt;
         &lt;ol&gt;
-          &lt;li&gt;&lt;a href=&quot;{{RADIAL_URL}}&quot;&gt;Modos radiales: umbral, ramas, estrella realista, estabilidad y validación (pasos 14–24) ↗&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;{{RADIAL_URL}}&quot;&gt;Modos radiales: umbral, ramas, estrella realista, estabilidad y validación (pasos 14–24 y 26) ↗&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;guia_departamento.html&quot;&gt;Guía de implantación para el Departamento ↗&lt;/a&gt;&lt;/li&gt;
         &lt;/ol&gt;
         &lt;p class=&quot;muted&quot;&gt;Las tres «líneas abiertas» que enlazaba la versión anterior (modos \(g\), rotación lenta, axión + magnetar) se han retirado: el informe que las sostenía no resistió la auditoría (cuaderno de laboratorio, §3).&lt;/p&gt;
@@ -9803,7 +10020,7 @@ STEPS = [&#x27;step1_background&#x27;, &#x27;step2_perturbations&#x27;, &#x27;st
          &#x27;step14_radial_branches&#x27;, &#x27;step15_radial_star&#x27;, &#x27;step16_radial_stability&#x27;, &#x27;step17_radial_validation&#x27;,
          &#x27;step18_rydberg&#x27;, &#x27;step19_avoided_crossing&#x27;, &#x27;step20_damped_count&#x27;, &#x27;step21_deep_artifacts&#x27;,
          &#x27;step22_exterior_contour&#x27;, &#x27;step23_eos_consistency&#x27;, &#x27;step24_scattering_width&#x27;,
-         &#x27;step25_exterior_convergence&#x27;]
+         &#x27;step25_exterior_convergence&#x27;, &#x27;step26_paper1_tables&#x27;]
 CODE = ([f&#x27;axion_ns/{m}.py&#x27; for m in (&#x27;__init__&#x27;, &#x27;geometry&#x27;, &#x27;model&#x27;, &#x27;paper&#x27;, &#x27;compare&#x27;, &#x27;pipeline&#x27;, &#x27;nonradial&#x27;,
                                        &#x27;fullgr&#x27;, &#x27;fmodes&#x27;, &#x27;bsk26&#x27;, &#x27;axstar&#x27;, &#x27;axgr&#x27;, &#x27;radial&#x27;, &#x27;figdata&#x27;, &#x27;run_all&#x27;)]
         + [f&#x27;axion_ns/{s}.py&#x27; for s in STEPS]
@@ -10562,8 +10779,8 @@ requires-dist = [
     { name = &quot;scipy&quot;, specifier = &quot;&gt;=1.18.1&quot; },
     { name = &quot;sympy&quot;, specifier = &quot;&gt;=1.14.0&quot; },
 ]
-</code></pre></details><details class="src" id="f-results-checks.json"><summary><code>results/checks.json</code> <span class="small">(1185 líneas)</span></summary><pre class="code" data-path="results/checks.json"><code>{
- &quot;seconds&quot;: 34452,
+</code></pre></details><details class="src" id="f-results-checks.json"><summary><code>results/checks.json</code> <span class="small">(1227 líneas)</span></summary><pre class="code" data-path="results/checks.json"><code>{
+ &quot;seconds&quot;: 35984,
  &quot;env&quot;: {
   &quot;python&quot;: &quot;3.14.4&quot;,
   &quot;platform&quot;: &quot;Linux x86_64&quot;,
@@ -11586,7 +11803,7 @@ requires-dist = [
    ]
   },
   {
-   &quot;step&quot;: &quot;Ceros profundos frente al radio de empalme&quot;,
+   &quot;step&quot;: &quot;Ceros profundos: intento de localizarlos (no concluyente)&quot;,
    &quot;module&quot;: &quot;step21_deep_artifacts&quot;,
    &quot;seconds&quot;: 577.0,
    &quot;checks&quot;: [
@@ -11741,6 +11958,48 @@ requires-dist = [
     {
      &quot;name&quot;: &quot;Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 8.5e-07 Hz&quot;,
      &quot;ok&quot;: false,
+     &quot;note&quot;: &quot;&quot;
+    }
+   ]
+  },
+  {
+   &quot;step&quot;: &quot;Modos radiales frente a las Tablas 1-3 del Paper I&quot;,
+   &quot;module&quot;: &quot;step26_paper1_tables&quot;,
+   &quot;seconds&quot;: 1532.0,
+   &quot;checks&quot;: [
+    {
+     &quot;name&quot;: &quot;Tabla 1 (fondo con axión, δθ apagado): 28/28 frecuencias halladas; desviación máxima 1.09 % (f0 a 2.8 kHz)&quot;,
+     &quot;ok&quot;: false,
+     &quot;note&quot;: &quot;H34(a)&quot;
+    },
+    {
+     &quot;name&quot;: &quot;Sin axión frente a la fila sin axión de la Tabla 1: -0.19 %, +0.12 %, +0.02 %, +0.14 %&quot;,
+     &quot;ok&quot;: null,
+     &quot;note&quot;: &quot;descriptivo: la prueba previa del cuaderno, ahora en el paso&quot;
+    },
+    {
+     &quot;name&quot;: &quot;Tabla 2, partes reales: 28/28 modos hallados; desviación máxima 0.86 %; los 6 modos con Im = 0 del paper son ligados también aquí (frecuencia real)&quot;,
+     &quot;ok&quot;: true,
+     &quot;note&quot;: &quot;H34(b)&quot;
+    },
+    {
+     &quot;name&quot;: &quot;Tabla 2, amortiguamientos: 11/22 dentro del 25 %; cociente nuestro/paper entre 0.55 y 2.04; fuera: f0 a 2.8 kHz (2.04), f1 a 2.8 kHz (1.77), f2 a 2.8 kHz (1.73), f3 a 2.8 kHz (1.72), f3 a 4.0 kHz (0.55), f1 a 5.0 kHz (0.67), f1 a 6.0 kHz (1.78), f3 a 6.0 kHz (0.68), f1 a 8.0 kHz (1.31), f2 a 8.0 kHz (0.72), f2 a 12.0 kHz (1.55)&quot;,
+     &quot;ok&quot;: false,
+     &quot;note&quot;: &quot;H34(c): criterio fijado antes de calcular, como mucho un modo fuera&quot;
+    },
+    {
+     &quot;name&quot;: &quot;Tabla 3 (modos del axión): Muller converge en 6/14 semillas y en 0 queda cerca del valor del paper (a menos de un 10 % de su |Im|). En las que convergen, Re ν se desvía entre +1.16 % y +1.48 % e Im ν / paper va de 0.968 a 0.996. Las que no convergen tienen |Im| ≥ 3.45 kHz en el paper; las que sí, ≤ 2.50&quot;,
+     &quot;ok&quot;: null,
+     &quot;note&quot;: &quot;H34(d), descriptivo&quot;
+    },
+    {
+     &quot;name&quot;: &quot;Control negativo 1: la estrella sin axión se desvía de la Tabla 1 al menos un 9.1 % para ν_a ≥ 4 kHz&quot;,
+     &quot;ok&quot;: true,
+     &quot;note&quot;: &quot;&quot;
+    },
+    {
+     &quot;name&quot;: &quot;Control negativo 2 (onda entrante): en las 22 raíces amortiguadas el determinante deja de anularse (|det|/escala ≥ 2.4e-02)&quot;,
+     &quot;ok&quot;: true,
      &quot;note&quot;: &quot;&quot;
     }
    ]
@@ -14994,6 +15253,841 @@ requires-dist = [
    &quot;name&quot;: &quot;Control negativo 2: con la media geom\u00e9trica de las dos definiciones, el desplazamiento es menor: F6 2.9e-04, H1 8.4e-05, F34 2.9e-04&quot;,
    &quot;ok&quot;: true,
    &quot;note&quot;: &quot;el efecto viene de c_s^2&quot;
+  }
+ ]
+}</code></pre></details><details class="src" id="f-results-radial_paper1.json"><summary><code>results/radial_paper1.json</code> <span class="small">(836 líneas)</span></summary><pre class="code" data-path="results/radial_paper1.json"><code>{
+ &quot;t1&quot;: {
+  &quot;None&quot;: [
+   3.0939909571132933,
+   7.279004463771197,
+   10.221706708287627,
+   11.646326099321136
+  ],
+  &quot;2.8&quot;: [
+   3.174102233030872,
+   7.3764075777043905,
+   10.315726301383247,
+   11.7153328012323
+  ],
+  &quot;3.0&quot;: [
+   3.3427243961618704,
+   7.592202613780338,
+   10.542868988231788,
+   11.917227523876594
+  ],
+  &quot;4.0&quot;: [
+   3.627556529702782,
+   8.047638387570053,
+   11.290850652428881,
+   12.90657403381923
+  ],
+  &quot;5.0&quot;: [
+   3.665461632032949,
+   8.14842117548161,
+   11.581722397754989,
+   13.511877248375907
+  ],
+  &quot;6.0&quot;: [
+   3.67430546033272,
+   8.185687829675995,
+   11.726904198264481,
+   13.924355378418962
+  ],
+  &quot;8.0&quot;: [
+   3.682779189010062,
+   8.220685447108192,
+   11.886753991985973,
+   14.49485766866608
+  ],
+  &quot;12.0&quot;: [
+   3.707397743319678,
+   8.270242930713614,
+   12.066751277829397,
+   15.1841381152731
+  ]
+ },
+ &quot;t2&quot;: {
+  &quot;2.8&quot;: [
+   {
+    &quot;paper&quot;: [
+     3.13,
+     -8.8
+    ],
+    &quot;nu&quot;: [
+     3.1569734264928373,
+     -0.017960397240423934
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.9760703968061415
+   },
+   {
+    &quot;paper&quot;: [
+     7.31,
+     -2.6
+    ],
+    &quot;nu&quot;: [
+     7.354533770821699,
+     -0.004594671250761962
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.2001080396654885
+   },
+   {
+    &quot;paper&quot;: [
+     10.25,
+     -1.04
+    ],
+    &quot;nu&quot;: [
+     10.305267251237396,
+     -0.0018019194254992076
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.07806133501824117
+   },
+   {
+    &quot;paper&quot;: [
+     11.66,
+     -0.394
+    ],
+    &quot;nu&quot;: [
+     11.71026236665659,
+     -0.0006776643245939351
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.027960030384035005
+   }
+  ],
+  &quot;3.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     3.26,
+     -43.7
+    ],
+    &quot;nu&quot;: [
+     3.2751188698034333,
+     -0.04855627267068846
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 4.802603077651928
+   },
+   {
+    &quot;paper&quot;: [
+     7.49,
+     -6.1
+    ],
+    &quot;nu&quot;: [
+     7.53444631616728,
+     -0.005185718964505633
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.22705380663210997
+   },
+   {
+    &quot;paper&quot;: [
+     10.46,
+     -2.15
+    ],
+    &quot;nu&quot;: [
+     10.516416797151564,
+     -0.001737396863934786
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.07528245805407145
+   },
+   {
+    &quot;paper&quot;: [
+     11.84,
+     -0.854
+    ],
+    &quot;nu&quot;: [
+     11.90347037847907,
+     -0.0006635337609682842
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.027316405551611994
+   }
+  ],
+  &quot;4.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     3.49,
+     0.0
+    ],
+    &quot;nu&quot;: [
+     3.4853053195564425,
+     0.0
+    ],
+    &quot;bound&quot;: true,
+    &quot;im_det_rel&quot;: 0.0
+   },
+   {
+    &quot;paper&quot;: [
+     7.96,
+     -38.9
+    ],
+    &quot;nu&quot;: [
+     7.978151176920453,
+     -0.038288281656972935
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 2.22126063137888
+   },
+   {
+    &quot;paper&quot;: [
+     11.21,
+     -4.55
+    ],
+    &quot;nu&quot;: [
+     11.250339543983122,
+     -0.0034389549322655947
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.15044931138597753
+   },
+   {
+    &quot;paper&quot;: [
+     12.82,
+     -1.06
+    ],
+    &quot;nu&quot;: [
+     12.889134245042674,
+     -0.0005800712704626728
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.024212761291669833
+   }
+  ],
+  &quot;5.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     3.5,
+     0.0
+    ],
+    &quot;nu&quot;: [
+     3.479182069311486,
+     0.0
+    ],
+    &quot;bound&quot;: true,
+    &quot;im_det_rel&quot;: 0.0
+   },
+   {
+    &quot;paper&quot;: [
+     8.05,
+     -8.38
+    ],
+    &quot;nu&quot;: [
+     8.062278621678615,
+     -0.005605212736806877
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.2420223516690964
+   },
+   {
+    &quot;paper&quot;: [
+     11.52,
+     -7.74
+    ],
+    &quot;nu&quot;: [
+     11.544320894405805,
+     -0.009641521629569584
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.4357879922101143
+   },
+   {
+    &quot;paper&quot;: [
+     13.44,
+     -4.02
+    ],
+    &quot;nu&quot;: [
+     13.495545645577945,
+     -0.004304163984511767
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.1857840377755294
+   }
+  ],
+  &quot;6.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     3.47,
+     0.0
+    ],
+    &quot;nu&quot;: [
+     3.449212288188925,
+     0.0
+    ],
+    &quot;bound&quot;: true,
+    &quot;im_det_rel&quot;: 0.0
+   },
+   {
+    &quot;paper&quot;: [
+     8.11,
+     -2.05
+    ],
+    &quot;nu&quot;: [
+     8.114832035680973,
+     -0.003649495778998882
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.15450584412625276
+   },
+   {
+    &quot;paper&quot;: [
+     11.66,
+     -22.5
+    ],
+    &quot;nu&quot;: [
+     11.669744748376079,
+     -0.021688537891215564
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 1.0386850542937776
+   },
+   {
+    &quot;paper&quot;: [
+     13.85,
+     -2.01
+    ],
+    &quot;nu&quot;: [
+     13.90206054699869,
+     -0.0013674086132986296
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.058030170203454155
+   }
+  ],
+  &quot;8.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     3.42,
+     0.0
+    ],
+    &quot;nu&quot;: [
+     3.3972303887470847,
+     0.0
+    ],
+    &quot;bound&quot;: true,
+    &quot;im_det_rel&quot;: 0.0
+   },
+   {
+    &quot;paper&quot;: [
+     8.12,
+     -36.2
+    ],
+    &quot;nu&quot;: [
+     8.115576598198622,
+     -0.0473926078742339
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 3.190986254872198
+   },
+   {
+    &quot;paper&quot;: [
+     11.8,
+     -6.71
+    ],
+    &quot;nu&quot;: [
+     11.809282903744826,
+     -0.0048237198008653686
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.20627167059912355
+   },
+   {
+    &quot;paper&quot;: [
+     14.42,
+     -5.22
+    ],
+    &quot;nu&quot;: [
+     14.467002814411256,
+     -0.006271043262913448
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.27286082797375827
+   }
+  ],
+  &quot;12.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     3.36,
+     0.0
+    ],
+    &quot;nu&quot;: [
+     3.3371036963100034,
+     0.0
+    ],
+    &quot;bound&quot;: true,
+    &quot;im_det_rel&quot;: 0.0
+   },
+   {
+    &quot;paper&quot;: [
+     8.09,
+     0.0
+    ],
+    &quot;nu&quot;: [
+     8.068657541552836,
+     0.0
+    ],
+    &quot;bound&quot;: true,
+    &quot;im_det_rel&quot;: 0.0
+   },
+   {
+    &quot;paper&quot;: [
+     11.98,
+     -12.0
+    ],
+    &quot;nu&quot;: [
+     11.980247503815772,
+     -0.018611315811222936
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.8421400270128307
+   },
+   {
+    &quot;paper&quot;: [
+     15.08,
+     -11.4
+    ],
+    &quot;nu&quot;: [
+     15.109925966018265,
+     -0.00992851584182591
+    ],
+    &quot;bound&quot;: false,
+    &quot;incoming&quot;: 0.4307291321156185
+   }
+  ]
+ },
+ &quot;t3&quot;: {
+  &quot;2.8&quot;: [
+   {
+    &quot;paper&quot;: [
+     10.5,
+     -4.3
+    ],
+    &quot;nu&quot;: null,
+    &quot;err&quot;: &quot;muller: sin converger en 30 pasos desde (10.5-4.3j)&quot;
+   },
+   {
+    &quot;paper&quot;: [
+     19.29,
+     -5.82
+    ],
+    &quot;nu&quot;: null,
+    &quot;err&quot;: &quot;muller: sin converger en 30 pasos desde (19.29-5.82j)&quot;
+   }
+  ],
+  &quot;3.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     11.23,
+     -4.31
+    ],
+    &quot;nu&quot;: null,
+    &quot;err&quot;: &quot;muller: sin converger en 30 pasos desde (11.23-4.31j)&quot;
+   },
+   {
+    &quot;paper&quot;: [
+     20.06,
+     -5.94
+    ],
+    &quot;nu&quot;: null,
+    &quot;err&quot;: &quot;muller: sin converger en 30 pasos desde (20.06-5.94j)&quot;
+   }
+  ],
+  &quot;4.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     16.36,
+     -3.45
+    ],
+    &quot;nu&quot;: null,
+    &quot;err&quot;: &quot;muller: residuo normalizado 2.9e+00 en (16.293457894051514-3.8146844225609717j)&quot;
+   },
+   {
+    &quot;paper&quot;: [
+     22.99,
+     -5.37
+    ],
+    &quot;nu&quot;: null,
+    &quot;err&quot;: &quot;muller: sin converger en 30 pasos desde (22.99-5.37j)&quot;
+   }
+  ],
+  &quot;5.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     20.3,
+     -2.22
+    ],
+    &quot;nu&quot;: [
+     20.593265116333086,
+     -2.149041477917454
+    ]
+   },
+   {
+    &quot;paper&quot;: [
+     25.54,
+     -4.7
+    ],
+    &quot;nu&quot;: null,
+    &quot;err&quot;: &quot;muller: sin converger en 30 pasos desde (25.54-4.7j)&quot;
+   }
+  ],
+  &quot;6.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     23.51,
+     -1.5
+    ],
+    &quot;nu&quot;: [
+     23.822139093608705,
+     -1.452889724655667
+    ]
+   },
+   {
+    &quot;paper&quot;: [
+     28.22,
+     -3.81
+    ],
+    &quot;nu&quot;: null,
+    &quot;err&quot;: &quot;muller: residuo normalizado 2.6e-01 en (28.555560615858436-3.745135176509429j)&quot;
+   }
+  ],
+  &quot;8.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     29.86,
+     -0.98
+    ],
+    &quot;nu&quot;: [
+     30.27712152716825,
+     -0.9594887571599376
+    ]
+   },
+   {
+    &quot;paper&quot;: [
+     33.55,
+     -2.5
+    ],
+    &quot;nu&quot;: [
+     33.938980243701316,
+     -2.4347060507467595
+    ]
+   }
+  ],
+  &quot;12.0&quot;: [
+   {
+    &quot;paper&quot;: [
+     42.97,
+     -1.08
+    ],
+    &quot;nu&quot;: [
+     43.60672194952225,
+     -1.07534982496176
+    ]
+   },
+   {
+    &quot;paper&quot;: [
+     45.19,
+     -1.5
+    ],
+    &quot;nu&quot;: [
+     45.80272832704373,
+     -1.4556695803883357
+    ]
+   }
+  ]
+ },
+ &quot;seconds&quot;: {
+  &quot;t2:2.8:0&quot;: 227.19310116767883,
+  &quot;t2:2.8:1&quot;: 223.77683806419373,
+  &quot;t2:2.8:2&quot;: 220.0622751712799,
+  &quot;t2:2.8:3&quot;: 238.1330587863922,
+  &quot;t2:3.0:0&quot;: 229.68298745155334,
+  &quot;t2:3.0:1&quot;: 237.78326153755188,
+  &quot;t2:3.0:2&quot;: 225.39486646652222,
+  &quot;t2:3.0:3&quot;: 222.60711789131165,
+  &quot;t2:4.0:0&quot;: 196.06427669525146,
+  &quot;t2:4.0:1&quot;: 166.38433456420898,
+  &quot;t2:4.0:2&quot;: 170.91600608825684,
+  &quot;t2:4.0:3&quot;: 190.36751699447632,
+  &quot;t2:5.0:0&quot;: 197.54531812667847,
+  &quot;t2:5.0:1&quot;: 150.46892595291138,
+  &quot;t2:5.0:2&quot;: 150.62682700157166,
+  &quot;t2:5.0:3&quot;: 174.51388812065125,
+  &quot;t2:6.0:0&quot;: 188.2633092403412,
+  &quot;t2:6.0:1&quot;: 156.7094886302948,
+  &quot;t2:6.0:2&quot;: 167.68530011177063,
+  &quot;t2:6.0:3&quot;: 215.1851704120636,
+  &quot;t2:8.0:0&quot;: 213.35213351249695,
+  &quot;t2:8.0:1&quot;: 162.9520878791809,
+  &quot;t2:8.0:2&quot;: 154.41322708129883,
+  &quot;t2:8.0:3&quot;: 177.32311534881592,
+  &quot;t2:12.0:0&quot;: 205.1561517715454,
+  &quot;t2:12.0:1&quot;: 182.3911440372467,
+  &quot;t2:12.0:2&quot;: 150.6923689842224,
+  &quot;t2:12.0:3&quot;: 158.31579732894897,
+  &quot;t3:2.8:0&quot;: 328.5408811569214,
+  &quot;t3:2.8:1&quot;: 223.24665999412537,
+  &quot;t3:3.0:0&quot;: 374.88634967803955,
+  &quot;t3:3.0:1&quot;: 269.8772931098938,
+  &quot;t3:4.0:0&quot;: 247.28277397155762,
+  &quot;t3:4.0:1&quot;: 149.21137070655823,
+  &quot;t3:5.0:0&quot;: 155.80840826034546,
+  &quot;t3:5.0:1&quot;: 138.5158269405365,
+  &quot;t3:6.0:0&quot;: 165.00445914268494,
+  &quot;t3:6.0:1&quot;: 80.4048478603363,
+  &quot;t3:8.0:0&quot;: 36.91269302368164,
+  &quot;t3:8.0:1&quot;: 164.25632882118225,
+  &quot;t3:12.0:0&quot;: 174.01582145690918,
+  &quot;t3:12.0:1&quot;: 38.7492094039917,
+  &quot;t1:None:0&quot;: 14.379301309585571,
+  &quot;t1:None:1&quot;: 17.104486227035522,
+  &quot;t1:None:2&quot;: 24.406574487686157,
+  &quot;t1:None:3&quot;: 18.367505073547363,
+  &quot;t1:2.8:0&quot;: 14.09671926498413,
+  &quot;t1:2.8:1&quot;: 19.330820322036743,
+  &quot;t1:2.8:2&quot;: 27.874010801315308,
+  &quot;t1:2.8:3&quot;: 23.05260682106018,
+  &quot;t1:3.0:0&quot;: 135.02154898643494,
+  &quot;t1:3.0:1&quot;: 19.524498462677002,
+  &quot;t1:3.0:2&quot;: 23.68624234199524,
+  &quot;t1:3.0:3&quot;: 19.1581871509552,
+  &quot;t1:4.0:0&quot;: 14.246985912322998,
+  &quot;t1:4.0:1&quot;: 18.757105350494385,
+  &quot;t1:4.0:2&quot;: 27.22279953956604,
+  &quot;t1:4.0:3&quot;: 25.37623167037964,
+  &quot;t1:5.0:0&quot;: 16.523842334747314,
+  &quot;t1:5.0:1&quot;: 18.363465309143066,
+  &quot;t1:5.0:2&quot;: 23.46505331993103,
+  &quot;t1:5.0:3&quot;: 149.78705716133118,
+  &quot;t1:6.0:0&quot;: 14.988417148590088,
+  &quot;t1:6.0:1&quot;: 140.91147994995117,
+  &quot;t1:6.0:2&quot;: 25.47282838821411,
+  &quot;t1:6.0:3&quot;: 39.760188817977905,
+  &quot;t1:8.0:0&quot;: 15.589322805404663,
+  &quot;t1:8.0:1&quot;: 15.169218063354492,
+  &quot;t1:8.0:2&quot;: 22.742098331451416,
+  &quot;t1:8.0:3&quot;: 34.42638158798218,
+  &quot;t1:12.0:0&quot;: 13.776817560195923,
+  &quot;t1:12.0:1&quot;: 16.852928161621094,
+  &quot;t1:12.0:2&quot;: 17.621917009353638,
+  &quot;t1:12.0:3&quot;: 26.260267734527588
+ },
+ &quot;source&quot;: &quot;Paper I (arXiv:2510.16245v2), Tablas 1-3&quot;,
+ &quot;t1_paper&quot;: {
+  &quot;None&quot;: [
+   3.1,
+   7.27,
+   10.22,
+   11.63
+  ],
+  &quot;2.8&quot;: [
+   3.14,
+   7.32,
+   10.26,
+   11.67
+  ],
+  &quot;3.0&quot;: [
+   3.32,
+   7.54,
+   10.46,
+   11.86
+  ],
+  &quot;4.0&quot;: [
+   3.63,
+   8.03,
+   11.25,
+   12.84
+  ],
+  &quot;5.0&quot;: [
+   3.67,
+   8.14,
+   11.56,
+   13.45
+  ],
+  &quot;6.0&quot;: [
+   3.68,
+   8.18,
+   11.71,
+   13.87
+  ],
+  &quot;8.0&quot;: [
+   3.69,
+   8.22,
+   11.88,
+   14.45
+  ],
+  &quot;12.0&quot;: [
+   3.72,
+   8.27,
+   12.07,
+   15.16
+  ]
+ },
+ &quot;t1_maxdev&quot;: 0.010860583767793563,
+ &quot;t2_maxdev_re&quot;: 0.008617708144676488,
+ &quot;t2_im_ratio&quot;: [
+  [
+   2.8,
+   0,
+   2.040954231866356
+  ],
+  [
+   2.8,
+   1,
+   1.7671812502930624
+  ],
+  [
+   2.8,
+   2,
+   1.7326148322107766
+  ],
+  [
+   2.8,
+   3,
+   1.719960214705419
+  ],
+  [
+   3.0,
+   0,
+   1.1111275210683857
+  ],
+  [
+   3.0,
+   1,
+   0.8501178630337104
+  ],
+  [
+   3.0,
+   2,
+   0.8080915646208306
+  ],
+  [
+   3.0,
+   3,
+   0.7769716170588808
+  ],
+  [
+   4.0,
+   1,
+   0.98427459272424
+  ],
+  [
+   4.0,
+   2,
+   0.7558142708276033
+  ],
+  [
+   4.0,
+   3,
+   0.5472370476062951
+  ],
+  [
+   5.0,
+   1,
+   0.6688798015282669
+  ],
+  [
+   5.0,
+   2,
+   1.2456746291433571
+  ],
+  [
+   5.0,
+   3,
+   1.0706875583362605
+  ],
+  [
+   6.0,
+   1,
+   1.7802418434140888
+  ],
+  [
+   6.0,
+   2,
+   0.9639350173873584
+  ],
+  [
+   6.0,
+   3,
+   0.6803027926858854
+  ],
+  [
+   8.0,
+   1,
+   1.3091880628241406
+  ],
+  [
+   8.0,
+   2,
+   0.718885216224347
+  ],
+  [
+   8.0,
+   3,
+   1.201349284083036
+  ],
+  [
+   12.0,
+   2,
+   1.550942984268578
+  ],
+  [
+   12.0,
+   3,
+   0.8709224422654306
+  ]
+ ],
+ &quot;t3_stats&quot;: {
+  &quot;n_conv&quot;: 6,
+  &quot;n&quot;: 14,
+  &quot;re_pct&quot;: [
+   1.15940460119619,
+   1.4817825215784453
+  ],
+  &quot;im_ratio&quot;: [
+   0.9680367017646189,
+   0.9956942823719999
+  ],
+  &quot;max_im_conv&quot;: 2.5,
+  &quot;min_im_fail&quot;: 3.45
+ },
+ &quot;checks&quot;: [
+  {
+   &quot;name&quot;: &quot;Tabla 1 (fondo con axión, δθ apagado): 28/28 frecuencias halladas; desviación máxima 1.09 % (f0 a 2.8 kHz)&quot;,
+   &quot;ok&quot;: false,
+   &quot;note&quot;: &quot;H34(a)&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Sin axión frente a la fila sin axión de la Tabla 1: -0.19 %, +0.12 %, +0.02 %, +0.14 %&quot;,
+   &quot;ok&quot;: null,
+   &quot;note&quot;: &quot;descriptivo: la prueba previa del cuaderno, ahora en el paso&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Tabla 2, partes reales: 28/28 modos hallados; desviación máxima 0.86 %; los 6 modos con Im = 0 del paper son ligados también aquí (frecuencia real)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;H34(b)&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Tabla 2, amortiguamientos: 11/22 dentro del 25 %; cociente nuestro/paper entre 0.55 y 2.04; fuera: f0 a 2.8 kHz (2.04), f1 a 2.8 kHz (1.77), f2 a 2.8 kHz (1.73), f3 a 2.8 kHz (1.72), f3 a 4.0 kHz (0.55), f1 a 5.0 kHz (0.67), f1 a 6.0 kHz (1.78), f3 a 6.0 kHz (0.68), f1 a 8.0 kHz (1.31), f2 a 8.0 kHz (0.72), f2 a 12.0 kHz (1.55)&quot;,
+   &quot;ok&quot;: false,
+   &quot;note&quot;: &quot;H34(c): criterio fijado antes de calcular, como mucho un modo fuera&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Tabla 3 (modos del axión): Muller converge en 6/14 semillas y en 0 queda cerca del valor del paper (a menos de un 10 % de su |Im|). En las que convergen, Re ν se desvía entre +1.16 % y +1.48 % e Im ν / paper va de 0.968 a 0.996. Las que no convergen tienen |Im| ≥ 3.45 kHz en el paper; las que sí, ≤ 2.50&quot;,
+   &quot;ok&quot;: null,
+   &quot;note&quot;: &quot;H34(d), descriptivo&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Control negativo 1: la estrella sin axión se desvía de la Tabla 1 al menos un 9.1 % para ν_a ≥ 4 kHz&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
+  },
+  {
+   &quot;name&quot;: &quot;Control negativo 2 (onda entrante): en las 22 raíces amortiguadas el determinante deja de anularse (|det|/escala ≥ 2.4e-02)&quot;,
+   &quot;ok&quot;: true,
+   &quot;note&quot;: &quot;&quot;
   }
  ]
 }</code></pre></details><details class="src" id="f-results-radial_rydberg.json"><summary><code>results/radial_rydberg.json</code> <span class="small">(65 líneas)</span></summary><pre class="code" data-path="results/radial_rydberg.json"><code>{
