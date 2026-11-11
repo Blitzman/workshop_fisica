@@ -452,3 +452,27 @@ La revisión señala que, a ν_a = 6 kHz, la Tabla 2 del Paper I da H1 = 8,11 kH
 **Estado de los ficheros.** Se mantienen en el repositorio como evidencia del caso, marcados como retirados en `LINEAS_INVESTIGACION.md`. No se muestran a José como resultados.
 
 **Lecciones convertidas en reglas** (añadidas a `AGENTS.md`, §4): validación externa obligatoria, cero constantes libres en los integradores, cifras del informe generadas desde los datos y premisa física revisada por el grupo antes de escribir código.
+
+## 4. Línea nueva: enfriamiento de estrellas de neutrones (2026-11-11)
+
+**Estado: premisa PENDIENTE de validar con José. No se escribe código hasta entonces (AGENTS.md §4).**
+
+**Encargo (José, 11/11).** Código 1D, sin campo magnético, con microfísica actualizada, para confirmar o refutar afirmaciones «poco rigurosas» de Marino, Dehman, Kovlakas, Rea, Pons y Viganò 2024 (Nat. Astron. 8, 1020; arXiv:2404.05371). La línea de axiones queda aparcada mientras revisan I8.
+
+**Qué dice el artículo** (leído de arXiv v1; el texto de Métodos a partir de §0.8 y las tablas extendidas solo los tenemos por resumen automático, sin verificar):
+- Tres fuentes jóvenes y frías: PSR J0205+6449 (~840 a), PSR B2334+61 (~7,7 ka), CXOU J0852−4617 (2,5–5 ka), con L_th del orden de 10³² erg/s.
+- 81 curvas con el código magneto-térmico 2D: 3 EoS (BSk24, SLy4, GM1A) × 3 masas (1,4; 1,6; 1,8 M☉) × 9 campos. Envoltura de hierro. Un solo modelo de gaps superfluidos.
+- Conclusión: el enfriamiento «mínimo» (SLy4, sin Urca directo) no explica las fuentes para ninguna masa ni campo (probabilidad < 5 % con un clasificador random forest); toda EoS debe permitir enfriamiento rápido en algún rango de masas; con un metamodelo nucleónico simplificado (Margueron et al. 2018), ~75 % de las EoS quedarían excluidas.
+
+**Afirmaciones a comprobar (borrador para José):**
+- A1. «El enfriamiento mínimo no llega a esas luminosidades a esas edades.» Solo se probó una EoS sin Urca directo y un modelo de gaps. Falta barrer: gaps (el triplete de neutrones y la emisión por rotura de pares pueden acelerar mucho el enfriamiento), Urca modificado con correcciones del medio, conductividades y capacidad calorífica actualizadas, composición de la envoltura.
+- A2. «~75 % de las EoS excluidas.» No sale de simulaciones sino de un umbral de fracción de protones en un metamodelo. Comprobable recalculando el umbral de Urca directo EoS por EoS.
+- A3. Umbrales de Urca directo de BSk24 y GM1A (masa y densidad). Comprobables contra los artículos de las EoS.
+- A4. Peso estadístico: 3 EoS y 3 masas como clases de un clasificador; los propios autores dicen que el método no sirve para acotar la EoS.
+- Fuera de alcance por ahora: el análisis de rayos X (luminosidades, distancias, edades).
+
+**Orden de magnitud (a verificar al reproducir curvas publicadas, no es resultado nuestro):** las curvas de enfriamiento mínimo publicadas dan, a 10³–10⁴ a, luminosidades de 10³³–10³⁴ erg/s; las fuentes están en ~10³² erg/s. La pregunta es si la microfísica actualizada, sin Urca directo, cierra ese factor 10–100.
+
+**Validación externa prevista antes de tocar nada nuevo:** reproducir curvas publicadas por otros (enfriamiento mínimo de Page et al. 2004; código público NSCool) con la misma EoS y los mismos ingredientes.
+
+**Preguntas para José:** (1) ¿cuáles son, para él, las afirmaciones poco rigurosas? ¿Coinciden con A1–A4? (2) ¿Qué ingredientes considera desfasados (gaps, Urca modificado en medio, conductividades, envolturas)? (3) ¿Partimos de un código suyo 1D o escribimos uno nuevo y lo validamos contra NSCool? (4) ¿Qué EoS quiere en el barrido?
