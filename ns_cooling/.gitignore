@@ -1,4 +1,3 @@
-paper/*.pdf
-paper/*.txt
+paper/
 data/src/
 __pycache__/

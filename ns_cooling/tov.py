@@ -24,13 +24,15 @@ class Table:
         return np.exp(self._lp(np.log(rho)))
 
 
-def star(tab, rho_c, rho_surf=1e6, rtol=1e-10):
+def star(tab, rho_c, rho_surf=1e6, rtol=1e-10, newtonian=False):
     """Mass [Msun] and radius [km] for central mass-energy density rho_c [g/cm^3]."""
     Pc, Ps = tab.P_of_rho(rho_c), tab.P_of_rho(rho_surf)
 
     def rhs(r, y):
         P, m = y
         rho = tab.rho_of_P(max(P, 0.5 * Ps))      # the last trial step may overshoot the surface
+        if newtonian:                              # negative control only
+            return [-G * rho * m / r**2, 4 * np.pi * r**2 * rho]
         dP = -G * (rho + P / C**2) * (m + 4 * np.pi * r**3 * P / C**2) / (r * (r - 2 * G * m / C**2))
         return [dP, 4 * np.pi * r**2 * rho]
 

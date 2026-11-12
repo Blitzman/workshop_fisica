@@ -8,6 +8,7 @@ Line references `paper:N` point to `paper/marino2024.txt` (text extracted from t
 
 - 2026-11-12. Folder created. Paper read in full from the PDF. Premise and claim list pending José's validation. Started anyway (user decision) with steps that only reproduce published numbers.
 - 2026-11-12. H1 confirmed: BSk24 structure and direct-Urca threshold reproduce the paper.
+- 2026-11-12. H2: SLy4 structure reproduces Douchin & Haensel 2001; no direct Urca in any stable star. Next: the cooling solver (step 3), validated against published curves before any sweep.
 
 ## 1. The brief (José, 2026-11-11)
 
@@ -71,3 +72,15 @@ Started before José's answer, at the user's request; this step only reproduces 
   - Direct Urca opens at n_b = 0.4527 fm⁻³, 8.251e+14 g/cm³ (+0.01 %), proton fraction 0.1364; the star with that central density has 1.595 M☉ and R = 12.58 km. R(1.4 M☉) = 12.59 km.
   - Controls: without muons the threshold density moves +35.7 %; BSk26 gives 2.169 M☉.
   - *Reading:* the paper's BSk24 numbers follow from the public fits, so our star and theirs are the same object. Consequence for S5: the paper's three masses put only 1.8 M☉ clearly above the threshold; 1.6 M☉ sits 0.005 M☉ above it, so its direct-Urca core is tiny and its curve should be very sensitive to the exact mass. Still to compare with Pearson et al. 2018's own table (not in hand).
+
+### H2 · SLy4 star structure and absence of direct Urca (2026-11-12)
+
+- **Sources.** EoS table `sly4.dat` (Douchin & Haensel's own table, from http://www.ioffe.ru/astro/NSG/NSEOS/). Reference numbers and core composition from Douchin & Haensel 2001 (A&A 380, 151; arXiv:astro-ph/0111092), Tables 4 and 6 and Sect. 7.6, read from the PDF (`paper/dh2001/`, not committed). Both are parsed, not typed.
+- **Hypothesis.** TOV on the table reproduces their Table 6: maximum mass 2.05 M☉, R = 9.99 km (each within 0.5 %), central baryon density 1.21 fm⁻³ and central pressure 1.38e36 dyn/cm² (each within 3 %). Their Table 4 composition gives the electron direct-Urca threshold at 1.35 fm⁻³ and the muon one at 1.44 fm⁻³ (each within 0.02 fm⁻³). Hence the paper's statement S5 for SLy4: no direct Urca in any stable star, including 2 M☉ (paper:1489).
+- **Note.** Table 6 prints the central density as 2.86 in units of 1e14 g/cm³; their Table 5 (2.83e15 at 1.2 fm⁻³) shows the unit is 1e15. We compare with 2.86e15.
+- **Negative controls.** (1) Dropping the relativistic corrections in TOV must change the maximum mass by more than 10 %. (2) Ignoring muons (x_e = x_p) must move the electron threshold by more than 0.05 fm⁻³.
+- **Status: structure CONFIRMED; quoted thresholds REFUTED; the conclusion (no direct Urca) CONFIRMED** (`step2_sly4.py`, 7/9 checks; numbers from `results/step2_sly4.json`). Criteria not changed after the fact.
+  - Maximum mass 2.050 M☉ (+0.01 %), R = 9.99 km (+0.02 %), n_c = 1.206 fm⁻³ (-0.32 %), P_c = 1.371e+36 dyn/cm² (-0.63 %). R(1.4 M☉) = 11.71 km, central density 0.538 fm⁻³.
+  - Thresholds from their Table 4 with the triangle condition: electron 1.414 fm⁻³ (they quote 1.35), muon 1.496 fm⁻³ (they quote 1.44). Both come out 0.06–0.06 fm⁻³ higher than quoted: 2 FAIL. The table's last rows do not satisfy the condition at the quoted density, so the quoted figures and the table are not consistent with each other at this level; cause unknown (rounding of the table, or a different interpolation).
+  - Either way the threshold is above the largest central density any stable SLy4 star reaches (1.206 fm⁻³; a 2 M☉ star has 0.956 fm⁻³). The paper's statement that SLy4 never activates direct Urca holds.
+  - Controls: Newtonian structure and the muon-free triangle both break the result (electron threshold 1.147 fm⁻³ without muons).
