@@ -1,0 +1,100 @@
+{
+ "source": "Yakovlev et al. 2001; Yakovlev, Levenfish & Shibanov 1999; Ho et al. 2015",
+ "tau": 0.1,
+ "asymptotes": {
+  "(209) Mn branch, protons A": 1.633801668465169,
+  "(210) Mp branch, protons A": 0.8296998260719748,
+  "(214) Mp branch, neutrons B": 6.036956033216178,
+  "(218) np bremsstrahlung, protons A": 0.09143579286457304,
+  "(219) pp bremsstrahlung, protons A": 0.27696597407878887,
+  "(240) pair-breaking F, singlet": 0.0686749387086103,
+  "(240) pair-breaking F, triplet": 0.06619869405405843
+ },
+ "reduction_205": 0.02705716199838426,
+ "limits": {
+  "(209)": 0.9807509629272508,
+  "(210)": 0.9933997428340846,
+  "(214)": 0.9781843984054659,
+  "(218)": 0.9998755096353289,
+  "(219)": 0.995122172289413,
+  "(240) A": 1.0002209320064426,
+  "(240) B": 0.9995789091288978
+ },
+ "limit_mutated": 2.0210732614188576,
+ "fig19": {
+  "n_n": 0.11274570828813353,
+  "peak": 1.0953583713834053e+21,
+  "tau_peak": 0.8444437218609304,
+  "peak_A": 5.999862664061884e+20
+ },
+ "tc_max": {
+  "p": {
+   "AO": 2433395270.6384945,
+   "BCLL": 5406834128.09318,
+   "BS": 4721500835.89042,
+   "CCDK": 6705959689.739289,
+   "CCYms": 5188698248.8562765,
+   "CCYps": 4441317505.299923,
+   "EEHO": 5850646710.31732,
+   "EEHOr": 6703902904.272253,
+   "T": 3284284398.338448
+  },
+  "nt": {
+   "AO": 818587986.8189358,
+   "BEEHS": 388235881.36724126,
+   "EEHO": 485815289.110526,
+   "EEHOr": 166479309.66424274,
+   "SYHHP": 882903361.7987943,
+   "T": 878992363.3857621,
+   "TTav": 552335246.5556946,
+   "TToa": 623905507.7965647
+  }
+ },
+ "checks": [
+  {
+   "name": "Reduction factors equal 1 at v = 0",
+   "ok": true,
+   "note": "max deviation 0.0e+00"
+  },
+  {
+   "name": "Fits reproduce their printed asymptotes at T = 0.1 T_c within 5 %",
+   "ok": false,
+   "note": "+163.4%, +83.0%, +603.7%, +9.1%, +27.7%, +6.9%, +6.6%"
+  },
+  {
+   "name": "H6b: fit over printed asymptote, extrapolated to v = infinity, within 3 % of 1 for all seven",
+   "ok": true,
+   "note": "0.981, 0.993, 0.978, 1.000, 0.995, 1.000, 1.000"
+  },
+  {
+   "name": "H6b NEG: a 10 % change in one coefficient of Eq. (211) takes the limit outside 3 %",
+   "ok": true,
+   "note": "2.021"
+  },
+  {
+   "name": "Fit (205) reduces to the single-superfluid factors (199) for v <= 3 within 5 %",
+   "ok": true,
+   "note": "max 2.7%"
+  },
+  {
+   "name": "Fig. 19: triplet pair-breaking peak 1.10e+21 erg cm-3 s-1 vs 1e21 (within 0.15 dex)",
+   "ok": true,
+   "note": "+0.04 dex"
+  },
+  {
+   "name": "Fig. 19: peak at T = 0.84 T_c (0.7 to 0.9)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "NEG1: swapping the singlet and triplet gap functions breaks an asymptote",
+   "ok": true,
+   "note": "max 6282266%"
+  },
+  {
+   "name": "NEG2: one neutrino flavour takes the Fig. 19 peak outside 0.15 dex",
+   "ok": true,
+   "note": "-0.44 dex"
+  }
+ ]
+}

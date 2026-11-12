@@ -12,6 +12,8 @@ Line references `paper:N` point to `paper/marino2024.txt` (text extracted from t
 - 2026-11-12. H3 confirmed: integrated heat capacity and nn-bremsstrahlung luminosity of the isothermal core reproduce the fits of Ofengeim et al. 2017. Next: step 4, the cooling curve with a published envelope relation.
 - 2026-11-12. H4: standard slow cooling reproduces Yakovlev et al. 2011 up to 1.6 M☉; 9–11 % hotter at 1.8–2.0 M☉ (open, I1). Next: envelope relation and photon stage, then the BSk24 1.4 M☉ curve of Potekhin & Chabrier 2018.
 - 2026-11-12. H5 confirmed: first cooling curve. The standard candle is 13–35 times brighter than the three sources. Next: superfluidity (gaps, suppression factors, pair-breaking emission) from the sources; I1 still open.
+- 2026-11-12. H6/H6b: superfluid formulas transcribed and checked against their asymptotes and a published figure. Next: H7, the first superfluid sweep.
+- 2026-11-12. H7 done: no gap combination reaches any of the three sources (closest: factor 2 for the CCO). S1 supported so far; S2 only as a majority statement. Next: the ingredients not yet covered, in-medium modified Urca first.
 
 ## 1. The brief (José, 2026-11-11)
 
@@ -144,3 +146,48 @@ Started before José's answer, at the user's request; this step only reproduces 
   - For S3: a fully accreted envelope is 9.0 to 11.0 times brighter than iron at those ages. The paper's "about one order of magnitude" holds in this model.
   - *Reading.* This fixes the size of the problem for S1: to make these sources slow coolers, updated microphysics must cut the luminosity by a factor 13–35. In the neutrino stage the photon luminosity scales roughly as L_ν^(−0.37) (T_s⁴ ∝ T_b^2.2 and T̃ ∝ L_ν^(−1/6)), so that needs a neutrino emission thousands of times stronger than the standard candle's, sustained over the star's life. Scaling to be verified numerically, not assumed; pair-breaking emission near the critical temperature is the known candidate.
   - Limits: isothermal interior (S4 untested, relevant for the 841-yr source); m* = 0.7 m; no superfluidity; no crust neutrino emission or heat capacity.
+
+### H6 · Superfluidity: gaps, reduction factors, pair-breaking emission (2026-11-12)
+
+- **Sources (all read from the PDF pages, listed in `superfluid.py`).**
+  - Gap models: Ho, Elshamouty, Heinke & Potekhin 2015 (arXiv:1412.7759), Eq. (2) and Table II: 9 proton-singlet and 8 neutron-triplet models; critical temperatures from their Eq. (1). This is the paper Marino et al. cite for "the" gap they used, without naming the model.
+  - Gap versus temperature, reduction factors and pair-breaking emission: Yakovlev et al. 2001 (arXiv:astro-ph/0012122), Eqs. (188), (199), (204)–(205), (211)–(215), (220)–(222), (225)–(229), (236), (238), (241).
+  - Heat-capacity factors: Yakovlev, Levenfish & Shibanov 1999 (arXiv:astro-ph/9906456), Eq. (18).
+  - Update of the pair-breaking rate: Potekhin & Chabrier 2018, Sect. 3: the triplet rate is multiplied by 0.19 with respect to Yakovlev et al. 2001, and the vector part of the singlet rate is suppressed by about (p_F/m*c)². Implemented as an option (`pbf='updated'`); the 2001 normalisation is `pbf='Y01'`.
+- **Choices taken from the text, not ours.** Neutron branch of modified Urca with neutrons only superfluid: Eq. (227). Combined factors: Eqs. (225), (226), (229). Outside the stated range of the fit (205), the rule (204) (the smaller of the two single factors).
+- **Hypothesis (transcription and behaviour).**
+  (a) Every fitted factor equals 1 at v = 0 and reproduces its printed low-temperature asymptote within 5 % at τ = 0.1: Eqs. (209), (210), (214), (218), (219), (240).
+  (b) The fit (205) reduces to the single-superfluid factors (199) within 5 % for v ≤ 3.
+  (c) Fig. 19 of Yakovlev et al. 2001 (ρ = 2e14 g/cm³, T_cn = 1e9 K, m* = 0.7 m): the pair-breaking emissivity for triplet pairing peaks at 1e21 erg cm⁻³ s⁻¹ within 0.15 dex (read off the figure), at T between 0.7 and 0.9 T_c (text: "maximum at T ≈ 0.8 T_cn").
+- **Negative controls.** (1) Swapping the singlet and triplet gap functions v_A, v_B must break at least one asymptote. (2) Dropping the factor N_ν = 3 must take the Fig. 19 peak outside 0.15 dex.
+- **Results to report (no criterion): first sweep for S1 and S2.** SLy4, iron envelope, isothermal interior, m* = 0.7 m: luminosity at the three source ages for every proton × neutron-triplet gap combination (and each alone), masses 1.0–2.0 M☉, both pair-breaking normalisations. S2 is the fraction of combinations that are colder than the non-superfluid star at those ages. S1 is whether any combination reaches the observed luminosities.
+- **Status (first run): (a) REFUTED as designed; (b), (c) CONFIRMED.** At τ = 0.1 the fits sit 7 % to 600 % above the printed asymptotes. The fits contain terms like (c + √(a² + (bv)²))^7.5, whose approach to the leading power is slow (corrections of order 1/v with large coefficients), so τ = 0.1 (v ≈ 12–18) is not yet asymptotic. The test was badly designed; this does not show whether the transcription is right. Criterion (a) stays failed; a proper test is H6b.
+
+### H6b · Asymptotes of the superfluid fits, tested in the limit (2026-11-12)
+
+- **Hypothesis.** In terms of v, each fit divided by its printed asymptote (the v-forms of Eqs. 209, 210, 214, 218, 219, 240) tends to 1 as v → ∞ with a 1/v correction. Evaluated at v = 100 and v = 200, the linear extrapolation to 1/v = 0, 2·r(200) − r(100), is within 3 % of 1 for all seven.
+- **Negative control.** Changing one transcribed coefficient by 10 % (0.1175 → 0.1293 in Eq. 211) must take that extrapolation outside 3 %.
+- **Status: CONFIRMED** (`step6_superfluid.py`, 8/9 checks in total, the one failure being criterion (a) of H6; numbers from `results/step6_superfluid.json`).
+  - Extrapolated limits: (209) 0.981, (210) 0.993, (214) 0.978, (218) 1.000, (219) 0.995, (240) A 1.000, (240) B 1.000. Mutated coefficient: 2.021.
+  - Fig. 19 of Yakovlev et al. 2001: our triplet peak is 1.10e+21 erg cm⁻³ s⁻¹ at T = 0.84 T_c.
+  - Largest critical temperatures of the Ho et al. models, in 1e9 K: protons AO 2.43, BCLL 5.41, BS 4.72, CCDK 6.71, CCYms 5.19, CCYps 4.44, EEHO 5.85, EEHOr 6.70, T 3.28; neutron triplet AO 0.82, BEEHS 0.39, EEHO 0.49, EEHOr 0.17, SYHHP 0.88, T 0.88, TTav 0.55, TToa 0.62. They agree with the right-hand axes of their Fig. 1 (read by eye).
+  - *Reading:* the superfluid formulas are transcribed correctly. Lesson: test fits in the regime where the reference statement actually applies.
+
+### H7 · First superfluid sweep for S1 and S2 (2026-11-12)
+
+- **Model.** SLy4 (no direct Urca at any mass), iron envelope, isothermal interior, m* = 0.7 m, protons singlet and neutrons triplet in the core, with the factors of H6. No crust physics, no neutron singlet. Masses 1.0–2.0 M☉; proton gap ∈ {none, 9 models}; neutron triplet gap ∈ {none, 8 models}; pair-breaking normalisation ∈ {Y01, updated}.
+- **Expectation written before running (from the literature on minimal cooling, not a calculation).** Pair-breaking emission from the neutron triplet lowers the luminosity at 1e3–1e4 yr by up to about an order of magnitude with the 2001 normalisation, and less with the updated one. If so: some combinations approach CXOU J0852−4617 (factor 13–17 needed), none reaches PSR J0205+6449 (factor 35).
+- **Reported.** For each source: the smallest model/observed ratio over all combinations and masses, and how many combinations fall within the observed upper error bar. For S2: the fraction of superfluid combinations colder than the non-superfluid star at each source age.
+- **Sanity checks (pass/fail).** (1) With no gaps the sweep reproduces the H5 luminosities within 1 %. (2) Control: a gap model with Δ0 scaled to zero gives the non-superfluid curve exactly. (3) Control: switching pair-breaking emission off makes every triplet-only combination hotter than or equal to the non-superfluid star at 1e3 yr is NOT required (heat capacity also drops), so instead: switching it off changes the luminosity at the source ages by more than 20 % for at least one combination.
+- **Status: done** (`step7_sf_sweep.py`, 3/3 sanity checks, about 5.5 min; numbers from `results/step7_sf_sweep.json`). Preliminary.
+    - PSR J0205+6449 (841 yr), Y01: best model/observed 6.3 (1.0 M☉, protons BCLL, neutrons TToa); non-superfluid 1.4 M☉ 35; within the upper error bar 0/534; colder than non-superfluid 72%.
+    - PSR J0205+6449 (841 yr), updated: best model/observed 12.9 (1.0 M☉, protons T, neutrons AO); non-superfluid 1.4 M☉ 35; within the upper error bar 0/534; colder than non-superfluid 59%.
+    - PSR B2334+61 (7700 yr), Y01: best model/observed 4.3 (1.0 M☉, protons BCLL, neutrons TTav); non-superfluid 1.4 M☉ 28; within the upper error bar 0/534; colder than non-superfluid 77%.
+    - PSR B2334+61 (7700 yr), updated: best model/observed 8.3 (1.0 M☉, protons BCLL, neutrons TTav); non-superfluid 1.4 M☉ 28; within the upper error bar 0/534; colder than non-superfluid 76%.
+    - CXOU J0852-4617 (5000 yr), Y01: best model/observed 2.0 (1.0 M☉, protons BCLL, neutrons TTav); non-superfluid 1.4 M☉ 13; within the upper error bar 0/534; colder than non-superfluid 77%.
+    - CXOU J0852-4617 (5000 yr), updated: best model/observed 4.1 (1.0 M☉, protons BCLL, neutrons TTav); non-superfluid 1.4 M☉ 13; within the upper error bar 0/534; colder than non-superfluid 75%.
+  - **S1 (preliminary): supported in this model.** None of the 534 combinations per normalisation reaches the upper error bar of any source. The closest is CXOU J0852−4617 at its oldest age, a factor 2.0 too bright with the 2001 pair-breaking rate and 4.1 with the updated one.
+  - **S2 (preliminary): only partly.** Superfluidity makes the star colder at the source ages in 59%–77% of the combinations, so 23%–41% are warmer. "Typically accelerated" holds as a majority statement; "unless extremely unusual choices" does not: the warmer cases are ordinary published gap models.
+  - Expectation check: the best combinations lower the luminosity by a factor 4.6–5.4 with the 2001 rate (expected: up to about ten). CXOU J0852−4617 is approached, not reached; PSR J0205+6449 is not reached. The updated rate halves the effect, as expected.
+  - The best cases are all at the lowest mass of the sweep (1.0 M☉), i.e. at the edge of the grid: lower masses were not explored.
+  - **Not yet covered, each could move the result:** real effective masses instead of 0.7 m; in-medium enhancement of modified Urca (Shternin & Baldo 2017, used by Potekhin & Chabrier 2018); neutron singlet superfluid and crust emission; the isothermal assumption for the 841-yr source (S4); other EoS without direct Urca; I1 (our luminosity possibly low at high mass, which would make heavy stars slightly colder).
