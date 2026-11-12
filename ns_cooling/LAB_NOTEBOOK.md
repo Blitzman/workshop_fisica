@@ -8,7 +8,8 @@ Line references `paper:N` point to `paper/marino2024.txt` (text extracted from t
 
 - 2026-11-12. Folder created. Paper read in full from the PDF. Premise and claim list pending José's validation. Started anyway (user decision) with steps that only reproduce published numbers.
 - 2026-11-12. H1 confirmed: BSk24 structure and direct-Urca threshold reproduce the paper.
-- 2026-11-12. H2: SLy4 structure reproduces Douchin & Haensel 2001; no direct Urca in any stable star. Next: the cooling solver (step 3), validated against published curves before any sweep.
+- 2026-11-12. H2: SLy4 structure reproduces Douchin & Haensel 2001; no direct Urca in any stable star. Next: the cooling solver, validated against published curves before any sweep.
+- 2026-11-12. H3 confirmed: integrated heat capacity and nn-bremsstrahlung luminosity of the isothermal core reproduce the fits of Ofengeim et al. 2017. Next: step 4, the cooling curve with a published envelope relation.
 
 ## 1. The brief (José, 2026-11-11)
 
@@ -84,3 +85,24 @@ Started before José's answer, at the user's request; this step only reproduces 
   - Thresholds from their Table 4 with the triangle condition: electron 1.414 fm⁻³ (they quote 1.35), muon 1.496 fm⁻³ (they quote 1.44). Both come out 0.06–0.06 fm⁻³ higher than quoted: 2 FAIL. The table's last rows do not satisfy the condition at the quoted density, so the quoted figures and the table are not consistent with each other at this level; cause unknown (rounding of the table, or a different interpolation).
   - Either way the threshold is above the largest central density any stable SLy4 star reaches (1.206 fm⁻³; a 2 M☉ star has 0.956 fm⁻³). The paper's statement that SLy4 never activates direct Urca holds.
   - Controls: Newtonian structure and the muon-free triangle both break the result (electron threshold 1.147 fm⁻³ without muons).
+
+## 8. Decisions
+
+- 2026-11-12 (user). We write our own 1D code; we do not wait for a code from José. Standing permission to download arXiv papers into `paper/refs/` (not committed). Downloaded so far: astro-ph/0012122 (Yakovlev et al. 2001, neutrino emission), 1612.04672 (Ofengeim et al. 2017, analytic L_ν and C), 1711.07662 (Potekhin & Chabrier 2018, BSk24 cooling), 1507.06186 (Potekhin, Pons & Page 2015 review), astro-ph/9706148 (Potekhin, Chabrier & Yakovlev 1997, envelopes), 1010.1154 (Yakovlev et al. 2011, cooling rates).
+- Build order: (3) integrated neutrino luminosity and heat capacity of an isothermal star, checked against published fits; (4) cooling curve of the isothermal star with a published envelope relation; (5) real microphysics (emissivities, effective masses, superfluid factors), each from its source; (6) full heat diffusion (needed for S4); then the sweeps.
+- Side note for S5: Potekhin & Chabrier 2018 give the BSk24 direct-Urca threshold mass as 1.596 M☉ and remark that 1.6 M☉ exceeds it by 0.004 M☉ (refs/1711.07662, Sect. on Fig. 4). Our H1 value agrees. This is the independent source H1 was missing.
+
+### H3 · Integrated neutrino luminosity and heat capacity of the isothermal core (2026-11-12)
+
+- **Reference.** Ofengeim, Fortin, Haensel, Yakovlev & Zdunik 2017 (arXiv:1612.04672): Eqs. (2)–(4), (6)–(11) define the integrands and integrals; Eqs. (19)–(20) and Table 2 give analytic fits calibrated on eight EoS, among them SLy (Douchin & Haensel), for M from 1 M☉ to the maximum mass at T̃ = 1e9 K. Quoted accuracy: heat capacity rms 5 %, maximum 12 %; nn-bremsstrahlung rms 14 %, maximum 54 %; modified Urca rms 25 %, maximum 66 %.
+- **What we compute.** With our SLy4 star (H2) and its Table 4 composition: C_core (non-superfluid: n, p with m* = 0.7 m; e, μ relativistic, their Eq. 6), L_nn (their Eq. 4) and L_MU (their Eq. 2). The integrals carry the redshift exp(2Φ) and the proper volume (their Eqs. 8–9), with T = T̃ exp(−Φ).
+- **Hypothesis.** For M = 1.0, 1.2, …, 2.0 M☉: (a) C_core within 12 % of the fit at every mass; (b) L_nn within 54 % at every mass, rms at most 20 %; (c) their constant c0 = 1.12e20 follows from Eq. (6) with m* = 0.7 m_n at n0 within 1 %.
+- **Not a pass/fail item.** L_MU depends on the factor Ω, which the paper only describes as "∼ 1"; we report the ratio with Ω = 1.
+- **Universality test (prediction, not validation).** BSk24 is not in their calibration set; we expect the same tolerances to hold for it.
+- **Negative controls.** (1) Dropping the redshift (Φ = 0 in T and in exp(2Φ)) must push L_nn outside 54 % for at least one mass. (2) Integrating over the whole star volume as if it were core at the central density (uniform-density star) must push C_core outside 12 %.
+- **Status: CONFIRMED** (`step3_integrals.py`, 5/5 checks, about half a minute; numbers from `results/step3_integrals.json`).
+  - SLy4, six masses: heat capacity within 3.9% of the fit (rms 2.3%); nn-bremsstrahlung within 13.0% (rms 8.4%). c0 recomputed: 1.125e+20 erg cm⁻³ K⁻¹.
+  - BSk24 (not in their calibration): heat capacity within 9.6%, nn-bremsstrahlung within 15.5%. The universality they claim extends to it.
+  - Modified Urca with Ω = 1: our integral is 0.27–0.41 of the fit, falling with mass. So their Ω is about 2.4–3.8 on average, not ∼1: it must contain the other branches of the process. To be settled in step 5 with the full expression of Yakovlev et al. 2001; prediction: agreement within their 66 %.
+  - Controls: without redshift and with a uniform-density star the agreement breaks.
+  - *Reading:* the structure integrals (redshift, proper volume, core boundary, composition) are right. This is the skeleton every later ingredient plugs into.
