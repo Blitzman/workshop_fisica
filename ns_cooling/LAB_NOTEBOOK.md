@@ -11,6 +11,7 @@ Line references `paper:N` point to `paper/marino2024.txt` (text extracted from t
 - 2026-11-12. H2: SLy4 structure reproduces Douchin & Haensel 2001; no direct Urca in any stable star. Next: the cooling solver, validated against published curves before any sweep.
 - 2026-11-12. H3 confirmed: integrated heat capacity and nn-bremsstrahlung luminosity of the isothermal core reproduce the fits of Ofengeim et al. 2017. Next: step 4, the cooling curve with a published envelope relation.
 - 2026-11-12. H4: standard slow cooling reproduces Yakovlev et al. 2011 up to 1.6 M☉; 9–11 % hotter at 1.8–2.0 M☉ (open, I1). Next: envelope relation and photon stage, then the BSk24 1.4 M☉ curve of Potekhin & Chabrier 2018.
+- 2026-11-12. H5 confirmed: first cooling curve. The standard candle is 13–35 times brighter than the three sources. Next: superfluidity (gaps, suppression factors, pair-breaking emission) from the sources; I1 still open.
 
 ## 1. The brief (José, 2026-11-11)
 
@@ -121,3 +122,25 @@ Started before José's answer, at the user's request; this step only reproduces 
   - (b) Full modified Urca over the Ofengeim fit: 0.73, 0.71, 0.68, 0.64, 0.60, 0.57. Inside their 66 %, but always below and falling with mass. Modified Urca is 96%–97% of the total; the muon branches carry 37%–44%.
   - *Reading.* Both references say the same thing: our modified-Urca luminosity is low at high mass. Three things known: (1) Yakovlev et al. 2011 state that the largest error of Eq. (14) below 2.4 M☉, about 7 %, is precisely the 1.9 M☉ SLy star, so part of the excess may be the fit and not us (sign not stated); (2) even for nn-bremsstrahlung, where the formula is unambiguous, our integral over the Ofengeim fit falls with mass (0.96 to 0.87), so the fits themselves drift at high mass; (3) Ofengeim et al. quote a modified-Urca prefactor of 1.75e+21, while Eq. (140) with m* = 0.7 m gives 1.494e+21: a factor 1.17 not explained by the text.
   - **Open (I1).** Whether the high-mass deficit is ours or the fits'. Not tuned. To settle with an independent curve for a named star (Potekhin & Chabrier 2018, BSk24 1.4 M☉) in the next step.
+
+### H5 · First cooling curve: iron envelope and photon stage (2026-11-12)
+
+- **Envelope.** Potekhin, Chabrier & Yakovlev 1997 (arXiv:astro-ph/9706148), Appendix A.3, read from PDF page 14: iron, Eqs. (A6)–(A7); fully accreted, Eq. (A8); partially accreted, Eqs. (A5), (A9)–(A10). T_b is the temperature at the bottom of the envelope; for the isothermal star T_b = T̃/√(1 − x) (Yakovlev et al. 2011, Sect. 4.3).
+- **Model.** Isothermal interior: C(T̃) dT̃/dt = −L_ν^∞(T̃) − L_γ^∞, with L_γ^∞ = 4πR²σT_s⁴(1 − x). Microphysics as in H4 (non-superfluid, m* = 0.7 m). This is the "standard candle", not yet the updated physics.
+- **Hypothesis.** (a) SLy4 candles with x < 0.5 at 330 yr have a redshifted surface temperature within 7 % of the 1.4 MK that Yakovlev et al. 2011 quote for iron envelopes (their Sect. 4.3; they write "≈"). (b) At 330 yr the numerical solution equals the analytic neutrino-stage one of H4 within 1 %.
+- **Results to report (no criterion).** Luminosity of SLy4 and BSk24 1.4 M☉ candles at the ages of the three sources, against the observed values (Marino et al. 2024, Supplementary Table 6, stored in `data/marino2024_sources.json`). Ratio of fully accreted to iron luminosity at those ages, for S3 (the paper says about one order of magnitude).
+- **Negative controls.** (1) Using T_b = T̃ (no redshift at the envelope) must leave the 7 % band. (2) The accreted relation in place of iron must leave it.
+- **Caveat known in advance.** The isothermal model is not valid before thermal relaxation (decades to about a century), so the 841-yr source is near the edge; that is S4, for the full diffusion code.
+- **Status: CONFIRMED** (`step5_cooling_curve.py`, 4/4 checks; numbers from `results/step5_cooling_curve.json`).
+  - (a) Redshifted surface temperature at 330 yr for the 5 SLy4 candles with x < 0.5: 1.45, 1.47, 1.47, 1.46, 1.43 MK (reference ≈ 1.4). (b) Numerical and analytic solutions agree.
+  - **Standard candle against the three sources (iron envelope, 1.4 M☉):**
+    - PSR J0205+6449, SLy4 1.4: model 4.98e+33 erg/s, observed 1.44e+32; ratio 35.
+    - PSR J0205+6449, BSk24 1.4: model 5.11e+33 erg/s, observed 1.44e+32; ratio 35.
+    - PSR B2334+61, SLy4 1.4: model 2.15e+33 erg/s, observed 7.80e+31; ratio 28.
+    - PSR B2334+61, BSk24 1.4: model 2.21e+33 erg/s, observed 7.80e+31; ratio 28.
+    - CXOU J0852-4617, SLy4 1.4: model 3.31e+33 to 2.54e+33 erg/s, observed 2.00e+32; ratio 13 to 17.
+    - CXOU J0852-4617, BSk24 1.4: model 3.39e+33 to 2.61e+33 erg/s, observed 2.00e+32; ratio 13 to 17.
+  - The standard candle is 13 to 35 times brighter than the three sources. SLy4 and BSk24 at 1.4 M☉ are indistinguishable at this level.
+  - For S3: a fully accreted envelope is 9.0 to 11.0 times brighter than iron at those ages. The paper's "about one order of magnitude" holds in this model.
+  - *Reading.* This fixes the size of the problem for S1: to make these sources slow coolers, updated microphysics must cut the luminosity by a factor 13–35. In the neutrino stage the photon luminosity scales roughly as L_ν^(−0.37) (T_s⁴ ∝ T_b^2.2 and T̃ ∝ L_ν^(−1/6)), so that needs a neutrino emission thousands of times stronger than the standard candle's, sustained over the star's life. Scaling to be verified numerically, not assumed; pair-breaking emission near the critical temperature is the known candidate.
+  - Limits: isothermal interior (S4 untested, relevant for the 841-yr source); m* = 0.7 m; no superfluidity; no crust neutrino emission or heat capacity.

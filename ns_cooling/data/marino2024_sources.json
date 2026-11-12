@@ -1,0 +1,8 @@
+{
+ "source": "Marino et al. 2024, Nat. Astron. 8, 1020 (arXiv:2404.05371): ages from the main text, thermal luminosities L_obs from Supplementary Data Table 6 (90 % confidence), in 1e32 erg/s",
+ "objects": [
+  {"name": "PSR J0205+6449", "age_yr": [841, 841], "L32": 1.44, "L32_err": [0.5, 0.6]},
+  {"name": "PSR B2334+61", "age_yr": [7700, 7700], "L32": 0.78, "L32_err": [0.10, 0.30]},
+  {"name": "CXOU J0852-4617", "age_yr": [2500, 5000], "L32": 2.0, "L32_err": [0.6, 0.6]}
+ ]
+}
