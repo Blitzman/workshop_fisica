@@ -10,6 +10,7 @@ Line references `paper:N` point to `paper/marino2024.txt` (text extracted from t
 - 2026-11-12. H1 confirmed: BSk24 structure and direct-Urca threshold reproduce the paper.
 - 2026-11-12. H2: SLy4 structure reproduces Douchin & Haensel 2001; no direct Urca in any stable star. Next: the cooling solver, validated against published curves before any sweep.
 - 2026-11-12. H3 confirmed: integrated heat capacity and nn-bremsstrahlung luminosity of the isothermal core reproduce the fits of Ofengeim et al. 2017. Next: step 4, the cooling curve with a published envelope relation.
+- 2026-11-12. H4: standard slow cooling reproduces Yakovlev et al. 2011 up to 1.6 M☉; 9–11 % hotter at 1.8–2.0 M☉ (open, I1). Next: envelope relation and photon stage, then the BSk24 1.4 M☉ curve of Potekhin & Chabrier 2018.
 
 ## 1. The brief (José, 2026-11-11)
 
@@ -106,3 +107,17 @@ Started before José's answer, at the user's request; this step only reproduces 
   - Modified Urca with Ω = 1: our integral is 0.27–0.41 of the fit, falling with mass. So their Ω is about 2.4–3.8 on average, not ∼1: it must contain the other branches of the process. To be settled in step 5 with the full expression of Yakovlev et al. 2001; prediction: agreement within their 66 %.
   - Controls: without redshift and with a uniform-density star the agreement breaks.
   - *Reading:* the structure integrals (redshift, proper volume, core boundary, composition) are right. This is the skeleton every later ingredient plugs into.
+
+### H4 · Standard slow cooling: modified Urca and the interior temperature at 330 yr (2026-11-12)
+
+- **Emissivities.** Yakovlev, Kaminker, Gnedin & Haensel 2001 (arXiv:astro-ph/0012122): modified Urca, neutron branch Eq. (140) and proton branch Eq. (142), with α_n = 1.13, β_n = 0.68; muon branches by the rule after Eq. (142) (p_Fe → p_Fμ, extra factor (n_μ/n_e)^(1/3)); nucleon bremsstrahlung Eqs. (165)–(167) with their α, β and three neutrino flavours. Read from the PDF pages 70–71 and 79. Check on the transcription: Eq. (165) with m* = 0.7 m gives the prefactor 1.77e19 that Ofengeim et al. quote.
+- **Reference.** Yakovlev, Ho, Shternin, Heinke & Potekhin 2011 (arXiv:1010.1154), Eq. (14): the redshifted interior temperature of a thermally relaxed "standard candle" (non-superfluid, modified Urca, m* = 0.7 m_n) is T̃ = 3.45e8 K (1 − x)[1 + 0.12 (R/10 km)²](330 yr/t)^(1/6), x = 2GM/(Rc²). Fitted to about 170 stars from 17 EoS, SLy among them; rms 3 %, maximum 7 % for M < 2.4 M☉.
+- **What we compute.** Since L_ν ∝ T̃⁸ and C ∝ T̃, the neutrino-stage solution is exact: T̃(t) = (6 q t)^(−1/6) with q = L_ν/(C T̃⁷) from our integrals (their Eq. 10).
+- **Hypothesis.** (a) SLy4, M = 1.0–2.0 M☉: T̃(330 yr) within 7 % of Eq. (14) at every mass. (b) Prediction left open in H3: the full modified-Urca luminosity is within 66 % of the Ofengeim fit at every mass.
+- **Note on sensitivity.** T̃ ∝ L^(−1/6): a 7 % band in T̃ is a 50 % band in luminosity. This test is coarse; it catches factor-of-two errors, not 10 % ones.
+- **Negative controls.** (1) Bremsstrahlung only (no modified Urca) must leave the 7 % band. (2) No redshift must leave the 7 % band.
+- **Status: (a) REFUTED at the two heaviest stars, confirmed below; (b) CONFIRMED** (`step4_standard_candle.py`, 4/5 checks; numbers from `results/step4_standard_candle.json`). Criteria not changed.
+  - (a) T̃(330 yr) minus Eq. (14), for M = 1.0, 1.2, 1.4, 1.6, 1.8, 2.0 M☉: -1.9%, +0.3%, +2.7%, +5.6%, +8.6%, +10.7%. Inside 7 % up to 1.6 M☉; outside at 1.8 and 2.0 M☉. We are hotter there, i.e. our neutrino luminosity is lower than theirs by up to a factor 1.84.
+  - (b) Full modified Urca over the Ofengeim fit: 0.73, 0.71, 0.68, 0.64, 0.60, 0.57. Inside their 66 %, but always below and falling with mass. Modified Urca is 96%–97% of the total; the muon branches carry 37%–44%.
+  - *Reading.* Both references say the same thing: our modified-Urca luminosity is low at high mass. Three things known: (1) Yakovlev et al. 2011 state that the largest error of Eq. (14) below 2.4 M☉, about 7 %, is precisely the 1.9 M☉ SLy star, so part of the excess may be the fit and not us (sign not stated); (2) even for nn-bremsstrahlung, where the formula is unambiguous, our integral over the Ofengeim fit falls with mass (0.96 to 0.87), so the fits themselves drift at high mass; (3) Ofengeim et al. quote a modified-Urca prefactor of 1.75e+21, while Eq. (140) with m* = 0.7 m gives 1.494e+21: a factor 1.17 not explained by the text.
+  - **Open (I1).** Whether the high-mass deficit is ours or the fits'. Not tuned. To settle with an independent curve for a named star (Potekhin & Chabrier 2018, BSk24 1.4 M☉) in the next step.
