@@ -6,7 +6,8 @@ Line references `paper:N` point to `paper/marino2024.txt` (text extracted from t
 
 ## 0. Status
 
-- 2026-11-12. Folder created. Paper read in full from the PDF. **No code yet: premise and claim list pending José's validation.**
+- 2026-11-12. Folder created. Paper read in full from the PDF. Premise and claim list pending José's validation. Started anyway (user decision) with steps that only reproduce published numbers.
+- 2026-11-12. H1 confirmed: BSk24 structure and direct-Urca threshold reproduce the paper.
 
 ## 1. The brief (José, 2026-11-11)
 
@@ -56,3 +57,17 @@ The sources sit near 1e32 erg/s at 1e3–1e4 yr. Published minimal-cooling curve
 ## 7. Hypotheses
 
 (none yet)
+
+### H1 · BSk24 star structure and direct-Urca threshold (2026-11-12)
+
+Started before José's answer, at the user's request; this step only reproduces published numbers, so it does not depend on his choices.
+
+- **Source of the EoS.** Potekhin's `bskfit18.f` (Pearson et al. 2018), downloaded from http://www.ioffe.ru/astro/NSG/BSk/ to `data/src/`. Coefficients are parsed from that file, not typed. Formulas ported: `BSKfit`, `BSkEofN`, `CORE18`.
+- **Hypothesis.** With these fits and a TOV integration, BSk24 gives the numbers quoted in the paper (paper:1422–1425, 237): maximum mass 2.279 M☉ (within 0.5 %), central density there 2.26e15 g/cm³ (within 3 %), direct-Urca threshold density 8.25e14 g/cm³ (within 3 %), and a threshold mass of about 1.6 M☉ (between 1.55 and 1.65).
+- **Direct-Urca condition.** Fermi momenta must close a triangle: p_Fn ≤ p_Fp + p_Fe, with Y_p = Y_e + Y_μ.
+- **Negative controls.** (1) Ignoring muons in the triangle (Y_p = Y_e) must move the threshold density by more than 3 %. (2) BSk26 coefficients must miss the maximum mass by more than 1 %.
+- **Status: CONFIRMED** (`step1_structure.py`, 6/6 checks, a few seconds; numbers below inserted from `results/step1_structure.json`).
+  - Maximum mass 2.279 M☉ (+0.01 % vs the paper); central density there 2.282e+15 g/cm³ (+0.96 %).
+  - Direct Urca opens at n_b = 0.4527 fm⁻³, 8.251e+14 g/cm³ (+0.01 %), proton fraction 0.1364; the star with that central density has 1.595 M☉ and R = 12.58 km. R(1.4 M☉) = 12.59 km.
+  - Controls: without muons the threshold density moves +35.7 %; BSk26 gives 2.169 M☉.
+  - *Reading:* the paper's BSk24 numbers follow from the public fits, so our star and theirs are the same object. Consequence for S5: the paper's three masses put only 1.8 M☉ clearly above the threshold; 1.6 M☉ sits 0.005 M☉ above it, so its direct-Urca core is tiny and its curve should be very sensitive to the exact mass. Still to compare with Pearson et al. 2018's own table (not in hand).

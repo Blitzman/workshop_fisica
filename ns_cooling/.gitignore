@@ -1,2 +1,4 @@
 paper/*.pdf
 paper/*.txt
+data/src/
+__pycache__/
