@@ -14,6 +14,7 @@ Line references `paper:N` point to `paper/marino2024.txt` (text extracted from t
 - 2026-11-12. H5 confirmed: first cooling curve. The standard candle is 13–35 times brighter than the three sources. Next: superfluidity (gaps, suppression factors, pair-breaking emission) from the sources; I1 still open.
 - 2026-11-12. H6/H6b: superfluid formulas transcribed and checked against their asymptotes and a published figure. Next: H7, the first superfluid sweep.
 - 2026-11-12. H7 done: no gap combination reaches any of the three sources (closest: factor 2 for the CCO). S1 supported so far; S2 only as a majority statement. Next: the ingredients not yet covered, in-medium modified Urca first.
+- 2026-11-12. H8: in-medium modified Urca dims the plain star by 1.5–1.6 but moves the best superfluid cases by a few percent. S1 unchanged. Next: a report for José; then real effective masses, lower masses, full heat diffusion (S4).
 
 ## 1. The brief (José, 2026-11-11)
 
@@ -191,3 +192,24 @@ Started before José's answer, at the user's request; this step only reproduces 
   - Expectation check: the best combinations lower the luminosity by a factor 4.6–5.4 with the 2001 rate (expected: up to about ten). CXOU J0852−4617 is approached, not reached; PSR J0205+6449 is not reached. The updated rate halves the effect, as expected.
   - The best cases are all at the lowest mass of the sweep (1.0 M☉), i.e. at the edge of the grid: lower masses were not explored.
   - **Not yet covered, each could move the result:** real effective masses instead of 0.7 m; in-medium enhancement of modified Urca (Shternin & Baldo 2017, used by Potekhin & Chabrier 2018); neutron singlet superfluid and crust emission; the isothermal assumption for the 841-yr source (S4); other EoS without direct Urca; I1 (our luminosity possibly low at high mass, which would make heavy stars slightly colder).
+
+### H8 · In-medium enhancement of modified Urca (2026-11-12)
+
+- **Source.** Shternin, Baldo & Haensel 2018 (PLB 786, 28; arXiv:1807.06569), read from PDF pages 3–6: Eq. (12) (same normalisation as Yakovlev et al. 2001 Eq. 140, with α_n β_n replaced by α_U and the lepton velocity p_Fℓ/μ_ℓ explicit), Eqs. (8)–(9) for R_dir^(A), R_dir^(B), and the practical expression Eq. (14), α_U ≈ 0.6 R^(A) + 0.2 R^(B), quoted as accurate to 20 % above 0.1 fm⁻³ (electrons) and 0.3 fm⁻³ (muons). The paper treats the neutron branch only; we leave the proton branch as in Yakovlev et al. 2001. Potekhin & Chabrier 2018 include this effect in their BSk24 curves.
+- **Assumption (ours, to flag).** Under superfluidity we multiply the enhanced rate by the same reduction factors as before.
+- **Hypothesis (implementation).** (a) The closed forms of the integrals (8)–(9) agree with numerical quadrature to 1e-8. (b) Near the direct-Urca threshold both factors grow as the inverse of the distance p_Fn − p_Fp − p_Fℓ (their Sect. 2.1): fitted exponent −1 within 0.05. (c) For the paper's own Fig. 2 no check is possible without their EoS; we only report α_U for SLy4.
+- **Expectation for the physics (before running).** Their estimate is T_s ∝ α_U^(−1/12), i.e. luminosity ∝ α_U^(−1/3); for α_U of 5–10 the non-superfluid star dims by a factor 1.7–2.2. In the best superfluid cases of H7 modified Urca is already suppressed and pair breaking dominates, so those should barely move. If so, S1 stays as in H7.
+- **Negative controls.** (1) Starting the integral (8) at p_Fn instead of p_Fn − p_Fℓ must break (b) (changed before running: the control first written, p_Fp in the lower limit, puts the pole inside the integral and has no value). (2) With α_U forced to α_n β_n the sweep must reproduce H7 exactly.
+- **Status: (a) REFUTED by a hair; (b) CONFIRMED; physics expectation CONFIRMED in direction** (`step8_inmedium.py`, 3/4 checks, about 6 min; numbers from `results/step8_inmedium.json`). Preliminary.
+  - (a) Closed form against quadrature: max 1.1e-08, criterion 1e-8. The single point tested while developing agreed to 4e-15, so the excess is the quadrature near the pole, not the formula; the criterion was too tight for that method and stays failed.
+  - (b) Threshold exponents -1.003 and -1.001.
+  - α_U in the SLy4 cores: 2.8–4.9 (the standard α_n β_n is 0.77). Lower than the 5–10 the paper quotes for its own EoS, because SLy4 never comes near the direct-Urca threshold.
+  - Non-superfluid star: 1.46–1.65 times dimmer at the source ages (expected 1.7–2.2 for α_U of 5–10).
+    - PSR J0205+6449 (841 yr), Y01: best model/observed 6.1 (H7: 6.3); non-superfluid 1.4 M☉ 22; within the upper error bar 0/534; colder than non-superfluid 73%.
+    - PSR J0205+6449 (841 yr), updated: best model/observed 12.8 (H7: 12.9); non-superfluid 1.4 M☉ 22; within the upper error bar 0/534; colder than non-superfluid 50%.
+    - PSR B2334+61 (7700 yr), Y01: best model/observed 4.2 (H7: 4.3); non-superfluid 1.4 M☉ 17; within the upper error bar 0/534; colder than non-superfluid 77%.
+    - PSR B2334+61 (7700 yr), updated: best model/observed 8.2 (H7: 8.3); non-superfluid 1.4 M☉ 17; within the upper error bar 0/534; colder than non-superfluid 71%.
+    - CXOU J0852-4617 (5000 yr), Y01: best model/observed 2.0 (H7: 2.0); non-superfluid 1.4 M☉ 8; within the upper error bar 0/534; colder than non-superfluid 77%.
+    - CXOU J0852-4617 (5000 yr), updated: best model/observed 4.0 (H7: 4.1); non-superfluid 1.4 M☉ 8; within the upper error bar 0/534; colder than non-superfluid 70%.
+  - **Reading.** As expected, the best superfluid cases barely move (a few percent): there modified Urca is already suppressed and pair breaking sets the cooling. S1 stands as in H7: no combination reaches any source; the CCO stays a factor 2.0 away at best. S2: 50%–77% of the combinations are colder than the (now dimmer) non-superfluid star.
+  - Caveat: the enhancement is strongest near the direct-Urca threshold, so for EoS that approach it without crossing it (unlike SLy4) the effect would be larger. That is a different question from S1 as the paper poses it (SLy4), but relevant for S6.

@@ -35,7 +35,7 @@ class Star:
         self.nn, self.np, self.ne, self.nmu = n * (1 - xe - xmu), n * (xe + xmu), n * xe, n * xmu
         self.kn, self.kp = (3 * np.pi**2 * self.nn)**(1 / 3), (3 * np.pi**2 * self.np)**(1 / 3)
 
-    def tables(self, gap_p=None, gap_n=None, pbf='Y01', pbf_on=True):
+    def tables(self, gap_p=None, gap_n=None, pbf='Y01', pbf_on=True, inmedium=False):
         """L_nu^infinity and C on TGRID."""
         s, phi = self, self.pr['phi']
         tcp = SF.tc(s.kp, gap_p, 'A') if gap_p else np.zeros_like(s.kp)
@@ -47,7 +47,7 @@ class Star:
             with np.errstate(divide='ignore'):
                 vp = np.minimum(SF.v_of_tau(np.where(tcp > 0, T / np.where(tcp > 0, tcp, 1.0), np.inf), 'A'), VMAX)
                 vn = np.minimum(SF.v_of_tau(np.where(tcn > 0, T / np.where(tcn > 0, tcn, 1.0), np.inf), 'B'), VMAX)
-            mu = NU.murca(s.nn, s.np, s.ne, s.nmu, t9, MS, MS)
+            mu = NU.murca(s.nn, s.np, s.ne, s.nmu, t9, MS, MS, inmedium)
             br = NU.brems(s.nn, s.np, t9, MS, MS)
             q = ((mu['n_e'] + mu['n_mu']) * SF.murca_n(vn, vp) + (mu['p_e'] + mu['p_mu']) * SF.murca_p(vn, vp)
                  + br['nn'] * SF.brems_nn(vn) + br['np'] * SF.brems_np(vn, vp) + br['pp'] * SF.brems_pp(vp))
