@@ -25,4 +25,11 @@ PRESSURE_TO_GEOM = G / C**4  # dyn cm^-2 -> cm^-2
 # The microphysics derives number densities as n = rho / 1.66e-24 (see background.py).
 # A background built from an equation of state sets rho = 1.66e-24 g * n_b, so the Fermi
 # momenta of the microphysics reproduce the tabulated baryon density exactly.
+# This rho is a baryon REST-MASS density (n_b times a fixed mass unit); it is not the
+# mass-energy density e/c^2 of the TOV equations, which differs from it by about 1 %.
 MICROPHYSICS_MASS_UNIT = 1.66e-24  # [g]
+
+# Reference baryon density n0 of the Yakovlev et al. (2001) emissivity formulas (decision D-014),
+# and the same density as a rest-mass density in the convention above (2.656e14 g cm^-3).
+N0_FM3 = 0.16  # [fm^-3]
+RHO0 = N0_FM3 * FM3_PER_CM3 * MICROPHYSICS_MASS_UNIT  # [g cm^-3]

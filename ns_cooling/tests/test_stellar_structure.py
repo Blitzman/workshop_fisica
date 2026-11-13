@@ -12,7 +12,6 @@ from config import CoolingConfig
 from cooling import run_cooling
 from energy_balance import energy_budget, energy_closure
 from input_model import load_background, load_backgrounds, read_parameters
-import tov
 from mesh import mesh_spec
 from state import LocalState
 from stellar_structure import StructureOptions, build_stellar_model, direct_urca_boundary_widths

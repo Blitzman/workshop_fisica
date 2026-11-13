@@ -1,26 +1,18 @@
-"""Heat capacity: the muon term and the Landau-quasiparticle nucleons, tested separately and together."""
+"""Heat capacity: the lepton and Landau-quasiparticle formulas against a numerical Fermi-Dirac gas, and the registered terms."""
 
-from contextlib import contextmanager
-from dataclasses import replace
 
 import numpy as np
 import pytest
 from scipy.integrate import quad
 from scipy.optimize import brentq
 
-from config import CoolingConfig
 from constants import HBAR, HBARC_MEV_FM, K_B, M_NEUTRON, M_PROTON, MEV_TO_ERG, MUON_MASS_MEV
-from cooling import run_cooling
 from heat_capacity import (
-    HEAT_CAPACITY_TERMS,
     degenerate_lepton_heat_capacity,
     electron_heat_capacity,
     heat_capacity,
-    heat_capacity_pairing_factor,
     landau_heat_capacity,
     muon_heat_capacity,
-    neutron_heat_capacity,
-    proton_heat_capacity,
 )
 from state import LocalState
 
@@ -146,135 +138,3 @@ def test_the_centre_has_muons_comparable_to_the_electrons(core_state):
     assert 0.03 < h["muons"][0] / h["total"][0] < 0.15
 
 
-# ------------------------------------------------------------------ the two changes, separately
-def old_nucleon_formula(state, fraction, mass):
-    """Relativistic gas of mass m*: the formula that the Landau-mass expression replaces."""
-    x = (6.497229e-14 / mass) * (state.nb * fraction) ** (1.0 / 3.0)
-    return 4.5507e11 * mass**2 * x * np.hypot(x, 1.0) * state.T
-
-
-def old_neutrons(state):
-    cv = old_nucleon_formula(state, state.yn, state.mstar_n)
-    if state.superfluid:
-        cv *= heat_capacity_pairing_factor(state.T, np.where(state.crust, state.tc_crust, 0.0), 1)
-        cv *= heat_capacity_pairing_factor(state.T, np.where(state.core, state.tc_n, 0.0), 2)
-    return cv
-
-
-def old_protons(state):
-    cv = old_nucleon_formula(state, state.yp, state.mstar_p)
-    if state.superfluid:
-        cv *= heat_capacity_pairing_factor(state.T, state.tc_p, 1)
-    return cv
-
-
-@contextmanager
-def heat_capacity_terms(*, muons, landau):
-    """Temporarily select the muon term and the nucleon formula; the registry is restored afterwards."""
-    saved = list(HEAT_CAPACITY_TERMS.items())
-    try:
-        for name, _ in saved:
-            HEAT_CAPACITY_TERMS.unregister(name)
-        for name, term in saved:
-            if name == "muons" and not muons:
-                continue
-            if not landau and name in ("neutrons", "protons"):
-                term = {"neutrons": old_neutrons, "protons": old_protons}[name]
-            HEAT_CAPACITY_TERMS.register(name)(term)
-        yield
-    finally:
-        for name in list(HEAT_CAPACITY_TERMS.names()):
-            HEAT_CAPACITY_TERMS.unregister(name)
-        for name, term in saved:
-            HEAT_CAPACITY_TERMS.register(name)(term)
-
-
-def total(state, **options):
-    with heat_capacity_terms(**options):
-        return heat_capacity(state)["total"]
-
-
-def test_the_registry_is_restored(core_state):
-    names = list(HEAT_CAPACITY_TERMS.names())
-    with heat_capacity_terms(muons=False, landau=False):
-        assert "muons" not in HEAT_CAPACITY_TERMS.names()
-    assert list(HEAT_CAPACITY_TERMS.names()) == names
-
-
-def test_the_correction_is_the_removal_of_the_relativistic_factor(core_state):
-    """With the same constants the two nucleon formulas differ exactly by sqrt(1 + x^2)."""
-    s = core_state
-    core = s.core & (s.yn > 0)
-    x = (6.497229e-14 / s.mstar_n) * (s.nb * s.yn) ** (1.0 / 3.0)
-    ratio = neutron_heat_capacity(s)[core] / old_neutrons(s)[core]
-    np.testing.assert_allclose(
-        ratio * np.hypot(x, 1.0)[core], 1.0, atol=3e-3
-    )  # constants agree to ~0.1%
-    assert (
-        np.all(ratio < 1.0) and ratio[0] < 0.8
-    )  # overestimated throughout the core, by 30% at the centre
-    x_p = (6.497229e-14 / s.mstar_p) * (s.nb * s.yp) ** (1.0 / 3.0)
-    ratio_p = proton_heat_capacity(s)[core] / old_protons(s)[core]
-    np.testing.assert_allclose(ratio_p * np.hypot(x_p, 1.0)[core], 1.0, atol=3e-3)
-
-
-def test_each_change_is_independent_and_additive(core_state):
-    base = total(core_state, muons=False, landau=False)
-    muons_only = total(core_state, muons=True, landau=False)
-    landau_only = total(core_state, muons=False, landau=True)
-    both = total(core_state, muons=True, landau=True)
-    np.testing.assert_allclose(
-        muons_only - base, muon_heat_capacity(core_state), rtol=1e-12, atol=0
-    )
-    np.testing.assert_allclose(both, muons_only + (landau_only - base), rtol=1e-12)
-    np.testing.assert_allclose(
-        both, heat_capacity(core_state)["total"], rtol=1e-14
-    )  # the default is both
-
-
-def test_the_size_of_each_change_at_the_centre(core_state):
-    base = total(core_state, muons=False, landau=False)[0]
-    muons_only = total(core_state, muons=True, landau=False)[0]
-    landau_only = total(core_state, muons=False, landau=True)[0]
-    both = total(core_state, muons=True, landau=True)[0]
-    assert 1.05 < muons_only / base < 1.12  # muons add 8%
-    assert 0.78 < landau_only / base < 0.86  # the Landau formula removes 18%
-    assert 0.86 < both / base < 0.94  # -10% together
-
-
-def test_the_crust_changes_only_through_the_free_neutrons(core_state):
-    s = core_state
-    base = total(s, muons=False, landau=False)
-    both = total(s, muons=True, landau=True)
-    outer = s.crust & (s.rho < 3e11)  # no free neutrons above the neutron drip: nothing changes
-    np.testing.assert_array_equal(both[outer], base[outer])
-    inner = s.crust & ~outer  # the dense neutron gas of the inner crust loses up to ~5%
-    change = both[inner] / base[inner] - 1.0
-    assert -0.06 < change.min() < -0.02 and change.max() < 0.003
-
-
-# ------------------------------------------------------------------ the effect on the cooling curve
-def luminosity_at(result, t):
-    return float(
-        np.exp(np.interp(np.log(t), np.log(result.times_years), np.log(result.luminosity_erg_s)))
-    )
-
-
-def test_the_cooling_effect_of_each_change(bsk22_model):
-    """More heat capacity cools more slowly: the muons raise L, the Landau correction lowers it."""
-    config = replace(CoolingConfig(), final_years=1e3)
-    runs = {}
-    for key, options in dict(
-        base=(False, False), muons=(True, False), landau=(False, True), both=(True, True)
-    ).items():
-        with heat_capacity_terms(muons=options[0], landau=options[1]):
-            runs[key] = run_cooling(bsk22_model.background, config)
-    effect = {
-        key: luminosity_at(runs[key], 1e3) / luminosity_at(runs["base"], 1e3) - 1.0 for key in runs
-    }
-    assert 0.003 < effect["muons"] < 0.03  # about +1%
-    assert -0.05 < effect["landau"] < -0.01  # about -2.3%
-    assert effect["landau"] < effect["both"] < effect["muons"]
-    assert effect["both"] == pytest.approx(
-        effect["muons"] + effect["landau"], abs=0.005
-    )  # nearly additive

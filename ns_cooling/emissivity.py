@@ -24,16 +24,17 @@ import numpy as np
 from numpy import sqrt, exp, log, log10, arctan, pi
 
 import emissivity_factors as sf
-from constants import HBARC_MEV_FM, MUON_MASS_MEV
+from constants import HBARC_MEV_FM, MUON_MASS_MEV, N0_FM3, NEUTRON_MASS_MEV, RHO0
 from registry import Registry
 from superfluid import dimensionless_pairing_gap
 
 NEUTRINO_PROCESSES = Registry("neutrino process")
 
 THIRD = 1.0 / 3.0
-# hbar c (3 pi^2 n_ref)^(1/3) [MeV] for n_ref = 2.8e14 g cm^-3 / 1.66e-24 g: the energy that the
-# electron factor (Ye rho / 2.8e14)^(1/3) of the Direct Urca stands for.
-DIRECT_URCA_REFERENCE_ENERGY = HBARC_MEV_FM * (3.0 * np.pi**2 * 2.8e14 / 1.66e15) ** THIRD
+# hbar c (3 pi^2 n0)^(1/3) [MeV] for n0 = 0.16 fm^-3 (decision D-014): the energy that the
+# electron factor (Ye rho / RHO0)^(1/3) of the Direct Urca stands for. The exact coefficient of the
+# Direct Urca rate gives 4.0e27 for mu = 330 MeV, so this value (331.4 MeV) is consistent with it.
+DIRECT_URCA_REFERENCE_ENERGY = HBARC_MEV_FM * (3.0 * np.pi**2 * N0_FM3) ** THIRD
 EP_EXP = float(np.float32(-2.0) / np.float32(3.0))
 PAIR_EXP = float(np.float32(1.0) / np.float32(3.0))
 # Constants rounded to single precision once, at import.
@@ -68,7 +69,7 @@ class ProcessFactors:
         self.s = s
         taus = (s.tau_crust, s.tau_n, s.tau_p)
         self.vc, self.vn, self.vp = [self.gap(t, k) for t, k in zip(taus, (1, 2, 1))]
-        self.urca_alpha = 1.76 - 0.63 / (s.rho / 2.82e14 * s.yn + 1e-20) ** (2.0 / 3.0)
+        self.urca_alpha = 1.76 - 0.63 / (s.rho / RHO0 * s.yn + 1e-20) ** (2.0 / 3.0)
         m = (self.urca_alpha > 0) & (s.yp > 0)
         self.Rmn = self.combined(
             m,
@@ -152,7 +153,7 @@ def modified_urca_emissivity(s):
     f = process_factors(s)
     out = np.zeros_like(T)
     m = (f.urca_alpha > 0) & (s.yp > 0)
-    rho0 = s.rho[m] / 2.82e14
+    rho0 = s.rho[m] / RHO0
     ye = s.ye[m]
     yp = s.yp[m]
     yn = s.yn[m]
@@ -201,7 +202,7 @@ def neutron_neutron_bremsstrahlung(s):
     out[m] = (
         7.4e19
         * mn**4
-        * (rho * yn / 2.82e14) ** THIRD
+        * (rho * yn / RHO0) ** THIRD
         * alpha
         * 0.56
         * 3
@@ -223,7 +224,7 @@ def neutron_proton_bremsstrahlung(s):
     out[m] = (
         1.5e20
         * (s.mstar_n[m] * s.mstar_p[m]) ** 2
-        * (s.rho[m] * s.yp[m] / 2.82e14) ** THIRD
+        * (s.rho[m] * s.yp[m] / RHO0) ** THIRD
         * 1.06
         * 0.66
         * 3.0
@@ -243,7 +244,7 @@ def proton_proton_bremsstrahlung(s):
     out[m] = (
         7.4e19
         * s.mstar_p[m] ** 4
-        * (s.rho[m] * s.yp[m] / 2.82e14) ** THIRD
+        * (s.rho[m] * s.yp[m] / RHO0) ** THIRD
         * 0.11
         * 0.7
         * 3
@@ -256,7 +257,12 @@ def proton_proton_bremsstrahlung(s):
 
 @NEUTRINO_PROCESSES.register("brems_ep")
 def electron_proton_bremsstrahlung(s):
-    """Electron-proton bremsstrahlung in the core."""
+    """Electron-proton bremsstrahlung in the core.
+
+    Not changed by D-014: its reference density 2.82e14 g cm^-3 and the hard density cut below are
+    kept until the source of this rate is checked (the cut switches the process off between the
+    crust-core interface and 2.82e14 g cm^-3).
+    """
     T = s.T
     out = np.zeros_like(T)
     m = (s.rho >= 2.82e14) & (s.yp > 0)
@@ -273,10 +279,10 @@ def core_pbf_emissivity(s):
     f = process_factors(s)
     out = np.zeros_like(T)
     m = (s.xh == 0) & (s.tau_n <= 1) & (s.yn > 0)
-    pf = 0.353 * (s.rho[m] / 2.82e14 * s.yn[m]) ** THIRD
+    pf = HBARC_MEV_FM * s.kf_n[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
     out[m] = 1.17e21 * s.mstar_n[m] * pf * 3.0 * (2.0 * 1.26**2) * f.Fn[m] * (T[m] * 1e-9) ** 7
     m = (s.xh == 0) & (s.tau_p <= 1) & (s.yp > 0)
-    pf = 0.353 * (s.rho[m] / 2.82e14 * s.yp[m]) ** THIRD
+    pf = HBARC_MEV_FM * s.kf_p[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
     mp = s.mstar_p[m]
     S = 4.0 / 81.0 * (pf / mp) ** 4
     a = (4.0 * 0.23 - 1.0) ** 2 * S + 1.26**2 * pf**2 * (1.0 + 11.0 / 42.0 / mp**2)
@@ -289,8 +295,8 @@ def direct_urca_emissivity(s):
     """Direct Urca process, electron and muon channels (each above its own threshold).
 
     Q_l = 4.0e27 m*_n m*_p T9^6 (mu_l / E_ref) R_du, with mu_l the Fermi energy of the lepton and
-    E_ref = hbar c (3 pi^2 n_ref)^(1/3), n_ref = 2.8e14 g cm^-3 / 1.66e-24 g: for the electrons
-    mu_e / E_ref = (Ye rho / 2.8e14)^(1/3). The lepton enters only through mu_l and its
+    E_ref = hbar c (3 pi^2 n0)^(1/3), n0 = 0.16 fm^-3: for the electrons
+    mu_e / E_ref = (Ye rho / RHO0)^(1/3). The lepton enters only through mu_l and its
     threshold (see README, REFERENCES).
     """
     T = s.T
@@ -302,7 +308,7 @@ def direct_urca_emissivity(s):
         * s.mstar_n[m]
         * s.mstar_p[m]
         * (T[m] * 1e-9) ** 6
-        * (s.ye[m] * s.rho[m] / 2.8e14) ** THIRD
+        * (s.ye[m] * s.rho[m] / RHO0) ** THIRD
         * f.Rdu[m]
     )
     mu = s.direct_urca_muon_allowed
@@ -361,7 +367,7 @@ def crust_pbf_emissivity(s):
     f = process_factors(s)
     out = np.zeros_like(T)
     m = (s.tau_crust <= 1) & (s.xh > 0) & (s.xh < 1) & (s.yn > 0)
-    pf = 0.353 * (s.rho[m] / 2.82e14 * s.yn[m]) ** THIRD
+    pf = HBARC_MEV_FM * s.kf_n[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
     mn = s.mstar_n[m]
     S = 4.0 / 81.0 * (pf / mn) ** 4
     a = S + 1.26**2 * pf**2 * (1.0 + 11.0 / 42.0 / mn**2)

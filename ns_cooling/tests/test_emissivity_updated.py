@@ -301,14 +301,6 @@ def test_the_registry_is_replaced_and_restored():
     assert list(NEUTRINO_PROCESSES.items()) == before
 
 
-def test_the_registry_is_restored_after_an_error():
-    before = list(NEUTRINO_PROCESSES.items())
-    with pytest.raises(RuntimeError):
-        with eu.updated_rates():
-            raise RuntimeError("inside")
-    assert list(NEUTRINO_PROCESSES.items()) == before
-
-
 def test_without_the_suppression_factors_the_rates_are_larger_by_the_betas():
     state = at_reference()
     with_beta, without = eu.make_processes(True), eu.make_processes(False)

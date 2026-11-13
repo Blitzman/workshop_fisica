@@ -7,6 +7,7 @@ import pytest
 
 import tov
 from background import Background, fermi_momentum
+from constants import RHO0
 from cooling import surface_luminosity
 from emissivity import direct_urca_emissivity, neutrino_emissivity
 from state import LocalState
@@ -42,11 +43,6 @@ def npe_background(ye, rho=1e15):
 YE_SCAN = np.array([0.10, 0.1105, 0.11110, 0.11112, 0.1112, 0.12, 0.2])  # 1/9 = 0.111111...
 
 
-def test_the_threshold_is_one_ninth_in_npe_matter():
-    state = LocalState(1e9, npe_background(YE_SCAN).faces)
-    assert list(state.direct_urca_allowed) == [False, False, False, True, True, True, True]
-
-
 def test_the_threshold_does_not_depend_on_the_density():
     for rho in (3e14, 1e15, 2e15):
         state = LocalState(1e9, npe_background(YE_SCAN, rho=rho).faces)
@@ -71,7 +67,7 @@ def test_direct_urca_emissivity_switches_on_at_the_threshold():
         * state.mstar_n
         * state.mstar_p
         * (state.T * 1e-9) ** 6
-        * (state.ye * state.rho / 2.8e14) ** (1 / 3)
+        * (state.ye * state.rho / RHO0) ** (1 / 3)
     )
     np.testing.assert_allclose(q[allowed], expected[allowed], rtol=1e-6)
     np.testing.assert_array_equal(
@@ -144,9 +140,10 @@ def test_direct_urca_region_of_the_eos_star(bsk22_model, eos_table):
 
 
 def test_the_default_star_never_reaches_the_threshold(background):
-    """BSk26, 1.4 Msun: kf_n stays above kf_p + kf_e (and kf_p + kf_mu) everywhere."""
+    """BSk26, 1.4 Msun: neither the electron nor the muon channel is open anywhere."""
     for points in (background.faces, background.cells):
-        assert not LocalState(1e9, points).direct_urca_allowed.any()
+        state = LocalState(1e9, points)
+        assert not state.direct_urca_allowed.any() and not state.direct_urca_muon_allowed.any()
 
 
 # ------------------------------------------------------------------ derived quantities

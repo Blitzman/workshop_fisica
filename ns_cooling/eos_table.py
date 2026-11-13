@@ -68,7 +68,8 @@ class EOSPoints:
 
     @property
     def rho_baryon(self):
-        """Baryon mass density in the convention of the microphysics, 1.66e-24 g * n_b [g cm^-3]."""
+        """Baryon rest-mass density in the convention of the microphysics, 1.66e-24 g * n_b [g cm^-3]
+        (not the mass-energy density e/c^2 of the TOV equations)."""
         return self.nb_fm3 * FM3_PER_CM3 * MICROPHYSICS_MASS_UNIT
 
 

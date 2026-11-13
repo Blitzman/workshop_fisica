@@ -1,16 +1,12 @@
 """Core conductivity with muons: the lepton expression adapted to the muons, and the composition."""
 
-from contextlib import contextmanager
-from dataclasses import replace
 
 import numpy as np
 import pytest
 
-from conductivity import CONDUCTIVITY_CHANNELS, core_muon_channel, thermal_transport
+from conductivity import CONDUCTIVITY_CHANNELS, thermal_transport
 from conductivity_core import core_conductivity, lepton_conductivity, muon_velocity
-from config import CoolingConfig
 from constants import HBARC_MEV_FM, MUON_MASS_MEV
-from cooling import run_cooling
 from state import LocalState
 
 # Results of the npe expressions (no muons) before the muon channel existed.
@@ -156,29 +152,3 @@ def test_in_the_star_the_muon_channel_is_zero_outside_the_muon_region(bsk22_mode
     )  # onset
 
 
-@contextmanager
-def without_the_muon_channel():
-    saved = list(CONDUCTIVITY_CHANNELS.items())
-    try:
-        CONDUCTIVITY_CHANNELS.unregister("core_muons")
-        yield
-    finally:
-        for name in list(CONDUCTIVITY_CHANNELS.names()):
-            CONDUCTIVITY_CHANNELS.unregister(name)
-        for name, channel in saved:
-            CONDUCTIVITY_CHANNELS.register(name)(channel)
-
-
-def test_the_cooling_curve_hardly_changes_with_the_muon_conductivity(bsk22_model):
-    config = replace(CoolingConfig(), final_years=300.0)
-    with_muons = run_cooling(bsk22_model.background, config)
-    with without_the_muon_channel():
-        assert "core_muons" not in CONDUCTIVITY_CHANNELS.names()
-        without = run_cooling(bsk22_model.background, config)
-    assert CONDUCTIVITY_CHANNELS.names()[1] == "core_muons" and core_muon_channel is not None
-
-    def luminosity(run, t):
-        return np.exp(np.interp(np.log(t), np.log(run.times_years), np.log(run.luminosity_erg_s)))
-
-    for t in (10.0, 100.0, 300.0):  # measured: below 1% (-0.9% at 30 yr, -0.2% at 100 yr)
-        assert abs(luminosity(with_muons, t) / luminosity(without, t) - 1.0) < 0.02

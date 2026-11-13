@@ -267,7 +267,8 @@ Pipeline (stellar_structure.py)
 - The EOS and the metric are evaluated at the faces and, independently, at the
   middle (in radius) of each cell, so no cell mixes crust and core values.
 - rho is 1.66e-24 g * n_b, the convention of the microphysics (n = rho/1.66e-24),
-  so the Fermi momenta reproduce the tabulated baryon density. The composition
+  a baryon REST-MASS density (not the mass-energy density e/c^2 of the TOV equations, which
+  differs from it by about 1 %), so the Fermi momenta reproduce the tabulated baryon density. The composition
   (including the muons) and its checks are described in BACKGROUND.
 - Effective masses: the Landau masses of the EOS in the core (used by the heat
   capacity, the emissivities and the conductivity); in the crust, where the EOS
@@ -392,8 +393,8 @@ There is an electron channel (n -> p e nu) and a muon channel (n -> p mu nu). Ea
 momentum conservation permits it in homogeneous matter: kf_n <= kf_p + kf_e for the electrons and
 kf_n <= kf_p + kf_mu for the muons, with kf_p from the proton density. In beta equilibrium
 mu_mu = mu_e, so kf_mu < kf_e and the muon channel opens at a higher density than the electron one.
-Emissivity of each lepton: Q_l = 4.0e27 m*_n m*_p T9^6 (mu_l / E_ref) R_du, E_ref = 337.3 MeV, where
-mu_l is the Fermi energy (sqrt((hbar c kf)^2 + m^2 c^4)) and mu_e / E_ref = (Ye rho / 2.8e14)^(1/3) is
+Emissivity of each lepton: Q_l = 4.0e27 m*_n m*_p T9^6 (mu_l / E_ref) R_du, E_ref = 331.4 MeV, where
+mu_l is the Fermi energy (sqrt((hbar c kf)^2 + m^2 c^4)) and mu_e / E_ref = (Ye rho / 2.656e14)^(1/3) is
 the electron factor; where both channels are open and mu_mu = mu_e the emission doubles. The lepton
 enters only through mu_l and its threshold. This was verified (tests/test_direct_urca_muons.py): the
 spin-summed matrix element computed with explicit Dirac spinors has no mass term besides the lepton
@@ -414,6 +415,11 @@ at 1.0 and 1.4 Msun (at the center of the 1.4 Msun star kf_p + kf_mu = 2.094 aga
 open at 1.8 Msun, in 7 of the 11 core cells where the electron channel is open.
 
 UNITS AND ASSUMPTIONS
+Reference density: every emissivity normalised by a reference density uses n0 = 0.16 fm^-3 of
+Yakovlev et al. (2001), i.e. 2.656e14 g/cm^3 as a rest-mass density (constants.N0_FM3, constants.RHO0);
+the pair-breaking rates use the actual Fermi momenta of the background, p_F/(m_N c) with m_N the neutron mass.
+Not covered: the electron-proton bremsstrahlung (2.82e14 g/cm^3) and the fit constant 2.8e14 of the
+electron-ion bremsstrahlung, which keep the values of their sources.
 Microphysics: local temperature in K. Evolution: Tinf_8 = exp(Phi)*Tlocal/1e8.
 Conductivity: CGS, converted to the internal coefficient with kappa*1e13*1e-40.
 Time unit: 1 yr = 3.16e7 s (SECONDS_PER_YEAR in thermal_matrix.py), about
@@ -630,15 +636,14 @@ Thermal conductivity (conductivity_core.py, conductivity_crust.py)
 
 TESTS
     python -m pip install -r requirements-dev.txt     (pytest)
-    make test                                         (python -m pytest tests, ~4 min)
+    make test                                         (python -m pytest tests, ~2 min)
 Covered: background validation, composition (charge neutrality, baryon number, muon
 fractions and Fermi momenta) and table round trip; the local state; the registries
 (adding, replacing and removing physics); the heat capacity (the lepton and Landau
-formulas against a numerical Fermi-Dirac gas, their limits, the muon term and the
-nucleon formula tested separately and together, and their effect on the cooling
-curve); microphysics regimes (superfluid heat-capacity jump); the core conductivity with muons (the npe
+formulas against a numerical Fermi-Dirac gas, their limits, the muon term and the sum of the
+registered terms); microphysics regimes (superfluid heat-capacity jump); the core conductivity with muons (the npe
 results reproduced exactly, the lepton expression and its velocity factor, the composition, the
-response to pairing, the registered channel and the effect on the cooling curve); envelope slopes against
+response to pairing and the registered channel); envelope slopes against
 finite differences and the Fe fit; the order of the theta-method against an exact
 solution (1 for backward Euler, 2 for Crank-Nicolson); monotonic cooling with the default start; the energy balance (the default
 scheme must close, plain backward Euler and a deliberately inconsistent solver must
@@ -649,7 +654,7 @@ the mesh, the background conventions, the effective masses, the Direct Urca thre
 against the published value, the surface factor (the heat removed at the base equals
 the reported luminosity), the resolution warning and the mesh convergence. For the updated
 emissivities: the closed forms against numerical integrals, the values of the paper's figures, the
-muon channels and thresholds, the scalings, the registry, the driver default and the comparison
+muon channels and thresholds, the scalings, the registry and the comparison
 script. For the direct Urca with muons: the matrix element with explicit spinors, the phase-space
 integral with exact kinematics, the thresholds and the doubling where both channels are open.
 

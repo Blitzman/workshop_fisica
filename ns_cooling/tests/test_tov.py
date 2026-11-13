@@ -134,6 +134,8 @@ def test_convergence_with_the_integration_tolerance(eos_table, bsk22_star):
 def test_impossible_target_masses_are_refused(eos_table):
     with pytest.raises(ValueError, match="exceeds the maximum mass"):
         tov.central_pressure_for_mass(eos_table, 2.5)
+    with pytest.raises(ValueError, match="below the minimum mass 0.08"):
+        tov.central_pressure_for_mass(eos_table, 0.05)
     for bad in (-1.0, 0.0, np.nan):
         with pytest.raises(ValueError):
             tov.central_pressure_for_mass(eos_table, bad)
@@ -206,6 +208,3 @@ def test_light_targets_are_on_the_stable_branch(eos_table):
         assert heavier.mass_solar > star.mass_solar  # the mass grows with Pc: the stable side
 
 
-def test_a_target_below_the_minimum_mass_is_refused(eos_table):
-    with pytest.raises(ValueError, match="below the minimum mass 0.08"):
-        tov.central_pressure_for_mass(eos_table, 0.05)

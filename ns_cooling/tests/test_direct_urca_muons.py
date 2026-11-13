@@ -175,10 +175,10 @@ def test_the_muon_channel_is_the_electron_formula_with_the_muon_fermi_energy():
     electron_only = em.direct_urca_emissivity(stripped)[0]
     both = em.direct_urca_emissivity(state)[0]
     mu_muon = np.hypot(HBARC_MEV_FM * state.kf_mu[0], MUON_MASS_MEV)
-    electron_factor = (state.ye[0] * state.rho[0] / 2.8e14) ** (1 / 3)
+    electron_factor = (state.ye[0] * state.rho[0] / em.RHO0) ** (1 / 3)
     expected = 1.0 + mu_muon / em.DIRECT_URCA_REFERENCE_ENERGY / electron_factor
     assert both / electron_only == pytest.approx(expected, rel=1e-12)
-    assert em.DIRECT_URCA_REFERENCE_ENERGY == pytest.approx(337.295, abs=1e-3)
+    assert em.DIRECT_URCA_REFERENCE_ENERGY == pytest.approx(331.411, abs=1e-3)  # n0 = 0.16 fm^-3
 
 
 def test_the_pairing_factor_of_the_direct_urca_covers_the_muon_channel():
@@ -204,7 +204,3 @@ def test_in_a_star_the_muon_channel_opens_inside_the_electron_one(root, input_co
     np.testing.assert_allclose(ratio, 2.0, atol=0.01)  # mu_mu = mu_e in beta equilibrium
 
 
-def test_the_default_stars_have_no_muon_direct_urca(background):
-    """In the default BSk26 star both Direct Urca channels are closed everywhere."""
-    state = LocalState(1e9, background.cells, superfluid=False)
-    assert not state.direct_urca_muon_allowed.any()

@@ -80,6 +80,7 @@ def test_driver_writes_all_outputs(root, tmp_path):
     ):
         assert (tmp_path / "o" / name).stat().st_size > 0
     assert "Energy balance" in result.stdout and "Accepted steps" in result.stdout
+    assert not (tmp_path / "o" / "cooling_curves.csv").exists()  # one star: the flat layout
 
 
 def test_driver_rejects_invalid_options(root, tmp_path):
@@ -93,14 +94,6 @@ def test_scheme_flags_select_backward_euler(root, tmp_path):
         root, "--final-years", 30, "--theta", 1, "--no-predictor-corrector", "--out", tmp_path / "o"
     )
     assert result.returncode == 0, result.stderr
-
-
-def test_a_single_star_keeps_the_flat_layout(root, tmp_path):
-    result = run_driver(root, "--final-years", 30, "--out", tmp_path / "o")
-    assert result.returncode == 0, result.stderr
-    assert (tmp_path / "o" / "cooling_curve.csv").is_file() and not (
-        tmp_path / "o" / "cooling_curves.csv"
-    ).exists()
 
 
 def test_a_face_table_of_an_eos_star_cannot_be_used_as_a_background(root, tmp_path, bsk22_model):
