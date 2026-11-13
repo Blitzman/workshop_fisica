@@ -7,3 +7,7 @@ CHULETA.md
 report/chuleta.html
 results/chuleta_axiones.html
 report/node_modules/
+__pycache__/
+.pytest_cache/
+results_cooling/
+results_emissivities/

@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Neutron-star cooling: GitHub ns_cooling vs local COOL1D</title>
+<style>
+:root{
+  --bg:#f5f6f4; --panel:#ffffff; --ink:#1a2327; --muted:#55636a; --rule:#d6dcd9; --rule-soft:#e6eae8;
+  --link:#1f5a78; --focus:#1f5a78; --hover:#eef2f0;
+  --agree:#1b7a52; --close:#8a6f12; --differ:#b2362c; --gh:#2a5ca6; --local:#7a479c; --check:#586169;
+  --agree-bg:#e3f1ea; --close-bg:#f5eed3; --differ-bg:#f8e1de; --gh-bg:#e1e9f6; --local-bg:#eee3f4; --check-bg:#e8eaec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121719; --panel:#192024; --ink:#e4eaec; --muted:#97a6ab; --rule:#2d383c; --rule-soft:#232d31;
+    --link:#7fc0df; --focus:#7fc0df; --hover:#202a2e;
+    --agree:#58c493; --close:#d9bb55; --differ:#f07f74; --gh:#7fa9ec; --local:#c49be0; --check:#a2adb4;
+    --agree-bg:#17302a; --close-bg:#2f2a15; --differ-bg:#38201e; --gh-bg:#1a2a42; --local-bg:#2c2036; --check-bg:#242c31;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#121719; --panel:#192024; --ink:#e4eaec; --muted:#97a6ab; --rule:#2d383c; --rule-soft:#232d31;
+    --link:#7fc0df; --focus:#7fc0df; --hover:#202a2e;
+    --agree:#58c493; --close:#d9bb55; --differ:#f07f74; --gh:#7fa9ec; --local:#c49be0; --check:#a2adb4;
+    --agree-bg:#17302a; --close-bg:#2f2a15; --differ-bg:#38201e; --gh-bg:#1a2a42; --local-bg:#2c2036; --check-bg:#242c31;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);color:var(--ink);scroll-padding-top:7.5rem}
+body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-variant-numeric:tabular-nums;background:var(--bg);color:var(--ink)}
+a,button{color:inherit}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:3px}
+.wrap{max-width:1260px;margin:0 auto;padding:2.2rem 1.4rem 4rem}
+h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spacing:-.01em}
+.lead{max-width:68ch;margin:0 0 .5rem;color:var(--ink)}
+.meta{max-width:80ch;margin:0 0 1.6rem;color:var(--muted);font-size:.9rem}
+.meta b{color:var(--ink);font-weight:600}
+
+/* findings */
+.findings{margin:0 0 1.8rem;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:.1rem 2rem}
+.findings li{border-top:1px solid var(--rule);padding:.65rem 0}
+.findings button{all:unset;display:grid;grid-template-columns:1.7rem 1fr;gap:.3rem;cursor:pointer;width:100%}
+.findings button:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.findings button:hover .ft{text-decoration:underline;text-underline-offset:3px}
+.findings .ft{max-width:60ch}
+.findings .fid{display:block;color:var(--muted);font-size:.8rem}
+.glyph{display:inline-grid;place-items:center;width:1.45rem;height:1.45rem;border-radius:50%;font-weight:700;font-size:.85rem;line-height:1;flex:none}
+.s-agree .glyph,.glyph.s-agree{background:var(--agree-bg);color:var(--agree)}
+.s-close .glyph,.glyph.s-close{background:var(--close-bg);color:var(--close)}
+.s-differ .glyph,.glyph.s-differ{background:var(--differ-bg);color:var(--differ)}
+.s-gh .glyph,.glyph.s-gh{background:var(--gh-bg);color:var(--gh)}
+.s-local .glyph,.glyph.s-local{background:var(--local-bg);color:var(--local)}
+.s-check .glyph,.glyph.s-check{background:var(--check-bg);color:var(--check)}
+
+
+.fin{font-size:.88rem}
+.fin .fid{display:block;color:var(--muted);font-size:.78rem;margin-top:.1rem}
+.fin.open{color:var(--muted)}
+.fin.pend{color:var(--close)}
+.fin.done{border-left:3px solid var(--agree);padding-left:.55rem}
+.dec.prop{border-left-color:var(--close)}
+.dec ol{margin:.2rem 0 .4rem 1.2rem;padding:0;font-size:.92rem}
+.badge.pend{border-color:var(--close);color:var(--close)}
+/* decisions */
+.decisions{margin:0 0 1.8rem}
+.decisions h2,.findings-h{font-size:1.05rem;margin:0 0 .5rem;font-weight:650}
+.dec{border-left:3px solid var(--agree);background:var(--panel);padding:.7rem 1rem;margin:0 0 .6rem;max-width:90ch}
+.dec .dh{display:flex;gap:.7rem;align-items:baseline;flex-wrap:wrap}
+.dec .dh b{font-weight:650}
+.dec .dh span{color:var(--muted);font-size:.84rem}
+.dec p{margin:.35rem 0}
+.dec ul{margin:.2rem 0 .4rem 1.1rem;padding:0;color:var(--muted);font-size:.9rem}
+.dec .aff{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.3rem}
+.dec .aff button{border:1px solid var(--rule);background:var(--bg);border-radius:4px;padding:.05rem .5rem;font-size:.82rem}
+.dec .aff button:hover{background:var(--hover)}
+.badge{display:inline-block;margin-left:.45rem;border:1px solid var(--agree);color:var(--agree);border-radius:4px;padding:0 .4rem;font-size:.75rem;line-height:1.35;vertical-align:1px}
+.decblock{border-left:3px solid var(--agree);padding:.25rem .8rem;margin:.1rem 0 .8rem}
+.decblock b{font-weight:650}
+
+/* legend / summary */
+.summary{margin:0 0 1.2rem}
+.bar{display:flex;height:.7rem;border-radius:2px;overflow:hidden;gap:2px;margin:0 0 .8rem}
+.bar span{display:block;height:100%}
+.bar .b-agree{background:var(--agree)}.bar .b-close{background:var(--close)}.bar .b-differ{background:var(--differ)}
+.bar .b-gh{background:var(--gh)}.bar .b-local{background:var(--local)}.bar .b-check{background:var(--check)}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.4rem .9rem;margin:0;padding:0;list-style:none}
+.legend button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:1.7rem 1fr;gap:.1rem .4rem;width:100%;padding:.45rem .5rem;border:1px solid transparent;border-radius:6px;cursor:pointer}
+.legend button:hover{background:var(--hover)}
+.legend button:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.legend button[aria-pressed="true"]{border-color:var(--rule);background:var(--panel)}
+.legend .lh{font-weight:600}
+.legend .lh i{font-style:normal;font-weight:400;color:var(--muted);margin-left:.35rem}
+.legend .ld{grid-column:2;color:var(--muted);font-size:.84rem;line-height:1.4}
+
+/* filter bar */
+.filters{position:sticky;top:0;z-index:5;background:var(--bg);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:.65rem 0;margin:0 0 .4rem;display:flex;flex-wrap:wrap;gap:.6rem .9rem;align-items:center}
+.filters label{font-size:.88rem;color:var(--muted)}
+.filters input[type=search],.filters select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:.38rem .6rem;min-width:0}
+.filters input[type=search]{width:min(22rem,100%)}
+.chips{display:flex;gap:.3rem;align-items:center}
+.chip{border:1px solid var(--rule);background:var(--panel);border-radius:999px;padding:.22rem .7rem;font-size:.86rem;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.spacer{flex:1}
+.count{font-size:.88rem;color:var(--muted)}
+.btn{border:1px solid var(--rule);background:var(--panel);border-radius:6px;padding:.34rem .75rem;font-size:.88rem}
+.btn:hover{background:var(--hover)}
+
+/* table */
+.head,.row>summary{display:grid;grid-template-columns:minmax(150px,1fr) minmax(0,1.8fr) 7.4rem minmax(0,1.8fr) minmax(0,1.5fr) 3.4rem;gap:0 1rem;align-items:start}
+.head{padding:.6rem .5rem;font-size:.84rem;color:var(--muted);font-weight:600;border-bottom:1px solid var(--rule)}
+.head .c-status{text-align:center}
+.sect{margin:1.5rem 0 0}
+.sect h2{font-size:1.02rem;font-weight:650;margin:0;padding:.4rem .5rem;display:flex;gap:.7rem;align-items:baseline;border-bottom:1px solid var(--ink)}
+.sect h2 small{font-weight:400;color:var(--muted);font-size:.84rem}
+.row{border-bottom:1px solid var(--rule-soft)}
+.row>summary{list-style:none;padding:.7rem .5rem;cursor:pointer;position:relative}
+.row>summary::-webkit-details-marker{display:none}
+.row>summary:hover{background:var(--hover)}
+.row[open]{background:var(--panel);border-bottom-color:var(--rule)}
+.row[open]>summary:hover{background:transparent}
+.c-item{display:grid;grid-template-columns:.9rem 1fr;gap:.2rem .35rem;align-items:baseline}
+.c-item::before{content:"";width:.42rem;height:.42rem;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);margin-top:.35rem;margin-left:.1rem}
+.row[open] .c-item::before{transform:rotate(45deg)}
+.item-name{font-weight:600}
+.item-id{grid-column:2;color:var(--muted);font-size:.8rem}
+.side{font-size:.9rem;color:var(--ink)}
+.row:not([open]) .side{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.side.none{color:var(--muted)}
+.c-status{display:flex;flex-direction:column;align-items:center;gap:.25rem;text-align:center}
+.c-status .glyph{width:1.9rem;height:1.9rem;font-size:1.05rem}
+.c-status .slab{font-size:.8rem;line-height:1.2}
+.s-agree .slab{color:var(--agree)}.s-close .slab{color:var(--close)}.s-differ .slab{color:var(--differ)}
+.s-gh .slab{color:var(--gh)}.s-local .slab{color:var(--local)}.s-check .slab{color:var(--check)}
+.imp{font-size:.82rem;color:var(--muted)}
+.imp.high{color:var(--ink);font-weight:650}
+.imp.med{color:var(--ink)}
+.panel{padding:.2rem .5rem 1.1rem;display:grid;grid-template-columns:minmax(150px,1fr) minmax(0,6.4fr);gap:0 1rem}
+.panel .pl{color:var(--muted);font-size:.84rem;padding-top:.2rem}
+.panel .pb{max-width:84ch}
+.panel .pb p{margin:.1rem 0 .6rem}
+.next{border-left:3px solid var(--link);padding:.25rem .8rem;margin:.1rem 0 .8rem;background:var(--hover)}
+.next b{font-weight:650}
+.tags{display:flex;gap:.5rem;flex-wrap:wrap;margin:.2rem 0 0;font-size:.82rem;color:var(--muted)}
+.tags span{border:1px solid var(--rule);border-radius:4px;padding:.05rem .45rem}
+.empty{padding:2.2rem .5rem;color:var(--muted)}
+.foot{margin-top:2.4rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font-size:.86rem;max-width:80ch}
+.abbr{margin:0 0 1.4rem;color:var(--muted);font-size:.86rem;max-width:90ch}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media (max-width:900px){
+  .head{display:none}
+  .row>summary{grid-template-columns:1fr auto;gap:.5rem .8rem}
+  .c-item{grid-column:1/2}
+  .c-status{grid-column:2/3;grid-row:1/2;flex-direction:row;gap:.4rem}
+  .c-imp{grid-column:1/-1;order:5}
+  .c-imp::before{content:"Impact: ";color:var(--muted)}
+  .side,.fin{grid-column:1/-1}
+  .fin::before{content:"Validated decision";display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+  .side::before{content:attr(data-label);display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+  .row:not([open]) .side{-webkit-line-clamp:4}
+  .panel{grid-template-columns:1fr}
+  .panel .pl{display:none}
+  .filters{position:static}
+}
+@media print{
+  .filters,.findings button{display:none}
+  .row .side{display:block!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>GitHub ns_cooling and local COOL1D: first comparison</h1>
+  <p class="lead">Two independent neutron-star cooling codes, compared item by item. The aim is a single code that takes the best of each, with every choice approved by the group. This page lists what already agrees, what differs, and what exists on one side only.</p>
+  <p class="meta" id="meta"></p>
+  <p class="abbr" id="abbr"></p>
+
+  <section class="decisions" id="decisions-sec" aria-label="Decisions">
+    <h2>Decisions so far</h2>
+    <div id="decisions"></div>
+  </section>
+
+  <section class="decisions" id="proposed-sec" aria-label="Awaiting approval" hidden>
+    <h2>Awaiting your approval</h2>
+    <div id="proposed"></div>
+  </section>
+
+  <h2 class="findings-h">What stands out</h2>
+  <ul class="findings" id="findings"></ul>
+
+  <div class="summary">
+    <div class="bar" id="bar" aria-hidden="true"></div>
+    <ul class="legend" id="legend"></ul>
+  </div>
+
+  <div class="filters" role="search">
+    <label for="q" class="sr">Search</label>
+    <input type="search" id="q" placeholder="Search items, formulas, references" aria-label="Search items, formulas, references">
+    <label>Area <select id="cat"></select></label>
+    <span class="chips" role="group" aria-label="Impact filter" id="impacts"></span>
+    <span class="spacer"></span>
+    <span class="count" id="count" aria-live="polite"></span>
+    <button class="btn" id="toggle">Expand all</button>
+    <button class="btn" id="reset">Reset filters</button>
+  </div>
+
+  <div class="head" aria-hidden="true">
+    <div>Item</div><div>GitHub ns_cooling</div><div class="c-status">Status</div><div>Local COOL1D</div><div>Validated decision</div><div>Impact</div>
+  </div>
+  <div id="table"></div>
+
+  <div class="foot">
+    <p>Evidence tags: <b>read in code</b> means I read the source on both sides; <b>computed here</b> means I ran both implementations on the same inputs; <b>docs only</b> means the statement comes from a README or notebook and has not been checked in code. Impact is my estimate and is open to challenge.</p>
+    <p>All rows are stored in the JSON block at the top of this file. Decisions are recorded in the same file. The column “Validated decision” shows the final approach once a decision has been approved; otherwise it reads Open, or Pending approval when a proposal exists.</p>
+    <p><button class="btn" id="exp-json">Download JSON</button> <button class="btn" id="exp-csv">Download CSV</button></p>
+  </div>
+</div>
+
+<script type="application/json" id="comparison-data">{
+ "meta": {
+  "date": "13 November 2026",
+  "github": "github.com/Blitzman/workshop_fisica, directory ns_cooling, commit e4321df",
+  "local": "COOL1D_FM_default.zip, README version 16 (default model BSk26, 1.4 M☉)",
+  "abbr": "Abbreviations: Y01 = Yakovlev et al. 2001 (Phys. Rep. 354, 1); YLS99 = Yakovlev, Levenfish & Shibanov 1999; PCY97 = Potekhin, Chabrier & Yakovlev 1997; BCF = Bottaro, Caputo & Fiorillo 2024; MURCA = modified Urca; dUrca = direct Urca; I1, S1–S7, H1–H8 = items in the GitHub lab notebook."
+ },
+ "statuses": [
+  {
+   "key": "agree",
+   "label": "Agree",
+   "glyph": "=",
+   "desc": "Same formula or value, checked in code or by computing both."
+  },
+  {
+   "key": "close",
+   "label": "Close",
+   "glyph": "≈",
+   "desc": "Same physics, different form, parameters or reference; effect small or not yet measured."
+  },
+  {
+   "key": "differ",
+   "label": "Differ",
+   "glyph": "≠",
+   "desc": "Different formula or choice. Results are expected to change."
+  },
+  {
+   "key": "gh",
+   "label": "Only GitHub",
+   "glyph": "G",
+   "desc": "Present in the GitHub code only."
+  },
+  {
+   "key": "local",
+   "label": "Only local",
+   "glyph": "L",
+   "desc": "Present in the local code only."
+  },
+  {
+   "key": "check",
+   "label": "To check",
+   "glyph": "?",
+   "desc": "Cannot be settled by reading; needs a test or a fact to be confirmed."
+  }
+ ],
+ "cats": [
+  {
+   "key": "eos",
+   "label": "EOS and composition"
+  },
+  {
+   "key": "tov",
+   "label": "Structure: TOV and background"
+  },
+  {
+   "key": "nu",
+   "label": "Neutrino emissivities"
+  },
+  {
+   "key": "cond",
+   "label": "Thermal conductivity"
+  },
+  {
+   "key": "hc",
+   "label": "Heat capacity"
+  },
+  {
+   "key": "sf",
+   "label": "Superfluidity"
+  },
+  {
+   "key": "env",
+   "label": "Envelope and surface"
+  },
+  {
+   "key": "num",
+   "label": "Thermal solver and numerics"
+  },
+  {
+   "key": "obs",
+   "label": "Observations and reference curves"
+  },
+  {
+   "key": "ref",
+   "label": "References and provenance"
+  },
+  {
+   "key": "eng",
+   "label": "Validation and engineering"
+  }
+ ],
+ "decisions": [
+  {
+   "id": "D-001",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "The local code is the primary code",
+   "text": "The local COOL1D structure is adopted as the primary code. It builds the background star from an EOS folder in CompOSE format, so many EOS can be tried easily. PL500_M1.40.DAT is ignored. Ingredients from the GitHub code enter the local code one approved item at a time.",
+   "by": "Decided in the project chat; confirmed that it covers the whole local code, not only the structure builder",
+   "effects": [
+    "The GitHub code becomes a source of candidate ingredients and of independent checks, not a second baseline.",
+    "Items below were reworded to say what the decision changes. Their comparison status is unchanged."
+   ]
+  },
+  {
+   "id": "D-002",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Only complete CompOSE packages; BSk22, BSk24 and BSk26 as the working set",
+   "text": "Only EOS packages from the CompOSE repository that carry the information the code needs are used. SLy4 (the RG(SLY4) package) is discarded. BSk22, BSk24 and BSk26, which both codes can build, are enough for now.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "Problems found only with the SLy4 package (grid indexing, consistency tolerance, phase codes, nuclei fraction) are dropped from the list.",
+    "BSk24 is usable now with central_pressure; the mass-solver rounding issue is handled separately (D-004)."
+   ]
+  },
+  {
+   "id": "D-003",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "A crust is required, so the local version is the right one",
+   "text": "The cooling model needs a crust. The GitHub code has none (isothermal core only), so the local code is the right version.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "Crust ingredients that exist only in the local code are the baseline: crust EOS and composition, crust heat capacity, crust conduction, crust neutron pairing, crust neutrino processes and the 1-D diffusion.",
+    "Whether each crust formula is correct is not decided here; the sources still have to be checked (RF-1)."
+   ]
+  },
+  {
+   "id": "D-004",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Mass solver: tolerance at the table edge",
+   "text": "Approved: add a relative tolerance of 1e-12 at the pressure-range check in integrate_star, so that solving for a mass works on BSk24. Applied to tov.py (two lines, delivered with its diff). Tested on the one failing case: BSk24 with mass = 1.4 now builds the star (Pc = 8.9053e+34 dyn/cm², R = 12.574 km) and runs.",
+   "by": "Proposed by Claude, approved in the project chat",
+   "effects": [
+    "The existing test suite has not been run on the fixed tov.py.",
+    "The central pressure found for 1.4 M☉ matches the value used earlier with central_pressure."
+   ]
+  },
+  {
+   "id": "D-005",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "The structure always stops at the first row of the EOS table",
+   "text": "The integration of the star always ends at the first row of the EOS table. There is no extrapolation above that row and no fixed surface density.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "This is what the local code already does (for BSk22 the first row is at 7.8e5 g/cm³; the layers above it, a few metres, are neglected).",
+    "The GitHub cut at ρ = 1e6 g/cm³ is not used."
+   ]
+  },
+  {
+   "id": "D-006",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Effective masses only from the EOS package; no fixed values",
+   "text": "Only EOS packages that provide nucleon effective masses are used. No value is fixed arbitrarily: a constant m*/m = 0.7, as on the GitHub side, is not used.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "BSk22, BSk24 and BSk26 all carry eos.micro with the Landau masses of neutrons and protons in the core, so all three qualify.",
+    "The crust is not covered: no package gives crust masses (eos.micro covers the core only). The local code uses a 42-point table there whose source is not recorded. See D-008.",
+    "The local reader fell back silently on its 42-point tables when a package had no eos.micro; D-009 removes that fallback for the core."
+   ]
+  },
+  {
+   "id": "D-007",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Constants: the most accurate values",
+   "text": "G = 6.6743e-8 cm³ g⁻¹ s⁻² (the same in both codes); solar mass M☉ = 1.98841e33 g; one year = 3.15576e7 s (Julian year, 365.25 days). Where the two codes differ, the more accurate value is used. Applied in constants.py and thermal_matrix.py (delivered with a diff); not tested.",
+   "by": "Decided in the project chat; values chosen by Claude",
+   "effects": [
+    "Basis: the Julian year is exactly 365.25 × 86400 s. M☉ is the IAU 2015 nominal GM☉ divided by the CODATA G. Both are quoted from memory and should be checked against IAU 2015 Resolution B3 and CODATA before merging.",
+    "Applied: M_SUN in constants.py (1.98847e33 → 1.98841e33 g, a 3e-5 change) and SECONDS_PER_YEAR in thermal_matrix.py (3.16e7 → 3.15576e7 s, which shifts every age by 0.13 %).",
+    "Not done: the README sentence about 1 yr = 3.16e7 s is now out of date; the central pressures in input_bsk22 and input_bsk26 were found with the old M☉ and would give slightly different masses; the reference cooling curve in tests/ has to be regenerated. Nothing has been run.",
+    "Constants rounded to single precision in the crust conductivity and in the electron heat-capacity fit are not covered by this decision.",
+    "Test run (EG-7): four tests fail because of this change (masses 3.0e-5 off, a hard-coded central pressure, and the reference curve length). Nothing else fails."
+   ]
+  },
+  {
+   "id": "D-008",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Crust effective masses: find the source of the table",
+   "text": "Approved: find the source of the local 42-point neutron effective-mass table used in the crust, and check the table against it. Result so far: the project records no source (effective_mass.py says only “tabulated values (42 points)” and the README names no reference). The source cannot be searched from this environment, so it has to come from the author of the code or from the group. Candidate found afterwards: Van Riper (1991), ApJS 75, 449 takes both the neutron and the proton effective masses from Chao, Clark & Yang (1972), the “MS i” curves of their Fig. 3. The local table (42 points, m*/m falling from 1.0 at k_F = 0 to 0.76 for neutrons and 0.50 for protons at k_F ≈ 1.73 fm⁻¹) is plausible as a digitization of such curves. This is not confirmed: the original figure has not been compared with the table.",
+   "by": "Proposed by Claude, approved in the project chat",
+   "options": [],
+   "effects": [
+    "Until the table is compared with Fig. 3 of Chao, Clark & Yang (1972), the crust masses are not validated, and D-006 (no arbitrary values) is not fully met for the crust."
+   ]
+  },
+  {
+   "id": "D-009",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Reader: refuse packages without effective masses",
+   "text": "Approved: stop with a clear error when a package gives no Landau effective masses in the core, instead of falling back on the local tables. Applied in _points() of stellar_structure.py (delivered with a diff); not tested.",
+   "by": "Proposed by Claude, approved in the project chat",
+   "options": [],
+   "effects": [
+    "No test has been run. Any test that builds a star from a table without eos.micro would now fail; I have not checked all of them.",
+    "The refusal applies to the core only. The crust still uses the local table (D-008)."
+   ]
+  },
+  {
+   "id": "D-010",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "BSk26, 1.4 M☉ replaces PL500 as the test star",
+   "text": "The default star of the local code, BSk26 at 1.4 M☉ (input_bsk26, mesh A), replaces PL500 as the shared test star. PL500_M1.40.DAT, input_in and the structure-table code are removed.",
+   "by": "Proposed by Claude, approved in the project chat",
+   "options": [],
+   "effects": [
+    "Mesh A is the mesh of the shipped input_bsk26; the central pressure in that file was found with the old M☉, so the star comes out at 1.40004 M☉ (see D-007).",
+    "The structure-table branch of input_model.py (read_stellar_structure, DEFAULT_LMAX, the lmax arguments) is removed; an input file without an eos option now stops with a clear message.",
+    "README: the structure-table paragraphs, the input_in example and the reference-curve paragraph are removed."
+   ]
+  },
+  {
+   "id": "D-011",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Remove obsolete, stale and PL500-specific tests",
+   "text": "The four tests that fail because of D-007, the two stale tests and every test tied to PL500 or SLy4 are removed from the suite, so that it starts and passes without them.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "18 tests removed (314 before, 296 after), plus one assertion inside a generic test. The suite passes: 296 passed, 0 failed, 132 s.",
+    "Four tests tied to D-007: the stars of input_bsk22 at 1.0, 1.4 and 1.8 M☉ (test_stellar_structure), the Schwarzschild matching at 1.4 M☉ and the hard-coded central pressure (test_tov), and the stored reference luminosity curve (test_time_integration). The reference curve and its generator, tests/reference_cooling_curve.csv and tests/make_reference.py, are deleted with it.",
+    "Two stale tests: the driver rate messages (test_emissivity_updated) and the three-star default run (test_input_and_driver).",
+    "Twelve PL500-specific tests: structure-table checks, saved-background run, no-star-options and the two muon and interface-cell tests of the table; and in test_background and test_urca_masses_surface the tests of 166 faces, cells as face averages, the face-table and CSV round trips, the derived-quantities hook and the surface-factor arguments.",
+    "One assertion removed from test_the_comparison_script_runs_variants_and_restores_the_registry: that removing the muon channels changes nothing, which was true only for the muon-free PL500 table.",
+    "Kept and re-pointed to BSk26: the shared fixture, the shipped-input test, the single-star layout test, and two Direct Urca tests whose docstrings named the structure table.",
+    "Lost coverage: the face-table API (from_face_table, to_csv/from_csv with surface metadata, the derived= hook) and the --background run have no direct test now. The code is still there. See P-005."
+   ]
+  },
+  {
+   "id": "P-005",
+   "status": "proposed",
+   "date": "13 November 2026",
+   "title": "Face-table tests on a synthetic table",
+   "text": "With the PL500 tests gone, the face-table functions of the Background have no direct test. They are still part of the code and of the README (adapting a table from another code).",
+   "by": "Proposed by Claude, awaiting approval",
+   "options": [
+    "Rewrite the removed round-trip, hook and surface-argument tests on a small synthetic face table, with no PL500 and no EOS package. Recommended.",
+    "Leave them out, and remove the face-table functions from the code as well."
+   ],
+   "effects": []
+  },
+  {
+   "id": "D-012",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Local version for core conduction and the gap function",
+   "text": "Agreed: the local version is the one used for the core lepton conductivity (CO-2), the core neutron conductivity (CO-3) and the pairing gap function (SF-1).",
+   "by": "Decided in the project chat",
+   "effects": [
+    "CO-2 and CO-3 exist only in the local code (the GitHub code has no heat conduction), so this fixes them as the baseline.",
+    "SF-1: both codes use the same four-parameter form of the gap, so nothing changes in the code.",
+    "The citations of CO-2 and CO-3 are marked “believed” in the local README. Checking them against the papers is not part of this decision and stays under RF-1."
+   ]
+  },
+  {
+   "id": "D-013",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Local version for the dimensionless gap",
+   "text": "Agreed: the local version is the one used for the dimensionless pairing gap v(T/T_c) (SF-4).",
+   "by": "Decided in the project chat",
+   "effects": [
+    "Both codes use the same formulas (Yakovlev et al. 2001, Eq. 188). Below T/T_c = 0.1 the local code uses the low-temperature form 1/(α τ), which differs from the full fit by at most about 1 % at τ = 0.1."
+   ]
+  },
+  {
+   "id": "D-014",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Reference density n0 = 0.16 fm⁻³, rest-mass density, actual p_F in pair breaking",
+   "text": "Three parts. (1) The pair-breaking rates use the actual Fermi momenta of the background, p_F/(m_N c), instead of the parametrization 0.353 (n/n0)^(1/3). (2) The density of the microphysics stays ρ = 1.66e-24 g × n_b, and is documented as a baryon rest-mass density, not the mass-energy density of the TOV equations. (3) The reference density n0 is set to 0.16 fm⁻³ (2.656e14 g/cm³ as a rest-mass density), consistent with the Yakovlev et al. (2001) formulas. Applied in constants.py, emissivity.py, the eos_table.py docstring and the README; one test updated; not tested.",
+   "by": "Decided in the project chat; implemented by Claude",
+   "effects": [
+    "Single constants N0_FM3 and RHO0 in constants.py. They replace 2.82e14 g/cm³ in the modified Urca (including its α factor), the nn, np and pp bremsstrahlung, and 2.8e14 g/cm³ in the direct Urca.",
+    "Check done before applying: the exact direct-Urca coefficient implies that the prefactor 4.0e27 corresponds to a Fermi energy of 330.2 MeV. E_ref for n0 = 0.16 fm⁻³ is 331.4 MeV (+0.4 %); the former 337.3 MeV was +2.2 % off.",
+    "Expected shifts at the same density: (n/n0)^(1/3) factors +2.0 % (modified Urca about +3 % with the α factor, nucleon bremsstrahlung +2 %); direct Urca about +1.8 %; pair breaking from the actual p_F: neutrons about +1.9 %, protons about +6 % to +10 %. Estimated by arithmetic, not by running the code.",
+    "Left unchanged on purpose: the electron–proton bremsstrahlung (reference density 2.82e14 g/cm³ and a hard density cut), the fit constant 2.8e14 g/cm³ of the electron–ion bremsstrahlung, and the single-precision constants. The source of the electron–proton rate has to be checked first.",
+    "The test suite has not been run since this change. One test was updated (the expected E_ref in test_direct_urca_muons)."
+   ]
+  },
+  {
+   "id": "D-015",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Remove redundant and obsolete local tests, merge duplicates",
+   "text": "Done: the nine tests found redundant or obsolete, the muon-conduction effect test and the duplicated tests were removed or merged, and the one failing test was fixed. The suite went from 296 cases (147 s) to 284 cases (108 s), all passing. The approval covered running the suite as often as needed and detecting further redundancy.",
+   "by": "Proposed by Claude, approved in the project chat",
+   "options": [],
+   "effects": [
+    "Removed (11 tests): the five old-versus-new heat-capacity tests and the registry test of their helper; the registry-restore-after-error test (subsumed); the density-one-ninth threshold test (a special case of another); the third driver run (its assertion moved into test_driver_writes_all_outputs); the muon-conduction effect test. Their helpers went with them.",
+    "Merged: the two TOV refusal tests into one, the two default-star direct-Urca tests into one (it now checks the electron and the muon channel), and test_bsk26.py into test_eos_table.py.",
+    "Fixed: test_direct_urca_emissivity_switches_on_at_the_threshold used the old reference density 2.8e14; it now uses RHO0 (D-014).",
+    "Kept on purpose from the Review list: the driver scheme-flag test (command-line wiring), the updated-rates effect check, the energy closure on the BSk22 star (direct Urca active) and the slow direct-Urca mesh test.",
+    "Coverage run: 84 % of the source modules; 187 of 247 tests add no branch that another test does not also run, so coverage alone cannot decide redundancy. The 17 closest pairs and the 14 groups with identical coverage were read; each asserts a different property, so nothing more was removed.",
+    "README: the TESTS section and the run time (about 2 min) were updated."
+   ]
+  },
+  {
+   "id": "P-007",
+   "status": "proposed",
+   "date": "13 November 2026",
+   "title": "Port selected GitHub checks as local tests",
+   "text": "Fourteen GitHub checks are worth keeping because they do not depend on SLy4 or on a fixed effective mass: step 1 (BSk24 against published values, to be run on BSk22, BSk24 and BSk26), step 6 (pairing reduction factors and the Fig. 19 pair-breaking peak, which the local suite does not test directly), the step-5 comparison with the analytic neutrino stage, and the step-4 check of the bremsstrahlung prefactor, which bears on NU-6. The step-8 checks belong to the in-medium Urca.",
+   "by": "Proposed by Claude, awaiting approval",
+   "options": [
+    "Port steps 1, 6, 5 (analytic) and 4 (prefactor) one check at a time, each with your confirmation. Recommended.",
+    "Port only the step-6 checks, the one real gap in the local suite.",
+    "Port none."
+   ],
+   "effects": [
+    "The 13 GitHub checks that depend on SLy4, on the fixed mass 0.7 or on old figures are not ported."
+   ]
+  }
+ ],
+ "findings": [
+  {
+   "id": "EOS-7",
+   "text": "BSk22, BSk24 and BSk26 are the working set: both codes can build them. The local code reproduces the BSk24 mass–radius curve (M_max within 0.03 %) and the direct-Urca threshold star (1.597 against 1.595–1.596 M☉)."
+  },
+  {
+   "id": "NU-10",
+   "text": "Pairing factors, superfluid heat capacity, the iron envelope and the TOV equations agree. Fifteen factor functions match to 1e-15."
+  },
+  {
+   "id": "NU-6",
+   "text": "Local nn and pp bremsstrahlung carry an extra factor 3 compared with the GitHub formula (2.9 times at equal inputs). Suspected error in the primary code, to verify against Yakovlev et al. 2001."
+  },
+  {
+   "id": "NU-1",
+   "text": "Standard modified Urca differs by 20–30 % at two to three times saturation density, because the α factor is from a different generation of the fit."
+  },
+  {
+   "id": "NU-7",
+   "text": "The neutron-triplet pair-breaking coefficient is 3.17 locally, against 4.17 (Y01) or 0.79 (updated) on GitHub."
+  },
+  {
+   "id": "EN-2",
+   "text": "The accreted-envelope fits diverge for hot interiors: the local surface flux is 0.37 times the GitHub one at T_b = 3e8 K."
+  },
+  {
+   "id": "SF-3",
+   "text": "The two gap tables normalise T_c differently (0.8416 against 0.1187 for triplet pairing), so parameters cannot be copied between them without conversion."
+  },
+  {
+   "id": "CO-1",
+   "text": "Each side has what the other lacks. The local code has the crust, conduction, direct Urca and full diffusion; GitHub has the observations, in-medium Urca and the validation against published numbers."
+  }
+ ],
+ "rows": [
+  {
+   "id": "EOS-1",
+   "cat": "eos",
+   "item": "Equations of state available",
+   "gh": "SLy4 (Douchin–Haensel table) and BSk22/24/25/26 (Potekhin’s analytic fits).",
+   "loc": "Any T = 0 CompOSE folder (eos.nb, eos.thermo, eos.compo required). BSk22 and BSk26 are included.",
+   "status": "close",
+   "impact": "high",
+   "ev": "code",
+   "next": "Done by D-001 and D-002. Remaining check: reproduce the GitHub BSk results from the local tables (see EOS-7).",
+   "detail": [
+    "BSk22, BSk24 and BSk26 can be built by both codes: from CompOSE tables in the local code, from Potekhin’s fits on the GitHub side.",
+    "The local input file can still point at a structure table (input_in); that mode is not used from now on."
+   ],
+   "decisions": [
+    "D-001",
+    "D-002"
+   ],
+   "final": "CompOSE packages in the local code. Working set: BSk22, BSk24, BSk26. SLy4 and PL500 discarded."
+  },
+  {
+   "id": "EOS-2",
+   "cat": "eos",
+   "item": "Representation and interpolation",
+   "gh": "Analytic fit of P(ρ); cubic spline in log–log for ρ(P) and n(P).",
+   "loc": "Tabulated CompOSE files; linear in log P for every quantity; crust and core interpolated separately.",
+   "status": "check",
+   "impact": "low",
+   "ev": "code",
+   "next": "Needed only to carry GitHub’s validated results over: compare fit and table once on BSk22 and BSk26 and report the maximum deviation by density region.",
+   "detail": [
+    "With tables now primary, the fit is no longer a candidate for production. It stays useful as an independent check of the tables, and because most GitHub numbers use BSk24, which the local package does not include. Whether CompOSE offers BSk24 is to be checked.",
+    "The local reader drops pressure reversals smaller than 0.1 % with a warning (BSk26: one row, 0.037 %, data row 276). Check the neighbourhood of the crust–core interface in particular."
+   ],
+   "decisions": [
+    "D-001",
+    "D-002",
+    "D-005"
+   ],
+   "final": "CompOSE tables as read by the local code; the star ends at the first table row."
+  },
+  {
+   "id": "EOS-3",
+   "cat": "eos",
+   "item": "Composition and muons",
+   "gh": "Core only: n, p, e, μ fractions from the fit (BSk) or from Douchin–Haensel Table 4 (SLy4).",
+   "loc": "Core and crust: Ye, Yμ, Yn, Yp, A, Z, X_h from eos.compo, with built-in consistency checks.",
+   "status": "check",
+   "impact": "med",
+   "ev": "code",
+   "next": "Verify Yp(n_b) and Yμ(n_b) agree between fit and eos.compo for BSk22/26; this decides direct-Urca thresholds.",
+   "detail": [
+    "Both include muons and impose Yp = Ye + Yμ. The local reader enforces charge neutrality to 1e-5 in the core and warns on crust mismatches above 25 %."
+   ],
+   "decisions": [
+    "D-002"
+   ],
+   "final": "Composition from the package’s own eos.compo."
+  },
+  {
+   "id": "EOS-4",
+   "cat": "eos",
+   "item": "Crust",
+   "gh": "None. No crust heat capacity, no crust emission; only the core boundary n_cc is used.",
+   "loc": "Full outer and inner crust on the mesh: nuclei (A, Z, X_h), free neutrons, exact faces at the crust–core interface and at the base (ρ = 1e10 g/cm³).",
+   "status": "local",
+   "impact": "high",
+   "ev": "code",
+   "next": "Domain: crust and core from the CompOSE table, base at ρ = 1e10 g/cm³ (follows from D-001). The GitHub isothermal model becomes a test of the local code in an isothermal limit.",
+   "detail": [
+    "This is the structural gap behind GitHub item S4 (does the isothermal-core assumption bias the 841-yr source?)."
+   ],
+   "decisions": [
+    "D-001",
+    "D-003"
+   ],
+   "final": "Local: crust and core from the table."
+  },
+  {
+   "id": "EOS-5",
+   "cat": "eos",
+   "item": "Nucleon effective masses",
+   "gh": "Constant m*/m = 0.7 for neutrons and protons.",
+   "loc": "Core: Landau masses from the EOS (eos.micro), separate transport masses. Crust: 42-point table in k_F, linear interpolation.",
+   "status": "differ",
+   "impact": "high",
+   "ev": "code",
+   "next": "Core settled by D-006 and D-009 (change applied, untested). Crust: D-008, compare the 42-point table with Fig. 3 (MS i curves) of Chao, Clark & Yang (1972).",
+   "detail": [
+    "Modified Urca scales as m*³·m*, bremsstrahlung as m*⁴: this choice alone can change L by large factors.",
+    "Decided (D-006): masses come only from the package. BSk22, BSk24 and BSk26 all carry eos.micro and the local reader reports has_micro = True for each.",
+    "Without eos.micro the local reader falls back on its 42-point tables for the core as well; that fallback is what D-006 excludes. D-009 makes the reader refuse such packages (applied, untested).",
+    "The crust has no masses in any package. The local code uses the 42-point neutron table of effective_mass.py there; its source is not recorded. D-006 does not cover this case (D-008).",
+    "GitHub notebook lists “real effective masses” as not yet covered.",
+    "Candidate source of the crust table: Van Riper (1991), ApJS 75, 449 takes the neutron and proton effective masses from Chao, Clark & Yang (1972), the “MS i” curves of their Fig. 3. Plausible for the local 42-point table, not confirmed (D-008)."
+   ],
+   "decisions": [
+    "D-006",
+    "D-008",
+    "D-009"
+   ],
+   "final": "Core: Landau masses from the package; packages without them are refused (applied, untested). Crust: candidate source Chao–Clark–Yang 1972 (via Van Riper 1991), not yet confirmed."
+  },
+  {
+   "id": "EOS-6",
+   "cat": "eos",
+   "item": "Density convention and reference density",
+   "gh": "ρ is the mass-energy density from the table; n_b taken from the table; n0 = 0.16 fm⁻³.",
+   "loc": "Microphysics uses ρ = 1.66e-24 g × n_b; formulas divide by 2.82e14 g/cm³, which is n0 ≈ 0.170 fm⁻³; direct Urca uses 2.8e14.",
+   "status": "differ",
+   "impact": "med",
+   "ev": "run",
+   "next": "Settled by D-014. Open: the electron–proton bremsstrahlung (source, reference density and its hard cut), and a run of the test suite.",
+   "detail": [
+    "The density ρ itself is harmless: the local round trip n = ρ/1.66e-24 is exact, and ρ differs from the table’s mass-energy density by −0.08 % at the first row and by about 1 % in the core. It is now documented as a rest-mass density.",
+    "The reference density is not a free convention: each formula is calibrated to the n0 of its source. The coefficient 0.353 in p_F/(m_N c) = 0.353 (n/n0)^(1/3) is the Fermi momentum at n0 = 0.16 fm⁻³ (0.3527 with the neutron mass). The local code applied it with n0 = 0.170, so its p_F was about 1.9 % too small; proton pair breaking, which depends on p_F³ and p_F⁵, was about 6 % to 10 % low.",
+    "Direct Urca: the exact coefficient implies 330.2 MeV for the prefactor 4.0e27; E_ref was 337.3 MeV (+2.2 %) with the old reference density and is 331.4 MeV (+0.4 %) with n0 = 0.16 fm⁻³.",
+    "Still open: the electron–proton bremsstrahlung is switched on by a hard cut at ρ ≥ 2.82e14 g/cm³ instead of the core mask. With the BSk tables the core starts at 1.2–1.4e14 g/cm³, so the process is off in the outer core. It is a small process, but its source and validity density have to be checked."
+   ],
+   "decisions": [
+    "D-014"
+   ],
+   "final": "ρ = 1.66e-24 g × n_b kept (rest-mass density); n0 = 0.16 fm⁻³ (ρ0 = 2.656e14 g/cm³) in the Y01 formulas; pair breaking uses the actual p_F. Applied, untested."
+  },
+  {
+   "id": "TOV-1",
+   "cat": "tov",
+   "item": "TOV equations and integrator",
+   "gh": "Standard TOV, scipy DOP853, rtol 1e-10; independent variable r, starting at r0 = 1 cm.",
+   "loc": "Same equations, scipy DOP853, rtol 1e-9; independent variable x = ln(P/Pc), series start at r0 = 10 cm.",
+   "status": "agree",
+   "impact": "low",
+   "ev": "code",
+   "next": "Keep the GitHub TOV as an independent check, not as a candidate: compare M, R and Φ(r) for BSk22/26 at 1.0, 1.4 and 1.8 M☉; expect agreement at the 1e-5 level or better.",
+   "detail": [
+    "Same physics and same ODE method; only the coordinate and the start differ. Mass targeting: GitHub brackets log ρc in 14.4–15.3; local solves log Pc on the stable branch between the minimum and maximum mass and refuses targets outside it."
+   ],
+   "decisions": [
+    "D-001"
+   ],
+   "final": "Local TOV integrator."
+  },
+  {
+   "id": "TOV-2",
+   "cat": "tov",
+   "item": "Outer edge, surface gravity, matching",
+   "gh": "Stops at ρ = 1e6 g/cm³; Φ matched to Schwarzschild there; g14 = GM/(R²√(1−x))/1e14.",
+   "loc": "Stops at the first table row (7.8e5 g/cm³ for BSk22); Φ matched there; g from the proper acceleration with pressure term; surface factor (R_s e^Φs / R_b e^Φb)² (1.036 for BSk22, 1.4 M☉).",
+   "status": "close",
+   "impact": "low",
+   "ev": "code",
+   "next": "Settled by D-005. Remaining: quantify the effect of the old GitHub cut (1e6 g/cm³) against the first table row on R, g14 and L∞, only to interpret earlier GitHub numbers.",
+   "detail": [
+    "The surface factor converts the flux leaving the base of the envelope into L∞ in the local code; the GitHub isothermal model has no equivalent layer."
+   ],
+   "decisions": [
+    "D-005"
+   ],
+   "final": "Outer edge is the first row of the CompOSE table (local behaviour)."
+  },
+  {
+   "id": "TOV-3",
+   "cat": "tov",
+   "item": "Background model and spatial grid",
+   "gh": "No grid. 0-D integrals over the TOV profile (4000 points) give C and L_ν of an isothermal core.",
+   "loc": "1-D mesh in ln P, presets A–D (161–581 faces). One read-only Background object is the only input of the evolution.",
+   "status": "local",
+   "impact": "high",
+   "ev": "docs",
+   "next": "Settled by D-001. Cross-check: reproduce the GitHub integrals (C, L_ν) from the local Background.",
+   "detail": [
+    "Local README: the direct-Urca edge must be resolved. For BSk22 at 1.4 M☉, mesh A gives L∞ 16–17 % too low from 100 yr; mesh C is within 0.1 % of mesh D."
+   ],
+   "decisions": [
+    "D-001"
+   ],
+   "final": "Local mesh and Background."
+  },
+  {
+   "id": "TOV-4",
+   "cat": "tov",
+   "item": "Structure validation targets",
+   "gh": "Published numbers: BSk24 M_max 2.279 M☉ (0.01 %), dUrca threshold 8.25e14 g/cm³, threshold mass 1.595 vs 1.596 M☉; SLy4 M_max 2.050, R 9.99 km.",
+   "loc": "Own tests: n = 1 polytrope, M–R curve vs the EOS package (0.13 % in R, 0.03 % in M_max), BSk22 threshold star 1.148 vs 1.151 M☉.",
+   "status": "close",
+   "impact": "low",
+   "ev": "docs",
+   "next": "Run both on BSk22 and BSk26 against the same targets (eos.mr and Pearson et al. 2018).",
+   "detail": [
+    "Both validate structure, against different references.",
+    "BSk24 now gives a common target: the local code reproduces the package’s eos.mr (M_max within 0.03 %, radii within 0.13 %) and the direct-Urca threshold star (1.597 against 1.595–1.596 M☉); see EOS-7."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "TOV-5",
+   "cat": "tov",
+   "item": "Constants and units",
+   "gh": "G = 6.6743e-8; M☉ = 1.98841e33 g; 1 yr = 3.15576e7 s; CODATA via scipy.constants in the microphysics.",
+   "loc": "G = 6.67430e-8; M☉ = 1.98847e33 g; 1 yr = 3.16e7 s (0.13 % longer); m_u = 1.66e-24 g; some constants rounded to single precision.",
+   "status": "close",
+   "impact": "low",
+   "ev": "code",
+   "next": "Settled by D-007 and applied. Still to do: update the README sentence, the central pressures in input_bsk22/26, and regenerate the reference curve.",
+   "detail": [
+    "Where the two codes differ, the GitHub values are the more accurate ones: M☉ = 1.98841e33 g and 1 yr = 3.15576e7 s. G is the same in both.",
+    "Single-precision constants remain in the crust conductivity (for example 1822.9, 137.036) and in the electron heat-capacity fit; they are not covered by D-007."
+   ],
+   "decisions": [
+    "D-007"
+   ],
+   "final": "G = 6.6743e-8 (cgs); M☉ = 1.98841e33 g; 1 yr = 3.15576e7 s (Julian year). Applied in constants.py and thermal_matrix.py; untested."
+  },
+  {
+   "id": "NU-1",
+   "cat": "nu",
+   "item": "Modified Urca, neutron branch (standard rate)",
+   "gh": "Yakovlev et al. 2001, Eq. 140: 8.1e21 · m*n³ m*p · (n_p/n0)^(1/3) · T9⁸ · α_n β_n, with α_n = 1.13, β_n = 0.68.",
+   "loc": "Older parametrisation: 8.55e21 · m*n³ m*p · (ρ Ye/2.82e14)^(1/3) · T9⁸ · α β, with α = 1.76 − 0.63 (n0/n)^(2/3), β = 0.68.",
+   "status": "differ",
+   "impact": "high",
+   "ev": "run",
+   "next": "Evaluate both on the BSk26 profile at fixed T; then choose one parametrisation (the 2001 one is more recent).",
+   "detail": [
+    "Computed ratio local/GitHub at identical inputs (m* = 0.7, npe matter, T9 = 1, Yp 0.04–0.12): 0.96–1.00 at n_b = 0.16 fm⁻³, 1.20–1.23 at 0.32 fm⁻³, 1.30–1.32 at 0.48 fm⁻³. The two agree at saturation and separate by 20–30 % at two to three times saturation density, through the density-dependent α.",
+    "The local rate also uses Ye where GitHub uses n_p; they differ whenever muons are present.",
+    "Hypothesis, not tested: part of the GitHub open issue I1 (modified-Urca luminosity 0.57–0.73 of the Ofengeim et al. fit at high mass) could be this. The sign is consistent.",
+    "The ratios above were computed with the old reference density (0.170 fm⁻³). With D-014 the local rate is higher by about 3 % at the same density, so they have to be recomputed (not done)."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NU-2",
+   "cat": "nu",
+   "item": "Modified Urca, proton branch (standard rate)",
+   "gh": "Yakovlev et al. 2001, Eq. 142: neutron-branch rate × (m*p/m*n)² (p_Fl + 3p_Fp − p_Fn)²/(8 p_Fl p_Fp); open above its own threshold, per lepton.",
+   "loc": "8.53e21 · m*p³ m*n · (ρ Ye/2.82e14)^(1/3) · α β · max(1 − ¼ (Ye/Yp)^(1/3), 0); open where Ye^(1/3) + 3 Yp^(1/3) > Yn^(1/3).",
+   "status": "differ",
+   "impact": "med",
+   "ev": "code",
+   "next": "Compare the proton/neutron branch ratio and the opening density on the BSk26 profile.",
+   "detail": [
+    "Different parametrisations of the same Friman–Maxwell branch; effect not yet quantified."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NU-3",
+   "cat": "nu",
+   "item": "Muons in the standard modified Urca",
+   "gh": "Electron and muon channels (muon rule after Eq. 142: p_Fe → p_Fμ and a factor (n_μ/n_e)^(1/3)).",
+   "loc": "Standard rate treats the leptons as electrons only; muon branches exist only in the updated (Bottaro–Caputo–Fiorillo) rate.",
+   "status": "differ",
+   "impact": "med",
+   "ev": "docs",
+   "next": "Include in the NU-1/NU-2 comparison with muons switched on; BSk22 and BSk26 both have muons in the core.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NU-4",
+   "cat": "nu",
+   "item": "Updated modified Urca and bremsstrahlung (Bottaro–Caputo–Fiorillo 2024)",
+   "gh": "Not implemented.",
+   "loc": "Implemented (arXiv:2406.18640): one-pion plus ρ exchange; nn, pp, np bremsstrahlung and modified Urca with muons. Non-triangular integral and in-medium effects not included.",
+   "status": "local",
+   "impact": "high",
+   "ev": "docs",
+   "next": "For comparison runs use --old-rates (all standard rates) first; treat the updated set as a separate decision.",
+   "detail": [
+    "Driver default (v16 README header): standard Friman–Maxwell modified Urca plus BCF bremsstrahlung. --murca bottaro selects BCF modified Urca; --old-rates selects all standard rates.",
+    "The local README contradicts itself: an older section says the driver replaces both processes, the v16 header says only bremsstrahlung. I followed the v16 header; to confirm with the author."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NU-5",
+   "cat": "nu",
+   "item": "In-medium enhancement of modified Urca",
+   "gh": "Implemented (Shternin–Baldo–Haensel 2018, α_U, neutron branch); dims the non-superfluid SLy4 star by 1.46–1.65 at the three source ages.",
+   "loc": "Not included.",
+   "status": "gh",
+   "impact": "high",
+   "ev": "docs",
+   "next": "Candidate to port. Physics decision: BCF includes no in-medium effects, so the two are complementary, not alternatives.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NU-6",
+   "cat": "nu",
+   "item": "Nucleon bremsstrahlung (standard rate)",
+   "gh": "Yakovlev et al. 2001, Eqs. 165–167: 7.5e19 · m*⁴ · (n/n0)^(1/3) · α β · N_ν · T9⁸ for nn and pp, 1.5e20 for np; N_ν = 3.",
+   "loc": "Same structure with 7.4e19 and 1.5e20, but the nn and pp lines carry two factors of 3 (a literal 3 and a 3.0); np carries one.",
+   "status": "differ",
+   "impact": "high",
+   "ev": "run",
+   "next": "Check against Y01 Eqs. 165 and 167 whether a second factor 3 is intended (for instance a flavour factor already inside the older 7.4e19). Fix or document.",
+   "detail": [
+    "At identical inputs the local nn and pp rates are 2.90 times the GitHub ones; np is 0.98 times. The 2.90 is 3 × 0.97, where 0.97 combines 7.4e19 against 7.5e19 and the density convention of EOS-6.",
+    "Not established which side is right. Supporting the GitHub value: its Eq. 165 with m* = 0.7 reproduces the 1.77e19 prefactor quoted by Ofengeim et al. 2017 (GitHub notebook, H4).",
+    "Reach: the default driver replaces core bremsstrahlung by the BCF rate, so this affects crust neutron bremsstrahlung and every --old-rates run. Bremsstrahlung matters most exactly when modified Urca is suppressed by superfluidity.",
+    "After D-014 the local nn and pp rates are 2.96 times the GitHub ones (3 × 7.4/7.5), and the np rate is 1.00 times: the density-convention part of the former 2.90 and 0.98 is gone. Computed by arithmetic from the formulas, not by running the code."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NU-7",
+   "cat": "nu",
+   "item": "Cooper-pair breaking and formation",
+   "gh": "Y01 normalisation (neutron triplet a = 4.17; proton singlet) plus an ‘updated’ option after Potekhin–Chabrier 2018 (triplet × 0.19, singlet vector part suppressed). Core only.",
+   "loc": "Y01-type structure; neutron triplet coefficient 2·g_A² = 3.17 (vector term absent); proton singlet written out explicitly. Core and crust (neutron singlet). No ‘updated’ option.",
+   "status": "differ",
+   "impact": "high",
+   "ev": "code",
+   "next": "Tabulate Q_pbf for both codes at the same T, T_c and density, then decide the triplet normalisation (4.17, 3.17 or 0.19 × 4.17 = 0.79).",
+   "detail": [
+    "Triplet coefficient, local over GitHub: 0.76 against the Y01 value, 4.0 against the updated one. Pair-breaking emission dominates when modified Urca is suppressed, so this sets the cooling in the superfluid cases that matter most for the Marino et al. question.",
+    "The dimensionless emission functions F_A and F_B are identical in both codes (see NU-10).",
+    "Pair breaking now uses the actual Fermi momenta of the background (D-014): p_F/(m_N c) = ħc k_F/(m_N c²), with m_N the neutron mass. The former 0.353 (n/n0)^(1/3) with n0 = 0.170 gave a p_F about 1.9 % too small."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NU-8",
+   "cat": "nu",
+   "item": "Direct Urca",
+   "gh": "Thresholds only (electron and muon, triangle condition). No emissivity implemented; only the superfluid reduction fits.",
+   "loc": "Emissivity for the electron and muon channels: 4.0e27 · m*n m*p · T9⁶ · (μ_l/E_ref) · R_du, each above its own threshold; checked against a spinor calculation in the tests.",
+   "status": "local",
+   "impact": "high",
+   "ev": "docs",
+   "next": "Port to the unified code. Needed for BSk22 (above 1.15 M☉) and BSk24 (above 1.6 M☉); cross-check the prefactor against Yakovlev et al. 2001.",
+   "detail": [
+    "Both codes agree on the threshold condition. The muon-channel formula is, by the local README’s own statement, verified numerically and not taken from a published formula.",
+    "With n0 = 0.16 fm⁻³ (D-014), E_ref is 331.4 MeV. The exact coefficient implies 330.2 MeV for the prefactor 4.0e27, so the new value is +0.4 % from it; the former 337.3 MeV was +2.2 % off."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NU-9",
+   "cat": "nu",
+   "item": "Other neutrino processes",
+   "gh": "None beyond modified Urca, nucleon bremsstrahlung and pair breaking.",
+   "loc": "Electron–proton and electron–ion bremsstrahlung, plasmon decay, pair annihilation, crust pair breaking.",
+   "status": "local",
+   "impact": "med",
+   "ev": "docs",
+   "next": "Needed as soon as the crust is included (EOS-4).",
+   "detail": [],
+   "decisions": [
+    "D-003"
+   ],
+   "final": "Local crust and other processes."
+  },
+  {
+   "id": "NU-10",
+   "cat": "nu",
+   "item": "Pairing reduction factors of the emissivities",
+   "gh": "Y01 Eqs. 199–229, transcribed and checked at their asymptotes.",
+   "loc": "The same Y01 fits in emissivity_factors.py.",
+   "status": "agree",
+   "impact": "high",
+   "ev": "run",
+   "next": "Keep a single copy in the unified code.",
+   "detail": [
+    "Compared 15 factor functions numerically (direct Urca, modified Urca n and p, bremsstrahlung np, pp, nn, pair-breaking singlet and triplet, and the combined factors): identical to 1e-15 on a grid of v from 0.5 to 20. Single exception: NU-11."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NU-11",
+   "cat": "nu",
+   "item": "Modified Urca neutron branch, neutron-only triplet pairing, v > 15",
+   "gh": "Y01 fit at every v.",
+   "loc": "Switches to an asymptotic form v⁶ e^(−2v) above v = 15 (v = Δ/k_BT).",
+   "status": "differ",
+   "impact": "low",
+   "ev": "run",
+   "next": "Decide against Y01 Eq. 227 which form is right above v = 15.",
+   "detail": [
+    "The local factor drops by a factor 52 at v = 15 relative to the Y01 fit (a discontinuity). The factor itself is below 5e-9 there, so it only matters for T far below T_c."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "CO-1",
+   "cat": "cond",
+   "item": "Heat conduction, overall",
+   "gh": "None. Core assumed isothermal, no crust, no heat diffusion.",
+   "loc": "Full: core electrons, muons and neutrons; crust electrons; entered in the GR heat equation on the mesh.",
+   "status": "local",
+   "impact": "high",
+   "ev": "code",
+   "next": "Backbone: local. GitHub item S4 asks exactly the question that needs this.",
+   "detail": [],
+   "decisions": [
+    "D-003"
+   ],
+   "final": "Local conduction (needed for the crust)."
+  },
+  {
+   "id": "CO-2",
+   "cat": "cond",
+   "item": "Core leptons (e, μ)",
+   "gh": "—",
+   "loc": "Shternin–Yakovlev 2007 (transverse plasmon exchange): κ_l = C T/ν_l · (n_l/n0)^(2/3) · v_l, with ν_ll + ν_ln + ν_lp and superfluid factors R, Z. Muons use the electron expression with their own density and velocity.",
+   "status": "local",
+   "impact": "med",
+   "ev": "docs",
+   "next": "Settled by D-012. The source check of the “believed” citation stays open under RF-1.",
+   "detail": [
+    "Known approximations (README): no electron–muon coupling, no flux tubes. Stated effect on the cooling curves: below 1 % at 1 yr to 1e5 yr, a few per cent where the curve is steepest."
+   ],
+   "decisions": [
+    "D-012"
+   ],
+   "final": "Local core lepton conductivity (electrons and muons)."
+  },
+  {
+   "id": "CO-3",
+   "cat": "cond",
+   "item": "Core neutrons",
+   "gh": "—",
+   "loc": "Baiko–Haensel–Yakovlev 2001 (nn and np collisions), κ ∝ n_n; superfluid factor R_C.",
+   "status": "local",
+   "impact": "low",
+   "ev": "docs",
+   "next": "Settled by D-012. The source check of the “believed” citation stays open under RF-1.",
+   "detail": [],
+   "decisions": [
+    "D-012"
+   ],
+   "final": "Local core neutron conductivity."
+  },
+  {
+   "id": "CO-4",
+   "cat": "cond",
+   "item": "Crust electrons",
+   "gh": "—",
+   "loc": "Potekhin et al. electron-conductivity fit (2019 version, built on COULAN 1999 and TAUEESY 2016); point ions, Q_imp = 0.1 fixed; no thermal averaging, ion conduction, form factor or Umklapp freeze-out.",
+   "status": "local",
+   "impact": "high",
+   "ev": "docs",
+   "next": "Compare against Potekhin’s public code on a (ρ, T, Z, A) grid; decide on Q_imp and on the missing pieces.",
+   "detail": [
+    "Constants are rounded to single precision. Q_imp = 0.1 is a fixed number that falls under the repository rule “no free constants” unless it is justified by a cited value."
+   ],
+   "decisions": [
+    "D-003"
+   ],
+   "final": "Local crust conduction as baseline; source check still open (RF-1)."
+  },
+  {
+   "id": "HC-1",
+   "cat": "hc",
+   "item": "Nucleons",
+   "gh": "Landau quasiparticles, C = k_B² T m* k_F/(3ħ³), m* = 0.7 m.",
+   "loc": "Same expression with the Landau mass from the EOS.",
+   "status": "agree",
+   "impact": "high",
+   "ev": "code",
+   "next": "Formula agrees; the mass is EOS-5.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "HC-2",
+   "cat": "hc",
+   "item": "Leptons (e, μ)",
+   "gh": "Relativistic degenerate gas for both (Ofengeim et al. 2017, Eq. 6).",
+   "loc": "Same gas, C = k_B² T E_F k_F/(3(ħc)²); the electron term is implemented as a fit with rounded constants (0.3 % from the exact expression).",
+   "status": "agree",
+   "impact": "low",
+   "ev": "code",
+   "next": "Use the exact expression for the electrons.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "HC-3",
+   "cat": "hc",
+   "item": "Crust: ions, free neutrons",
+   "gh": "None.",
+   "loc": "Ions in gas, liquid and Debye-solid regimes; crust neutrons with a superfluid factor. Source of the ion fits not recorded.",
+   "status": "local",
+   "impact": "high",
+   "ev": "docs",
+   "next": "Source identified (see detail). Remaining: the general source check of the crust formulas under RF-1.",
+   "detail": [
+    "Van Riper (1991), ApJS 75, 449, Eqs. 24–25 (ion heat capacity) are the formulas of the local code, compared coefficient by coefficient in the code: the Debye temperature 3.48e3 ρ^½ Z/A K is identical; the Debye approximation is the same (0.8π⁴x³ = 77.9273 x³ for x ≤ 0.15, 1 − 0.05/x² above x = 0.4, and a linear piece in between, with 1.69798x + 0.0083073 locally against the paper’s rounded 1.70x + 0.0083); the regimes are 3/2 k_B per ion for Γ ≤ 1, a logarithmic interpolation up to Γ = 150 and the Debye form above, where the log formula reaches 3 k_B exactly at Γ = 150.",
+    "Two points to check on the printed page: the text I have gives the upper Debye threshold as “x ≥ 4” and garbles the conditions of the last two regimes; with the paper’s own coefficients the pieces join continuously at x = 0.15 and x = 0.4, which is what the local code uses. The local constant 4.143e-16 is 0.03 % above 3 k_B (a rounded constant)."
+   ],
+   "decisions": [
+    "D-003"
+   ],
+   "final": "Local crust heat capacity as baseline; the ion fits are Van Riper 1991, Eqs. 24–25."
+  },
+  {
+   "id": "HC-4",
+   "cat": "hc",
+   "item": "Superfluid reduction of the heat capacity",
+   "gh": "Yakovlev–Levenfish–Shibanov 1999, Eq. 18; checked in the limits.",
+   "loc": "Same fits in heat_capacity.py (not normalised to R(0) = 1; the jump at T_c is kept).",
+   "status": "agree",
+   "impact": "high",
+   "ev": "run",
+   "next": "Keep one copy.",
+   "detail": [
+    "Evaluated both for singlet and triplet pairing at nine values of T/T_c from 0.02 to 0.99: identical to rounding."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "SF-1",
+   "cat": "sf",
+   "item": "Gap function of k_F",
+   "gh": "Four-parameter form of Ho et al. 2015: Δ0 (k−k0)²/((k−k0)²+k1) · (k−k2)²/((k−k2)²+k3).",
+   "loc": "The same functional form.",
+   "status": "agree",
+   "impact": "med",
+   "ev": "code",
+   "next": "Settled by D-012.",
+   "detail": [],
+   "decisions": [
+    "D-012"
+   ],
+   "final": "Local gap function (the same four-parameter form in both codes)."
+  },
+  {
+   "id": "SF-2",
+   "cat": "sf",
+   "item": "Catalogue of gap models",
+   "gh": "Ho et al. 2015, Table II: 9 proton singlet and 8 neutron triplet models. Swept in full (534 combinations).",
+   "loc": "NSCool-style numbering 1–16: 7 crust neutron, 3 proton, 6 core neutron. Default input: crust 7, core neutron 12, proton 8.",
+   "status": "close",
+   "impact": "high",
+   "ev": "run",
+   "next": "Build a model-by-model concordance table (name, source paper, parameters, peak T_c) and drop duplicates.",
+   "detail": [
+    "After converting the triplet normalisation, local model 11 matches the Ho et al. EEHO triplet (0.068 vs 0.48 × 0.1187/0.8416 = 0.0677). Local models 11 and 15 are identical, and so are 2 and 7.",
+    "No match within 3 % for local triplet models 12, 13, 14, 16 or for local proton models 8, 9, 10 against the Ho et al. entries (the local proton model 8 and CCDK are similar but not equal: peak T_c 6.80e9 K locally, 6.71e9 K in the Ho et al. table). These are different parameter sets or different sources.",
+    "Peak T_c of the local defaults: neutron triplet (model 12) 1.08e9 K; proton (model 8) 6.8e9 K; crust neutron (model 7) 8.5e9 K."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "SF-3",
+   "cat": "sf",
+   "item": "T_c–Δ normalisation",
+   "gh": "k_BT_c = 0.5669 Δ0 (singlet), 0.1187 Δ0 (triplet), applied to the Ho et al. Δ0.",
+   "loc": "k_BT_c = 0.5669 Δ (singlet), 0.8416 Δ (triplet), applied to the local table’s own Δ.",
+   "status": "differ",
+   "impact": "high",
+   "ev": "run",
+   "next": "Never mix the two tables without conversion; record the normalisation in each model’s metadata.",
+   "detail": [
+    "The ratio 0.8416/0.1187 = 7.09 is a convention in how Δ is tabulated, not a physics difference, as the EEHO match in SF-2 shows. It becomes an error as soon as parameters are copied between the codes."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "SF-4",
+   "cat": "sf",
+   "item": "Dimensionless gap v(T/T_c)",
+   "gh": "Y01 Eq. 188.",
+   "loc": "Same formulas; below T/T_c = 0.1 the local code uses the low-temperature form 1/(α τ).",
+   "status": "agree",
+   "impact": "med",
+   "ev": "code",
+   "next": "Settled by D-013.",
+   "detail": [],
+   "decisions": [
+    "D-013"
+   ],
+   "final": "Local dimensionless gap, with its low-temperature form below T/T_c = 0.1."
+  },
+  {
+   "id": "SF-5",
+   "cat": "sf",
+   "item": "Neutron 1S0 pairing in the crust",
+   "gh": "None.",
+   "loc": "Yes (models 1–7), with the matching heat-capacity factor, bremsstrahlung factor and pair breaking.",
+   "status": "local",
+   "impact": "high",
+   "ev": "code",
+   "next": "Needed with the crust (EOS-4).",
+   "detail": [],
+   "decisions": [
+    "D-003"
+   ],
+   "final": "Local crust neutron pairing."
+  },
+  {
+   "id": "EN-1",
+   "cat": "env",
+   "item": "Iron envelope",
+   "gh": "Potekhin–Chabrier–Yakovlev 1997, Eqs. A6–A7.",
+   "loc": "Fe fit (Potekhin et al. 2003).",
+   "status": "agree",
+   "impact": "high",
+   "ev": "run",
+   "next": "Keep one copy.",
+   "detail": [
+    "Evaluated both for T_b from 2e7 to 1e9 K at g14 = 1.3: identical (ratio 1.00000)."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "EN-2",
+   "cat": "env",
+   "item": "Fully accreted envelope",
+   "gh": "PCY97 Eq. A8: T_s = 1e6 (g14 (18.1 T_b9)^2.42)^(1/4).",
+   "loc": "Potekhin et al. 2003 form: the same power law times a correction 0.447 + 0.075 log10(1e9 T_b9)/(1 + (6.2 T_b9)⁴), mixed with the iron fit through b = 3.2 T_b9^1.67.",
+   "status": "differ",
+   "impact": "high",
+   "ev": "run",
+   "next": "Decide which fit to keep; compare with the original Potekhin et al. 2003 paper.",
+   "detail": [
+    "Local over GitHub, surface flux (g14 = 1.3): 0.99 at T_b = 2e7 K, 1.00 at 5e7, 0.91 at 1e8, 0.37 at 3e8 and 0.16 at 1e9 K. They agree for old, cool stars and diverge for young, hot ones, which is the relevant regime for the youngest source (841 yr).",
+    "Matters for the GitHub statement S3 (iron is the coldest case; fully accreted is about ten times brighter)."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "EN-3",
+   "cat": "env",
+   "item": "Envelope models offered",
+   "gh": "Iron, fully accreted, partially accreted (PCY97 A5, A9–A10).",
+   "loc": "Gudmundsson-type relation (default), Fe, accreted.",
+   "status": "differ",
+   "impact": "med",
+   "ev": "run",
+   "next": "Choose the set for the unified code; the partially accreted model is only on the GitHub side.",
+   "detail": [
+    "The local default (Gudmundsson, T_s = 1e6 g14^(1/4) (T_b8/1.288)^(1/1.82)) gives a surface temperature 3–6 % above the iron envelope at the same T_b (T_b from 2e7 to 1e9 K at g14 = 1.3), which is 14–28 % in photon luminosity; so default runs of the two codes will not match even with every other ingredient equal."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "EN-4",
+   "cat": "env",
+   "item": "Where the envelope is attached",
+   "gh": "At the star’s surface, with T_b = T̃/√(1−x) (isothermal interior); g14 from M and R.",
+   "loc": "At the base of the cooled domain (ρ_b = 1e10 g/cm³ by default), with the local temperature there; g14 at the table edge; surface factor applied.",
+   "status": "differ",
+   "impact": "med",
+   "ev": "code",
+   "next": "Check that, in the isothermal limit, the two prescriptions give the same L∞.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NM-1",
+   "cat": "num",
+   "item": "Thermal model",
+   "gh": "Isothermal interior: one ODE for the redshifted temperature T̃(t) (LSODA, rtol 1e-8); neutrino-stage analytic solution as a check.",
+   "loc": "Full 1-D general-relativistic heat diffusion on the mesh, core and crust (Thorne), tridiagonal solve.",
+   "status": "differ",
+   "impact": "high",
+   "ev": "code",
+   "next": "Run the local code in an isothermal limit and compare with the GitHub curve before comparing anything else.",
+   "detail": [],
+   "decisions": [
+    "D-003"
+   ],
+   "final": "Local 1-D diffusion; the GitHub isothermal model is not the baseline."
+  },
+  {
+   "id": "NM-2",
+   "cat": "num",
+   "item": "Time integration",
+   "gh": "LSODA in ln T.",
+   "loc": "Crank–Nicolson with predictor–corrector (second order); backward Euler for the first 20 steps of 0.01 yr; adaptive step (≤ 5 % cell change); energy-balance check built in.",
+   "status": "local",
+   "impact": "med",
+   "ev": "docs",
+   "next": "Adopt the local scheme for the diffusion code; keep the analytic neutrino-stage solution as a regression test.",
+   "detail": [
+    "Local README: largest energy-closure error per time window 0.29–1.5 % with standard rates and 1.4–3.0 % with updated rates; the 3.0 % case (1.4 M☉, 0.1–1 kyr) falls to 0.99 % when the step controls are halved."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NM-3",
+   "cat": "num",
+   "item": "Initial condition",
+   "gh": "T∞ = 1e10 K, uniform.",
+   "loc": "T∞ = 1e10 K (T8 = 100 in the input file), uniform.",
+   "status": "agree",
+   "impact": "low",
+   "ev": "code",
+   "next": "Keep.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "NM-4",
+   "cat": "num",
+   "item": "Photon luminosity at infinity",
+   "gh": "L_γ∞ = 4πR² σ T_s⁴ (1 − x).",
+   "loc": "L∞ = 4πR² σ T_s⁴ e^(2Φ).",
+   "status": "agree",
+   "impact": "med",
+   "ev": "code",
+   "next": "Keep.",
+   "detail": [
+    "The two are the same, since e^(2Φ_s) = 1 − 2GM/Rc² = 1 − x at the surface."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "OB-1",
+   "cat": "obs",
+   "item": "Observational data",
+   "gh": "Three sources from Marino et al. 2024, Suppl. Table 6 (data/marino2024_sources.json): PSR J0205+6449 (841 yr), PSR B2334+61 (7700 yr), CXOU J0852−4617 (2500–5000 yr); luminosities 1.44, 0.78 and 2.0 × 10³² erg/s, 90 % confidence.",
+   "loc": "None in the package.",
+   "status": "gh",
+   "impact": "high",
+   "ev": "code",
+   "next": "Decide the data set and add one observations file (name, age, L with errors, reference) to the unified repository.",
+   "detail": [
+    "Out of scope in the GitHub notebook: the X-ray spectral analysis, distances and ages."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "OB-2",
+   "cat": "obs",
+   "item": "Reference curves for validation",
+   "gh": "Published relations: Yakovlev et al. 2011 standard candle (Eq. 14), Ofengeim et al. 2017 fits, Yakovlev et al. 2001 Fig. 19. Potekhin–Chabrier 2018 BSk24 curve planned, not yet compared.",
+   "loc": "tests/reference_cooling_curve.csv is a stored snapshot of the code’s own output (regression test, not independent).",
+   "status": "differ",
+   "impact": "high",
+   "ev": "docs",
+   "next": "Obtain one independent curve for a BSk star (published, or from NSCool) and compare both codes against it.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "OB-3",
+   "cat": "obs",
+   "item": "Output format",
+   "gh": "results/*.json with t_yr, T, Ts_inf, L.",
+   "loc": "cooling_curve.csv (time_years, L_infinity_erg_s), temperature_profiles.csv, time_steps.csv, neutrino_processes.csv.",
+   "status": "close",
+   "impact": "low",
+   "ev": "code",
+   "next": "One small converter and one shared plotting script.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "RF-1",
+   "cat": "ref",
+   "item": "Provenance of formulas",
+   "gh": "Equations transcribed from the PDFs with equation numbers; constants parsed from the source file (bskfit18.f, sha256-checked).",
+   "loc": "README marks many citations “believed”: given from memory and not recorded in the original implementation. Sources of the ion heat capacity and of the crust conduction are not recorded.",
+   "status": "differ",
+   "impact": "high",
+   "ev": "docs",
+   "next": "Every formula in the unified code gets a paper and equation number checked against the PDF; “believed” entries are verified first.",
+   "detail": [
+    "This is the repository’s own rule (AGENTS.md: no value without an exact citation). It turns each “believed” entry into a task.",
+    "Case on record: the 42-point crust effective-mass table in effective_mass.py has no source anywhere in the project (D-008).",
+    "Answered by Van Riper (1991), ApJS 75, 449: the ion heat capacity of the local code is its Eqs. 24–25 (HC-3). The source of the ion fits is no longer unrecorded.",
+    "Citation to correct: the local README gives the heat-transport reference as “Thorne (1977), MNRAS 178, 501 (believed)”. Van Riper’s reference list gives Thorne 1977 as Ap. J., 212, 825, and also Thorne 1967 (High Energy Astrophysics, vol. 3, p. 166), for the relativistic transport equation. The README citation looks wrong; to be confirmed against the paper itself and then corrected in the README."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "RF-2",
+   "cat": "ref",
+   "item": "References both codes use",
+   "gh": "Yakovlev et al. 2001 (emissivities), Yakovlev–Levenfish–Shibanov 1999 (superfluid fits), Pearson et al. 2018 (BSk), Potekhin et al. envelopes.",
+   "loc": "The same four families (Y01, YLS99, Pearson 2018, Potekhin 2003).",
+   "status": "close",
+   "impact": "med",
+   "ev": "docs",
+   "next": "Compare edition and equation by equation (see NU-1 for a case where the generations differ).",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "RF-3",
+   "cat": "ref",
+   "item": "References on one side only",
+   "gh": "Ofengeim et al. 2017; Yakovlev et al. 2011; Potekhin–Chabrier 2018; Shternin–Baldo–Haensel 2018; Ho et al. 2015; Douchin–Haensel 2001; Marino et al. 2024.",
+   "loc": "Bottaro–Caputo–Fiorillo 2024; Shternin–Yakovlev 2007; Baiko et al. 2001; Potekhin conduction fits (1999, 2016, 2019); Itoh et al. 1996; Lattimer et al. 1991; Friman–Maxwell 1979; Yakovlev–Levenfish 1995; Gudmundsson et al. 1983.",
+   "status": "differ",
+   "impact": "med",
+   "ev": "docs",
+   "next": "Merge into one bibliography file with a verified-against-PDF flag.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "EG-1",
+   "cat": "eng",
+   "item": "Code layout and extension",
+   "gh": "Python package ns_cooling; one script per validation step (python -m ns_cooling.step N); one module per physics ingredient.",
+   "loc": "Flat Python modules with plug-in registries for neutrino processes, conduction channels and heat-capacity terms; Background and LocalState data flow.",
+   "status": "differ",
+   "impact": "high",
+   "ev": "code",
+   "next": "Settled by D-001: the local code is the backbone (grid, solver, registries). GitHub ingredients enter as plug-ins through the registries, one approved item at a time. Open: where the GitHub validation scripts live in the merged repository.",
+   "detail": [
+    "The registry design lets one ingredient be swapped without editing other files, which suits a decision-by-decision merge."
+   ],
+   "decisions": [
+    "D-001"
+   ],
+   "final": "Local code is the backbone; GitHub ingredients enter one approved item at a time."
+  },
+  {
+   "id": "EG-2",
+   "cat": "eng",
+   "item": "Tests and acceptance criteria",
+   "gh": "Each step: hypothesis written first, pass/fail checks, negative controls, numbers generated into results/*.json. No pytest.",
+   "loc": "235 pytest functions (about 4 min), energy balance, convergence orders, mesh convergence.",
+   "status": "differ",
+   "impact": "med",
+   "ev": "docs",
+   "next": "Keep both: GitHub-style physics checks against published numbers and local-style numerical tests.",
+   "detail": [
+    "The local README says the full pytest suite was not run in the environment of the last update (v16)."
+   ],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "EG-3",
+   "cat": "eng",
+   "item": "External data and redistribution",
+   "gh": "Third-party files not committed (bskfit18.f with checksum, sly4.dat, Douchin–Haensel text); the user downloads them.",
+   "loc": "Ships the BSk22 and BSk26 CompOSE packages (1.6 MB in total) inside the project.",
+   "status": "differ",
+   "impact": "med",
+   "ev": "docs",
+   "next": "Check redistribution terms of the EOS packages before committing them to the public repository.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "EG-4",
+   "cat": "eng",
+   "item": "Known open issues",
+   "gh": "I1 (modified-Urca luminosity 0.57–0.73 of a published fit at high mass); four failed criteria on record (H2 thresholds, H4a at 1.8–2.0 M☉, H6a, H8a).",
+   "loc": "First 0.2 yr under-resolved; one energy-closure window at 3.0 %; direct-Urca edge needs mesh C or finer.",
+   "status": "check",
+   "impact": "med",
+   "ev": "docs",
+   "next": "Carry every open issue into the tracker as its own item.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "EG-5",
+   "cat": "eng",
+   "item": "Working conventions",
+   "gh": "AGENTS.md and CONVENTIONS.md: hypothesis first, no free constants, report numbers generated from data, premise reviewed by the group.",
+   "loc": "README only; fixed numbers such as Q_imp = 0.1 and rounded constants appear in the code.",
+   "status": "differ",
+   "impact": "med",
+   "ev": "code",
+   "next": "Adopt the repository rules as acceptance criteria for the unified code, and audit the local code against “no free constants”.",
+   "detail": [],
+   "decisions": [],
+   "final": ""
+  },
+  {
+   "id": "EOS-7",
+   "cat": "eos",
+   "item": "Working set of stars: BSk22, BSk24, BSk26",
+   "gh": "BSk22, BSk24, BSk25 and BSk26 built from Potekhin’s fits; most published numbers in the notebook use BSk24.",
+   "loc": "BSk22 and BSk26 included; BSk24 package added from CompOSE.",
+   "status": "agree",
+   "impact": "high",
+   "ev": "run",
+   "next": "Use these three as the common stars for every cross-check between the two codes.",
+   "detail": [
+    "BSk24 in the local code: mass–radius curve against the package’s own eos.mr, M_max 2.2795 against 2.2788 M☉ (+0.03 %), radii within 0.13 % (R at 1.4 M☉: 12.574 against 12.590 km).",
+    "Direct-Urca electron threshold, interpolated between table rows: ρ = 8.25e14 g/cm³ and a threshold star of 1.597 M☉. The GitHub side quotes 8.25e14 g/cm³ and 1.595–1.596 M☉.",
+    "A full local cooling run of BSk24 at 1.4 M☉ (standard rates, to 1e4 yr) completed with an energy-balance closure of 0.22 % (tolerance 2 %).",
+    "BSk22 and BSk26 were not re-run here; their local validation figures come from the local README.",
+    "Density coverage, read from the tables: all three reach the same first row, n_b = 4.68e-10 fm⁻³, ρ = 7.77e5 g/cm³ (P = 1.44e22 dyn/cm²), below the 1e6 g/cm³ cut of the GitHub code. Outer crust 196–217 rows, neutron drip at 4.48e11 g/cm³, inner crust 74–83 rows, crust–core interface at 1.19e14 (BSk22), 1.34e14 (BSk24) and 1.41e14 g/cm³ (BSk26).",
+    "In the stars the code builds (1.4 M☉, mesh C, mass = 1.4 for all three): the cooled domain runs from ρ = 1e10 g/cm³ to the centre, with 220–226 crust faces (127–133 with free neutrons, so neutron drip is inside the domain) and 0.79–0.91 km of crust. The 0.14–0.18 km between the table edge and the base is the envelope, handled by the T_b–T_s relation, not gridded."
+   ],
+   "decisions": [
+    "D-002"
+   ],
+   "final": "BSk22, BSk24 and BSk26 as the working set."
+  },
+  {
+   "id": "EG-6",
+   "cat": "eng",
+   "item": "Mass solver at the table edge",
+   "gh": "—",
+   "loc": "Solving for a mass (mass = 1.4) on BSk24 failed in the unmodified code: the top of the pressure scan grid lies 7e-15 (relative) above the table’s maximum pressure and the range check is strict. BSk22 and BSk26 happen to land just below. Entering central_pressure works.",
+   "status": "check",
+   "impact": "low",
+   "ev": "run",
+   "next": "Decided D-004 and applied in tov.py (two lines, with a diff). BSk24 with mass = 1.4 now works. Remaining, when you confirm: run the existing test suite on the fixed file.",
+   "detail": [
+    "Seen with the unmodified code: BSk24 with mass = 1.4 stops with “Require EOS Pmin <= Pouter < Pcentral <= EOS Pmax”; the same star with central_pressure = 8.9053e+34 runs."
+   ],
+   "decisions": [
+    "D-004"
+   ],
+   "final": "Relative tolerance of 1e-12 at the check, applied in tov.py (two lines). Checked on BSk24 with mass = 1.4; test suite not run."
+  },
+  {
+   "id": "EG-7",
+   "cat": "eng",
+   "item": "Test suite status",
+   "gh": "No automated test suite; checks are the pass/fail criteria of each step script.",
+   "loc": "After the clean-up (D-015): 284 passed, 0 failed, 108 s; also 284 passed under coverage. One expected warning (BSk26 pressure reversal, row 276). No test of its own for BSk24.",
+   "status": "agree",
+   "impact": "med",
+   "ev": "run",
+   "next": "Done by D-015. Open: P-005 (face-table tests) and P-007 (port selected GitHub checks).",
+   "detail": [
+    "Before the clean-up: 308 passed, 6 failed (159 s). After removing 18 tests (D-011) and re-pointing the shared fixture to BSk26: 296 passed, 0 failed (132 s). 314 − 18 = 296.",
+    "The suite uses BSk22 and BSk26; BSk24 is covered only by the manual checks in EOS-7.",
+    "A first run after re-pointing the fixture showed 8 further failures, all from PL500-specific assertions (166 faces, cells as face averages, round trips of a table that EOS stars cannot read back, surface factor 1, muon-free matter); they were removed as above.",
+    "Not re-run since D-014. One test was updated (the expected E_ref and RHO0 in test_direct_urca_muons). Tests that compare standard rates with fixed numbers may shift by 2–3 %; not checked.",
+    "Inventory in test_inventory.xlsx: the local suite has 296 cases in 19 files (146 s); the GitHub code has no pytest suite, only the checks recorded by its step scripts: 68 entries, of which 29 are real checks (24 passed, 5 recorded as failed), 17 are controls and 22 are findings, not tests.",
+    "Redundancy, by reading the tests: 9 tests are redundant or obsolete (21 s), 6 can be merged, 4 are judgement calls (17 s) and the 8 animation tests belong to a feature. The five slowest tests take about 70 s of the 146 s.",
+    "Sequence of runs on 13 November 2026: 296 passed (after D-011); 295 passed, 1 failed (after D-014); 284 passed, 0 failed after D-015; 284 passed again under coverage.",
+    "Updated inventory in test_inventory.xlsx, with the removed tests and the coverage study."
+   ],
+   "decisions": [
+    "D-011",
+    "D-015"
+   ],
+   "final": "Suite passes: 284 tests; obsolete, stale, PL500-specific and redundant tests removed."
+  },
+  {
+   "id": "EG-8",
+   "cat": "eng",
+   "item": "PL500 and the structure-table mode",
+   "gh": "—",
+   "loc": "Removed: PL500_M1.40.DAT, input_in, the structure-table branch of input_model.py, the README paragraphs and the reference-curve files. BSk26, 1.4 M☉ is the shared test star.",
+   "status": "agree",
+   "impact": "med",
+   "ev": "code",
+   "next": "Done by D-010. PL500_M1.40.DAT, input_in and the structure-table code are removed.",
+   "detail": [
+    "Before the removal, PL500 was wired into the tests: about 36 tests used it through the shared fixture, five test files named it, and the reference curve was built on it. Deleting the file alone would have stopped the suite from starting.",
+    "Handled in D-010 and D-011: the fixture now builds BSk26 at 1.4 M☉; tests that only made sense for the PL500 table were removed; generic tests were kept."
+   ],
+   "decisions": [
+    "D-001",
+    "D-010"
+   ],
+   "final": "BSk26, 1.4 M☉ replaces PL500; PL500 and the structure-table code are removed."
+  }
+ ]
+}</script>
+<script>
+(function(){
+  "use strict";
+  var D = JSON.parse(document.getElementById("comparison-data").textContent);
+  var EVL = {code:"read in code", run:"computed here", docs:"docs only"};
+  var IMPL = {high:"high", med:"medium", low:"low"};
+  var S = {}; D.statuses.forEach(function(s){ S[s.key]=s; });
+  var CAT = {}; D.cats.forEach(function(c){ CAT[c.key]=c.label; });
+  var counts = {}; D.statuses.forEach(function(s){ counts[s.key]=0; });
+  D.rows.forEach(function(r){ counts[r.status]++; });
+
+  var state = {q:"", cat:"all", status:new Set(), impact:new Set(), allOpen:false, openOnly:false};
+  var els = {};
+  ["meta","abbr","findings","decisions","proposed","bar","legend","q","cat","impacts","count","toggle","reset","table","exp-json","exp-csv"].forEach(function(id){ els[id]=document.getElementById(id); });
+
+  function h(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+
+  /* header */
+  (function(){
+    var m=els.meta, mm=D.meta;
+    function add(label, val){ var b=h("b",null,label); m.appendChild(b); m.appendChild(document.createTextNode(" "+val+" ")); }
+    add("Compared:", mm.date+".");
+    add("GitHub:", mm.github+".");
+    add("Local:", mm.local+".");
+    els.abbr.textContent = mm.abbr;
+  })();
+
+
+  /* decisions */
+  var DS = {}; D.decisions.forEach(function(dc){ DS[dc.id]=dc.status; });
+  D.decisions.forEach(function(dc){
+    var prop = dc.status==="proposed";
+    var box=h("div","dec"+(prop?" prop":"")), dh=h("div","dh");
+    dh.appendChild(h("b",null,dc.id+" "+dc.title)); dh.appendChild(h("span",null,dc.date+". "+dc.by+"."));
+    box.appendChild(dh); box.appendChild(h("p",null,dc.text));
+    if(dc.options && dc.options.length){ var ol=h("ol"); dc.options.forEach(function(o){ ol.appendChild(h("li",null,o)); }); box.appendChild(ol); }
+    if(dc.effects && dc.effects.length){ var ul=h("ul"); dc.effects.forEach(function(e){ ul.appendChild(h("li",null,e)); }); box.appendChild(ul); }
+    var aff=h("div","aff"); aff.appendChild(h("span","sr","Items affected:"));
+    D.rows.forEach(function(r){ if(r.decisions.indexOf(dc.id)>=0){
+      var b=h("button",null,r.id); b.type="button"; b.title=r.item; b.addEventListener("click",function(){ jumpTo(r.id); }); aff.appendChild(b); } });
+    box.appendChild(aff);
+    (prop?els.proposed:els.decisions).appendChild(box);
+    if(prop) document.getElementById("proposed-sec").hidden=false;
+  });
+  function decided(r){ return r.decisions.filter(function(d){ return DS[d]==="decided"; }); }
+  function pending(r){ return r.decisions.filter(function(d){ return DS[d]==="proposed"; }); }
+
+  /* findings */
+  D.findings.forEach(function(f){
+    var r = D.rows.find(function(x){ return x.id===f.id; });
+    var li=h("li"), b=h("button"); b.type="button";
+    var g=h("span","glyph s-"+r.status, S[r.status].glyph); g.setAttribute("aria-hidden","true");
+    var box=h("span"); box.appendChild(h("span","ft",f.text)); box.appendChild(h("span","fid","Item "+f.id));
+    b.appendChild(g); b.appendChild(box);
+    b.addEventListener("click", function(){ jumpTo(f.id); });
+    li.appendChild(b); els.findings.appendChild(li);
+  });
+
+  /* summary bar + legend */
+  D.statuses.forEach(function(s){
+    var seg=h("span","b-"+s.key); seg.style.flex=String(counts[s.key]||0.0001); els.bar.appendChild(seg);
+    var li=h("li"), b=h("button"); b.type="button"; b.setAttribute("aria-pressed","false"); b.dataset.key=s.key;
+    var g=h("span","glyph s-"+s.key, s.glyph); g.setAttribute("aria-hidden","true");
+    var head=h("span","lh",s.label); head.appendChild(h("i",null,String(counts[s.key])));
+    b.appendChild(g); b.appendChild(head); b.appendChild(h("span","ld",s.desc));
+    b.addEventListener("click", function(){
+      if(state.status.has(s.key)) state.status.delete(s.key); else state.status.add(s.key);
+      b.setAttribute("aria-pressed", state.status.has(s.key)?"true":"false"); apply();
+    });
+    li.appendChild(b); els.legend.appendChild(li);
+  });
+
+  /* filters */
+  var o=h("option",null,"All areas"); o.value="all"; els.cat.appendChild(o);
+  D.cats.forEach(function(c){ var op=h("option",null,c.label); op.value=c.key; els.cat.appendChild(op); });
+  ["high","med","low"].forEach(function(k){
+    var b=h("button","chip",IMPL[k]+" impact"); b.type="button"; b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", function(){
+      if(state.impact.has(k)) state.impact.delete(k); else state.impact.add(k);
+      b.setAttribute("aria-pressed", state.impact.has(k)?"true":"false"); apply();
+    });
+    els.impacts.appendChild(b);
+  });
+  (function(){
+    var b=h("button","chip","open items only"); b.type="button"; b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", function(){ state.openOnly=!state.openOnly; b.setAttribute("aria-pressed", state.openOnly?"true":"false"); apply(); });
+    els.impacts.appendChild(b);
+  })();
+  els.q.addEventListener("input", function(){ state.q=els.q.value.trim().toLowerCase(); apply(); });
+  els.cat.addEventListener("change", function(){ state.cat=els.cat.value; apply(); });
+  els.reset.addEventListener("click", function(){
+    state.q=""; state.cat="all"; state.openOnly=false; state.status.clear(); state.impact.clear();
+    els.q.value=""; els.cat.value="all";
+    Array.prototype.forEach.call(document.querySelectorAll("[aria-pressed]"), function(b){ b.setAttribute("aria-pressed","false"); });
+    apply();
+  });
+  els.toggle.addEventListener("click", function(){
+    state.allOpen=!state.allOpen;
+    Array.prototype.forEach.call(els.table.querySelectorAll("details.row"), function(d){ if(!d.hidden) d.open=state.allOpen; });
+    els.toggle.textContent = state.allOpen ? "Collapse all" : "Expand all";
+  });
+
+  /* table */
+  var sections={};
+  D.cats.forEach(function(c){
+    var sec=h("section","sect"); sec.dataset.cat=c.key;
+    var hd=h("h2",null,c.label); hd.appendChild(h("small",null,"")); sec.appendChild(hd);
+    els.table.appendChild(sec); sections[c.key]=sec;
+  });
+  var rowEls={};
+  D.rows.forEach(function(r){
+    var d=h("details","row s-"+r.status); d.id="row-"+r.id; d.dataset.id=r.id;
+    var sm=h("summary");
+    var ci=h("div","c-item"); ci.appendChild(h("span","item-name",r.item)); var ii=h("span","item-id",r.id); if(decided(r).length){ ii.appendChild(h("span","badge","decided")); } else if(pending(r).length){ ii.appendChild(h("span","badge pend","pending")); } ci.appendChild(ii);
+    var gh=h("div","side"+(r.gh==="—"||/^(None|Not implemented|Not included)/.test(r.gh)?" none":""), r.gh); gh.dataset.label="GitHub ns_cooling";
+    var cs=h("div","c-status"); var g=h("span","glyph s-"+r.status,S[r.status].glyph); g.setAttribute("aria-hidden","true");
+    cs.appendChild(g); cs.appendChild(h("span","slab",S[r.status].label));
+    var lo=h("div","side"+(r.loc==="—"||/^(None|Not implemented|Not included)/.test(r.loc)?" none":""), r.loc); lo.dataset.label="Local COOL1D";
+    var fn=h("div","fin");
+    if(r.final){ fn.className="fin done"; fn.appendChild(document.createTextNode(r.final)); fn.appendChild(h("span","fid",decided(r).join(", "))); }
+    else if(pending(r).length){ fn.className="fin pend"; fn.appendChild(document.createTextNode("Pending approval")); fn.appendChild(h("span","fid",pending(r).join(", "))); }
+    else { fn.className="fin open"; fn.appendChild(document.createTextNode("Open")); }
+    var im=h("div","c-imp imp "+r.impact, IMPL[r.impact]);
+    [ci,gh,cs,lo,fn,im].forEach(function(x){ sm.appendChild(x); });
+    d.appendChild(sm);
+    var p=h("div","panel"); p.appendChild(h("div","pl","Detail"));
+    var pb=h("div","pb");
+    r.decisions.forEach(function(did){ var dc=D.decisions.find(function(x){ return x.id===did; });
+      var db=h("div","decblock"); db.appendChild(h("b",null,(dc.status==="proposed"?"Proposal ":"Decision ")+dc.id+": ")); db.appendChild(document.createTextNode(dc.title+" ("+dc.date+").")); pb.appendChild(db); });
+    var nx=h("div","next"); nx.appendChild(h("b",null,"Next step: ")); nx.appendChild(document.createTextNode(r.next)); pb.appendChild(nx);
+    r.detail.forEach(function(t){ pb.appendChild(h("p",null,t)); });
+    var tg=h("div","tags"); tg.appendChild(h("span",null,"Area: "+CAT[r.cat])); tg.appendChild(h("span",null,"Evidence: "+EVL[r.ev])); tg.appendChild(h("span",null,"Impact: "+IMPL[r.impact])); pb.appendChild(tg);
+    p.appendChild(pb); d.appendChild(p);
+    sections[r.cat].appendChild(d); rowEls[r.id]=d;
+    d.dataset.hay=(r.id+" "+r.item+" "+r.gh+" "+r.loc+" "+r.next+" "+r.detail.join(" ")+" "+CAT[r.cat]+" "+r.decisions.join(" ")+" "+r.final).toLowerCase();
+  });
+  var empty=h("div","empty","No item matches these filters. Reset the filters to see all items."); empty.hidden=true; els.table.appendChild(empty);
+
+  function apply(){
+    var shown=0;
+    D.cats.forEach(function(c){
+      var sec=sections[c.key], vis=0, tot=0;
+      D.rows.forEach(function(r){
+        if(r.cat!==c.key) return; tot++;
+        var d=rowEls[r.id];
+        var ok = (state.cat==="all"||state.cat===r.cat) &&
+                 (state.status.size===0||state.status.has(r.status)) &&
+                 (state.impact.size===0||state.impact.has(r.impact)) &&
+                 (!state.openOnly||decided(r).length===0) &&
+                 (state.q===""||d.dataset.hay.indexOf(state.q)>=0);
+        d.hidden=!ok; if(ok){ vis++; shown++; }
+      });
+      sec.hidden = vis===0;
+      sec.querySelector("small").textContent = vis===tot ? tot+" items" : vis+" of "+tot+" items";
+    });
+    els.count.textContent = "Showing "+shown+" of "+D.rows.length;
+    empty.hidden = shown!==0;
+  }
+  function jumpTo(id){
+    els.reset.click();
+    var d=rowEls[id]; if(!d) return; d.open=true;
+    d.scrollIntoView({block:"start"});
+    var s=d.querySelector("summary"); if(s) s.focus({preventScroll:true});
+  }
+
+  /* export */
+  function download(name, mime, text){
+    var blob=new Blob([text],{type:mime}); var a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },0);
+  }
+  els["exp-json"].addEventListener("click", function(){ download("comparison.json","application/json",JSON.stringify(D,null,2)); });
+  els["exp-csv"].addEventListener("click", function(){
+    function q(x){ return '"'+String(x).replace(/"/g,'""')+'"'; }
+    var head=["id","area","item","github","local","status","impact","evidence","validated_decision","decisions","next_step","detail"];
+    var lines=[head.join(",")];
+    D.rows.forEach(function(r){
+      lines.push([r.id,CAT[r.cat],r.item,r.gh,r.loc,S[r.status].label,r.impact,EVL[r.ev],r.final||"open",r.decisions.join(" "),r.next,r.detail.join(" | ")].map(q).join(","));
+    });
+    download("comparison.csv","text/csv;charset=utf-8","\ufeff"+lines.join("\n"));
+  });
+
+  apply();
+  if(location.hash && location.hash.indexOf("#row-")===0){ var t=rowEls[location.hash.slice(5)]; if(t){ t.open=true; } }
+})();
+</script>
+</body>
+</html>

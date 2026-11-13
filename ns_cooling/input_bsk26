@@ -1,0 +1,23 @@
+Structure file (not used: the stars are built from the equation of state below)
+none
+Initial temperature T_8 [10^8 K] (1.d1 - 1.d2)
+1.d2
+Unused line (the run stops at the final time or at the minimum temperature)
+800
+Superfluidity: on/off (0,1) and gap model; pairing type is fixed by region (crust n = 1S0, core n = 3P2, core p = 1S0)
+a) neutrons in the crust: on/off (0,1), gap model (1-7)
+1 7
+b) neutrons in the core: on/off (0,1), gap model (11-16)
+1 12
+c) protons in the core: on/off (0,1), gap model (8-10)
+1 8
+envelope_model = gudmundsson
+
+Options: gudmundsson, fe, accreted
+
+# Default: one 1.4 Msun star from the supplied BSk26 CompOSE table.
+eos = BSk26
+# Central pressures recomputed for 1.0, 1.4 and 1.8 Msun.
+# Alternatively use: mass = 1.0, 1.4, 1.8
+central_pressure = 1.2541308424984512e+35
+mesh = A
