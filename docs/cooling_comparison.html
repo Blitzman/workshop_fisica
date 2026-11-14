@@ -702,6 +702,49 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
     "Every kept test has a docstring with Hypothesis, Reference and Criterion. Two small differences from the proposal: the threshold test of the direct Urca no longer repeats the prefactor 4e27 (the exact-coefficient test validates it, and the prefactor may change with the emissivity decisions), and the muon-composition test uses the BSk26 model directly instead of a fixture parametrised over two EOS.",
     "The README tests section was rewritten, and the reference to the removed direct-Urca test file corrected. No module code changed in this step (checked by comparing the syntax trees)."
    ]
+  },
+  {
+   "id": "D-030",
+   "status": "decided",
+   "date": "14 November 2026",
+   "title": "One list of references; the “believed” ones are tagged “to be checked”",
+   "text": "The reference list of the README and that of the old GitHub work are merged into one, in the README section References and formulas. A paper cited on both sides appears once, with all its identifiers. Every reference carries a tag: read from the PDF, cited exactly, identified here, or to be checked (the former “believed”). Doubtful cases were settled as follows.",
+   "by": "Decided in the project chat; implemented by Claude",
+   "effects": [
+    "The list has 38 references: 10 read from the PDF in the GitHub work, 5 cited exactly, 1 identified here (Van Riper 1991) and 22 to be checked. Three papers were on both sides (Y01, YLS99, Pearson 2018); 28 were only in the README and 7 only in the GitHub work. The list is in the workbook references_review.xlsx (not in the repository).",
+    "Case 1 (Thorne): the README citation MNRAS 178, 501 was replaced by Thorne 1977, ApJ 212, 825 and Thorne 1967, High Energy Astrophysics, vol. 3, p. 166, both to be checked. Case 2 (envelopes): iron fit cited to Potekhin, Chabrier and Yakovlev 1997, Eqs. A6–A7; accreted fit to Potekhin et al. 2003 (to be checked); the test docstring and the module docstring agree. Case 3: the superfluid reduction factors are cited to Y01 Eqs. 199–229, with Yakovlev–Levenfish 1995 and Levenfish–Yakovlev 1994 as original sources to be checked. Case 4: the README no longer says that the local modified Urca follows Y01; its source is not recorded and differs from Y01 (item NU-1).",
+    "Case 5: the Potekhin conduction fits are cited through the Ioffe Institute website (www.ioffe.ru/astro/); the exact page and the “2019 version” are to be checked (there is no web access here to verify the address). COULAN 1999 and TAUEESY 2016 stay, as named in the original implementation. Case 6 (Chao–Clark–Yang 1972): ignored; it stays only in D-008 and in a comment. Case 7: Marino 2024, Yakovlev 2011 and Ofengeim 2017 form a group “benchmarks, not used by the code”; Douchin–Haensel 2001 was dropped with SLy4; Ho 2015, Potekhin–Chabrier 2018 and Shternin et al. 2018 stay in the main list. Case 8: the second-hand citations (Machleidt et al.; Sjöberg; Anastasio–Brown) were removed.",
+    "Changed: 30 comments “believed” became “to be checked” (README, code comments, two test docstrings); the README section was rewritten; three module or test docstrings and two comments were aligned. The code is identical (checked by comparing the syntax trees without docstrings); the 42 fast tests pass."
+   ]
+  },
+  {
+   "id": "D-031",
+   "status": "decided",
+   "date": "14 November 2026",
+   "title": "The thermal catalogue is the starting working list of sources (OB-1 and OB-2)",
+   "text": "The uploaded catalogue of isolated neutron stars (ns_thermal_catalogue.html) is adopted as the starting working list, to be improved and checked later. For now it answers OB-1 (the data set) and OB-2 (the reference for validation).",
+   "by": "Decided in the project chat",
+   "effects": [
+    "Content: 77 entries (13 CCO or weak-field thermal sources, 32 rotation-powered pulsars, 6 high-B pulsars, 8 isolated neutron stars, 17 magnetars, 1 remnant) with a review status (3 literature consistent, 16 open discrepancy, 10 published revision, 2 disputed, 46 limited evidence). 29 entries form the cooling sample (12 CCO, 11 rotation-powered, 1 high-B, 4 isolated, 1 remnant; no magnetar), 4 of them with a luminosity upper limit. For 27 of the 29 the chosen age and luminosity come from the Potekhin catalogue snapshot of 3 August 2026 (WEB).",
+    "The HTML file is the master list. observations/ns_thermal_sample.json (the 29 entries with ages in yr and L_inf in erg/s, upper limits flagged) is derived from it by observations/extract_thermal_sample.py, which also checks that every chosen line parses. The catalogue carries its own list of references with DOIs; they are not copied into the README list.",
+    "Changes for the three sources used so far: PSR J0205+6449 is “disputed” (age basis, timing) and outside the cooling sample, so the comparison at 841 yr that we showed used a source the catalogue excludes; CXOU J0852-4617 has an updated age 1.6–3.3 kyr (Suherli et al. 2026; it was 2.5–5 kyr) and L 1.3–4 × 10^32 erg/s (Ho 2026; it was 2.0 ± 0.6); PSR B2334+61 has age 7.6–7.8 kyr and L 0.12–0.82 × 10^32 erg/s (it was 7.7 kyr and 0.78). observations/marino2024_sources.json stays in the repository for the moment as the data of the paper.",
+    "First look (thermal_sample_vs_model.png): the default model (BSk26, 1.4 Msun, default physics, one star, no heating and no gap optimisation, so not a fit) lies below the data for 8 of the 25 sources with a measured luminosity, overlaps 11 and lies above 6; of the 4 luminosity upper limits it violates 2 (PSR J0007+7303 and PSR B1727-47) and respects 2. The run stops at about 740 kyr (L = 1e31 erg/s), so older sources are compared with the last model value.",
+    "OB-2: the reference for validation is, for now, the observed list and not a theoretical curve. The published curves (Yakovlev et al. 2011, Ofengeim et al. 2017) stay as benchmarks that the code does not use (D-030) and can be compared later if wanted."
+   ]
+  },
+  {
+   "id": "D-032",
+   "status": "decided",
+   "date": "14 November 2026",
+   "title": "Envelope: the local version for all three items (EN-2, EN-3, EN-4)",
+   "text": "The local version is kept for the fully accreted envelope (EN-2), for the set of envelope models offered (EN-3) and for the place where the envelope is attached (EN-4).",
+   "by": "Decided in the project chat",
+   "effects": [
+    "EN-2: the local accreted fit stays: the Potekhin et al. 2003 form, with the power law times a correction 0.447 + 0.075 log10(1e9 T_b9)/(1 + (6.2 T_b9)^4), mixed with the iron fit. It is not replaced by the fully accreted relation of Potekhin, Chabrier and Yakovlev 1997 (Eq. A8), from which it differs by 0.99 at T_b = 2e7 K to 0.16 at 1e9 K in the surface flux (the two agree for old, cool stars and diverge for young, hot ones).",
+    "EN-3: the set stays gudmundsson (default), fe and accreted. The partially accreted model of the 1997 paper (Eqs. A5, A9-A10), which existed only in the GitHub code, is not offered. The default Gudmundsson relation gives a surface temperature 3 to 6 % above the iron envelope at the same T_b (14 to 28 % in photon luminosity).",
+    "EN-4: the envelope is attached at the base of the cooled domain (base density 1e10 g/cm^3 by default), with the local temperature there and the surface gravity at the edge of the table, with the surface factor applied; not at the surface with an isothermal interior.",
+    "Cleaned: a comment in thermal_fluxes.py and a sentence of the README no longer say that the item is open; the README envelope section now cites the iron fit to Potekhin, Chabrier and Yakovlev 1997 and the accreted fit to Potekhin et al. 2003 (to be checked), states that the partially accreted model is not offered, and states where the envelope is attached. No code changed."
+   ]
   }
  ],
  "findings": [
@@ -1393,13 +1436,15 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "high",
    "ev": "run",
-   "next": "Decide which fit to keep; compare with the original Potekhin et al. 2003 paper.",
+   "next": "Settled by D-032.",
    "detail": [
     "Local over GitHub, surface flux (g14 = 1.3): 0.99 at T_b = 2e7 K, 1.00 at 5e7, 0.91 at 1e8, 0.37 at 3e8 and 0.16 at 1e9 K. They agree for old, cool stars and diverge for young, hot ones, which is the relevant regime for the youngest source (841 yr).",
     "Matters for the GitHub statement S3 (iron is the coldest case; fully accreted is about ten times brighter)."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-032"
+   ],
+   "final": "Local accreted fit: Potekhin et al. 2003 form with the correction and the mixing with the iron fit. Kept."
   },
   {
    "id": "EN-3",
@@ -1410,12 +1455,14 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "med",
    "ev": "run",
-   "next": "Choose the set for the unified code; the partially accreted model is only on the GitHub side.",
+   "next": "Settled by D-032.",
    "detail": [
     "The local default (Gudmundsson, T_s = 1e6 g14^(1/4) (T_b8/1.288)^(1/1.82)) gives a surface temperature 3–6 % above the iron envelope at the same T_b (T_b from 2e7 to 1e9 K at g14 = 1.3), which is 14–28 % in photon luminosity; so default runs of the two codes will not match even with every other ingredient equal."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-032"
+   ],
+   "final": "Local set: gudmundsson (default), fe and accreted; no partially accreted model."
   },
   {
    "id": "EN-4",
@@ -1426,10 +1473,12 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "med",
    "ev": "code",
-   "next": "Check that, in the isothermal limit, the two prescriptions give the same L∞.",
+   "next": "Settled by D-032.",
    "detail": [],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-032"
+   ],
+   "final": "Local: the envelope is attached at the base of the cooled domain, with the local temperature and the surface gravity at the table edge."
   },
   {
    "id": "NM-1",
@@ -1510,12 +1559,14 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "gh",
    "impact": "high",
    "ev": "code",
-   "next": "Decide the data set and add one observations file (name, age, L with errors, reference) to the unified repository.",
+   "next": "Settled by D-031 as a starting list; to be improved and checked later.",
    "detail": [
     "Out of scope in the GitHub notebook: the X-ray spectral analysis, distances and ages."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-031"
+   ],
+   "final": "The thermal catalogue (ns_thermal_catalogue.html): 77 entries, 29 in the cooling sample, as the starting working list, to be improved and checked."
   },
   {
    "id": "OB-2",
@@ -1526,10 +1577,12 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "high",
    "ev": "docs",
-   "next": "Obtain one independent curve for a BSk star (published, or from NSCool) and compare both codes against it.",
+   "next": "Settled by D-031 for now; a theoretical curve can be added later.",
    "detail": [],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-031"
+   ],
+   "final": "For now the observed list of D-031 is the reference for validation; published curves stay as benchmarks not used by the code."
   },
   {
    "id": "OB-3",
@@ -1556,16 +1609,19 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "high",
    "ev": "docs",
-   "next": "Every formula in the unified code gets a paper and equation number checked against the PDF; “believed” entries are verified first.",
+   "next": "Settled by D-030.",
    "detail": [
     "The AGENTS.md rule “no value without an exact citation” was dropped for ns_cooling in D-026; each “believed” entry stays a provenance gap, and a comment is enough.",
     "Case on record: the 42-point crust effective-mass table in effective_mass.py has no source anywhere in the project (D-008).",
     "Answered by Van Riper (1991), ApJS 75, 449: the ion heat capacity of the local code is its Eqs. 24–25 (HC-3). The source of the ion fits is no longer unrecorded.",
     "Citation to correct: the local README gives the heat-transport reference as “Thorne (1977), MNRAS 178, 501 (believed)”. Van Riper’s reference list gives Thorne 1977 as Ap. J., 212, 825, and also Thorne 1967 (High Energy Astrophysics, vol. 3, p. 166), for the relativistic transport equation. The README citation looks wrong; to be confirmed against the paper itself and then corrected in the README.",
-    "D-027 added a comment above each block of numbers saying where it comes from or that the source is not recorded; the “believed” attributions are still unchecked. Whether this settles RF-1 is open."
+    "D-027 added a comment above each block of numbers saying where it comes from or that the source is not recorded; the “believed” attributions are still unchecked. Whether this settles RF-1 is open.",
+    "D-030: the Thorne citation was replaced by ApJ 212, 825 and Thorne 1967 (both to be checked), and the “believed” attributions were renamed “to be checked”. The 22 references still to be checked are listed in references_review.xlsx."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-030"
+   ],
+   "final": "Every attribution is tagged (read from the PDF, cited exactly, identified here, or to be checked); comments above the blocks (D-027); the Thorne citation was replaced. The ones to be checked stay open as a list, not as a rule (D-026)."
   },
   {
    "id": "RF-2",
@@ -1576,10 +1632,12 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "close",
    "impact": "med",
    "ev": "docs",
-   "next": "Compare edition and equation by equation (see NU-1 for a case where the generations differ).",
+   "next": "Settled by D-030.",
    "detail": [],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-030"
+   ],
+   "final": "One list: Y01, YLS99 and Pearson 2018 appear once with all identifiers; the superfluid factors are cited to Y01 Eqs. 199–229 and the envelopes to PCY97 (iron) and Potekhin 2003 (accreted)."
   },
   {
    "id": "RF-3",
@@ -1590,10 +1648,12 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "med",
    "ev": "docs",
-   "next": "Merge into one bibliography file with a verified-against-PDF flag.",
+   "next": "Settled by D-030.",
    "detail": [],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-030"
+   ],
+   "final": "Merged into the README list: Ho 2015, Potekhin–Chabrier 2018 and Shternin et al. 2018 stay as read from the PDF; Marino 2024, Yakovlev 2011 and Ofengeim 2017 are benchmarks not used by the code; Douchin–Haensel 2001 dropped with SLy4; second-hand citations removed."
   },
   {
    "id": "EG-1",
