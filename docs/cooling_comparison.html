@@ -456,17 +456,20 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    ]
   },
   {
-   "id": "P-005",
-   "status": "proposed",
+   "id": "D-018",
+   "status": "decided",
    "date": "13 November 2026",
-   "title": "Face-table tests on a synthetic table",
-   "text": "With the PL500 tests gone, the face-table functions of the Background have no direct test. They are still part of the code and of the README (adapting a table from another code).",
-   "by": "Proposed by Claude, awaiting approval",
-   "options": [
-    "Rewrite the removed round-trip, hook and surface-argument tests on a small synthetic face table, with no PL500 and no EOS package. Recommended.",
-    "Leave them out, and remove the face-table functions from the code as well."
-   ],
-   "effects": []
+   "title": "The face-table input is rejected and removed",
+   "text": "The face table, the file format through which a star computed elsewhere could enter the cooling code, is not needed. The --background and --save-background options, the code behind them and the tests that relied on them or on the former structure-table version were removed. A Background is now built only from an equation of state, or directly from two Points objects.",
+   "by": "Decided in the project chat",
+   "options": [],
+   "effects": [
+    "Code removed: the options --background and --save-background and their branches in cooling_driver.py; Background.from_face_table, face_table, to_csv, from_csv and the field face_table_exact in background.py; the constants AVERAGED_FIELDS, OPTIONAL_COLUMNS and FACE_TABLE_COLUMNS; the derived= hook; one argument in stellar_structure.py; loose wording in two docstrings. derived_fermi_quantities stays, because the EOS builder uses it.",
+    "README: the options, the FACE TABLE paragraphs and the list of ways to adapt another source were replaced by one sentence (build the two Points objects and call Background directly); the module list and the TESTS section were updated.",
+    "Tests removed (6): the face-table checks of invalid tables, the muon column in a table, the refusal to read back an EOS-star table, the derived= hook, the CSV of an EOS background, and the synthetic boundary-width test that needed a full Background built from a table.",
+    "Tests kept without the feature (they only used the face table as a builder): the direct-Urca threshold tests, the composition and muon-fraction checks, and the validation of Points and of the geometry. They now use a short builder in tests/synthetic.py that makes Points directly. The 6-case table test became 5 cases on Points and Background. If you prefer to remove these tests as well, say so.",
+    "Result: 277 passed, 0 failed, run twice (80 s and 76 s); pyflakes clean. The suite was 284 cases before."
+   ]
   },
   {
    "id": "D-012",
@@ -525,19 +528,71 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    ]
   },
   {
-   "id": "P-007",
-   "status": "proposed",
+   "id": "D-017",
+   "status": "decided",
    "date": "13 November 2026",
-   "title": "Port selected GitHub checks as local tests",
-   "text": "Fourteen GitHub checks are worth keeping because they do not depend on SLy4 or on a fixed effective mass: step 1 (BSk24 against published values, to be run on BSk22, BSk24 and BSk26), step 6 (pairing reduction factors and the Fig. 19 pair-breaking peak, which the local suite does not test directly), the step-5 comparison with the analytic neutrino stage, and the step-4 check of the bremsstrahlung prefactor, which bears on NU-6. The step-8 checks belong to the in-medium Urca.",
-   "by": "Proposed by Claude, awaiting approval",
-   "options": [
-    "Port steps 1, 6, 5 (analytic) and 4 (prefactor) one check at a time, each with your confirmation. Recommended.",
-    "Port only the step-6 checks, the one real gap in the local suite.",
-    "Port none."
-   ],
+   "title": "No GitHub checks are ported; no further tests are added",
+   "text": "The proposal to port selected GitHub checks as local tests is dropped. No further tests will be added to the suite.",
+   "by": "Decided in the project chat",
+   "options": [],
    "effects": [
-    "The 13 GitHub checks that depend on SLy4, on the fixed mass 0.7 or on old figures are not ported."
+    "The 14 GitHub checks marked Port in test_inventory.xlsx stay in the GitHub history only (the old step scripts and results at commit e4321df).",
+    "The pairing reduction factors, which are identical in both codes, keep no direct test; this was the one real gap of the local suite."
+   ]
+  },
+  {
+   "id": "D-016",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Future updates go directly to main; no more branches",
+   "text": "The unified code was merged into main on purpose (pull request #1, merge commit 39f8df1). The project is at an early stage, so no further branches are opened: every future update is pushed directly to main.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "The branch unify has served its purpose and can be deleted from the merged pull request page; the commits stay in main and the pull request stays on record.",
+    "Suggested by Claude, not part of the decision: before each upload, compare main with the commit the package was built from (39f8df1), to see whether anyone else changed the same files. A web upload overwrites files with the same path and never deletes."
+   ]
+  },
+  {
+   "id": "D-019",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Local versions of the heat capacity of nucleons, leptons and the superfluid reduction",
+   "text": "The local versions are kept for the nucleon heat capacity (HC-1), the lepton heat capacity (HC-2) and the superfluid reduction of the heat capacity (HC-4).",
+   "by": "Decided in the project chat",
+   "effects": [
+    "HC-1: both codes use the Landau quasiparticle formula; the effective masses come from the EOS package (D-006). No code change.",
+    "HC-2: the local electron term is a fit with rounded constants, 0.3 % from the exact expression of the relativistic degenerate gas. It stays as it is; replacing it by the exact expression remains possible later. Superseded by D-020: the electron term now uses the exact expression.",
+    "HC-4: the local fits equal the Yakovlev–Levenfish–Shibanov 1999 fits of the GitHub code, compared at nine values of T/T_c. No code change."
+   ]
+  },
+  {
+   "id": "D-020",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Nucleon bremsstrahlung with N_ν once (NU-6), and the rounded constants corrected",
+   "text": "The extra factor 3 in the nn and pp bremsstrahlung is removed: all three rates carry N_ν = 3 once, with the prefactors 7.5e19, 1.5e20 and 7.5e19 of Yakovlev et al. 2001, Eqs. 165–167 (page supplied in the project chat; it also gives α = (0.59, 1.06, 0.11), β = (0.56, 0.66, 0.70) and states that the crust expression, Eq. 88, has a single N_ν). The rounded or duplicated physical constants found in the code were replaced by their CODATA 2018 values from constants.py.",
+   "by": "Decided in the project chat; implemented by Claude",
+   "effects": [
+    "Factor 3: removed in the nn and pp bremsstrahlung (the crust uses the nn routine); the prefactor of nn and pp goes from 7.4e19 to 7.5e19; np and the pair-breaking rates now use the named constant N_NU. The pair-breaking rates were already right (one factor 3).",
+    "New in constants.py: N_NU, M_ELECTRON, E_ESU, ALPHA_FS, LAMBDA_C, SIGMA_SB, BOLTZMANN_MEV_PER_K.",
+    "Corrected: Stefan–Boltzmann constant 5.67e-5 to 5.670374419e-5 (+0.0066 % in every photon luminosity); k_B in MeV/K 8.617342e-11 to 8.617333e-11 (superfluid.py) and 8.617e-5 eV/K in the plasma rate; α = 1/137 to 1/137.036 and ħc 197.326 to 197.327 in the plasma and nn rates; 3 k_B of the ions 4.143e-16 to 4.141947e-16 (+0.025 %); the electron heat capacity now uses the exact expression of the muons, replacing the fit with rounded constants (+0.27 %); the ion coupling coefficient is derived from constants (2.274953e5, the literal 2.275e5 was the same value rounded).",
+    "Crust conductivity: m_u/m_e (1822.9), m_e/λ_C³ (15819.4), 1/α (137.036), π and 1/3, rounded to single precision, are now exact; the unit 2.778e15 became k_B c/λ_C² = 2.77569e15 (−0.083 %). This last identification is my inference (dimensionally correct and equal to the old number within 0.08 %), not read from the source of the fit.",
+    "Not changed on purpose: the modified-Urca prefactors 8.55e21 and 8.53e21 and the factor α(ρ) (NU-1, NU-2); the electron–proton bremsstrahlung and its density cut; the fit constants of the electron–ion bremsstrahlung and of the plasma rate; the value 139.0 MeV in the crust nn factor (the charged-pion mass is 139.57 MeV; its source is unchecked); g_A = 1.26; the Debye coefficient 3.48e3.",
+    "Effect on the cooling curve (BSk26, 1.4 Msun): with the default rates at most +1.1 % (10 yr) and 0.02 % at 841, 3535 and 7700 yr. With --old-rates +25 % at 100 yr, +113 % at 300 yr, +9.4 % at 841 yr, +7.3 % at 1 kyr, +1.6 % at 3.5 kyr and below 1 % after 7 kyr.",
+    "Tests: 277 pass. Two were updated: the nn ratio of updated to standard rates (0.15–0.95; it was 0.05–0.35 with the wrong factor) and the closure limits of test_default_scheme_closes_the_energy_balance (2.5 %, tolerance 3 %), because the closure error of that window, about 2 % at the default step size, depends on where the steps fall. See P-008."
+   ]
+  },
+  {
+   "id": "D-021",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Default step size kept at max_change = 0.05 for now",
+   "text": "Option 1 was chosen: max_change stays at 0.05. The question is left for later. With this value the energy-balance error of the window 100–1000 yr, where the cooling wave reaches the surface, is about 2–3 %; 0.025 gives 1.1 % (about 10 % more steps, error of L at 300 yr 1.9 % instead of 3.6 %) and 0.0125 gives 0.4 % (about 65 % more steps). The luminosity is accurate to 0.3 % at 841 yr and 0.04 % at 3.5 kyr with the default, so the comparison with the three observed sources is not affected.",
+   "by": "Proposed by Claude, decided in the project chat",
+   "options": [],
+   "effects": [
+    "A comment next to max_change in config.py records the figures and the pending question. No behaviour changes.",
+    "To revisit: setting 0.025 would let the closure test return to its 2 % limit; it changes a documented default (README, tests of the defaults)."
    ]
   }
  ],
@@ -783,7 +838,8 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "next": "Settled by D-007 and applied. Still to do: update the README sentence, the central pressures in input_bsk22/26, and regenerate the reference curve.",
    "detail": [
     "Where the two codes differ, the GitHub values are the more accurate ones: M☉ = 1.98841e33 g and 1 yr = 3.15576e7 s. G is the same in both.",
-    "Single-precision constants remain in the crust conductivity (for example 1822.9, 137.036) and in the electron heat-capacity fit; they are not covered by D-007."
+    "Single-precision constants remain in the crust conductivity (for example 1822.9, 137.036) and in the electron heat-capacity fit; they are not covered by D-007.",
+    "D-020: further rounded constants were replaced by their CODATA 2018 values (σ_SB, k_B in MeV/K, α, ħc, m_e, 3 k_B, the constants of the crust conductivity)."
    ],
    "decisions": [
     "D-007"
@@ -875,19 +931,23 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "cat": "nu",
    "item": "Nucleon bremsstrahlung (standard rate)",
    "gh": "Yakovlev et al. 2001, Eqs. 165–167: 7.5e19 · m*⁴ · (n/n0)^(1/3) · α β · N_ν · T9⁸ for nn and pp, 1.5e20 for np; N_ν = 3.",
-   "loc": "Same structure with 7.4e19 and 1.5e20, but the nn and pp lines carry two factors of 3 (a literal 3 and a 3.0); np carries one.",
-   "status": "differ",
+   "loc": "Fixed (D-020): the same three formulas as the GitHub side: 7.5e19, 1.5e20 and 7.5e19, with N_ν = 3 once.",
+   "status": "agree",
    "impact": "high",
    "ev": "run",
-   "next": "Check against Y01 Eqs. 165 and 167 whether a second factor 3 is intended (for instance a flavour factor already inside the older 7.4e19). Fix or document.",
+   "next": "Settled by D-020.",
    "detail": [
     "At identical inputs the local nn and pp rates are 2.90 times the GitHub ones; np is 0.98 times. The 2.90 is 3 × 0.97, where 0.97 combines 7.4e19 against 7.5e19 and the density convention of EOS-6.",
     "Not established which side is right. Supporting the GitHub value: its Eq. 165 with m* = 0.7 reproduces the 1.77e19 prefactor quoted by Ofengeim et al. 2017 (GitHub notebook, H4).",
     "Reach: the default driver replaces core bremsstrahlung by the BCF rate, so this affects crust neutron bremsstrahlung and every --old-rates run. Bremsstrahlung matters most exactly when modified Urca is suppressed by superfluidity.",
-    "After D-014 the local nn and pp rates are 2.96 times the GitHub ones (3 × 7.4/7.5), and the np rate is 1.00 times: the density-convention part of the former 2.90 and 0.98 is gone. Computed by arithmetic from the formulas, not by running the code."
+    "After D-014 the local nn and pp rates are 2.96 times the GitHub ones (3 × 7.4/7.5), and the np rate is 1.00 times: the density-convention part of the former 2.90 and 0.98 is gone. Computed by arithmetic from the formulas, not by running the code.",
+    "Effect of the extra factor, measured on the default star (BSk26, 1.4 Msun) with the factor removed from nn and pp in a temporary copy: with the default rates (BCF bremsstrahlung in the core, standard nn bremsstrahlung in the crust) L changes by at most +1.1 % (10 yr) and by +0.05 % at 841 yr. With --old-rates (standard bremsstrahlung everywhere) L changes by +26 % at 100 yr, +119 % at 300 yr, +9.7 % at 841 yr, +7.4 % at 1 kyr and less than 1 % after 4 kyr.",
+    "Internal evidence: in the local code the np rate carries one factor 3 (N_ν) while nn and pp carry two, although N_ν multiplies all three the same way. Not proven: the equations of Yakovlev et al. 2001 were not read by me, and the original source of the local factor is not recorded."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-020"
+   ],
+   "final": "Yakovlev et al. 2001, Eqs. 165–167: N_ν once, prefactors 7.5e19, 1.5e20, 7.5e19 (fixed)."
   },
   {
    "id": "NU-7",
@@ -1033,7 +1093,8 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "ev": "docs",
    "next": "Compare against Potekhin’s public code on a (ρ, T, Z, A) grid; decide on Q_imp and on the missing pieces.",
    "detail": [
-    "Constants are rounded to single precision. Q_imp = 0.1 is a fixed number that falls under the repository rule “no free constants” unless it is justified by a cited value."
+    "Constants are rounded to single precision. Q_imp = 0.1 is a fixed number that falls under the repository rule “no free constants” unless it is justified by a cited value.",
+    "D-020: the physical constants of the fit (m_u/m_e, m_e/λ_C³, 1/α, π) and the unit of conductivity (2.778e15 to k_B c/λ_C² = 2.77569e15, −0.083 %) were replaced by exact values."
    ],
    "decisions": [
     "D-003"
@@ -1049,10 +1110,12 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "agree",
    "impact": "high",
    "ev": "code",
-   "next": "Formula agrees; the mass is EOS-5.",
+   "next": "Settled by D-019.",
    "detail": [],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-019"
+   ],
+   "final": "Local Landau quasiparticle formula, masses from the EOS package (D-006)."
   },
   {
    "id": "HC-2",
@@ -1063,10 +1126,15 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "agree",
    "impact": "low",
    "ev": "code",
-   "next": "Use the exact expression for the electrons.",
-   "detail": [],
-   "decisions": [],
-   "final": ""
+   "next": "Settled by D-019 and D-020.",
+   "detail": [
+    "Exact expression, computed against the local fit (T = 1e9 K, Ye from 0.05 to 0.4, rho from 1e8 to 1e15 g/cm³): the local electron term is the same formula, C = n_e π² k_B² T/(m_e c²) · √(x²+1)/x² with x = p_F/(m_e c), written with two rounded constants: the coefficient of x (0.010067 against 0.010090, −0.22 %) and the prefactor (2.298976e-25 against 2.297925e-25, +0.05 %). The net effect is +0.27 % over the whole core (0.29–0.33 % at 1e8 g/cm³), at most 0.27 % of the electron share. The exact expression, C = k_B² T k_F E_F/(3 (ħc)²) with E_F = √((m c²)² + (ħc k_F)²), is already in the code as degenerate_lepton_heat_capacity, used for the muons."
+   ],
+   "decisions": [
+    "D-019",
+    "D-020"
+   ],
+   "final": "Local lepton heat capacity; the electron term now uses the exact expression (D-020)."
   },
   {
    "id": "HC-3",
@@ -1096,12 +1164,14 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "agree",
    "impact": "high",
    "ev": "run",
-   "next": "Keep one copy.",
+   "next": "Settled by D-019.",
    "detail": [
     "Evaluated both for singlet and triplet pairing at nine values of T/T_c from 0.02 to 0.99: identical to rounding."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-019"
+   ],
+   "final": "Local superfluid reduction factors (identical to the GitHub fits)."
   },
   {
    "id": "SF-1",
@@ -1275,7 +1345,8 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "ev": "docs",
    "next": "Adopt the local scheme for the diffusion code; keep the analytic neutrino-stage solution as a regression test.",
    "detail": [
-    "Local README: largest energy-closure error per time window 0.29–1.5 % with standard rates and 1.4–3.0 % with updated rates; the 3.0 % case (1.4 M☉, 0.1–1 kyr) falls to 0.99 % when the step controls are halved."
+    "Local README: largest energy-closure error per time window 0.29–1.5 % with standard rates and 1.4–3.0 % with updated rates; the 3.0 % case (1.4 M☉, 0.1–1 kyr) falls to 0.99 % when the step controls are halved.",
+    "D-021: the default max_change = 0.05 is kept; a smaller default (0.025) is left for later, see the decision for the figures."
    ],
    "decisions": [],
    "final": ""
@@ -1305,7 +1376,8 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "ev": "code",
    "next": "Keep.",
    "detail": [
-    "The two are the same, since e^(2Φ_s) = 1 − 2GM/Rc² = 1 − x at the surface."
+    "The two are the same, since e^(2Φ_s) = 1 − 2GM/Rc² = 1 − x at the surface.",
+    "D-020: the Stefan–Boltzmann constant was 5.67e-5 and is now 5.670374419e-5 (+0.0066 % in every photon luminosity)."
    ],
    "decisions": [],
    "final": ""
@@ -1523,11 +1595,11 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "cat": "eng",
    "item": "Test suite status",
    "gh": "No automated test suite; checks are the pass/fail criteria of each step script.",
-   "loc": "After the clean-up (D-015): 284 passed, 0 failed, 108 s; also 284 passed under coverage. One expected warning (BSk26 pressure reversal, row 276). No test of its own for BSk24.",
+   "loc": "After D-020: 277 passed, 0 failed, 80 s. One expected warning (BSk26 pressure reversal, row 276). No test of its own for BSk24.",
    "status": "agree",
    "impact": "med",
    "ev": "run",
-   "next": "Done by D-015. Open: P-005 (face-table tests) and P-007 (port selected GitHub checks).",
+   "next": "Done. D-017: no further tests will be added. D-021: the step size is revisited later.",
    "detail": [
     "Before the clean-up: 308 passed, 6 failed (159 s). After removing 18 tests (D-011) and re-pointing the shared fixture to BSk26: 296 passed, 0 failed (132 s). 314 − 18 = 296.",
     "The suite uses BSk22 and BSk26; BSk24 is covered only by the manual checks in EOS-7.",
@@ -1536,7 +1608,9 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
     "Inventory in test_inventory.xlsx: the local suite has 296 cases in 19 files (146 s); the GitHub code has no pytest suite, only the checks recorded by its step scripts: 68 entries, of which 29 are real checks (24 passed, 5 recorded as failed), 17 are controls and 22 are findings, not tests.",
     "Redundancy, by reading the tests: 9 tests are redundant or obsolete (21 s), 6 can be merged, 4 are judgement calls (17 s) and the 8 animation tests belong to a feature. The five slowest tests take about 70 s of the 146 s.",
     "Sequence of runs on 13 November 2026: 296 passed (after D-011); 295 passed, 1 failed (after D-014); 284 passed, 0 failed after D-015; 284 passed again under coverage.",
-    "Updated inventory in test_inventory.xlsx, with the removed tests and the coverage study."
+    "Updated inventory in test_inventory.xlsx, with the removed tests and the coverage study.",
+    "D-018: the face-table input and the tests that relied on it were removed; 6 tests removed, 6 table cases converted into 5 on Points and Background; the suite went from 284 to 277 cases.",
+    "D-020: two tests were updated: the nn ratio of updated to standard rates (it encoded the wrong factor 3) and the closure limits of the default scheme (closure of the window with the cooling wave depends on the step; see P-008)."
    ],
    "decisions": [
     "D-011",
@@ -1556,13 +1630,32 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "next": "Done by D-010. PL500_M1.40.DAT, input_in and the structure-table code are removed.",
    "detail": [
     "Before the removal, PL500 was wired into the tests: about 36 tests used it through the shared fixture, five test files named it, and the reference curve was built on it. Deleting the file alone would have stopped the suite from starting.",
-    "Handled in D-010 and D-011: the fixture now builds BSk26 at 1.4 M☉; tests that only made sense for the PL500 table were removed; generic tests were kept."
+    "Handled in D-010 and D-011: the fixture now builds BSk26 at 1.4 M☉; tests that only made sense for the PL500 table were removed; generic tests were kept.",
+    "Later: the face-table input, which was the last trace of the structure-table era in the code, was removed too (D-018)."
    ],
    "decisions": [
     "D-001",
     "D-010"
    ],
    "final": "BSk26, 1.4 M☉ replaces PL500; PL500 and the structure-table code are removed."
+  },
+  {
+   "id": "EG-9",
+   "cat": "eng",
+   "item": "Repository workflow",
+   "gh": "Commits made directly to main by the authors; no pull requests so far.",
+   "loc": "Pull request #1 (branch unify) merged into main on 13 November 2026; main now holds the unified code, identical to unify (87 files in ns_cooling, plus docs and observations). The old code stays in the history at e4321df.",
+   "status": "agree",
+   "impact": "low",
+   "ev": "run",
+   "next": "Done by D-016: further updates go directly to main.",
+   "detail": [
+    "Open small items: the pointer at line 458 of the root LAB_NOTEBOOK.md still names ns_cooling/LAB_NOTEBOOK.md (the notebook is now docs/ns_cooling_lab_notebook.md), and the README of ns_cooling still gives 1 yr = 3.16e7 s."
+   ],
+   "decisions": [
+    "D-016"
+   ],
+   "final": "Direct commits to main; no further branches."
   }
  ]
 }</script>
