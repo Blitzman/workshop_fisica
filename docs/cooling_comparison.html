@@ -594,6 +594,114 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
     "A comment next to max_change in config.py records the figures and the pending question. No behaviour changes.",
     "To revisit: setting 0.025 would let the closure test return to its 2 % limit; it changes a documented default (README, tests of the defaults)."
    ]
+  },
+  {
+   "id": "D-022",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Structure validation: one test on one EOS",
+   "text": "The structure is validated by one test on one EOS: the mass–radius curve of BSk22 against the authors' curve in the package (eos.mr). It is not repeated for other EOS and no GitHub check is ported (D-017). The second published comparison on the same EOS, the direct-Urca threshold mass against the 1.151 Msun quoted in the description of the package, was removed.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "Kept: test_mass_radius_curve_matches_the_published_one (M_max within 0.2 %, radii within 0.3 % at 0.8, 1.4 and 2.0 Msun; the measured agreement is 0.03 % and 0.13 %). Also kept, as they check other things: the analytic n = 1 polytrope (it needs no EOS and tests the integrator), the equations on the profile, the convergence with the tolerance, and the stable-branch finder.",
+    "Removed: test_the_threshold_mass_matches_the_published_value (the threshold star of BSk22, 1.148 against 1.151 Msun, and the 0.88 Msun of the naive Yp = 1/9 rule). The README keeps the numbers and says that this was checked once and is not in the tests.",
+    "Result: 276 passed. The polytrope counts here as a test of the integrator, not of an EOS; if you want it removed as well, say so."
+   ]
+  },
+  {
+   "id": "D-023",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Local choices for the time integration, the initial condition and the photon luminosity",
+   "text": "The local choices are kept for NM-2 (time integration), NM-3 (initial condition) and NM-4 (photon luminosity at infinity).",
+   "by": "Decided in the project chat",
+   "effects": [
+    "NM-2: Crank–Nicolson with predictor–corrector, a backward-Euler start-up (the first 20 steps) and adaptive steps (max_change 0.05, D-021). The GitHub code integrates an isothermal ODE and has no equivalent.",
+    "NM-3: uniform T_inf = 1e10 K, the same value in both codes. NM-4: L_inf = 4π R² σ T_s⁴ e^(2Φ_s), identical to the GitHub formula (1 − x). No code change for either.",
+    "“Clean the others” was answered by D-024 (EN-1 and OB-3, kept local). No alternative integration option of the local code was removed."
+   ]
+  },
+  {
+   "id": "D-024",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Local versions for the iron envelope and the output format",
+   "text": "The local versions are kept for the iron envelope (EN-1) and the output format (OB-3).",
+   "by": "Decided in the project chat",
+   "effects": [
+    "EN-1: the iron envelope relation is the same in both codes (Potekhin, Chabrier and Yakovlev 1997, Eqs. A6–A7), checked numerically for T_b from 2e7 to 1e9 K. No code change.",
+    "OB-3: the local files are kept: cooling_curve.csv, temperature_profiles.csv, time_steps.csv and neutrino_processes.csv. No code change.",
+    "This answers the open question of D-023: “the others” meant EN-1 and OB-3. No alternative integration option was removed."
+   ]
+  },
+  {
+   "id": "D-025",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "External data and known issues: local choices; the GitHub ones are dropped",
+   "text": "EG-3: the EOS packages ship inside the project, as the local code does (BSk22, BSk24, BSk26 from CompOSE); the GitHub practice of leaving third-party files uncommitted and asking the user to download them (bskfit18.f, sly4.dat, the Douchin–Haensel text) is dropped. EG-4: the known issues are those of the local code; the GitHub ones (I1 and the failed criteria of H2, H4, H6 and H8, all about SLy4 or the fixed mass 0.7) are dropped.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "The code in ns_cooling/ has no trace left of the downloaded files. The old notebook docs/ns_cooling_lab_notebook.md is kept for now, as an archive: it is the only readable record of the purpose of the project and the statements S1–S7 to test (Marino et al. 2024), of the benchmark results of the old code (standard candle 13–35 times brighter than the sources, 534 gap combinations of which none reaches a source, in-medium Urca dimming 1.46–1.65) and of the equation-level provenance, including the peak T_c of the Ho et al. 2015 models. It cites paths that no longer exist. The old code and its results are in the history (commit e4321df). To revisit: distill these three items into a short document and then remove the notebook.",
+    "Open: the redistribution terms of the CompOSE tables are still unverified (there is no web access in this environment). Shipping them is harmless in a private repository; it has to be checked before the repository becomes public.",
+    "Known issues of the local code, as of today: the first 0.2 yr is under-resolved; the energy closure of the window with the arrival of the cooling wave is 2–3 % at the default step (D-021); the direct-Urca edge needs mesh C or finer; the crust effective masses are not validated (D-008); the validation numbers of the README predate D-007; the electron–proton bremsstrahlung has a hard density cut; the modified-Urca generation is undecided (NU-1, NU-2)."
+   ]
+  },
+  {
+   "id": "D-026",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Working rules of the ns_cooling project",
+   "text": "For ns_cooling the rules are: write the hypothesis before testing a non-trivial idea and record the outcome; a new result is validated only if it first reproduces a published result by other authors; the physical premise of a new line of work is reviewed by the group before code is written. The rule “zero free constants” is removed: free numbers are allowed, and a comment saying where they come from, or that the source is not recorded, is enough. The rule “figures generated from data” is removed. The axion-specific rules of the repository (AGENTS.md sections 1 and 2, “deduce, do not define”, and CONVENTIONS.md) are not applied to ns_cooling.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "Written in the new section WORKING RULES of the ns_cooling README. The root AGENTS.md and CONVENTIONS.md, which are Alberto’s documents for the axion work, are left untouched.",
+    "Reading of “external validation first” recorded here, to be corrected if it is wrong: a one-off comparison with a published result, noted in the tracker, is enough; it does not have to become a test, so there is no conflict with D-017 (no further tests).",
+    "The audit planned in EG-5 changes from finding violations to adding comments. Numbers whose source is not recorded in the code today: Q_imp = 0.1 (crust conductivity default), 139.0 MeV in the crust nn factor, the constants of the electron–proton bremsstrahlung, the 42-point effective-mass table (D-008), g_A = 1.26, the Debye coefficient 3.48e3, and the 17 citations marked “believed” in the README (RF-1). The comments were added in D-027.",
+    "The tracker itself keeps its typed figures: the rule that figures are generated from data no longer applies."
+   ]
+  },
+  {
+   "id": "D-027",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Remaining single-precision roundings removed; comments added to the numbers without a recorded source",
+   "text": "Following D-020 and D-026: the last single-precision roundings were removed, and a comment was added to every block of numbers whose source is not recorded or is only attributed in the README.",
+   "by": "Decided in the project chat; implemented by Claude",
+   "effects": [
+    "Roundings removed: the interpolation of the effective masses (float32 and 2.96088e-38 for 3π² × 1e-39) now runs in double precision (change below 2e-7); the exponents EP_EXP and PAIR_EXP and the twelve coefficients of the pair process; the temperature unit 5930 in the crust conductivity (now k_B T/(m_e c²), 1.7e-5); π and √3 in the asymptotic prefactor of the modified Urca factor.",
+    "Comments: 69 lines in 13 files, placed above the numbers they describe. They say where a block comes from (the README attribution, marked believed where the original implementation did not record it, or what this project identified: Van Riper 1991 for the ion heat capacity, Yakovlev et al. 2001 Eqs. 165–167 for the nucleon bremsstrahlung, the Ho et al. concordance of the gap models) or that the source is not recorded: Q_imp = 0.1, 139 MeV, the electron–proton bremsstrahlung, the 42-point effective-mass table (candidate Chao–Clark–Yang 1972, D-008), g_A = 1.26 with sin²θ_W = 0.23, the modified-Urca prefactors, the asymptotic form for v > 15, g14 = 1.36 and the numerical parameters.",
+    "Verified: the code of every file (its syntax tree) is identical to the tested version before the comments; only comments were added in that step. The suite passes (276) after both steps. One regression test (core conductivity with the table masses) had stored values that moved by 5e-8 to 1e-7; they were recomputed.",
+    "README: the ion heat capacity now cites Van Riper 1991, and the tests section no longer mentions the removed threshold test."
+   ]
+  },
+  {
+   "id": "D-028",
+   "status": "decided",
+   "date": "13 November 2026",
+   "title": "Tests and acceptance criteria: the GitHub style; the suite is trimmed by code area",
+   "text": "The GitHub style is adopted for tests and acceptance: validation steps, each with a hypothesis, an independent reference and a criterion, run by hand. The heavy automatic suite is dropped. The pytest suite is trimmed to a small set, with every test assigned to a part of the code (structure, emissivities, heat capacity and conduction, envelope and boundary, integration, output, state and registries), run only when its area changes or on request. No mass scans on every run.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "Proposal of 13 November (test_trim_proposal.xlsx): 276 cases become 43, and 101 s become 30 s, of which 17 s is one slow test that runs only on request (the fast set takes about 13 s). One test file per area; make targets per area, make test-all for the fast tests and make test-slow for the slow one. Each kept test gets a docstring with Hypothesis, Reference and Criterion.",
+    "Review area by area. Approved so far: heat capacity and conduction (5 cases kept of 31), output (2 of 38), state and registries (0 of 12) and emissivities (15 of 49). Emissivities are under construction, so only the tests of mathematics and logic that do not depend on the numbers under decision (NU-1 to NU-11) are kept; the ratio of the updated modified Urca to the standard rate was removed for that reason. Still to review: structure (12 of 98), envelope and boundary (4 of 11) and integration (5 of 37).",
+    "All seven areas were approved and the changes were applied at once (D-029)."
+   ]
+  },
+  {
+   "id": "D-029",
+   "status": "decided",
+   "date": "14 November 2026",
+   "title": "The trimmed test suite is applied",
+   "text": "All seven areas of the trimming proposal were approved and the change was applied at once: 276 cases in 18 files became 43 cases in 6 files, one per code area.",
+   "by": "Approved in the project chat; implemented by Claude",
+   "effects": [
+    "Files: tests/test_structure.py (12 cases, one of them slow), test_emissivities.py (15), test_heat_conduction.py (5), test_envelope.py (4), test_integration.py (5) and test_output.py (2). The 17 old test files were removed (all except test_envelope.py, which was rewritten). conftest.py lost the fixture used only by the removed stable-branch scan; synthetic.py stays.",
+    "Running: make test-structure, test-emissivities, test-heat-conduction, test-envelope, test-integration and test-output run one area; make test-all runs the 42 fast tests; make test-slow runs the slow one. pytest.ini registers the slow marker and skips it by default. Nothing runs by itself.",
+    "Measured after the change: the 42 fast tests take 21 s (the earlier estimate of 13 s left out the time to build the shared fixtures), the slow test 19.5 s, against 101 s for the 276 cases before. All pass. Per area, including fixtures: structure 5 s, emissivities 0.5 s, heat capacity and conduction 0.5 s, envelope 0.5 s, integration 8 s, output 11 s.",
+    "Every kept test has a docstring with Hypothesis, Reference and Criterion. Two small differences from the proposal: the threshold test of the direct Urca no longer repeats the prefactor 4e27 (the exact-coefficient test validates it, and the prefactor may change with the emissivity decisions), and the muon-composition test uses the BSk26 model directly instead of a fixture parametrised over two EOS.",
+    "The README tests section was rewritten, and the reference to the removed direct-Urca test file corrected. No module code changed in this step (checked by comparing the syntax trees)."
+   ]
   }
  ],
  "findings": [
@@ -815,16 +923,18 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "item": "Structure validation targets",
    "gh": "Published numbers: BSk24 M_max 2.279 M☉ (0.01 %), dUrca threshold 8.25e14 g/cm³, threshold mass 1.595 vs 1.596 M☉; SLy4 M_max 2.050, R 9.99 km.",
    "loc": "Own tests: n = 1 polytrope, M–R curve vs the EOS package (0.13 % in R, 0.03 % in M_max), BSk22 threshold star 1.148 vs 1.151 M☉.",
-   "status": "close",
+   "status": "agree",
    "impact": "low",
    "ev": "docs",
-   "next": "Run both on BSk22 and BSk26 against the same targets (eos.mr and Pearson et al. 2018).",
+   "next": "Settled by D-022.",
    "detail": [
     "Both validate structure, against different references.",
     "BSk24 now gives a common target: the local code reproduces the package’s eos.mr (M_max within 0.03 %, radii within 0.13 %) and the direct-Urca threshold star (1.597 against 1.595–1.596 M☉); see EOS-7."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-022"
+   ],
+   "final": "One test on one EOS: the BSk22 mass–radius curve against eos.mr; the polytrope check of the integrator stays."
   },
   {
    "id": "TOV-5",
@@ -860,7 +970,8 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
     "Computed ratio local/GitHub at identical inputs (m* = 0.7, npe matter, T9 = 1, Yp 0.04–0.12): 0.96–1.00 at n_b = 0.16 fm⁻³, 1.20–1.23 at 0.32 fm⁻³, 1.30–1.32 at 0.48 fm⁻³. The two agree at saturation and separate by 20–30 % at two to three times saturation density, through the density-dependent α.",
     "The local rate also uses Ye where GitHub uses n_p; they differ whenever muons are present.",
     "Hypothesis, not tested: part of the GitHub open issue I1 (modified-Urca luminosity 0.57–0.73 of the Ofengeim et al. fit at high mass) could be this. The sign is consistent.",
-    "The ratios above were computed with the old reference density (0.170 fm⁻³). With D-014 the local rate is higher by about 3 % at the same density, so they have to be recomputed (not done)."
+    "The ratios above were computed with the old reference density (0.170 fm⁻³). With D-014 the local rate is higher by about 3 % at the same density, so they have to be recomputed (not done).",
+    "D-025: the GitHub open issue I1, whose sign this hypothesis compared with, belongs to the dropped code and is no longer tracked."
    ],
    "decisions": [],
    "final": ""
@@ -1093,7 +1204,7 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "ev": "docs",
    "next": "Compare against Potekhin’s public code on a (ρ, T, Z, A) grid; decide on Q_imp and on the missing pieces.",
    "detail": [
-    "Constants are rounded to single precision. Q_imp = 0.1 is a fixed number that falls under the repository rule “no free constants” unless it is justified by a cited value.",
+    "Q_imp = 0.1 is a free default; under D-026 a comment that says so is enough. The single-precision constants were corrected in D-020.",
     "D-020: the physical constants of the fit (m_u/m_e, m_e/λ_C³, 1/α, π) and the unit of conductivity (2.778e15 to k_B c/λ_C² = 2.77569e15, −0.083 %) were replaced by exact values."
    ],
    "decisions": [
@@ -1264,12 +1375,14 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "agree",
    "impact": "high",
    "ev": "run",
-   "next": "Keep one copy.",
+   "next": "Settled by D-024.",
    "detail": [
     "Evaluated both for T_b from 2e7 to 1e9 K at g14 = 1.3: identical (ratio 1.00000)."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-024"
+   ],
+   "final": "Local iron envelope (identical to the GitHub formulas, PCY97 Eqs. A6–A7)."
   },
   {
    "id": "EN-2",
@@ -1343,13 +1456,15 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "local",
    "impact": "med",
    "ev": "docs",
-   "next": "Adopt the local scheme for the diffusion code; keep the analytic neutrino-stage solution as a regression test.",
+   "next": "Settled by D-023.",
    "detail": [
     "Local README: largest energy-closure error per time window 0.29–1.5 % with standard rates and 1.4–3.0 % with updated rates; the 3.0 % case (1.4 M☉, 0.1–1 kyr) falls to 0.99 % when the step controls are halved.",
     "D-021: the default max_change = 0.05 is kept; a smaller default (0.025) is left for later, see the decision for the figures."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-023"
+   ],
+   "final": "Local scheme: Crank–Nicolson predictor–corrector, backward-Euler start-up, adaptive steps."
   },
   {
    "id": "NM-3",
@@ -1360,10 +1475,12 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "agree",
    "impact": "low",
    "ev": "code",
-   "next": "Keep.",
+   "next": "Settled by D-023.",
    "detail": [],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-023"
+   ],
+   "final": "Local initial condition: uniform T_inf = 1e10 K (the same in the GitHub code)."
   },
   {
    "id": "NM-4",
@@ -1374,13 +1491,15 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "agree",
    "impact": "med",
    "ev": "code",
-   "next": "Keep.",
+   "next": "Settled by D-023.",
    "detail": [
     "The two are the same, since e^(2Φ_s) = 1 − 2GM/Rc² = 1 − x at the surface.",
     "D-020: the Stefan–Boltzmann constant was 5.67e-5 and is now 5.670374419e-5 (+0.0066 % in every photon luminosity)."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-023"
+   ],
+   "final": "Local L_inf = 4π R² σ T_s⁴ e^(2Φ_s) (identical to the GitHub formula)."
   },
   {
    "id": "OB-1",
@@ -1421,10 +1540,12 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "close",
    "impact": "low",
    "ev": "code",
-   "next": "One small converter and one shared plotting script.",
+   "next": "Settled by D-024.",
    "detail": [],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-024"
+   ],
+   "final": "Local output files: cooling_curve.csv, temperature_profiles.csv, time_steps.csv, neutrino_processes.csv."
   },
   {
    "id": "RF-1",
@@ -1437,10 +1558,11 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "ev": "docs",
    "next": "Every formula in the unified code gets a paper and equation number checked against the PDF; “believed” entries are verified first.",
    "detail": [
-    "This is the repository’s own rule (AGENTS.md: no value without an exact citation). It turns each “believed” entry into a task.",
+    "The AGENTS.md rule “no value without an exact citation” was dropped for ns_cooling in D-026; each “believed” entry stays a provenance gap, and a comment is enough.",
     "Case on record: the 42-point crust effective-mass table in effective_mass.py has no source anywhere in the project (D-008).",
     "Answered by Van Riper (1991), ApJS 75, 449: the ion heat capacity of the local code is its Eqs. 24–25 (HC-3). The source of the ion fits is no longer unrecorded.",
-    "Citation to correct: the local README gives the heat-transport reference as “Thorne (1977), MNRAS 178, 501 (believed)”. Van Riper’s reference list gives Thorne 1977 as Ap. J., 212, 825, and also Thorne 1967 (High Energy Astrophysics, vol. 3, p. 166), for the relativistic transport equation. The README citation looks wrong; to be confirmed against the paper itself and then corrected in the README."
+    "Citation to correct: the local README gives the heat-transport reference as “Thorne (1977), MNRAS 178, 501 (believed)”. Van Riper’s reference list gives Thorne 1977 as Ap. J., 212, 825, and also Thorne 1967 (High Energy Astrophysics, vol. 3, p. 166), for the relativistic transport equation. The README citation looks wrong; to be confirmed against the paper itself and then corrected in the README.",
+    "D-027 added a comment above each block of numbers saying where it comes from or that the source is not recorded; the “believed” attributions are still unchecked. Whether this settles RF-1 is open."
    ],
    "decisions": [],
    "final": ""
@@ -1500,12 +1622,15 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "med",
    "ev": "docs",
-   "next": "Keep both: GitHub-style physics checks against published numbers and local-style numerical tests.",
+   "next": "Settled by D-028 and applied by D-029.",
    "detail": [
     "The local README says the full pytest suite was not run in the environment of the last update (v16)."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-028",
+    "D-029"
+   ],
+   "final": "GitHub style: validation steps with hypothesis, reference and criterion; a small suite by code area (43 cases in 6 files), run on request or when its area changes. Applied (D-029)."
   },
   {
    "id": "EG-3",
@@ -1516,10 +1641,12 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "med",
    "ev": "docs",
-   "next": "Check redistribution terms of the EOS packages before committing them to the public repository.",
+   "next": "Settled by D-025. Still to do: check the redistribution terms of the CompOSE tables before the repository is public.",
    "detail": [],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-025"
+   ],
+   "final": "Local: the EOS packages ship inside the project. The GitHub download practice is dropped. Licence terms to be checked before the repository is public."
   },
   {
    "id": "EG-4",
@@ -1530,10 +1657,12 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "check",
    "impact": "med",
    "ev": "docs",
-   "next": "Carry every open issue into the tracker as its own item.",
+   "next": "Settled by D-025.",
    "detail": [],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-025"
+   ],
+   "final": "Local known issues only (see D-025); the GitHub issues I1, H2, H4, H6, H8 are dropped."
   },
   {
    "id": "EG-5",
@@ -1544,10 +1673,12 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "med",
    "ev": "code",
-   "next": "Adopt the repository rules as acceptance criteria for the unified code, and audit the local code against “no free constants”.",
+   "next": "Settled by D-026; the comments on the numbers without a source were added in D-027.",
    "detail": [],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-026"
+   ],
+   "final": "Working rules: hypothesis log, external validation first, premise reviewed by the group, comments on free numbers (D-026). Axion-specific rules not applied."
   },
   {
    "id": "EOS-7",
@@ -1595,11 +1726,11 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "cat": "eng",
    "item": "Test suite status",
    "gh": "No automated test suite; checks are the pass/fail criteria of each step script.",
-   "loc": "After D-020: 277 passed, 0 failed, 80 s. One expected warning (BSk26 pressure reversal, row 276). No test of its own for BSk24.",
+   "loc": "After D-029: 43 cases in 6 files by code area; the 42 fast ones pass in 21 s and the slow one in 19.5 s. Run the area that changed, or make test-all on request.",
    "status": "agree",
    "impact": "med",
    "ev": "run",
-   "next": "Done. D-017: no further tests will be added. D-021: the step size is revisited later.",
+   "next": "Done: D-017 (no further tests), D-022 (one structure test), D-028 and D-029 (suite by area, trimmed).",
    "detail": [
     "Before the clean-up: 308 passed, 6 failed (159 s). After removing 18 tests (D-011) and re-pointing the shared fixture to BSk26: 296 passed, 0 failed (132 s). 314 − 18 = 296.",
     "The suite uses BSk22 and BSk26; BSk24 is covered only by the manual checks in EOS-7.",
@@ -1610,7 +1741,10 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
     "Sequence of runs on 13 November 2026: 296 passed (after D-011); 295 passed, 1 failed (after D-014); 284 passed, 0 failed after D-015; 284 passed again under coverage.",
     "Updated inventory in test_inventory.xlsx, with the removed tests and the coverage study.",
     "D-018: the face-table input and the tests that relied on it were removed; 6 tests removed, 6 table cases converted into 5 on Points and Background; the suite went from 284 to 277 cases.",
-    "D-020: two tests were updated: the nn ratio of updated to standard rates (it encoded the wrong factor 3) and the closure limits of the default scheme (closure of the window with the cooling wave depends on the step; see P-008)."
+    "D-020: two tests were updated: the nn ratio of updated to standard rates (it encoded the wrong factor 3) and the closure limits of the default scheme (closure of the window with the cooling wave depends on the step; see P-008).",
+    "D-022: the published threshold-mass test was removed; the suite has 276 cases.",
+    "D-027: one regression test of the core conductivity had stored values recomputed (5e-8 to 1e-7) after the effective masses moved to double precision.",
+    "D-029: the suite was trimmed from 276 cases in 18 files to 43 cases in 6 files, one per code area."
    ],
    "decisions": [
     "D-011",
