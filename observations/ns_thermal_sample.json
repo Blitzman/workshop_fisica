@@ -1,0 +1,2142 @@
+{
+ "note": "Derived from ns_thermal_catalogue.html (the master list) by extract_thermal_sample.py. Ages in yr, L_inf in erg/s, as chosen for the cooling sample of the catalogue; bounds keep the conventions of each reference. Working list: to be improved and checked.",
+ "n_catalogue_entries": 77,
+ "n_cooling_sample": 29,
+ "cooling_sample": [
+  {
+   "id": 2,
+   "name": "RX J0822.0-4300",
+   "subtitle": "Puppis A",
+   "type": "CCO/TINS",
+   "status": "consistent",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    3700.0,
+    5200.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    3.9e+33,
+    6.1e+33
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 3.7–5.2 kyr ( WEB ) · 39–61 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 3,
+   "name": "CXOU J085201.4-461753",
+   "subtitle": "Vela Jr. · CXOU J0852-4617; Vela Jr",
+   "type": "CCO/TINS",
+   "status": "open",
+   "references": [
+    "P20",
+    "WEB",
+    "M24",
+    "HO26",
+    "SU26"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    1600.0,
+    3300.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "SU26",
+   "L_inf_erg_s": [
+    1.3e+32,
+    4e+32
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "HO26",
+   "emission": "Cool surface",
+   "chosen_text": "Cooling sample · 1.6–3.3 kyr ( SU26 ) · 1.3–4 × 10³² erg/s ( HO26 ) · Cool surface."
+  },
+  {
+   "id": 4,
+   "name": "2XMM J104608.7-594306",
+   "subtitle": "Homunculus",
+   "type": "CCO/TINS",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [],
+   "in_cooling_sample": true,
+   "age_yr": [
+    11000.0,
+    30000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    7.700000000000001e+31,
+    6.2000000000000006e+32
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 11–30 kyr ( WEB ) · 0.77–6.2 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 5,
+   "name": "1E 1207.4-5209",
+   "subtitle": "G296.5+10.0",
+   "type": "CCO/TINS",
+   "status": "consistent",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    2333.0,
+    21000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    1.15e+33,
+    1.8e+33
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 2.333–21 kyr ( WEB ) · 11.5–18 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 6,
+   "name": "1RXS J141256.0+792204",
+   "subtitle": "Calvera",
+   "type": "CCO/TINS",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    10000.0,
+    20000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    1.5000000000000002e+33,
+    9e+33
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 10–20 kyr ( WEB ) · 15–90 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 7,
+   "name": "CXOU J160103.1-513353",
+   "subtitle": "G330.2+1.0",
+   "type": "CCO/TINS",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Spectrum"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    600.0,
+    1000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    4.4000000000000005e+33,
+    6.300000000000001e+33
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 0.6–1 kyr ( WEB ) · 44–63 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 8,
+   "name": "1WGA J1713.4-3949",
+   "subtitle": "G347.3-0.5",
+   "type": "CCO/TINS",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Spectrum"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    1608.0,
+    1609.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    1.7e+33,
+    2.3e+33
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 1.608–1.609 kyr ( WEB ) · 17–23 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 9,
+   "name": "XMMU J172054.5-372652",
+   "subtitle": "G350.1-0.3",
+   "type": "CCO/TINS",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    null,
+    700.0
+   ],
+   "age_is_upper_limit": true,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    1.08e+34,
+    1.28e+34
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · <0.7 kyr ( WEB ) · 108–128 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 10,
+   "name": "XMMU J173203.3-344518",
+   "subtitle": "HESS J1731-347",
+   "type": "CCO/TINS",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Distance",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    2000.0,
+    6000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    7.8e+33,
+    1.45e+34
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 2–6 kyr ( WEB ) · 78–145 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 11,
+   "name": "CXOU J181852.0-150213",
+   "subtitle": "G015.9+00.2",
+   "type": "CCO/TINS",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [],
+   "in_cooling_sample": true,
+   "age_yr": [
+    2700.0,
+    6000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    4.2e+33,
+    1.52e+34
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 2.7–6 kyr ( WEB ) · 42–152 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 12,
+   "name": "CXOU J185238.6+004020",
+   "subtitle": "Kes 79",
+   "type": "CCO/TINS",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    3200.0,
+    7800.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    8.4e+33,
+    1.28e+34
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 3.2–7.8 kyr ( WEB ) · 84–128 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 13,
+   "name": "CXOU J232327.8+584842",
+   "subtitle": "Cas A",
+   "type": "CCO/TINS",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Observing epoch",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    319.5,
+    338.7
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    5.6e+33,
+    9.3e+33
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 0.3195–0.3387 kyr ( WEB ) · 56–93 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 15,
+   "name": "PSR J0357+3205",
+   "subtitle": "Morla",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [],
+   "in_cooling_sample": true,
+   "age_yr": [
+    200000.0,
+    1300000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    4e+30,
+    4.0000000000000003e+31
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 200–1,300 kyr ( WEB ) · 0.04–0.4 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 16,
+   "name": "PSR J0538+2817",
+   "subtitle": "Sim 147",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    20000.0,
+    60000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    6.3e+32,
+    1.36e+33
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 20–60 kyr ( WEB ) · 6.3–13.6 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 17,
+   "name": "CXOU J061705.3+222127",
+   "subtitle": "IC 443 (P~0.1-0.6 s est.; not used)",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    25000.0,
+    35000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    2.5000000000000002e+32,
+    2.7000000000000005e+32
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 25–35 kyr ( WEB ) · 2.5–2.7 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 20,
+   "name": "PSR B0656+14",
+   "subtitle": "Monogem",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    79430.0,
+    79430.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "V13",
+   "L_inf_erg_s": [
+    5.0119999999999995e+32,
+    6.31e+32
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "V13",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 79.43 kyr ( V13 ) · 5.012–6.31 × 10³² erg/s ( V13 ) · Reported thermal emission."
+  },
+  {
+   "id": 21,
+   "name": "PSR B0833-45",
+   "subtitle": "Vela",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    17000.0,
+    27000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    4.1200000000000006e+32,
+    4.3600000000000006e+32
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 17–27 kyr ( WEB ) · 4.12–4.36 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 30,
+   "name": "PSR B1951+32",
+   "subtitle": "CTB 80",
+   "type": "RPP",
+   "status": "consistent",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    46000.0,
+    82000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    7e+31,
+    4.8e+32
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 46–82 kyr ( WEB ) · 0.7–4.8 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 33,
+   "name": "PSR B2334+61",
+   "subtitle": "G114.3+00.3",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB",
+    "M24"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    7600.0,
+    7800.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    1.2e+31,
+    8.2e+31
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 7.6–7.8 kyr ( WEB ) · 0.12–0.82 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 35,
+   "name": "PSR J1119-6127",
+   "subtitle": "G292.2-00.5",
+   "type": "HB-PSR",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    4200.0,
+    7100.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    1.1000000000000001e+33,
+    3.8e+33
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 4.2–7.1 kyr ( WEB ) · 11–38 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 40,
+   "name": "RX J0720.4-3125",
+   "subtitle": "",
+   "type": "XINS",
+   "status": "updated",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Timing"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    700000.0,
+    1000000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    1.1000000000000002e+32,
+    3.2000000000000002e+32
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 700–1,000 kyr ( WEB ) · 1.1–3.2 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 42,
+   "name": "RX J1308.6+2127",
+   "subtitle": "RBS1223",
+   "type": "XINS",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    300000.0,
+    800000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    2.6e+32,
+    3.8e+32
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 300–800 kyr ( WEB ) · 2.6–3.8 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 43,
+   "name": "RX J1605.3+3249",
+   "subtitle": "RBS1556",
+   "type": "XINS",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    380000.0,
+    510000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    7.000000000000002e+30,
+    5.0000000000000004e+32
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 380–510 kyr ( WEB ) · 0.07–5 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 44,
+   "name": "RX J1856.5-3754",
+   "subtitle": "Upper Scorpius",
+   "type": "XINS",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    340000.0,
+    500000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    5e+31,
+    8.000000000000001e+31
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 340–500 kyr ( WEB ) · 0.5–0.8 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 46,
+   "name": "PSR J0007+7303",
+   "subtitle": "CTA 1",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Timing",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    9100.0,
+    9300.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    null,
+    3e+31
+   ],
+   "L_is_upper_limit": true,
+   "L_reference": "WEB",
+   "emission": "Thermal upper limit",
+   "chosen_text": "Cooling sample · 9.1–9.3 kyr ( WEB ) · < 0.3 × 10³² erg/s ( WEB ) · Thermal upper limit."
+  },
+  {
+   "id": 47,
+   "name": "PSR B0531+21",
+   "subtitle": "Crab",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    953.5,
+    953.7
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    null,
+    3e+34
+   ],
+   "L_is_upper_limit": true,
+   "L_reference": "WEB",
+   "emission": "Thermal upper limit",
+   "chosen_text": "Cooling sample · 0.9535–0.9537 kyr ( WEB ) · < 300 × 10³² erg/s ( WEB ) · Thermal upper limit."
+  },
+  {
+   "id": 48,
+   "name": "PSR B1727-47",
+   "subtitle": "RCW 114",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    40000.0,
+    60000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    null,
+    3.5e+31
+   ],
+   "L_is_upper_limit": true,
+   "L_reference": "WEB",
+   "emission": "Thermal upper limit",
+   "chosen_text": "Cooling sample · 40–60 kyr ( WEB ) · < 0.35 × 10³² erg/s ( WEB ) · Thermal upper limit."
+  },
+  {
+   "id": 202,
+   "name": "PSR B0950+08",
+   "subtitle": "---",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    600000.0,
+    7600000.0
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    2.0000000000000004e+28,
+    2.3e+29
+   ],
+   "L_is_upper_limit": false,
+   "L_reference": "WEB",
+   "emission": "Reported thermal emission",
+   "chosen_text": "Cooling sample · 600–7,600 kyr ( WEB ) · 0.0002–0.0023 × 10³² erg/s ( WEB ) · Reported thermal emission."
+  },
+  {
+   "id": 205,
+   "name": "SN 1987A remnant",
+   "subtitle": "MCSNR J0535-6916",
+   "type": "remnant",
+   "status": "limited",
+   "references": [
+    "WEB"
+   ],
+   "issues": [
+    "Observing epoch",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true,
+   "age_yr": [
+    28.34,
+    28.59
+   ],
+   "age_is_upper_limit": false,
+   "age_reference": "WEB",
+   "L_inf_erg_s": [
+    null,
+    3.44e+35
+   ],
+   "L_is_upper_limit": true,
+   "L_reference": "WEB",
+   "emission": "Thermal upper limit",
+   "chosen_text": "Cooling sample · 0.02834–0.02859 kyr ( WEB ) · < 3,440 × 10³² erg/s ( WEB ) · Thermal upper limit."
+  }
+ ],
+ "catalogue_entries": [
+  {
+   "id": 1,
+   "name": "1E 0102.2-7219",
+   "subtitle": "SNR 0102-72.3 (SMC) [disputed candidate; removed from web 25.11.2020]",
+   "type": "CCO/TINS",
+   "status": "disputed",
+   "references": [
+    "P20",
+    "L20"
+   ],
+   "issues": [
+    "Identity"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 2,
+   "name": "RX J0822.0-4300",
+   "subtitle": "Puppis A",
+   "type": "CCO/TINS",
+   "status": "consistent",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 3,
+   "name": "CXOU J085201.4-461753",
+   "subtitle": "Vela Jr. · CXOU J0852-4617; Vela Jr",
+   "type": "CCO/TINS",
+   "status": "open",
+   "references": [
+    "P20",
+    "WEB",
+    "M24",
+    "HO26",
+    "SU26"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 4,
+   "name": "2XMM J104608.7-594306",
+   "subtitle": "Homunculus",
+   "type": "CCO/TINS",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 5,
+   "name": "1E 1207.4-5209",
+   "subtitle": "G296.5+10.0",
+   "type": "CCO/TINS",
+   "status": "consistent",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 6,
+   "name": "1RXS J141256.0+792204",
+   "subtitle": "Calvera",
+   "type": "CCO/TINS",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 7,
+   "name": "CXOU J160103.1-513353",
+   "subtitle": "G330.2+1.0",
+   "type": "CCO/TINS",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Spectrum"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 8,
+   "name": "1WGA J1713.4-3949",
+   "subtitle": "G347.3-0.5",
+   "type": "CCO/TINS",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Spectrum"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 9,
+   "name": "XMMU J172054.5-372652",
+   "subtitle": "G350.1-0.3",
+   "type": "CCO/TINS",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 10,
+   "name": "XMMU J173203.3-344518",
+   "subtitle": "HESS J1731-347",
+   "type": "CCO/TINS",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Distance",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 11,
+   "name": "CXOU J181852.0-150213",
+   "subtitle": "G015.9+00.2",
+   "type": "CCO/TINS",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 12,
+   "name": "CXOU J185238.6+004020",
+   "subtitle": "Kes 79",
+   "type": "CCO/TINS",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 13,
+   "name": "CXOU J232327.8+584842",
+   "subtitle": "Cas A",
+   "type": "CCO/TINS",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Observing epoch",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 14,
+   "name": "PSR J0205+6449",
+   "subtitle": "3C 58",
+   "type": "RPP",
+   "status": "disputed",
+   "references": [
+    "P20",
+    "WEB",
+    "M24",
+    "R21",
+    "B06"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum",
+    "Timing",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 15,
+   "name": "PSR J0357+3205",
+   "subtitle": "Morla",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 16,
+   "name": "PSR J0538+2817",
+   "subtitle": "Sim 147",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 17,
+   "name": "CXOU J061705.3+222127",
+   "subtitle": "IC 443 (P~0.1-0.6 s est.; not used)",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 18,
+   "name": "PSR J0633+0632",
+   "subtitle": "Collinder 106 (?)",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 19,
+   "name": "PSR J0633+1746",
+   "subtitle": "Geminga",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Timing"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 20,
+   "name": "PSR B0656+14",
+   "subtitle": "Monogem",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 21,
+   "name": "PSR B0833-45",
+   "subtitle": "Vela",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 22,
+   "name": "PSR B1055-52",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 23,
+   "name": "PSR J1357-6429",
+   "subtitle": "HESS J1356-645",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 24,
+   "name": "PSR B1706-44",
+   "subtitle": "G343.1-02.3",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 25,
+   "name": "PSR J1740+1000",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum",
+    "Timing"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 26,
+   "name": "PSR J1741-2054",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 27,
+   "name": "PSR B1822-09",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 28,
+   "name": "PSR B1823-13",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 29,
+   "name": "PSR J1836+5925",
+   "subtitle": "Next Geminga",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 30,
+   "name": "PSR B1951+32",
+   "subtitle": "CTB 80",
+   "type": "RPP",
+   "status": "consistent",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 31,
+   "name": "PSR J1957+5033",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 32,
+   "name": "PSR J2021+3651",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 33,
+   "name": "PSR B2334+61",
+   "subtitle": "G114.3+00.3",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB",
+    "M24"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 34,
+   "name": "PSR J0726-2612",
+   "subtitle": "",
+   "type": "HB-PSR",
+   "status": "limited",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 35,
+   "name": "PSR J1119-6127",
+   "subtitle": "G292.2-00.5",
+   "type": "HB-PSR",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 36,
+   "name": "PSR B1509-58",
+   "subtitle": "",
+   "type": "HB-PSR",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 37,
+   "name": "PSR J1718-3718",
+   "subtitle": "",
+   "type": "HB-PSR",
+   "status": "limited",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 38,
+   "name": "PSR J1819-1458",
+   "subtitle": "RRAT",
+   "type": "HB-PSR",
+   "status": "limited",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 39,
+   "name": "RX J0420.0-5022",
+   "subtitle": "",
+   "type": "XINS",
+   "status": "limited",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 40,
+   "name": "RX J0720.4-3125",
+   "subtitle": "",
+   "type": "XINS",
+   "status": "updated",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Timing"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 41,
+   "name": "RX J0806.4-4123",
+   "subtitle": "",
+   "type": "XINS",
+   "status": "updated",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum",
+    "Timing"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 42,
+   "name": "RX J1308.6+2127",
+   "subtitle": "RBS1223",
+   "type": "XINS",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 43,
+   "name": "RX J1605.3+3249",
+   "subtitle": "RBS1556",
+   "type": "XINS",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Distance",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 44,
+   "name": "RX J1856.5-3754",
+   "subtitle": "Upper Scorpius",
+   "type": "XINS",
+   "status": "open",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 45,
+   "name": "RX J2143.0+0654",
+   "subtitle": "RBS1774",
+   "type": "XINS",
+   "status": "updated",
+   "references": [
+    "V13",
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Timing"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 46,
+   "name": "PSR J0007+7303",
+   "subtitle": "CTA 1",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Timing",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 47,
+   "name": "PSR B0531+21",
+   "subtitle": "Crab",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 48,
+   "name": "PSR B1727-47",
+   "subtitle": "RCW 114",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 49,
+   "name": "PSR J2043+2740",
+   "subtitle": "Cygnus Loop (?)",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 50,
+   "name": "PSR B2224+65",
+   "subtitle": "Guitar",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 51,
+   "name": "PSR B0114+58",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 52,
+   "name": "PSR B0943+10",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 53,
+   "name": "PSR B1133+16",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 54,
+   "name": "PSR J1154-6250",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "updated",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 55,
+   "name": "PSR B1929+10",
+   "subtitle": "",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "P20",
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Spectrum"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 101,
+   "name": "1E 2259+586",
+   "subtitle": "SNR CTB109",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 102,
+   "name": "4U 0142+614",
+   "subtitle": "",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 103,
+   "name": "CXO J164710.2-455216",
+   "subtitle": "Cluster Wd1",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 104,
+   "name": "XTE J1810-197",
+   "subtitle": "",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 105,
+   "name": "1E 1547.0-5408",
+   "subtitle": "SNR G327.24-0.13",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 106,
+   "name": "1E 1048.1-5937",
+   "subtitle": "",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 107,
+   "name": "CXOU J010043.1-721134",
+   "subtitle": "SMC",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 108,
+   "name": "1RXS J170849.0-400910",
+   "subtitle": "",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 109,
+   "name": "CXOU J171405.7-381031",
+   "subtitle": "SNR CTB37B",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 110,
+   "name": "1E 1841-045",
+   "subtitle": "SNR Kes73",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 111,
+   "name": "SGR 0501+4516",
+   "subtitle": "SNR HB9",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 112,
+   "name": "SGR 1627-41",
+   "subtitle": "SNR G337.0-0.1",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 113,
+   "name": "SGR 0526-66",
+   "subtitle": "SNR N49 (LMC)",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 114,
+   "name": "SGR 1900+14",
+   "subtitle": "Cluster",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 115,
+   "name": "SGR 1806-20",
+   "subtitle": "Cluster W31",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 116,
+   "name": "SGR 0418+5729",
+   "subtitle": "",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 117,
+   "name": "Swift J1822.3-1606",
+   "subtitle": "",
+   "type": "MAG",
+   "status": "limited",
+   "references": [
+    "V13"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating",
+    "Upper limits"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 201,
+   "name": "PSR J0554+3107",
+   "subtitle": "G179.0+2.6",
+   "type": "RPP",
+   "status": "limited",
+   "references": [
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 202,
+   "name": "PSR B0950+08",
+   "subtitle": "---",
+   "type": "RPP",
+   "status": "open",
+   "references": [
+    "WEB"
+   ],
+   "issues": [
+    "Age basis",
+    "Heating"
+   ],
+   "in_cooling_sample": true
+  },
+  {
+   "id": 203,
+   "name": "PSR J0837-2454",
+   "subtitle": "---",
+   "type": "HB-PSR",
+   "status": "limited",
+   "references": [
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 204,
+   "name": "eRASSU J131716.9-402647",
+   "subtitle": "---",
+   "type": "XINS",
+   "status": "limited",
+   "references": [
+    "WEB"
+   ],
+   "issues": [
+    "Age basis"
+   ],
+   "in_cooling_sample": false
+  },
+  {
+   "id": 205,
+   "name": "SN 1987A remnant",
+   "subtitle": "MCSNR J0535-6916",
+   "type": "remnant",
+   "status": "limited",
+   "references": [
+    "WEB"
+   ],
+   "issues": [
+    "Observing epoch",
+    "Upper limits"
+   ],
+   "in_cooling_sample": true
+  }
+ ]
+}
