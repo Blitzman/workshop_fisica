@@ -9,7 +9,7 @@ from numpy import sqrt, exp
 
 
 # The fits of this module are those of Yakovlev et al. (2001), Eqs. (199)-(229) (README: Yakovlev and Levenfish 1995, Levenfish and
-# Yakovlev 1994, believed). They equal the transcription of the GitHub code to 1e-15, except the asymptotic form for v > 15 of the
+# Yakovlev 1994, to be checked). They equal the transcription of the GitHub code to 1e-15, except the asymptotic form for v > 15 of the
 # neutron branch of the modified Urca (item NU-11).
 def exp_with_floor(z):
     """exp(z) with the argument floored at -150.

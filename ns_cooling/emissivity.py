@@ -49,7 +49,7 @@ DIRECT_URCA_REFERENCE_ENERGY = HBARC_MEV_FM * (3.0 * np.pi**2 * N0_FM3) ** THIRD
 EP_EXP = -2.0 / 3.0
 PAIR_EXP = 1.0 / 3.0
 # Coefficients of the fit of the pair-annihilation neutrino process. Source: Itoh et al. (1996), ApJS 102, 411
-# (README, believed); the table is not recorded in the original implementation.
+# (README, to be checked); the table is not recorded in the original implementation.
 PAIR_CONSTANTS = (
     5.5924,
     1.2383,
@@ -283,7 +283,7 @@ def electron_proton_bremsstrahlung(s):
     T = s.T
     out = np.zeros_like(T)
     # Prefactor 2.4e17, the exponent EP_EXP, the reference density and the cut at 2.82e14 g/cm^3: source not recorded
-    # (README: Kaminker and Haensel 1999, believed). Not changed by D-014.
+    # (README: Kaminker and Haensel 1999, to be checked). Not changed by D-014.
     m = (s.rho >= 2.82e14) & (s.yp > 0)
     out[m] = (
         2.4e17 * (s.rho[m] * s.yp[m] / 2.82e14) ** EP_EXP * (T[m] * 1e-9) ** 8 * s.mstar_p[m] ** 2
@@ -299,7 +299,7 @@ def core_pbf_emissivity(s):
     out = np.zeros_like(T)
     m = (s.xh == 0) & (s.tau_n <= 1) & (s.yn > 0)
     pf = HBARC_MEV_FM * s.kf_n[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
-    # Pair breaking and formation (README: Yakovlev, Kaminker and Levenfish 1999, believed, and Yakovlev et al. 2001): prefactor 1.17e21.
+    # Pair breaking and formation (README: Yakovlev, Kaminker and Levenfish 1999, to be checked, and Yakovlev et al. 2001): prefactor 1.17e21.
     # The neutron triplet term 2 g_A^2 omits the vector part (item NU-7, open). g_A = 1.26 and sin^2(theta_W) = 0.23 are the values of the
     # original implementation, source not recorded (Bottaro et al. use g_A = 1.27); the structure 4/81 (p_F/m*)^4 and 11/42 of the proton term:
     # source not recorded.
@@ -358,7 +358,7 @@ def electron_ion_bremsstrahlung(s):
     tau = log10(T[m] * 1e-8)
     xr = log10(s.rho[m] * 1e-12)
     # Coefficients of the fit (T = 5e7-2e9 K, rho = 1e9-1.4e14 g/cm^3), including the term 0.228 rho/2.8e14: Haensel, Kaminker
-    # and Yakovlev (1996), A&A 314, 328 (README, believed); the table is not recorded in the original implementation.
+    # and Yakovlev (1996), A&A 314, 328 (README, to be checked); the table is not recorded in the original implementation.
     out[m] = 10.0 ** (
         11.204
         + 7.304 * tau
@@ -382,7 +382,7 @@ def plasma_emissivity(s):
     xr = s.kf_e[m] * HBARC_MEV_FM / ELECTRON_MASS_MEV
     alpha = ALPHA_FS
     fp = sqrt(4.0 * alpha * xr**3 / 3.0 / pi / sqrt(1.0 + xr**2)) / xtr
-    # Coefficients 16.23, 4.604, 1.203e23 and 0.9248: Itoh et al. (1996) (README, believed); not recorded in the original implementation.
+    # Coefficients 16.23, 4.604, 1.203e23 and 0.9248: Itoh et al. (1996) (README, to be checked); not recorded in the original implementation.
     xip = xtr**9 * (16.23 * fp**6 + 4.604 * fp**7.5) * sf.exp_with_floor(-fp)
     out[m] = 1.203e23 * xip * 0.9248 / 96.0 / pi**4 / alpha
     return out

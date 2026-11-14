@@ -1,8 +1,9 @@
 """Standalone B=0 envelope (Tb-Ts) relations.
 
 Inputs Tb [local K], g14=g/(1e14 cm s^-2). No stellar model is needed.
-Fe and accreted fits: Potekhin et al. (2003), ApJ 594, 404. 'accreted' is that
-paper's accreted-envelope fit, not an arbitrary pure-H envelope model.
+Iron fit: Potekhin, Chabrier and Yakovlev (1997), Appendix A, Eqs. A6-A7. Accreted fit: Potekhin et al.
+(2003), ApJ 594, 404 (to be checked); 'accreted' is that paper's accreted-envelope fit, not an arbitrary
+pure-H envelope model.
 """
 
 from dataclasses import dataclass
@@ -38,7 +39,7 @@ def thermal_fluxes(Tb_K, g14=1.36, model="gudmundsson"):
         raise ValueError(f"model must be one of {MODELS}")
     x = T / 1e8
     if model == "gudmundsson":
-        # Ts = 1e6 g14^0.25 (Tb8/1.288)^(1/1.82): Gudmundsson, Pethick and Epstein (1983) (README, believed).
+        # Ts = 1e6 g14^0.25 (Tb8/1.288)^(1/1.82): Gudmundsson, Pethick and Epstein (1983) (README, to be checked).
         # Gudmundsson-type relation with exponent 1/1.82.
         ts = 1e6 * g**0.25 * (x / 1.288) ** (1 / 1.82)
         flux = SIGMA * ts**4 * 1e-30
@@ -46,7 +47,7 @@ def thermal_fluxes(Tb_K, g14=1.36, model="gudmundsson"):
     else:
         t = T / 1e9
         # Iron envelope: Potekhin, Chabrier and Yakovlev (1997), Eqs. A6-A7 (equal to the GitHub transcription, item EN-1). The accreted
-        # relation is the form of Potekhin et al. (2003) with a correction factor and a mixing with the iron fit (item EN-2, open).
+        # relation is the form of Potekhin et al. (2003) with a correction factor and a mixing with the iron fit (decision D-032: kept).
         z = t - 1e-3 * g**0.25 * np.sqrt(7 * t)
         if np.any(z <= 0):
             raise ValueError("Fe/accreted fit requires zeta>0; increase Tb")

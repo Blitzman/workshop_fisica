@@ -33,7 +33,7 @@ CONDUCTIVITY_UNIT = K_B * C / LAMBDA_C**2  # k_B c / lambda_C^2 [erg cm^-1 s^-1 
 
 
 # The numerical coefficients of the functions below (Coulomb logarithm, collision integrals, thermal and impurity terms) are
-# those of Potekhin's electron-conductivity fit (2019 version, COULAN 1999, TAUEESY 2016) as in the original implementation;
+# those of Potekhin's electron-conductivity fit (2019 version, COULAN 1999, TAUEESY 2016) as in the original implementation (Potekhin's public codes, Ioffe Institute website, www.ioffe.ru/astro/; exact page to be checked);
 # they have not been checked against the papers (item RF-1).
 def coulomb_log(xs, xw, v):
     """Coulomb logarithm, 1999 point-nucleus formulation (no finite nuclear-size correction)."""

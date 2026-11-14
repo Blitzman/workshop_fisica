@@ -138,7 +138,7 @@ def test_the_muon_conductivity_is_the_electron_expression_with_the_muon_density_
 def test_superfluid_heat_capacity_regimes(background):
     """Hypothesis: superfluidity leaves the heat capacity unchanged above T_c, reduces it strongly deep
         inside the gap, and keeps the jump just below T_c.
-    Reference: the reduction factors of Yakovlev, Levenfish and Shibanov (1999) (README, believed).
+    Reference: the reduction factors of Yakovlev, Levenfish and Shibanov (1999) (README, to be checked).
     Criterion: a ratio of exactly 1 at 1e10 K, below 0.5 where T_c > 3 T, and above 1 where 1 <
         T_c/T < 1.5.
     """

@@ -25,7 +25,7 @@ from superfluid import dimensionless_pairing_gap
 
 
 # The coefficients of the factors R, Z and R_C below, and those of the collision frequencies, are fit values of Shternin and
-# Yakovlev (2007, 2008) and Baiko, Haensel and Yakovlev (2001) (README, believed; the original implementation does not name
+# Yakovlev (2007, 2008) and Baiko, Haensel and Yakovlev (2001) (README, to be checked; the original implementation does not name
 # them): to be checked against the papers (item RF-1).
 def _pairing_factors(tau, pairing):
     """Superfluid reduction factors (R, Z, R_C) of the collision frequencies and of the neutron conduction."""
@@ -131,7 +131,7 @@ def core_conductivity(T_K, rho, Y_e, tau_n=10.0, tau_p=10.0, *, effective_masses
         muons = np.where(present, kappa, 0.0)
         nu_mm, nu_mn, nu_mp = (np.where(present, v, 0.0) for v in (a, b, c))
     # Collision frequencies and prefactor of the neutron conduction (3.48e15, 7.2e23): Baiko, Haensel and Yakovlev (2001)
-    # (README, believed).
+    # (README, to be checked).
     # Interaction/superfluid corrections to the neutron collision frequencies are set to 1.
     nunn = 3.48e15 * mn**3 * T8**2
     nunp = 3.48e15 * mn * mp**2 * T8**2

@@ -32,7 +32,7 @@ def test_analytic_slope_matches_finite_difference(model):
 
 
 def test_fe_fit_uses_zeta_over_three():
-    """Hypothesis: the iron envelope follows the fit of Potekhin et al. (2003).
+    """Hypothesis: the iron envelope follows the fit of Potekhin, Chabrier and Yakovlev (1997), Appendix A.
     Reference: Ts^4 = g14 [(7 zeta)^2.25 + (zeta/3)^1.25] in units of 1e6 K, with zeta = t - 1e-3
         g14^0.25 sqrt(7 t).
     Criterion: relative 1e-13 at T_b = 1e8, 5e8 and 2e9 K.
@@ -46,7 +46,7 @@ def test_fe_fit_uses_zeta_over_three():
 
 def test_gudmundsson_scaling():
     """Hypothesis: T_b = 1.288e8 K gives T_s = 1e6 K for g14 = 1.
-    Reference: the Gudmundsson, Pethick and Epstein (1983) relation (README, believed).
+    Reference: the Gudmundsson, Pethick and Epstein (1983) relation (README, to be checked).
     Criterion: relative 1e-12.
     """
     ts = thermal_fluxes(1.288e8, 1.0, "gudmundsson").surface_temperature_K

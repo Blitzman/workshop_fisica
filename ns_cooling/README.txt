@@ -435,8 +435,11 @@ L computed after each step. If missing, gudmundsson is used; a wrong value
 gives an explicit error. No other file needs to be modified.
 
 Gudmundsson: Ts = 1e6*g14^0.25*(Tb8/1.288)^(1/1.82).
-Fe and accreted: fits of Potekhin et al. (2003), ApJ 594, 404. Accreted is
-that paper's accreted-envelope fit, not a pure-H model with configurable mass.
+Fe: the iron fit of Potekhin, Chabrier and Yakovlev (1997), Eqs. A6-A7. Accreted: the accreted-envelope fit of
+Potekhin et al. (2003), ApJ 594, 404 (to be checked), not a pure-H model with configurable mass. The partially
+accreted model of the 1997 paper is not offered (decision D-032).
+The envelope is attached at the base of the cooled domain, with the local temperature there and the surface
+gravity at the edge of the table (decision D-032).
 The three models use the same implicit linearization:
     x = Tb/1e8; F = sigma*Ts^4*1e-30
     cfluxb = dF/dx
@@ -556,78 +559,115 @@ and 2, and CONVENTIONS.md) do not apply to it.
   default, an approximation) carries a comment that says where it comes from, or that its source is not recorded.
 
 REFERENCES AND FORMULAS
-The formulas of the model and their sources. References marked (believed) were not recorded in the
-original implementation and are given from memory of the literature: check them against the papers
-before quoting them. The paper of Bottaro, Caputo and Fiorillo and the expressions derived for this
-version are cited exactly, and the places where the implementation differs from a source are stated.
+One list for the whole project (decision D-030): the list of this README and that of the old GitHub work are merged,
+and a paper that appears on both sides is cited once, with all its identifiers. Tags: (read from the PDF) means that
+the equations were transcribed from the paper, with their numbers, in the old GitHub work and compared with this code;
+(to be checked) means that the reference was not recorded in the original implementation and is given from memory of
+the literature: check it against the paper before quoting it. The paper of Bottaro, Caputo and Fiorillo and the
+expressions derived for this version are cited exactly, and the places where the implementation differs from a
+source are stated.
 
 Structure of the star
 - Tolman-Oppenheimer-Volkoff equations in x = ln(P/Pc) (tov.py): Tolman (1939), Phys. Rev. 55, 364;
   Oppenheimer and Volkoff (1939), Phys. Rev. 55, 374. exp(Phi) is matched to the Schwarzschild exterior.
 - Stable branch of M(Pc), between the minimum and the maximum mass: the turning-point criterion
-  (Harrison, Thorne, Wakano and Wheeler 1965) (believed).
-- EOS tables (eos_table.py): CompOSE format (compose.obspm.fr; Typel et al. 2015, 2022) (believed).
-  BSk22 and BSk26 unified EOS: Pearson et al. (2018), MNRAS 481, 2994 and the Skyrme functionals of
-  Goriely, Chamel and Pearson (2013), Phys. Rev. C 88, 024308 (both believed); see the README of each
-  folder of eos/.
+  (Harrison, Thorne, Wakano and Wheeler 1965) (to be checked).
+- EOS tables (eos_table.py): CompOSE format (compose.obspm.fr; Typel et al. 2015, 2022) (to be checked).
+- BSk22, BSk24 and BSk26 unified EOS: Pearson et al. (2018), MNRAS 481, 2994 (journal reference to be checked). The old
+  GitHub work read the analytic fits (bskfit18.f, Ioffe Institute website, www.ioffe.ru/astro/NSG/BSk/) and
+  reproduced the structure and the direct-Urca threshold of BSk24; the mass-radius curves of the packages agree with
+  the structure computed here (see TESTS). Skyrme functionals: Goriely, Chamel and Pearson (2013), Phys. Rev. C 88,
+  024308 (to be checked). See also the README of each folder of eos/.
 
 Thermal evolution
-- Heat transport and energy balance in general relativity with the redshifted temperature
-  T_inf = exp(Phi) T: Thorne (1977), MNRAS 178, 501 (believed); L_inf = 4 pi R^2 sigma Ts^4 exp(2 Phi).
+- Heat transport and energy balance in general relativity with the redshifted temperature T_inf = exp(Phi) T:
+  Thorne (1977), ApJ 212, 825, and Thorne (1967), High Energy Astrophysics, vol. 3, p. 166 (both to be checked; the
+  earlier citation MNRAS 178, 501 could not be confirmed and was replaced). L_inf = 4 pi R^2 sigma Ts^4 exp(2 Phi).
 - Time integration: Crank and Nicolson (1947), Proc. Camb. Phil. Soc. 43, 50; the predictor-corrector
   with midpoint coefficients is a standard second-order scheme for nonlinear problems.
 - Envelopes: Gudmundsson-type relation Ts = 1e6 g14^0.25 (Tb8 / 1.288)^(1/1.82) (Gudmundsson, Pethick and
-  Epstein 1983, ApJ 272, 286, believed); Fe and accreted fits of Potekhin et al. (2003), ApJ 594, 404.
+  Epstein 1983, ApJ 272, 286, to be checked). Iron fit: Potekhin, Chabrier and Yakovlev (1997), arXiv:astro-ph/9706148,
+  Appendix A, Eqs. A6-A7 (read from the PDF; equal to the local formula). Accreted fit: Potekhin et al. (2003),
+  ApJ 594, 404 (to be checked), which differs from the fully accreted relation of the 1997 paper; the local fit is kept (decision D-032).
 
 Heat capacity (heat_capacity.py)
 - Electrons and muons: degenerate relativistic gas, C = k_B^2 T E_F k_F / (3 (hbar c)^2), E_F = sqrt((hbar c
-  k_F)^2 + m^2 c^4) (standard: Landau and Lifshitz, Statistical Physics; Shapiro and Teukolsky 1983, believed).
+  k_F)^2 + m^2 c^4) (standard: Landau and Lifshitz, Statistical Physics; Shapiro and Teukolsky 1983, to be checked).
   The electron term uses the same expression as the muons.
 - Nucleons: Landau quasiparticles, C = k_B^2 T m* k_F / (3 hbar^2) with the Landau effective mass m* = k_F / v_F
-  (Landau 1957; Baym and Pethick 1991, Landau Fermi-Liquid Theory, believed). The tests check the lepton and
+  (Landau 1957; Baym and Pethick 1991, Landau Fermi-Liquid Theory, to be checked). The tests check the lepton and
   nucleon expressions against a numerical Fermi-Dirac gas.
-- Superfluid reduction factors and the dimensionless gap fits: Levenfish and Yakovlev (1994), Astron. Lett. 20,
-  43 and Yakovlev, Levenfish and Shibanov (1999), Physics-Uspekhi 42, 737 (both believed).
+- Superfluid reduction factors: Yakovlev, Levenfish and Shibanov (1999), Physics-Uspekhi 42, 737 =
+  arXiv:astro-ph/9906456, Eq. 18 (read from the PDF; the coefficients are equal to the local ones). Original source:
+  Levenfish and Yakovlev (1994), Astron. Lett. 20, 43 (to be checked).
 - Ions (gas, liquid and Debye-solid fits): Van Riper (1991), ApJS 75, 449, Eqs. 24-25; identified by matching its
   coefficients (the original implementation did not record the source).
 
 Neutrino emissivities (emissivity.py, emissivity_factors.py)
-- Modified Urca and nucleon bremsstrahlung, standard rates: Friman and Maxwell (1979), ApJ 232, 541, in the
-  parametrization of Yakovlev, Kaminker, Gnedin and Haensel (2001), Phys. Rep. 354, 1; superfluid reduction:
-  Yakovlev and Levenfish (1995), A&A 297, 717 and Levenfish and Yakovlev (1994).
+- Yakovlev, Kaminker, Gnedin and Haensel (2001), Phys. Rep. 354, 1 = arXiv:astro-ph/0012122 (Y01, read from the
+  PDF): nucleon bremsstrahlung Eqs. 165-167 (the local rates equal them since D-020), pairing reduction factors
+  Eqs. 199-229 (equal to the local formulas except the asymptotic form for v > 15, item NU-11) and pair breaking
+  Eqs. 236-241.
+- Modified Urca, standard rates: the source of the local prefactors (8.55e21 neutron branch, 8.53e21 proton branch,
+  alpha(n), beta = 0.68) is not recorded. They differ from Y01, Eqs. 140 and 142 (8.1e21 with alpha_n = 1.13); they
+  are probably the earlier parametrization of Yakovlev and Levenfish (1995), A&A 297, 717 (to be checked). The
+  original rates are Friman and Maxwell (1979), ApJ 232, 541 (to be checked). Item NU-1 is open.
+- Superfluid reduction of the rates: Y01 Eqs. 199-229 as the primary source; the original sources are Yakovlev and
+  Levenfish (1995) and Levenfish and Yakovlev (1994) (to be checked).
 - Direct Urca: Lattimer, Pethick, Prakash and Haensel (1991), Phys. Rev. Lett. 66, 2701; emissivity prefactor
   Q = (457 pi / 10080) G^2 cos^2(theta_C) (1 + 3 g_A^2) m*_n m*_p mu_l (k_B T)^6 as in Yakovlev et al. (2001).
   The threshold k_n <= k_p + k_l uses the proton Fermi momentum from the proton density. The muon channel
   (lepton factor mu_mu, threshold k_n <= k_p + k_mu) is the same expression for the muon, verified here
   numerically as described in DIRECT URCA THRESHOLD; it is not taken from a published formula.
-- Cooper pair breaking and formation: Yakovlev, Kaminker and Levenfish (1999), A&A 343, 650 (believed) and
-  Yakovlev et al. (2001). Plasmon decay and pair annihilation: Itoh et al. (1996), ApJS 102, 411 (believed).
-  Electron-ion bremsstrahlung: Haensel, Kaminker and Yakovlev (1996), A&A 314, 328 (believed). Electron-proton
-  bremsstrahlung: Kaminker and Haensel (1999), Acta Phys. Pol. B 30, 1125 (believed).
+- Cooper pair breaking and formation: Y01 Eqs. 236-241 and Yakovlev, Kaminker and Levenfish (1999), A&A 343, 650
+  (to be checked). The update of the triplet rate of Potekhin and Chabrier (2018), A&A 609, A74 =
+  arXiv:1711.07662, Sect. 3 (read from the PDF) is not implemented (item NU-7).
+- Plasmon decay and pair annihilation: Itoh et al. (1996), ApJS 102, 411 (to be checked). Electron-ion
+  bremsstrahlung: Haensel, Kaminker and Yakovlev (1996), A&A 314, 328 (to be checked). Electron-proton
+  bremsstrahlung: Kaminker and Haensel (1999), Acta Phys. Pol. B 30, 1125 (to be checked).
+- In-medium modified Urca: Shternin, Baldo and Haensel (2018), Phys. Lett. B 786, 28 = arXiv:1807.06569, Eqs. 8-9
+  and 12 (read from the PDF); not implemented (item NU-5).
 - Updated modified Urca and nucleon bremsstrahlung (emissivity_updated.py): Bottaro, Caputo and Fiorillo (2024),
   JCAP, arXiv:2406.18640: Eqs. 3.3, 3.7-3.9 and 3.11 (nn, pp), 3.13 and 3.15-3.17 (np), 3.22 and 3.28 (modified
   Urca, neutron branch, triangular), 3.39 (proton branch). Parameters of the paper: m_pi = 138 MeV, m_rho =
-  769 MeV, C_rho = 1.4 (Bonn potential, Machleidt, Holinde and Elster 1987, Phys. Rep. 149, 1), Landau parameters
-  F0' = 0.7 and G0 = 1.1 (Sjoberg 1976; Anastasio and Brown 1977, as cited there), G = G_F cos(theta_C),
-  g_A = 1.27. Differences with the paper: the nucleon effective masses enter as overall powers, the pairing
-  reduction factors are those of the standard processes, the Friman-Maxwell suppression factors beta (0.56 nn,
-  0.66 np, 0.70 pp, 0.68 modified Urca) are kept, and the rates apply in the core only. Not implemented: the
-  non-triangular integrals (Eqs. 3.34 and 3.37) and in-medium effects.
+  769 MeV, C_rho = 1.4, Landau parameters F0' = 0.7 and G0 = 1.1, G = G_F cos(theta_C), g_A = 1.27. Differences
+  with the paper: the nucleon effective masses enter as overall powers, the pairing reduction factors are those of
+  the standard processes, the Friman-Maxwell suppression factors beta (0.56 nn, 0.66 np, 0.70 pp, 0.68 modified
+  Urca) are kept, and the rates apply in the core only. Not implemented: the non-triangular integrals (Eqs. 3.34
+  and 3.37) and in-medium effects.
 
 Superfluidity (superfluid.py)
 - Gap models 1-16 (crust neutron 1S0, proton 1S0, core neutron 3P2) with the parameters of GAP_MODELS: the
-  numbering follows the NSCool code (Page) (believed). Dimensionless gap v(T/Tc): Levenfish and Yakovlev (1994)
-  and Yakovlev, Levenfish and Shibanov (1999) (believed).
+  numbering follows the NSCool code (Page) (to be checked); the source of each row is not recorded. Compared with
+  Ho, Elshamouty, Heinke and Potekhin (2015), Phys. Rev. C 91, 015806 = arXiv:1412.7759, Eqs. 1-2 and Table II (read
+  from the PDF): model 11 equals EEHO (triplet) after the conversion of the normalization, models 11 and 15, and 2
+  and 7, are identical, and the other rows do not match any model of that paper within 3 % (item SF-2).
+- Dimensionless gap v(T/Tc): Y01 Eq. 188 (read from the PDF; equal in both codes) and Levenfish and Yakovlev (1994)
+  (to be checked).
 
 Thermal conductivity (conductivity_core.py, conductivity_crust.py)
 - Core electrons and neutrons, the collision frequencies and the factors R, Z, R_C: Shternin and Yakovlev (2007),
   Phys. Rev. D 75, 103004 (electron and muon conduction by the exchange of transverse plasmons) and Baiko,
   Haensel and Yakovlev (2001), A&A 374, 151 (neutrons), with the superfluid factors of Shternin and Yakovlev
-  (2008) (all believed; the original implementation does not name them).
+  (2008) (all to be checked; the original implementation does not name them).
 - Muon conduction: the adaptation of the electron expression described in MICROPHYSICS (own approximation). The
   coupled electron-muon treatment of Shternin and Yakovlev (2007) is not implemented.
-- Crust electrons: Potekhin's electron-conductivity fit (2019 version), COULAN (1999) (Potekhin, Baiko, Haensel and
-  Yakovlev 1999, A&A 346, 345, believed) and TAUEESY (2016), as named in the original implementation; Qimp = 0.1.
+- Crust electrons: Potekhin's electron-conductivity fit and its public codes, Ioffe Institute website
+  (www.ioffe.ru/astro/); the exact page and the "2019 version" named in the original implementation are to be
+  checked. Also COULAN (1999) (Potekhin, Baiko, Haensel and Yakovlev 1999, A&A 346, 345, to be checked) and TAUEESY
+  (2016), names of routines of the original implementation (the paper is to be checked). Qimp = 0.1.
+
+Observations and benchmarks (not used by the code)
+- Marino et al. (2024), Nature Astronomy 8, 1020 = arXiv:2404.05371 (read from the PDF): the paper that the project
+  sets out to test; its three sources are in observations/marino2024_sources.json (Supplementary Table 6).
+- Thermal catalogue of isolated neutron stars, observations/ns_thermal_catalogue.html (decision D-031): the starting
+  working list of sources, to be improved and checked. 77 entries, 29 of them in the cooling sample. The file carries
+  its own list of references with their DOIs (V13, P20, WEB, M24, HO26, R21, B06, SU26). The file
+  observations/ns_thermal_sample.json is derived from it by observations/extract_thermal_sample.py.
+- Yakovlev, Ho, Shternin, Heinke and Potekhin (2011), arXiv:1010.1154, Eq. 14 (read from the PDF): the redshifted
+  temperature of the standard candle.
+- Ofengeim, Fortin, Haensel, Yakovlev and Zdunik (2017), arXiv:1612.04672 (read from the PDF): fits of the
+  integrated heat capacity and neutrino luminosity.
 
 TESTS (decision D-028)
 The tests follow the style of the validation steps of the GitHub code: few, each with a hypothesis, a
