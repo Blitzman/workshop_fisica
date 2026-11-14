@@ -24,6 +24,9 @@ from effective_mass import effective_mass_ratios
 from superfluid import dimensionless_pairing_gap
 
 
+# The coefficients of the factors R, Z and R_C below, and those of the collision frequencies, are fit values of Shternin and
+# Yakovlev (2007, 2008) and Baiko, Haensel and Yakovlev (2001) (README, believed; the original implementation does not name
+# them): to be checked against the papers (item RF-1).
 def _pairing_factors(tau, pairing):
     """Superfluid reduction factors (R, Z, R_C) of the collision frequencies and of the neutron conduction."""
     mask = tau <= 1
@@ -50,6 +53,7 @@ def lepton_conductivity(T8, n_lepton, n_n, n_p, mn, mp, Rn, Rp, Zn, Zp, velocity
     ``Zp`` the superfluid factors; ``velocity`` the factor p_F / mu of the lepton (1 for electrons).
     Returns ``(kappa, nu_ll, nu_ln, nu_lp)``.
     """
+    # 0.16 fm^-3 is the reference density of the fit (source not recorded).
     sfn = mn * (n_n * 0.16 / n_lepton**2) ** (1.0 / 3.0) * Zn
     sfp = mp * (n_p * 0.16 / n_lepton**2) ** (1.0 / 3.0) * Zp
     q = np.sqrt(0.00929 * (1.0 + 2.83 * (sfn + sfp)))
@@ -98,6 +102,7 @@ def core_conductivity(T_K, rho, Y_e, tau_n=10.0, tau_p=10.0, *, effective_masses
     T8 = T_K / 1.0e8
     Y_p = Y_e + Y_mu
     Y_n = 1.0 - Y_p
+    # 1.66e-24 g (1.66e15 per fm^3) is the mass unit of the microphysics (constants.MICROPHYSICS_MASS_UNIT).
     nb = rho / 1.66e15
     ne = nb * Y_e
     n_mu = nb * Y_mu
@@ -125,6 +130,8 @@ def core_conductivity(T_K, rho, Y_e, tau_n=10.0, tau_p=10.0, *, effective_masses
         )
         muons = np.where(present, kappa, 0.0)
         nu_mm, nu_mn, nu_mp = (np.where(present, v, 0.0) for v in (a, b, c))
+    # Collision frequencies and prefactor of the neutron conduction (3.48e15, 7.2e23): Baiko, Haensel and Yakovlev (2001)
+    # (README, believed).
     # Interaction/superfluid corrections to the neutron collision frequencies are set to 1.
     nunn = 3.48e15 * mn**3 * T8**2
     nunp = 3.48e15 * mn * mp**2 * T8**2

@@ -116,6 +116,7 @@ class EnergyClosure:
         return "\n".join(lines)
 
 
+# t_min_K, t_max_K and points: free numerical choices (range and size of the thermal-energy tables).
 def thermal_energy_tables(background, *, t_min_K=1e4, t_max_K=4e10, points=4000, terms=None):
     """Per-cell table of U(T) = integral of C_v dT [erg cm^-3] on a logarithmic temperature grid.
 
@@ -182,6 +183,7 @@ def validate_energy_options(start_years, tolerance):
         raise ValueError("energy tolerance must be positive and finite")
 
 
+# start_years = 1 yr and tolerance = 2 % are free choices.
 def energy_closure(budget, *, start_years=1.0, tolerance=0.02):
     """Closure error per decade of time, from ``start_years`` to the end of the run.
 

@@ -23,6 +23,7 @@ class ThermalFluxes:
     flux_slope: np.ndarray
 
 
+# g14 = 1.36 is a free default (no source recorded).
 def thermal_fluxes(Tb_K, g14=1.36, model="gudmundsson"):
     """Return Ts and local flux F ≈ offset + slope*Tb8 about the input Tb.
 
@@ -37,12 +38,15 @@ def thermal_fluxes(Tb_K, g14=1.36, model="gudmundsson"):
         raise ValueError(f"model must be one of {MODELS}")
     x = T / 1e8
     if model == "gudmundsson":
+        # Ts = 1e6 g14^0.25 (Tb8/1.288)^(1/1.82): Gudmundsson, Pethick and Epstein (1983) (README, believed).
         # Gudmundsson-type relation with exponent 1/1.82.
         ts = 1e6 * g**0.25 * (x / 1.288) ** (1 / 1.82)
         flux = SIGMA * ts**4 * 1e-30
         slope = 4 / 1.82 * flux / x
     else:
         t = T / 1e9
+        # Iron envelope: Potekhin, Chabrier and Yakovlev (1997), Eqs. A6-A7 (equal to the GitHub transcription, item EN-1). The accreted
+        # relation is the form of Potekhin et al. (2003) with a correction factor and a mixing with the iron fit (item EN-2, open).
         z = t - 1e-3 * g**0.25 * np.sqrt(7 * t)
         if np.any(z <= 0):
             raise ValueError("Fe/accreted fit requires zeta>0; increase Tb")

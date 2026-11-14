@@ -4,6 +4,10 @@ import numpy as np
 from constants import BOLTZMANN_MEV_PER_K
 from numerical_validation import checked
 
+# Gap models 1-16 (1-7 crust neutron 1S0, 8-10 proton 1S0, 11-16 core neutron 3P2) in the four-parameter form of Ho et al.
+# (2015), Eq. 2. The numbering follows NSCool (README, believed); the source of each row is not recorded. Checked against the Ho et
+# al. models (item SF-2): model 11 equals EEHO (triplet) after the conversion of the normalisation; models 11 and 15, and 2 and 7,
+# are identical; the other rows do not match any Ho et al. model within 3 %.
 # imod: (Delta_scale [MeV], k1 [fm^-1], k2 [fm^-2], k3 [fm^-1], k4 [fm^-2])
 GAP_MODELS = {
     1: (9.3, 0.02, 0.6, 1.55, 0.32),
@@ -23,6 +27,8 @@ GAP_MODELS = {
     15: (0.068, 1.28, 0.1, 2.37, 0.02),
     16: (2.9, 1.21, 0.5, 1.62, 0.5),
 }
+# k_B T_c / Delta: 0.5669 (singlet) and 0.8416 (triplet) for the Delta of this table; the Ho et al. table uses 0.1187 for its
+# triplet Delta0 (item SF-3). Type 3 is not used.
 TC_GAP_RATIO = {1: 0.5669, 2: 0.8416, 3: 0.4926}
 
 

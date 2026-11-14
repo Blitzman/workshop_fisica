@@ -159,6 +159,7 @@ def derived_fermi_quantities(rho, ye, yn, yp):
     n_n, kf_n = fermi(yn)
     n_p, kf_p = fermi(yp)
     _, kf_e = fermi(ye)
+    # 1.66e-24 g: the mass unit of the microphysics (constants.MICROPHYSICS_MASS_UNIT).
     nb = rho / 1.66e-24
     # Evaluated at each location, not by averaging effective masses of other locations.
     mstar_n, mstar_p = effective_mass_ratios(n_n, n_p)

@@ -47,6 +47,8 @@ class MeshSpec:
                 raise ValueError(f"{name} must be positive and finite (or omitted)")
 
 
+# Mesh presets: free numerical choices (spacing in ln P in the core and the crust, optional cap on the core cell size); see the
+# module docstring and the README.
 PRESETS = {
     "A": MeshSpec("A", 0.101, 0.101),
     "B": MeshSpec("B", 0.10, 0.05, blend=0.5),

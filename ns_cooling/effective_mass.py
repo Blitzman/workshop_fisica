@@ -1,9 +1,10 @@
-"""Neutron and proton effective-mass ratios from tabulated values (42 points),
-linearly interpolated in single precision."""
+"""Neutron and proton effective-mass ratios from tabulated values (42 points), linearly interpolated."""
 
 import numpy as np
 from numerical_validation import checked
 
+# Source of the tables: not recorded in the original implementation. Candidate, not confirmed: Chao, Clark and Yang (1972), Nucl.
+# Phys. A 179, 320, Fig. 3, curves "MS i", which Van Riper (1991) uses for the effective masses (decision D-008).
 # Tables of the Fermi momentum k [fm^-1] and the effective-mass ratio m*/m.
 NEUTRON_KF_TABLE = [
     0.0,
@@ -192,14 +193,13 @@ def effective_mass_ratios(n_n_cm3, n_p_cm3):
 
     def interp(n, grid, vals):
         n = checked(n, "particle number density")
-        # The exponent is the single-precision value of 1/3.
-        k = np.asarray((2.96088e-38 * n) ** float(np.float32(0.333333333333333)), dtype=np.float32)
-        grid, vals = np.asarray(grid, np.float32), np.asarray(vals, np.float32)
+        k = np.asarray((3.0 * np.pi**2 * n * 1e-39) ** (1.0 / 3.0))  # k_F [fm^-1] from n [cm^-3]
+        grid, vals = np.asarray(grid, float), np.asarray(vals, float)
         idx = np.clip(np.searchsorted(grid, k, side="left") - 1, 0, 40)
         # Clip BEFORE interpolating to avoid extrapolation or huge products.
         k = np.clip(k, grid[0], grid[-1])
         d = (k - grid[idx]) / (grid[idx + 1] - grid[idx])
-        value = d * vals[idx + 1] + (np.float32(1.0) - d) * vals[idx]
+        value = d * vals[idx + 1] + (1.0 - d) * vals[idx]
         return value.astype(float)
 
     return interp(n_n_cm3, NEUTRON_KF_TABLE, NEUTRON_MSTAR_RATIO_TABLE), interp(

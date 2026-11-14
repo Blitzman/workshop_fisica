@@ -68,6 +68,7 @@ class StructureOptions:
     base_density: float = 1e10
     mesh: MeshSpec = None
     rtol: float = 1e-9
+    # Maximum step of the TOV integration in ln P: a free numerical parameter.
     max_step: float = 0.05
 
     def __post_init__(self):
@@ -133,6 +134,7 @@ class StellarModel:
         return f"{self.star.mass_solar:.2f} Msun"
 
 
+# Largest cell [km] allowed across a direct-Urca edge before the resolution warning: a free numerical parameter.
 DIRECT_URCA_MAX_CELL_KM = 0.35
 
 

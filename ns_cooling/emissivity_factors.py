@@ -8,6 +8,9 @@ import numpy as np
 from numpy import sqrt, exp
 
 
+# The fits of this module are those of Yakovlev et al. (2001), Eqs. (199)-(229) (README: Yakovlev and Levenfish 1995, Levenfish and
+# Yakovlev 1994, believed). They equal the transcription of the GitHub code to 1e-15, except the asymptotic form for v > 15 of the
+# neutron branch of the modified Urca (item NU-11).
 def exp_with_floor(z):
     """exp(z) with the argument floored at -150.
 
@@ -80,8 +83,10 @@ def modified_urca_n_neutron_triplet_factor(v):
     """Dimensionless pairing-reduction factor; v = Delta(T)/(k_B T)."""
     v = np.asarray(v, float)
     out = np.empty_like(v)
+    # For v > 15 an asymptotic form is used, whose source is not recorded; it falls a factor ~52 below the Yakovlev et al. (2001) fit
+    # at v = 15 (item NU-11, open).
     large = v > 15.0
-    prefactor = 1.20960 * 2.0 * 0.209 / 0.11513 / 3.1415927**8 / 3.0 / 1.7320508
+    prefactor = 1.20960 * 2.0 * 0.209 / 0.11513 / np.pi**8 / 3.0 / np.sqrt(3.0)
     out[large] = prefactor * v[large] ** 6 * exp_with_floor(-2.0 * v[large])
     out[~large] = modified_urca_p_proton_factor(v[~large])
     return out

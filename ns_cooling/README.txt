@@ -274,8 +274,9 @@ for a star with Direct Urca use mesh C or finer and compare meshes (refine = 2).
 Validation (tests): an n = 1 polytrope reproduces the analytic radius and mass up to the
 post-Newtonian correction (proportional to the compactness); the mass, hydrostatic and
 metric equations hold on the profile; the mass-radius curve matches eos.mr within 0.13%
-in radius and 0.03% in M_max; the Direct Urca threshold star has 1.148 Msun for BSk22
-(the description of the EOS quotes 1.151 Msun).
+in radius and 0.03% in M_max (the one test of the structure against a reference, for BSk22). The Direct Urca
+threshold star has 1.148 Msun for BSk22 (the description of the EOS quotes 1.151 Msun); this was checked
+once and is not part of the tests.
 Limits: no layers above the first row of the table; one nuclear species per row;
 no 3P2 neutron gap or crust effective masses in the EOS; the interface is known
 only to the spacing of the table.
@@ -374,7 +375,7 @@ mu_mu = mu_e, so kf_mu < kf_e and the muon channel opens at a higher density tha
 Emissivity of each lepton: Q_l = 4.0e27 m*_n m*_p T9^6 (mu_l / E_ref) R_du, E_ref = 331.4 MeV, where
 mu_l is the Fermi energy (sqrt((hbar c kf)^2 + m^2 c^4)) and mu_e / E_ref = (Ye rho / 2.656e14)^(1/3) is
 the electron factor; where both channels are open and mu_mu = mu_e the emission doubles. The lepton
-enters only through mu_l and its threshold. This was verified (tests/test_direct_urca_muons.py): the
+enters only through mu_l and its threshold. This was verified (tests/test_emissivities.py): the
 spin-summed matrix element computed with explicit Dirac spinors has no mass term besides the lepton
 energy, and the phase-space integral with exact kinematics gives Q = (457 pi / 10080) G^2 cos^2(theta_C)
 (1 + 3 g_A^2) m*_n m*_p mu_l (k_B T)^6 for the electron and the muon alike (0.999 of the coefficient at
@@ -542,6 +543,18 @@ luminosity itself by 7% at 400 yr, 0.3% at 300 yr and 0.5% at 1 kyr; below 0.05%
 Use the check after adding physics or changing tolerances. The functions are in
 energy_balance.py (energy_budget, energy_closure).
 
+WORKING RULES (decision D-026)
+These are the rules of the ns_cooling project. The axion-specific rules of the repository (AGENTS.md sections 1
+and 2, and CONVENTIONS.md) do not apply to it.
+- Before testing a non-trivial idea, write the hypothesis (in the tracker); afterwards record whether it was
+  confirmed or refuted, and why.
+- A new result counts as validated only if it first reproduces a published result by other authors. A one-off
+  comparison recorded in the tracker is enough; it does not have to become a test.
+- The physical premise of a new line of work is reviewed by the group before code is written; results are
+  presented as preliminary.
+- Free numbers are allowed. A number that is not a physical constant or a cited value (a fit parameter, a
+  default, an approximation) carries a comment that says where it comes from, or that its source is not recorded.
+
 REFERENCES AND FORMULAS
 The formulas of the model and their sources. References marked (believed) were not recorded in the
 original implementation and are given from memory of the literature: check them against the papers
@@ -575,7 +588,8 @@ Heat capacity (heat_capacity.py)
   nucleon expressions against a numerical Fermi-Dirac gas.
 - Superfluid reduction factors and the dimensionless gap fits: Levenfish and Yakovlev (1994), Astron. Lett. 20,
   43 and Yakovlev, Levenfish and Shibanov (1999), Physics-Uspekhi 42, 737 (both believed).
-- Ions (gas, liquid and Debye-solid fits): source not recorded in the original implementation.
+- Ions (gas, liquid and Debye-solid fits): Van Riper (1991), ApJS 75, 449, Eqs. 24-25; identified by matching its
+  coefficients (the original implementation did not record the source).
 
 Neutrino emissivities (emissivity.py, emissivity_factors.py)
 - Modified Urca and nucleon bremsstrahlung, standard rates: Friman and Maxwell (1979), ApJ 232, 541, in the
@@ -615,29 +629,39 @@ Thermal conductivity (conductivity_core.py, conductivity_crust.py)
 - Crust electrons: Potekhin's electron-conductivity fit (2019 version), COULAN (1999) (Potekhin, Baiko, Haensel and
   Yakovlev 1999, A&A 346, 345, believed) and TAUEESY (2016), as named in the original implementation; Qimp = 0.1.
 
-TESTS
-    python -m pip install -r requirements-dev.txt     (pytest)
-    make test                                         (python -m pytest tests, ~2 min)
-Covered: background validation, composition (charge neutrality, baryon number, muon
-fractions and Fermi momenta); the local state; the registries
-(adding, replacing and removing physics); the heat capacity (the lepton and Landau
-formulas against a numerical Fermi-Dirac gas, their limits, the muon term and the sum of the
-registered terms); microphysics regimes (superfluid heat-capacity jump); the core conductivity with muons (the npe
-results reproduced exactly, the lepton expression and its velocity factor, the composition, the
-response to pairing and the registered channel); envelope slopes against
-finite differences and the Fe fit; the order of the theta-method against an exact
-solution (1 for backward Euler, 2 for Crank-Nicolson); monotonic cooling with the default start; the energy balance (the default
-scheme must close, plain backward Euler and a deliberately inconsistent solver must
-be flagged, new physics passes automatically); input parsing; the command line.
-For the EOS star: the reader (BSk22 and BSk26) and its refusal of corrupted tables, the
-structure equations and their analytic limit, the mass solver and the stable branch,
-the mesh, the background conventions, the effective masses, the Direct Urca threshold
-against the published value, the surface factor (the heat removed at the base equals
-the reported luminosity), the resolution warning and the mesh convergence. For the updated
-emissivities: the closed forms against numerical integrals, the values of the paper's figures, the
-muon channels and thresholds, the scalings, the registry and the comparison
-script. For the direct Urca with muons: the matrix element with explicit spinors, the phase-space
-integral with exact kinematics, the thresholds and the doubling where both channels are open.
+TESTS (decision D-028)
+The tests follow the style of the validation steps of the GitHub code: few, each with a hypothesis, a
+reference and a criterion (see its docstring). A test compares with an independent reference (an analytic limit,
+a numerical integral, a published value or an exact integral), or checks a conservation law or a convergence.
+They are grouped by the part of the code they check, one file per area, and are run only when that part
+changes, or on request. Nothing runs by itself.
+
+    python -m pip install -r requirements-dev.txt        (pytest)
+    make test-structure         tests/test_structure.py        EOS reader, TOV, star builder, mesh, Background
+    make test-emissivities      tests/test_emissivities.py     neutrino rates (emissivity*.py)
+    make test-heat-conduction   tests/test_heat_conduction.py  heat capacity, conductivities, effective masses, gaps
+    make test-envelope          tests/test_envelope.py         Tb-Ts relation and the surface boundary
+    make test-integration       tests/test_integration.py      time stepping, solver, energy check
+    make test-output            tests/test_output.py           driver, output files, figure
+    make test-all               the 42 fast tests (about 20 s)
+    make test-slow              the mesh-convergence test of the direct-Urca edge (about 20 s)
+
+Covered. Structure: the analytic n = 1 polytrope, the mass and hydrostatic equations on the profile, the
+convergence with the tolerance, the mass-radius curve of BSk22 against eos.mr (the one structure test against a
+reference), the thermodynamic identity of the table, the reader, the exact crust-core face, charge neutrality and
+baryon number, the effective masses from the package, the independence of the mesh and (slow) the mesh
+convergence of a star with direct Urca. Emissivities: the closed forms of the updated rates against numerical
+integrals, the two published figures of Bottaro et al., the T^8 scaling, the exact phase-space coefficient of
+the direct Urca with its spinor matrix element, and the thresholds. Heat capacity and conduction: the lepton and
+nucleon formulas against numerical gases and their limits, the superfluid reduction and the muon conduction
+expression. Envelope: the analytic slope, the iron fit and the Gudmundsson scaling, and the energy
+conservation across the boundary. Integration: the order of the theta-method, the monotonic cooling of the
+default start, the energy closure, dU/dT = C_v and a negative control (a solver that loses the wrong amount of
+energy must be flagged). Output: one run of the driver and the figure.
+Not covered, by decision: input and option validation, the details of the EOS reader, the mesh bookkeeping, the
+state and the registries, and the standard neutrino rates (modified Urca, nucleon bremsstrahlung, pair breaking).
+New physics is validated first by a one-off comparison with a published result, recorded in the tracker (D-026);
+it becomes a test only if you ask for one.
 
 Validation of the current default: the 1.4 Msun Gudmundsson run with FM MURCA
 completed in 414 accepted steps (3 rejected), stopping at 741495.54 yr

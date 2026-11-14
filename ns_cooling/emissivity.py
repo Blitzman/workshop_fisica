@@ -45,25 +45,24 @@ THIRD = 1.0 / 3.0
 # electron factor (Ye rho / RHO0)^(1/3) of the Direct Urca stands for. The exact coefficient of the
 # Direct Urca rate gives 4.0e27 for mu = 330 MeV, so this value (331.4 MeV) is consistent with it.
 DIRECT_URCA_REFERENCE_ENERGY = HBARC_MEV_FM * (3.0 * np.pi**2 * N0_FM3) ** THIRD
-EP_EXP = float(np.float32(-2.0) / np.float32(3.0))
-PAIR_EXP = float(np.float32(1.0) / np.float32(3.0))
-# Constants rounded to single precision once, at import.
-PAIR_CONSTANTS = tuple(
-    float(np.float32(v))
-    for v in (
-        5.5924,
-        1.2383,
-        -0.8141,
-        4.9924,
-        13.04,
-        918.6,
-        1.0050,
-        0.3967,
-        10.7480,
-        -0.3,
-        0.840766,
-        0.090766,
-    )
+# Exponents of the density in the electron-proton bremsstrahlung (EP_EXP) and in the pair process (PAIR_EXP).
+EP_EXP = -2.0 / 3.0
+PAIR_EXP = 1.0 / 3.0
+# Coefficients of the fit of the pair-annihilation neutrino process. Source: Itoh et al. (1996), ApJS 102, 411
+# (README, believed); the table is not recorded in the original implementation.
+PAIR_CONSTANTS = (
+    5.5924,
+    1.2383,
+    -0.8141,
+    4.9924,
+    13.04,
+    918.6,
+    1.0050,
+    0.3967,
+    10.7480,
+    -0.3,
+    0.840766,
+    0.090766,
 )
 
 
@@ -79,6 +78,8 @@ class ProcessFactors:
         self.s = s
         taus = (s.tau_crust, s.tau_n, s.tau_p)
         self.vc, self.vn, self.vp = [self.gap(t, k) for t, k in zip(taus, (1, 2, 1))]
+        # alpha(n) = 1.76 - 0.63 (n0/n)^(2/3): source not recorded, probably the earlier parametrisation of Yakovlev and
+        # Levenfish (1995). Yakovlev et al. (2001) use the constant alpha_n = 1.13 (item NU-1, open).
         self.urca_alpha = 1.76 - 0.63 / (s.rho / RHO0 * s.yn + 1e-20) ** (2.0 / 3.0)
         m = (self.urca_alpha > 0) & (s.yp > 0)
         self.Rmn = self.combined(
@@ -168,6 +169,9 @@ def modified_urca_emissivity(s):
     yp = s.yp[m]
     yn = s.yn[m]
     t9 = T[m] * 1e-9
+    # Prefactors 8.55e21 (neutron branch) and 8.53e21 (proton branch), beta = 0.68 and the factor 1 - (Ye/Yp)^(1/3)/4
+    # of the proton branch: source not recorded. Yakovlev et al. (2001) give 8.1e21 with alpha_n beta_n = 1.13 x 0.68 and
+    # another proton-branch factor (items NU-1 and NU-2, open).
     qn = (
         8.55e21
         * s.mstar_n[m] ** 3
@@ -206,9 +210,12 @@ def neutron_neutron_bremsstrahlung(s):
     cr = (xh > 0) & (xh < 1)
     fmu[cr] = yn[cr]
     kfn = s.kf_n[m][cr] * HBARC_MEV_FM
+    # u = m_pi c / (2 p_F) with m_pi c^2 = 139 MeV, a rounded value whose source is not recorded (the charged pion has 139.57 MeV).
     u = 139.0 / 2.0 / kfn
     alpha[cr] = 1.0 - 3.0 * u * arctan(1.0 / u) / 2.0 + u**2 / 2.0 / (1.0 + u**2)
     alpha[xh == 1] = 0.0
+    # nn bremsstrahlung: Yakovlev et al. (2001), Eq. 165: 7.5e19, alpha_nn = 0.59 (core), beta_nn = 0.56, N_nu = 3 once (D-020).
+    # In the crust alpha follows a pion-exchange form (see u above); its source is not recorded.
     out[m] = (
         7.5e19
         * mn**4
@@ -230,6 +237,7 @@ def neutron_proton_bremsstrahlung(s):
     f = process_factors(s)
     out = np.zeros_like(T)
     m = s.yp > 0
+    # np bremsstrahlung: Yakovlev et al. (2001), Eq. 166: 1.5e20, alpha_np = 1.06, beta_np = 0.66, N_nu = 3 once.
     out[m] = (
         1.5e20
         * (s.mstar_n[m] * s.mstar_p[m]) ** 2
@@ -250,6 +258,7 @@ def proton_proton_bremsstrahlung(s):
     f = process_factors(s)
     out = np.zeros_like(T)
     m = s.yp > 0
+    # pp bremsstrahlung: Yakovlev et al. (2001), Eq. 167: 7.5e19, alpha_pp = 0.11, beta_pp = 0.70, N_nu = 3 once.
     out[m] = (
         7.5e19
         * s.mstar_p[m] ** 4
@@ -273,6 +282,8 @@ def electron_proton_bremsstrahlung(s):
     """
     T = s.T
     out = np.zeros_like(T)
+    # Prefactor 2.4e17, the exponent EP_EXP, the reference density and the cut at 2.82e14 g/cm^3: source not recorded
+    # (README: Kaminker and Haensel 1999, believed). Not changed by D-014.
     m = (s.rho >= 2.82e14) & (s.yp > 0)
     out[m] = (
         2.4e17 * (s.rho[m] * s.yp[m] / 2.82e14) ** EP_EXP * (T[m] * 1e-9) ** 8 * s.mstar_p[m] ** 2
@@ -288,6 +299,10 @@ def core_pbf_emissivity(s):
     out = np.zeros_like(T)
     m = (s.xh == 0) & (s.tau_n <= 1) & (s.yn > 0)
     pf = HBARC_MEV_FM * s.kf_n[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
+    # Pair breaking and formation (README: Yakovlev, Kaminker and Levenfish 1999, believed, and Yakovlev et al. 2001): prefactor 1.17e21.
+    # The neutron triplet term 2 g_A^2 omits the vector part (item NU-7, open). g_A = 1.26 and sin^2(theta_W) = 0.23 are the values of the
+    # original implementation, source not recorded (Bottaro et al. use g_A = 1.27); the structure 4/81 (p_F/m*)^4 and 11/42 of the proton term:
+    # source not recorded.
     out[m] = 1.17e21 * s.mstar_n[m] * pf * N_NU * (2.0 * 1.26**2) * f.Fn[m] * (T[m] * 1e-9) ** 7
     m = (s.xh == 0) & (s.tau_p <= 1) & (s.yp > 0)
     pf = HBARC_MEV_FM * s.kf_p[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
@@ -311,6 +326,7 @@ def direct_urca_emissivity(s):
     f = process_factors(s)
     out = np.zeros_like(T)
     m = s.direct_urca_allowed
+    # Electron channel. Prefactor 4.0e27 with n0 = 0.16 fm^-3: consistent with the exact coefficient of the rate (README, D-014).
     out[m] = (
         4.0e27
         * s.mstar_n[m]
@@ -321,6 +337,7 @@ def direct_urca_emissivity(s):
     )
     mu = s.direct_urca_muon_allowed
     mu_muon = np.hypot(HBARC_MEV_FM * s.kf_mu[mu], MUON_MASS_MEV)
+    # Muon channel: the same expression with the muon Fermi energy (README, DIRECT URCA THRESHOLD).
     out[mu] += (
         4.0e27
         * s.mstar_n[mu]
@@ -340,6 +357,8 @@ def electron_ion_bremsstrahlung(s):
     m = (T >= 5e7) & (T <= 2e9) & (s.rho >= 1e9) & (s.rho <= 1.4e14) & (s.xh > 0)
     tau = log10(T[m] * 1e-8)
     xr = log10(s.rho[m] * 1e-12)
+    # Coefficients of the fit (T = 5e7-2e9 K, rho = 1e9-1.4e14 g/cm^3), including the term 0.228 rho/2.8e14: Haensel, Kaminker
+    # and Yakovlev (1996), A&A 314, 328 (README, believed); the table is not recorded in the original implementation.
     out[m] = 10.0 ** (
         11.204
         + 7.304 * tau
@@ -363,6 +382,7 @@ def plasma_emissivity(s):
     xr = s.kf_e[m] * HBARC_MEV_FM / ELECTRON_MASS_MEV
     alpha = ALPHA_FS
     fp = sqrt(4.0 * alpha * xr**3 / 3.0 / pi / sqrt(1.0 + xr**2)) / xtr
+    # Coefficients 16.23, 4.604, 1.203e23 and 0.9248: Itoh et al. (1996) (README, believed); not recorded in the original implementation.
     xip = xtr**9 * (16.23 * fp**6 + 4.604 * fp**7.5) * sf.exp_with_floor(-fp)
     out[m] = 1.203e23 * xip * 0.9248 / 96.0 / pi**4 / alpha
     return out
@@ -378,6 +398,7 @@ def crust_pbf_emissivity(s):
     pf = HBARC_MEV_FM * s.kf_n[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
     mn = s.mstar_n[m]
     S = 4.0 / 81.0 * (pf / mn) ** 4
+    # Neutron singlet pair breaking in the crust: same constants as in the core, source not recorded.
     a = S + 1.26**2 * pf**2 * (1.0 + 11.0 / 42.0 / mn**2)
     out[m] = 1.17e21 * mn * pf * N_NU * a * f.Fc[m] * (T[m] * 1e-9) ** 7
     return out

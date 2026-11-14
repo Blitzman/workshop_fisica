@@ -53,6 +53,8 @@ def heat_capacity_pairing_factor(T_K, Tc_K, pairing_type):
     R = np.ones_like(T_K)
     mask = (Tc_K > 0) & (T_K <= Tc_K)
     v = dimensionless_pairing_gap(T_K[mask] / Tc_K[mask], pairing_type)
+    # Fits of the superfluid reduction of the heat capacity: Yakovlev, Levenfish and Shibanov (1999), Eq. 18 (README, believed);
+    # equal to the transcription of the GitHub code (D-019).
     if pairing_type == 1:
         a = 0.4186 + np.hypot(1.007, 0.5010 * v)
         z = 1.456 - np.hypot(1.456, v)
@@ -70,6 +72,8 @@ def debye_heat_capacity_factor(x):
     """Piecewise fit of the Debye function (x = T/T_D); its small jumps are not smoothed."""
     x = checked(x, "T/T_D")
     f = np.empty_like(x)
+    # Approximation of the Debye function: Van Riper (1991), ApJS 75, 449, Eq. 25, identified by matching its coefficients; the
+    # original implementation did not record the source (item HC-3). The three pieces join continuously at x = 0.15 and 0.4.
     lo, hi = x <= 0.15, x >= 0.4
     mid = ~(lo | hi)
     f[lo] = 77.9273 * x[lo] ** 3
@@ -148,6 +152,8 @@ def ion_heat_capacity(state):
         state.xh[ions],
     )
     ni = ri / MICROPHYSICS_MASS_UNIT * xi / ai
+    # Debye temperature 3.48e3 rho^(1/2) Z/A K and the regimes Gamma <= 1 (gas), 1 < Gamma < 150 (liquid, logarithmic
+    # interpolation) and Gamma >= 150 (Debye solid): Van Riper (1991), Eq. 24.
     T_D_K = 3.48e3 * np.sqrt(ri) * zi / ai
     gamma = ION_COUPLING * zi**2 * (ri * xi / ai) ** (1.0 / 3.0) / ti
     ci = np.empty_like(ni)

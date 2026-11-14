@@ -55,6 +55,7 @@ class LocalState:
 
     @cached_property
     def nb(self):
+        # 1.66e-24 g: the mass unit of the microphysics (constants.MICROPHYSICS_MASS_UNIT).
         return self.rho / 1.66e-24
 
     @cached_property

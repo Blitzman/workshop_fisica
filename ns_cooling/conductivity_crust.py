@@ -8,7 +8,16 @@ Only n_i = rho*xh/(m_u*A) enters: free-neutron mass is not counted as ions.
 """
 
 from math import sqrt, exp, log, log1p, isfinite, pi
-from constants import ALPHA_FS, C, K_B, LAMBDA_C, M_ELECTRON, M_U
+from constants import (
+    ALPHA_FS,
+    BOLTZMANN_MEV_PER_K,
+    C,
+    ELECTRON_MASS_MEV,
+    K_B,
+    LAMBDA_C,
+    M_ELECTRON,
+    M_U,
+)
 
 # Physical constants of the relativistic units of the fit, from constants.py (they had been rounded
 # to single precision; decision D-020). UM1 is a parameter of the fit.
@@ -18,10 +27,14 @@ BOHR = 1.0 / ALPHA_FS  # inverse fine-structure constant
 PI = pi
 PI_F = pi
 THIRD = 1.0 / 3.0
+# UM1 = 2.8 is a parameter of the fit; the source of the value is not recorded in the original implementation.
 UM1 = 2.8
 CONDUCTIVITY_UNIT = K_B * C / LAMBDA_C**2  # k_B c / lambda_C^2 [erg cm^-1 s^-1 K^-1]
 
 
+# The numerical coefficients of the functions below (Coulomb logarithm, collision integrals, thermal and impurity terms) are
+# those of Potekhin's electron-conductivity fit (2019 version, COULAN 1999, TAUEESY 2016) as in the original implementation;
+# they have not been checked against the papers (item RF-1).
 def coulomb_log(xs, xw, v):
     """Coulomb logarithm, 1999 point-nucleus formulation (no finite nuclear-size correction)."""
     if xs <= 0 or xw < 0 or not 0 <= v < 1:
@@ -86,6 +99,7 @@ def electron_electron_time(x, temp):
     return (1 + t + 0.4342 * sqrt(theta) * t * t) / (1 + t * t) / freq
 
 
+# Qimp = 0.1 is a free default for the impurity parameter; its source is not recorded in the original implementation.
 def crust_electron_conductivity(T_K, rho, A, Z, xh, Qimp=0.1):
     """Scalar isotropic electron conductivity kappa_e [erg cm^-1 s^-1 K^-1]."""
     T_K, rho, A, Z, xh, Qimp = map(float, (T_K, rho, A, Z, xh, Qimp))
@@ -93,8 +107,9 @@ def crust_electron_conductivity(T_K, rho, A, Z, xh, Qimp=0.1):
         raise ValueError("Non-finite crust conductivity input")
     if T_K <= 0 or rho <= 0 or A < 1 or Z < 0.5 or not 0 < xh <= 1 or Qimp < 0:
         raise ValueError("Invalid crust conductivity input")
-    temp = (T_K / 1e6) / 5930.0
+    temp = T_K * BOLTZMANN_MEV_PER_K / ELECTRON_MASS_MEV  # k_B T / (m_e c^2)
     ni = rho * xh / (AUD * AUM * A)
+    # Validity limit of the fit in the ion density (in the relativistic units of the fit); source not recorded.
     if ni > 1e4:
         raise ValueError("Ion density exceeds the validity limit of the conductivity fit")
     sphere = (0.75 / PI / ni) ** THIRD
