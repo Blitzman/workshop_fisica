@@ -28,24 +28,15 @@ Fields of ``Points`` (one value per point; units in brackets)
     mstar_n, mstar_p (Landau effective-mass ratios m*/m of the neutrons and protons),
     transport_mstar_n, transport_mstar_p (the ones used by the conductivity).
 
-How a ``Background`` is produced (providers)
-    The files of this package are one provider (``input_model.load_background``).
-    A future provider only has to produce the *face table* below, either as a
-    dictionary of arrays or as a CSV file, and call ``Background.from_face_table``
-    or ``Background.from_csv``:
-
-        radius_km, rho, ye, yn, yp, xh, aa, zz, ephi, elam, tc_crust, tc_n, tc_p [, ymu]
-
-    ``ymu`` is optional (zeros if absent). Cell values are face averages. The Fermi momenta and effective masses are
-    derived from the table by ``derived_fermi_quantities``; a different routine
-    (for example one that returns effective masses from the equation of state)
-    can be passed as ``derived=``. If every point of the background should come
-    from an external routine, build the two ``Points`` objects directly.
+How a ``Background`` is produced
+    ``stellar_structure.build_stellar_model`` builds it from an equation of state
+    (``input_model.load_backgrounds`` reads the input file). Any other source only has to
+    build the two ``Points`` objects and call ``Background(...)`` directly;
+    ``derived_fermi_quantities`` gives the Fermi momenta and effective masses of a composition.
 """
 
 import warnings
 from dataclasses import dataclass
-from pathlib import Path
 
 import numpy as np
 
@@ -75,13 +66,6 @@ POINT_FIELDS = (
     "kf_p",
     "kf_mu",
 )
-# Primary columns of the face table (the other fields of Points are derived).
-AVERAGED_FIELDS = (
-    "rho", "ye", "yn", "yp", "xh", "aa", "zz", "ephi", "tc_crust", "tc_n", "tc_p", "ymu",
-)  # fmt: skip
-OPTIONAL_COLUMNS = ("ymu",)  # absent from older face tables: zeros
-FACE_TABLE_COLUMNS = ("radius_km",) + AVERAGED_FIELDS[:8] + ("elam",) + AVERAGED_FIELDS[8:]
-
 
 def _readonly(values, name, size=None):
     a = np.array(values, dtype=float, copy=True)
@@ -161,9 +145,7 @@ def derived_fermi_quantities(rho, ye, yn, yp):
     number density (the muon momentum ``kf_mu`` is added by the caller, which knows ``ymu``), ``mstar_n``,
     ``mstar_p`` (from the neutron and proton number densities),
     ``transport_mstar_n``, ``transport_mstar_p`` (the same composition, using
-    the actual Yn and Yp also when muons are present). A replacement routine must accept the same
-    four arrays and return ``kf_n``, ``kf_e`` and the four mass keys; ``kf_p`` is computed
-    from ``yp`` if the routine does not return it.
+    the actual Yn and Yp also when muons are present).
     """
 
     def fermi(fraction):
@@ -273,7 +255,6 @@ class Background:
     surface_radius_km: float = None
     surface_ephi: float = None
     description: str = ""
-    face_table_exact: bool = True  # False: cells/masses cannot be rebuilt from the face table
 
     def __post_init__(self):
         n = len(self.faces)
@@ -324,119 +305,3 @@ class Background:
             return 1.0
         surface = self.surface_radius_km * self.surface_ephi
         return float((surface / (self.radius_km[-1] * self.faces.ephi[-1])) ** 2)
-
-    # ----------------------------------------------------------------- table
-    @classmethod
-    def from_face_table(
-        cls,
-        table,
-        *,
-        g14,
-        envelope_model="gudmundsson",
-        derived=derived_fermi_quantities,
-        surface_radius_km=None,
-        surface_ephi=None,
-        description="",
-    ):
-        """Build the background from a face table (see the module docstring).
-
-        ``table`` maps each column name of ``FACE_TABLE_COLUMNS`` to an array of
-        N face values. Cell values are the averages of the two neighboring faces
-        (critical temperatures included: they are averaged after being computed
-        at the faces). ``derived`` supplies the Fermi momenta and effective masses.
-        """
-        missing = [c for c in FACE_TABLE_COLUMNS if c not in table and c not in OPTIONAL_COLUMNS]
-        if missing:
-            raise ValueError(f"Face table lacks the columns: {', '.join(missing)}")
-        f = {
-            c: (
-                np.asarray(table[c], dtype=float)
-                if c in table
-                else np.zeros(len(np.asarray(table["rho"])))
-            )
-            for c in FACE_TABLE_COLUMNS
-        }
-
-        if np.any((f["ymu"] < 0) | (f["ymu"] > 1)):
-            raise ValueError("ymu must lie in [0, 1]")
-
-        def complete(values, rho, yp, ymu):
-            values = dict(values)
-            values.setdefault("kf_p", fermi_momentum(rho, yp))
-            values["kf_mu"] = fermi_momentum(rho, ymu)
-            return values
-
-        faces = Points(
-            **{k: f[k] for k in AVERAGED_FIELDS},
-            **complete(derived(f["rho"], f["ye"], f["yn"], f["yp"]), f["rho"], f["yp"], f["ymu"]),
-        )
-        c = {k: 0.5 * (f[k][1:] + f[k][:-1]) for k in AVERAGED_FIELDS}
-        cells = Points(
-            **c,
-            **complete(derived(c["rho"], c["ye"], c["yn"], c["yp"]), c["rho"], c["yp"], c["ymu"]),
-        )
-        return cls(
-            faces,
-            cells,
-            f["radius_km"],
-            f["elam"],
-            g14,
-            envelope_model,
-            surface_radius_km,
-            surface_ephi,
-            description,
-        )
-
-    def face_table(self):
-        """The primary face table: the complete description of this background."""
-        table = {"radius_km": self.radius_km, "elam": self.elam}
-        table.update({k: getattr(self.faces, k) for k in AVERAGED_FIELDS})
-        return {c: table[c] for c in FACE_TABLE_COLUMNS}
-
-    def to_csv(self, path):
-        """Write the face table as CSV (exact round trip; header lines start with '#')."""
-        table = self.face_table()
-        lines = [f"g14 = {self.g14!r}", f"envelope_model = {self.envelope_model}"]
-        if self.surface_radius_km is not None:
-            lines += [
-                f"surface_radius_km = {self.surface_radius_km!r}",
-                f"surface_ephi = {self.surface_ephi!r}",
-            ]
-        if self.description:
-            lines.append("description = " + " ".join(self.description.split()))
-        lines += [f"exact = {self.face_table_exact}", f"columns: {','.join(FACE_TABLE_COLUMNS)}"]
-        header = "\n".join(lines)
-        data = np.column_stack([table[c] for c in FACE_TABLE_COLUMNS])
-        np.savetxt(path, data, delimiter=",", fmt="%.17g", header=header, comments="# ")
-
-    @classmethod
-    def from_csv(cls, path, *, derived=derived_fermi_quantities):
-        """Read a face table written by ``to_csv`` (or prepared by hand in the same format)."""
-        meta = {}
-        for line in Path(path).read_text().splitlines():
-            if not line.startswith("#"):
-                break
-            key, _, value = line[1:].partition("=" if "=" in line else ":")
-            meta[key.strip()] = value.strip()
-        if "columns" not in meta or "g14" not in meta:
-            raise ValueError("The CSV header must define 'g14 = ...' and 'columns: ...'")
-        if meta.get("exact", "True") != "True":
-            raise ValueError(
-                "This face table was written for inspection only: its cell values and effective "
-                "masses come from the equation of state and cannot be rebuilt from the faces"
-            )
-        columns = [c.strip() for c in meta["columns"].split(",")]
-        data = np.loadtxt(path, delimiter=",", ndmin=2)
-        if data.shape[1] != len(columns):
-            raise ValueError("The number of columns does not match the header")
-        return cls.from_face_table(
-            dict(zip(columns, data.T)),
-            g14=float(meta["g14"]),
-            envelope_model=meta.get("envelope_model", "gudmundsson"),
-            derived=derived,
-            surface_radius_km=(
-                float(meta["surface_radius_km"]) if "surface_radius_km" in meta else None
-            ),
-            surface_ephi=float(meta["surface_ephi"]) if "surface_ephi" in meta else None,
-            description=meta.get("description", ""),
-        )

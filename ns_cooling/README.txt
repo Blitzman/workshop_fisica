@@ -130,10 +130,7 @@ relative temperature change.
 results_cooling/energy_budget.csv: with --check-energy (see below).
 No static figures or videos are generated automatically.
 To compute without opening a window: --no-animation.
---out changes the results folder; --input changes the input file;
---background / --save-background read / write the background table (see
-BACKGROUND; with several stars --save-background writes one file per star, with the
-name of the star added; --background reads a single star).
+--out changes the results folder; --input changes the input file.
 
 MODEL AND EVOLUTION
 Cooled domain: from the centre to the base density (base_density, default 1e10 g/cm^3); the layers
@@ -158,7 +155,7 @@ The luminosity curve starts after 0.01 yr; the initial profile is shown at t = 0
 STRUCTURE
 Data flow: provider -> Background -> evolution (never the other way round).
 background.py: Background (everything that does not evolve in time), Points,
-  face-table reading/writing, derived quantities and the composition check.
+  derived quantities and the composition check.
 input_model.py: reads the input file and provides the Background, built from an
   equation of state. superfluid.py: pairing gap models and critical temperatures.
 eos_table.py / tov.py / mesh.py / stellar_structure.py: the star from an equation
@@ -207,27 +204,10 @@ down to about half of the interface density), and to ~1e-4 in the inner crust
 (interpolation of the product between rows).
 The included provider reads the input file (input_model.load_backgrounds), builds the star
 from the EOS package (see STELLAR MODEL FROM AN EOS) and evaluates the pairing gap models there.
-The complete primary description of a Background is a FACE TABLE, 13 columns
-    radius_km, rho, ye, yn, yp, xh, aa, zz, ephi, elam, tc_crust, tc_n, tc_p
-and an optional 14th, ymu (zeros if absent), plus the scalars g14 and
-envelope_model (CSV header lines "# g14 = ...").
-    python cooling_driver.py --save-background background.csv    # write it
-    python cooling_driver.py --background background.csv         # run from it
-The second form ignores the structure and superfluidity lines of the input file; the
-initial temperature is still taken from it (or from --initial-temperature).
-Cell values are face averages; the Fermi momenta and effective masses are
-derived from the table by background.derived_fermi_quantities.
-Adapting a different source of background information, in increasing order of
-work, without touching the evolution:
-- a table from another code or equation-of-state routine: write the columns
-  in the CSV format above, or build the dictionary and call
-  Background.from_face_table(table, g14=..., envelope_model=...).
-- a routine that returns effective masses or Fermi momenta itself: pass it as
-  derived= (it receives rho, ye, yn, yp and returns kf_n, kf_e, mstar_n,
-  mstar_p, transport_mstar_n, transport_mstar_p; kf_p is computed from yp if the
-  routine does not return it).
-- everything from a routine, point by point: build the two Points objects and
-  the Background directly.
+A Background is made of two Points objects (faces and cells), the radius and the metric
+factor at the faces, the surface gravity g14 and the envelope model. To use another source
+without touching the evolution, build these directly and call Background(...);
+background.derived_fermi_quantities gives the Fermi momenta and effective masses of a composition.
 
 STELLAR MODEL FROM AN EOS
 The star is built from a cold EOS in
@@ -277,9 +257,7 @@ Pipeline (stellar_structure.py)
 - The surface: g14 is the gravity at the outer edge. The luminosity at infinity is
   conserved across the envelope, so the luminosity and the heat flux leaving the base
   carry the factor (R_s e^Phi_s / R_b e^Phi_b)^2 (1.036 for BSk22 at 1.4 Msun);
-  Background.surface_factor, 1 for a table without surface values.
-- --save-background writes the face table of such a star for inspection; it cannot
-  be read back (its cells and masses come from the EOS, not from the faces).
+  Background.surface_factor, 1 if no surface is given.
 Meshes (faces in ln P; Pc = 7.94e34 dyn/cm^2, 1.4 Msun BSk22)
     A  uniform, step 0.101                                            161 faces
     B  crust step 0.05                                                274 faces
@@ -307,8 +285,8 @@ Heat capacity (heat_capacity.py). Registered terms, summed:
 - electrons and muons: degenerate relativistic free lepton gases,
   C = k_B^2 T E_F k_F / (3 (hbar c)^2), E_F = sqrt((hbar c k_F)^2 + m^2 c^4),
   with k_F from the density of each species (kf_e, kf_mu) and m_mu c^2 = 105.66 MeV.
-  Muons exist only in the core (zero where Ymu = 0). The electron term is a fit with
-  rounded constants of the same expression (agreement 0.3%). At the center of a
+  Muons exist only in the core (zero where Ymu = 0). The electron term uses the same
+  expression (decision D-020). At the center of a
   1.4 Msun star the muons contribute 85% (BSk22) and 79% (BSk26) of the electron term.
 - neutrons and protons: Landau quasiparticles, C = k_B^2 T m* k_F / (3 hbar^2), with
   the Landau effective mass m* = (m*/m) m_N of the background and k_F from the density
@@ -415,6 +393,9 @@ at 1.0 and 1.4 Msun (at the center of the 1.4 Msun star kf_p + kf_mu = 2.094 aga
 open at 1.8 Msun, in 7 of the 11 core cells where the electron channel is open.
 
 UNITS AND ASSUMPTIONS
+Physical constants are the CODATA 2018 values of constants.py (including sigma_SB and k_B in MeV/K).
+Neutrino flavours: the standard nucleon bremsstrahlung carries N_nu = 3 (constants.N_NU) once, with the
+prefactors 7.5e19, 1.5e20 and 7.5e19 of Yakovlev et al. (2001), Eqs. 165-167.
 Reference density: every emissivity normalised by a reference density uses n0 = 0.16 fm^-3 of
 Yakovlev et al. (2001), i.e. 2.656e14 g/cm^3 as a rest-mass density (constants.N0_FM3, constants.RHO0);
 the pair-breaking rates use the actual Fermi momenta of the background, p_F/(m_N c) with m_N the neutron mass.
@@ -428,8 +409,8 @@ Crust: strongly degenerate electrons, point ions, Qimp = 0.1;
 ni = rho*xh/(m_u*A). No thermal averaging, ion conductivity, nuclear form
 factor or Umklapp freeze-out. The EXPINT function needed is built into
 the same module. Source of the fit: Potekhin's electron-conductivity fit
-(2019 version), COULAN 1999, TAUEESY 2016. Some constants are rounded to
-single precision.
+(2019 version), COULAN 1999, TAUEESY 2016. Its physical constants (m_u/m_e, m_e/lambda_C^3, 1/alpha and the
+unit k_B c/lambda_C^2) are the CODATA values of constants.py; they had been rounded to single precision.
 
 NUMERICAL CHOICES
 Crank-Nicolson with a predictor-corrector (two microphysics evaluations and
@@ -588,7 +569,7 @@ Thermal evolution
 Heat capacity (heat_capacity.py)
 - Electrons and muons: degenerate relativistic gas, C = k_B^2 T E_F k_F / (3 (hbar c)^2), E_F = sqrt((hbar c
   k_F)^2 + m^2 c^4) (standard: Landau and Lifshitz, Statistical Physics; Shapiro and Teukolsky 1983, believed).
-  The electron term keeps a fit with rounded constants of the same expression (agreement 0.3%).
+  The electron term uses the same expression as the muons.
 - Nucleons: Landau quasiparticles, C = k_B^2 T m* k_F / (3 hbar^2) with the Landau effective mass m* = k_F / v_F
   (Landau 1957; Baym and Pethick 1991, Landau Fermi-Liquid Theory, believed). The tests check the lepton and
   nucleon expressions against a numerical Fermi-Dirac gas.
@@ -638,7 +619,7 @@ TESTS
     python -m pip install -r requirements-dev.txt     (pytest)
     make test                                         (python -m pytest tests, ~2 min)
 Covered: background validation, composition (charge neutrality, baryon number, muon
-fractions and Fermi momenta) and table round trip; the local state; the registries
+fractions and Fermi momenta); the local state; the registries
 (adding, replacing and removing physics); the heat capacity (the lepton and Landau
 formulas against a numerical Fermi-Dirac gas, their limits, the muon term and the sum of the
 registered terms); microphysics regimes (superfluid heat-capacity jump); the core conductivity with muons (the npe

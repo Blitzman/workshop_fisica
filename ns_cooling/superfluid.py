@@ -1,6 +1,7 @@
 """Pairing gap models and superfluid functions."""
 
 import numpy as np
+from constants import BOLTZMANN_MEV_PER_K
 from numerical_validation import checked
 
 # imod: (Delta_scale [MeV], k1 [fm^-1], k2 [fm^-2], k3 [fm^-1], k4 [fm^-2])
@@ -23,7 +24,6 @@ GAP_MODELS = {
     16: (2.9, 1.21, 0.5, 1.62, 0.5),
 }
 TC_GAP_RATIO = {1: 0.5669, 2: 0.8416, 3: 0.4926}
-BOLTZMANN_MEV_PER_K = 8.617342e-11  # k_B in MeV/K
 
 
 def fermi_quantities(rho, particle_fraction):
@@ -64,14 +64,14 @@ def pairing_gap(gap_model, pairing_type, rho, particle_fraction):
         raise ValueError("Unknown pairing type")
     _, kF = fermi_quantities(rho, particle_fraction)
     gap_MeV = pairing_gap_from_kF(gap_model, kF)
-    return gap_MeV, TC_GAP_RATIO[pairing_type] * gap_MeV * 1e11 / 8.617342
+    return gap_MeV, TC_GAP_RATIO[pairing_type] * gap_MeV / BOLTZMANN_MEV_PER_K
 
 
 def pairing_critical_temperatures(cfg, star):
     """Critical temperatures [K] at the faces of crust neutrons, core neutrons and core protons.
 
     ``cfg`` holds the on/off switches and gap models of the input file; ``star``
-    is the face table of the structure. Returns ``tc_crust``, ``tc_n`` and
+    is a dictionary with the arrays ``rho``, ``yn``, ``yp`` and ``xh`` at the faces. Returns ``tc_crust``, ``tc_n`` and
     ``tc_p`` (zero outside the region of each species or when it is switched off).
     """
     result = {}

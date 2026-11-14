@@ -33,3 +33,12 @@ MICROPHYSICS_MASS_UNIT = 1.66e-24  # [g]
 # and the same density as a rest-mass density in the convention above (2.656e14 g cm^-3).
 N0_FM3 = 0.16  # [fm^-3]
 RHO0 = N0_FM3 * FM3_PER_CM3 * MICROPHYSICS_MASS_UNIT  # [g cm^-3]
+
+# Further constants, CODATA 2018 (decision D-020). They replace rounded copies that were spread over the modules.
+M_ELECTRON = 9.1093837015e-28  # electron mass [g]
+E_ESU = 1.602176634e-19 * C / 10.0  # elementary charge [esu]
+ALPHA_FS = E_ESU**2 / (HBAR * C)  # fine-structure constant
+LAMBDA_C = HBAR / (M_ELECTRON * C)  # reduced Compton wavelength of the electron [cm]
+SIGMA_SB = 5.670374419e-5  # Stefan-Boltzmann constant [erg cm^-2 s^-1 K^-4]
+BOLTZMANN_MEV_PER_K = K_B / MEV_TO_ERG  # k_B [MeV K^-1]
+N_NU = 3  # number of neutrino flavours: the factor N_nu of Yakovlev et al. (2001), Eqs. 165-167

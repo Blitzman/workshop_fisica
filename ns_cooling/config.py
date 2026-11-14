@@ -66,6 +66,9 @@ class CoolingConfig:
     dt_min_years: float = 1e-12
     dt_max_years: float = 1000.0
     n_fixed_steps: int = 20
+    # Decision D-021: kept at 0.05 for now, to be revisited. With it the energy-balance error of the window
+    # with the arrival of the cooling wave at the surface (100-1000 yr) is about 2-3 %; 0.025 gives 1.1 % and
+    # 0.0125 gives 0.4 % (about 10 % and 65 % more steps). The luminosity is accurate to 0.3 % at 841 yr either way.
     max_change: float = 0.05
     grow_below_change: float = 0.01
     target_change: float = 0.025

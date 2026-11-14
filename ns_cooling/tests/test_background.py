@@ -1,11 +1,11 @@
-"""The Background: validation of its arrays, tables and scalars."""
+"""The Background: validation of its arrays and scalars."""
 
 from dataclasses import replace
 
 import numpy as np
 import pytest
 
-from background import POINT_FIELDS, Background, Points
+from background import POINT_FIELDS, Points
 
 
 def test_arrays_are_read_only(background):
@@ -18,19 +18,28 @@ def test_arrays_are_read_only(background):
 @pytest.mark.parametrize(
     "change, message",
     [
-        (lambda t: t.update(rho=-t["rho"]), "rho"),
-        (lambda t: t.update(ye=t["ye"] + 2.0), "ye|particle_fraction"),
-        (lambda t: t.update(ephi=0 * t["ephi"]), "ephi"),
-        (lambda t: t.update(radius_km=t["radius_km"][::-1].copy()), "radius"),
-        (lambda t: t.update(elam=-t["elam"]), "elam"),
-        (lambda t: t.pop("tc_n"), "tc_n"),
+        (lambda f: f.update(rho=-f["rho"]), "rho"),
+        (lambda f: f.update(ye=f["ye"] + 2.0), "ye must lie"),
+        (lambda f: f.update(ephi=0 * f["ephi"]), "ephi"),
     ],
 )
-def test_invalid_tables_are_rejected(background, change, message):
-    table = {k: np.array(v) for k, v in background.face_table().items()}
-    change(table)
+def test_invalid_points_are_rejected(background, change, message):
+    fields = {k: np.array(getattr(background.cells, k)) for k in POINT_FIELDS}
+    change(fields)
     with pytest.raises(ValueError, match=message):
-        Background.from_face_table(table, g14=background.g14)
+        Points(**fields)
+
+
+@pytest.mark.parametrize(
+    "change, message",
+    [
+        (lambda b: {"radius_km": b.radius_km[::-1].copy()}, "radius"),
+        (lambda b: {"elam": -b.elam}, "elam"),
+    ],
+)
+def test_invalid_geometry_is_rejected(background, change, message):
+    with pytest.raises(ValueError, match=message):
+        replace(background, **change(background))
 
 
 def test_invalid_scalars_are_rejected(background):

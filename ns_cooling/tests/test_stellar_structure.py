@@ -6,7 +6,7 @@ from dataclasses import replace
 import numpy as np
 import pytest
 
-from background import Background, derived_fermi_quantities
+from background import derived_fermi_quantities
 from constants import C, G, M_SUN
 from config import CoolingConfig
 from cooling import run_cooling
@@ -267,19 +267,6 @@ def test_an_unknown_eos_folder_is_reported(root, input_config):
         )
 
 
-def test_the_csv_of_an_eos_background_is_for_inspection_only(bsk22_model, tmp_path):
-    path = tmp_path / "background.csv"
-    bsk22_model.background.to_csv(path)
-    header = "\n".join(path.read_text().splitlines()[:8])
-    assert (
-        "exact = False" in header
-        and "description = EOS BSk22" in header
-        and "surface_radius_km" in header
-    )
-    with pytest.raises(ValueError, match="inspection only"):
-        Background.from_csv(path)
-
-
 # ------------------------------------------------------------------ the whole pipeline
 def test_cooling_runs_on_the_eos_star_and_conserves_energy(bsk22_model):
     background = bsk22_model.background
@@ -330,15 +317,6 @@ def test_a_star_without_direct_urca_has_no_edge_to_resolve(root, input_config):
         warnings.simplefilter("error")
         model = build_stellar_model(options, root / "eos", input_config)
     assert direct_urca_boundary_widths(model.background).size == 0
-
-
-def test_boundary_widths_of_a_synthetic_region():
-    from test_urca_masses_surface import YE_SCAN, npe_background
-
-    widths = direct_urca_boundary_widths(
-        npe_background(YE_SCAN)
-    )  # cells are 1 km wide; Direct Urca on for the last four faces
-    np.testing.assert_allclose(widths, [1.0])
 
 
 def test_the_cooling_of_a_star_with_direct_urca_needs_the_edge_to_be_resolved(

@@ -96,13 +96,6 @@ def test_scheme_flags_select_backward_euler(root, tmp_path):
     assert result.returncode == 0, result.stderr
 
 
-def test_a_face_table_of_an_eos_star_cannot_be_used_as_a_background(root, tmp_path, bsk22_model):
-    path = tmp_path / "bsk22.csv"
-    bsk22_model.background.to_csv(path)
-    result = run_driver(root, "--background", path, "--final-years", 30, "--out", tmp_path / "o")
-    assert result.returncode != 0 and "inspection only" in result.stderr
-
-
 def test_folder_names_from_labels():
     from cooling_driver import folder_name
 

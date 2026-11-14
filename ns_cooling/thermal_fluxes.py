@@ -8,8 +8,10 @@ paper's accreted-envelope fit, not an arbitrary pure-H envelope model.
 from dataclasses import dataclass
 import numpy as np
 
+from constants import SIGMA_SB
+
 MODELS = ("gudmundsson", "fe", "accreted")
-SIGMA = 5.67e-5
+SIGMA = SIGMA_SB  # Stefan-Boltzmann constant [erg cm^-2 s^-1 K^-4]
 
 
 @dataclass(frozen=True)

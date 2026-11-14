@@ -253,7 +253,6 @@ def build_stellar_model(options, eos_root, cfg):
         surface_radius_km=star.radius_cm / 1e5,
         surface_ephi=star.surface_ephi,
         description=_describe(eos, star, options, g14, len(x_faces)),
-        face_table_exact=False,
     )
     _warn_if_the_direct_urca_edge_is_unresolved(background)
     return StellarModel(background, eos, star, x_faces, x_interface, x_base, options)

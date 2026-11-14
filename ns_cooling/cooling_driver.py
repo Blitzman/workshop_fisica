@@ -8,7 +8,6 @@ from pathlib import Path
 
 import numpy as np
 
-from background import Background
 from config import CoolingConfig
 from cooling import run_cooling
 from emissivity_updated import use_standard_rates, use_updated_rates
@@ -96,17 +95,6 @@ def main():
         help="Theta of the corrector: 0.5 = Crank-Nicolson (default), 1 = backward Euler (see README)",
     )
     parser.add_argument(
-        "--background",
-        type=Path,
-        help="Face table (CSV) to use as the background instead of the structure and "
-        "superfluidity lines of the input file (see README, BACKGROUND)",
-    )
-    parser.add_argument(
-        "--save-background",
-        type=Path,
-        help="Write the background used as a face table (CSV) and continue",
-    )
-    parser.add_argument(
         "--initial-temperature",
         type=float,
         help="Initial T_infinity in units of 1e8 K; default: the value of the input file",
@@ -177,10 +165,7 @@ def main():
     except ValueError as error:
         parser.error(str(error))
 
-    if args.background:
-        stars = [("background", Background.from_csv(args.background))]
-    else:
-        stars = load_backgrounds(args.input)
+    stars = load_backgrounds(args.input)
     several = len(stars) > 1
     out = args.out.resolve()
     entries, curves = [], []
@@ -190,12 +175,6 @@ def main():
     for label, background in stars:
         if several:
             print(f"=== {label} ===")
-        if args.save_background:
-            path = args.save_background
-            if several:
-                path = path.with_name(f"{path.stem}_{folder_name(label)}{path.suffix}")
-            background.to_csv(path)
-            print(f"Background written to {path}")
         run = run_cooling(background, config)
         if background.description:
             print(background.description)

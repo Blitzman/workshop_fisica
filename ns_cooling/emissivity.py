@@ -24,7 +24,17 @@ import numpy as np
 from numpy import sqrt, exp, log, log10, arctan, pi
 
 import emissivity_factors as sf
-from constants import HBARC_MEV_FM, MUON_MASS_MEV, N0_FM3, NEUTRON_MASS_MEV, RHO0
+from constants import (
+    ALPHA_FS,
+    BOLTZMANN_MEV_PER_K,
+    ELECTRON_MASS_MEV,
+    HBARC_MEV_FM,
+    MUON_MASS_MEV,
+    N0_FM3,
+    N_NU,
+    NEUTRON_MASS_MEV,
+    RHO0,
+)
 from registry import Registry
 from superfluid import dimensionless_pairing_gap
 
@@ -195,19 +205,18 @@ def neutron_neutron_bremsstrahlung(s):
     fmu = np.ones_like(rho)
     cr = (xh > 0) & (xh < 1)
     fmu[cr] = yn[cr]
-    kfn = s.kf_n[m][cr] * 197.326
+    kfn = s.kf_n[m][cr] * HBARC_MEV_FM
     u = 139.0 / 2.0 / kfn
     alpha[cr] = 1.0 - 3.0 * u * arctan(1.0 / u) / 2.0 + u**2 / 2.0 / (1.0 + u**2)
     alpha[xh == 1] = 0.0
     out[m] = (
-        7.4e19
+        7.5e19
         * mn**4
         * (rho * yn / RHO0) ** THIRD
         * alpha
         * 0.56
-        * 3
+        * N_NU
         * t9**8
-        * 3.0
         * fmu
         * f.Rnn[m]
     )
@@ -227,7 +236,7 @@ def neutron_proton_bremsstrahlung(s):
         * (s.rho[m] * s.yp[m] / RHO0) ** THIRD
         * 1.06
         * 0.66
-        * 3.0
+        * N_NU
         * (T[m] * 1e-9) ** 8
         * f.Rnp[m]
     )
@@ -242,13 +251,12 @@ def proton_proton_bremsstrahlung(s):
     out = np.zeros_like(T)
     m = s.yp > 0
     out[m] = (
-        7.4e19
+        7.5e19
         * s.mstar_p[m] ** 4
         * (s.rho[m] * s.yp[m] / RHO0) ** THIRD
         * 0.11
         * 0.7
-        * 3
-        * 3.0
+        * N_NU
         * (T[m] * 1e-9) ** 8
         * f.Rpp[m]
     )
@@ -280,13 +288,13 @@ def core_pbf_emissivity(s):
     out = np.zeros_like(T)
     m = (s.xh == 0) & (s.tau_n <= 1) & (s.yn > 0)
     pf = HBARC_MEV_FM * s.kf_n[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
-    out[m] = 1.17e21 * s.mstar_n[m] * pf * 3.0 * (2.0 * 1.26**2) * f.Fn[m] * (T[m] * 1e-9) ** 7
+    out[m] = 1.17e21 * s.mstar_n[m] * pf * N_NU * (2.0 * 1.26**2) * f.Fn[m] * (T[m] * 1e-9) ** 7
     m = (s.xh == 0) & (s.tau_p <= 1) & (s.yp > 0)
     pf = HBARC_MEV_FM * s.kf_p[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
     mp = s.mstar_p[m]
     S = 4.0 / 81.0 * (pf / mp) ** 4
     a = (4.0 * 0.23 - 1.0) ** 2 * S + 1.26**2 * pf**2 * (1.0 + 11.0 / 42.0 / mp**2)
-    out[m] += 1.17e21 * mp * pf * 3.0 * a * f.Fp[m] * (T[m] * 1e-9) ** 7
+    out[m] += 1.17e21 * mp * pf * N_NU * a * f.Fp[m] * (T[m] * 1e-9) ** 7
     return out
 
 
@@ -351,9 +359,9 @@ def plasma_emissivity(s):
     T = s.T
     out = np.zeros_like(T)
     m = (s.xh > 0) & (s.ye > 0)
-    xtr = 8.617e-5 * T[m] / 0.510998e6
-    xr = s.kf_e[m] * 197.326e6 / 0.510998e6
-    alpha = 1.0 / 137.0
+    xtr = BOLTZMANN_MEV_PER_K * T[m] / ELECTRON_MASS_MEV
+    xr = s.kf_e[m] * HBARC_MEV_FM / ELECTRON_MASS_MEV
+    alpha = ALPHA_FS
     fp = sqrt(4.0 * alpha * xr**3 / 3.0 / pi / sqrt(1.0 + xr**2)) / xtr
     xip = xtr**9 * (16.23 * fp**6 + 4.604 * fp**7.5) * sf.exp_with_floor(-fp)
     out[m] = 1.203e23 * xip * 0.9248 / 96.0 / pi**4 / alpha
@@ -371,7 +379,7 @@ def crust_pbf_emissivity(s):
     mn = s.mstar_n[m]
     S = 4.0 / 81.0 * (pf / mn) ** 4
     a = S + 1.26**2 * pf**2 * (1.0 + 11.0 / 42.0 / mn**2)
-    out[m] = 1.17e21 * mn * pf * 3.0 * a * f.Fc[m] * (T[m] * 1e-9) ** 7
+    out[m] = 1.17e21 * mn * pf * N_NU * a * f.Fc[m] * (T[m] * 1e-9) ** 7
     return out
 
 

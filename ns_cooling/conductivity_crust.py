@@ -7,17 +7,19 @@ Inputs: local T [K], total rho [g/cm^3], nuclear A, Z and mass fraction xh.
 Only n_i = rho*xh/(m_u*A) enters: free-neutron mass is not counted as ions.
 """
 
-from math import sqrt, exp, log, log1p, isfinite
-import numpy as np
+from math import sqrt, exp, log, log1p, isfinite, pi
+from constants import ALPHA_FS, C, K_B, LAMBDA_C, M_ELECTRON, M_U
 
-# Constants rounded to single precision and then promoted to double.
-AUM = float(np.float32(1822.9))
-AUD = float(np.float32(15819.4))
-BOHR = float(np.float32(137.036))
-PI = 3.14159265
-PI_F = float(np.float32(3.14159265))
-THIRD = float(np.float32(0.3333333))
-UM1 = float(np.float32(2.8))
+# Physical constants of the relativistic units of the fit, from constants.py (they had been rounded
+# to single precision; decision D-020). UM1 is a parameter of the fit.
+AUM = M_U / M_ELECTRON  # m_u / m_e
+AUD = M_ELECTRON / LAMBDA_C**3  # m_e / lambda_C^3 [g cm^-3]
+BOHR = 1.0 / ALPHA_FS  # inverse fine-structure constant
+PI = pi
+PI_F = pi
+THIRD = 1.0 / 3.0
+UM1 = 2.8
+CONDUCTIVITY_UNIT = K_B * C / LAMBDA_C**2  # k_B c / lambda_C^2 [erg cm^-1 s^-1 K^-1]
 
 
 def coulomb_log(xs, xw, v):
@@ -124,7 +126,7 @@ def crust_electron_conductivity(T_K, rho, A, Z, xh, Qimp=0.1):
     ee = electron_electron_time(x, temp)
     tau = tau * ee / (tau + ee)
     cel = x**3 / 3 / PI**2 / e / BOHR
-    k = cel * PI**2 * temp / 3 * BOHR * tau * 2.778e15
+    k = cel * PI**2 * temp / 3 * BOHR * tau * CONDUCTIVITY_UNIT
     if not isfinite(k) or k <= 0:
         raise FloatingPointError("Invalid crust conductivity result")
     return k

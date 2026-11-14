@@ -276,8 +276,8 @@ def test_in_the_star_the_updated_rates_are_below_the_standard_ones(bsk22_model):
     }
     assert 0.4 < np.mean(ratio["modified_urca"]) < 0.9
     assert (
-        0.05 < np.mean(ratio["brems_nn"]) < 0.35
-    )  # includes the normalization of the standard nn rate
+        0.15 < np.mean(ratio["brems_nn"]) < 0.95
+    )  # the standard nn rate carries N_nu once (Yakovlev et al. 2001, Eq. 165)
     assert 0.4 < np.mean(ratio["brems_np"]) < 0.9
 
 

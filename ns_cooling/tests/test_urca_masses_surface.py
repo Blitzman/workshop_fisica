@@ -6,18 +6,18 @@ import numpy as np
 import pytest
 
 import tov
-from background import Background, fermi_momentum
 from constants import RHO0
 from cooling import surface_luminosity
 from emissivity import direct_urca_emissivity, neutrino_emissivity
 from state import LocalState
+from synthetic import points_from_table
 from thermal_boundary import surface_boundary
 from thermal_geometry import thermal_geometry
 from thermal_matrix import evaluate_coefficients
 
 
-def npe_background(ye, rho=1e15):
-    """A core-only npe background (Yp = Ye, Yn = 1 - Ye) with the given electron fractions."""
+def npe_points(ye, rho=1e15):
+    """Core-only npe points (Yp = Ye, Yn = 1 - Ye) with the given electron fractions."""
     ye = np.asarray(ye, dtype=float)
     n = len(ye)
     zeros = np.zeros(n)
@@ -36,7 +36,7 @@ def npe_background(ye, rho=1e15):
         tc_n=zeros,
         tc_p=zeros,
     )
-    return Background.from_face_table(table, g14=1.5)
+    return points_from_table(table)
 
 
 # ------------------------------------------------------------------ Direct Urca threshold
@@ -45,17 +45,17 @@ YE_SCAN = np.array([0.10, 0.1105, 0.11110, 0.11112, 0.1112, 0.12, 0.2])  # 1/9 =
 
 def test_the_threshold_does_not_depend_on_the_density():
     for rho in (3e14, 1e15, 2e15):
-        state = LocalState(1e9, npe_background(YE_SCAN, rho=rho).faces)
+        state = LocalState(1e9, npe_points(YE_SCAN, rho=rho))
         assert list(state.direct_urca_allowed) == [False, False, False, True, True, True, True]
 
 
 def test_the_proton_fermi_momentum():
-    npe = LocalState(1e9, npe_background(YE_SCAN).faces)
+    npe = LocalState(1e9, npe_points(YE_SCAN))
     np.testing.assert_array_equal(npe.kf_p, npe.kf_e)  # n_p = n_e without muons
 
 
 def test_direct_urca_emissivity_switches_on_at_the_threshold():
-    faces = npe_background(YE_SCAN).faces
+    faces = npe_points(YE_SCAN)
     state = LocalState(1e9, faces, superfluid=False)
     allowed = state.direct_urca_allowed
     q = direct_urca_emissivity(state)
@@ -144,42 +144,6 @@ def test_the_default_star_never_reaches_the_threshold(background):
     for points in (background.faces, background.cells):
         state = LocalState(1e9, points)
         assert not state.direct_urca_allowed.any() and not state.direct_urca_muon_allowed.any()
-
-
-# ------------------------------------------------------------------ derived quantities
-def test_custom_derived_routines_may_omit_the_proton_momentum():
-    def custom(rho, ye, yn, yp):
-        ones = np.ones_like(rho)
-        return dict(
-            kf_n=ones,
-            kf_e=ones,
-            mstar_n=0.8 * ones,
-            mstar_p=0.7 * ones,
-            transport_mstar_n=ones,
-            transport_mstar_p=ones,
-        )
-
-    n = 5
-    zeros = np.zeros(n)
-    table = dict(
-        radius_km=np.arange(n, dtype=float),
-        rho=np.full(n, 1e15),
-        ye=np.full(n, 0.05),
-        yn=np.full(n, 0.95),
-        yp=np.full(n, 0.05),
-        xh=zeros,
-        aa=np.ones(n),
-        zz=np.full(n, 0.05),
-        ephi=np.full(n, 0.8),
-        elam=np.full(n, 1.2),
-        tc_crust=zeros,
-        tc_n=zeros,
-        tc_p=zeros,
-    )
-    b = Background.from_face_table(table, g14=1.5, derived=custom)
-    expected = fermi_momentum(table["rho"], table["yp"])
-    np.testing.assert_array_equal(b.faces.kf_p, expected)
-    assert np.all(b.faces.mstar_p == 0.7) and np.all(b.cells.mstar_p == 0.7)
 
 
 # ------------------------------------------------------------------ surface

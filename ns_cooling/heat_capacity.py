@@ -19,10 +19,25 @@ Contributions
 
 import numpy as np
 
-from constants import HBAR, HBARC_MEV_FM, K_B, M_NEUTRON, M_PROTON, MEV_TO_ERG, MUON_MASS_MEV
+from constants import (
+    E_ESU,
+    ELECTRON_MASS_MEV,
+    HBAR,
+    HBARC_MEV_FM,
+    K_B,
+    M_NEUTRON,
+    M_PROTON,
+    MEV_TO_ERG,
+    MICROPHYSICS_MASS_UNIT,
+    MUON_MASS_MEV,
+)
 from numerical_validation import checked
 from registry import Registry
 from superfluid import dimensionless_pairing_gap
+
+# Gamma = Z^2 e^2 / (a k_B T) with a = (3 / 4 pi n_i)^(1/3): Gamma = ION_COUPLING Z^2 (rho / A)^(1/3) / T
+# (2.275e5 for the mass unit of the microphysics).
+ION_COUPLING = E_ESU**2 / K_B * (4.0 * np.pi / (3.0 * MICROPHYSICS_MASS_UNIT)) ** (1.0 / 3.0)
 
 HEAT_CAPACITY_TERMS = Registry("heat-capacity term")
 
@@ -90,13 +105,7 @@ def degenerate_lepton_heat_capacity(kf, mass_mev, T):
 @HEAT_CAPACITY_TERMS.register("electrons")
 def electron_heat_capacity(state):
     """Degenerate electrons."""
-    cv = np.zeros_like(state.T)
-    mask = state.ye > 0
-    xe = 0.010067 * (state.ye[mask] * state.rho[mask]) ** (1.0 / 3.0)
-    cv[mask] = (
-        state.nb[mask] * state.ye[mask] * 2.298976e-25 * state.T[mask] * np.hypot(xe, 1.0) / xe**2
-    )
-    return cv
+    return degenerate_lepton_heat_capacity(state.kf_e, ELECTRON_MASS_MEV, state.T)
 
 
 @HEAT_CAPACITY_TERMS.register("muons")
@@ -138,15 +147,15 @@ def ion_heat_capacity(state):
         state.zz[ions],
         state.xh[ions],
     )
-    ni = ri / 1.66e-24 * xi / ai
+    ni = ri / MICROPHYSICS_MASS_UNIT * xi / ai
     T_D_K = 3.48e3 * np.sqrt(ri) * zi / ai
-    gamma = 2.275e5 * zi**2 * (ri * xi / ai) ** (1.0 / 3.0) / ti
+    gamma = ION_COUPLING * zi**2 * (ri * xi / ai) ** (1.0 / 3.0) / ti
     ci = np.empty_like(ni)
     weak, solid = gamma <= 1.0, gamma >= 150.0
     liquid = ~(weak | solid)
-    ci[weak] = ni[weak] * 4.143e-16 / 2.0
-    ci[solid] = ni[solid] * 4.143e-16 * debye_heat_capacity_factor(ti[solid] / T_D_K[solid])
-    ci[liquid] = ni[liquid] * 4.143e-16 / 2.0 * (1.0 + np.log10(gamma[liquid]) / np.log10(150.0))
+    ci[weak] = ni[weak] * 3.0 * K_B / 2.0
+    ci[solid] = ni[solid] * 3.0 * K_B * debye_heat_capacity_factor(ti[solid] / T_D_K[solid])
+    ci[liquid] = ni[liquid] * 3.0 * K_B / 2.0 * (1.0 + np.log10(gamma[liquid]) / np.log10(150.0))
     cv[ions] = ci
     return cv
 

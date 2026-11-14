@@ -6,12 +6,12 @@ import numpy as np
 import pytest
 
 from background import (
-    Background,
+    Points,
     check_composition,
     composition_residuals,
-    fermi_momentum,
 )
 from state import LocalState
+from synthetic import point_fields, points_from_table
 from stellar_structure import StructureOptions, build_stellar_model
 
 PC_BSK26_14 = 1.2541308424984512e35  # dyn/cm^2: 1.4 Msun in BSk26 (input_bsk26)
@@ -105,7 +105,7 @@ def test_the_check_reports_the_residuals(model):
     )
 
 
-# ------------------------------------------------------------------ the face table
+# ------------------------------------------------------------------ synthetic points
 def table(n=6, ymu=None, ye=0.06):
     z = np.zeros(n)
     ymu_values = np.zeros(n) if ymu is None else np.full(n, ymu)
@@ -127,61 +127,28 @@ def table(n=6, ymu=None, ye=0.06):
     return t, ymu_values
 
 
-def test_the_face_table_carries_the_muon_fraction(tmp_path):
-    t, mu = table(ymu=0.03)
-    t["ymu"] = mu * np.linspace(1.0, 0.5, 6)
-    t["yp"] = t["ye"] + t["ymu"]
-    t["yn"] = 1 - t["yp"]
-    b = Background.from_face_table(t, g14=1.5)
-    np.testing.assert_allclose(
-        b.cells.ymu, 0.5 * (t["ymu"][1:] + t["ymu"][:-1]), rtol=1e-14
-    )  # averaged like the others
-    assert b.face_table()["ymu"].tolist() == t["ymu"].tolist()
-    np.testing.assert_allclose(b.faces.kf_mu, fermi_momentum(t["rho"], t["ymu"]), rtol=0)
-    path = tmp_path / "bg.csv"
-    b.to_csv(path)
-    c = Background.from_csv(path)  # exact round trip
-    np.testing.assert_array_equal(c.faces.ymu, b.faces.ymu)
-    np.testing.assert_array_equal(c.cells.kf_mu, b.cells.kf_mu)
-    check_composition(b.faces)
-    check_composition(b.cells)
-
-
-def test_a_table_without_the_muon_column_has_none(tmp_path):
-    t, _ = table()
-    b = Background.from_face_table(t, g14=1.5)
-    assert np.all(b.faces.ymu == 0) and np.all(b.cells.kf_mu == 0) and "ymu" in b.face_table()
-    path = tmp_path / "no_muons.csv"  # a CSV without the muon column
-    b.to_csv(path)
-    text = path.read_text().replace(",ymu", "")
-    lines = [ln if ln.startswith("#") else ",".join(ln.split(",")[:-1]) for ln in text.splitlines()]
-    path.write_text("\n".join(lines) + "\n")
-    assert np.all(Background.from_csv(path).faces.ymu == 0)
-
-
 def test_invalid_muon_fractions_are_refused():
-    t, _ = table()
+    fields = point_fields(table()[0])
     for bad, message in ((-0.01, "ymu must lie"), (1.5, "ymu must lie")):
-        t2 = dict(t, ymu=np.full(6, bad))
         with pytest.raises(ValueError, match=message):
-            Background.from_face_table(t2, g14=1.5)
-    t3 = dict(t, ymu=np.full(6, 0.2))  # more muons than protons: no charge to neutralize
+            Points(**dict(fields, ymu=np.full(6, bad)))
+    # more muons than protons: no charge to neutralize
     with pytest.raises(ValueError, match="cannot exceed yp"):
-        Background.from_face_table(t3, g14=1.5)
+        Points(**dict(fields, ymu=np.full(6, 0.2)))
 
 
 # ------------------------------------------------------------------ the checks themselves
 def test_check_composition_refuses_broken_cores():
     t, mu = table(ymu=0.03)
     t["ymu"] = mu
-    good = Background.from_face_table(t, g14=1.5)
-    assert check_composition(good.faces)["core_charge"] < 1e-12
+    good = points_from_table(t)
+    assert check_composition(good)["core_charge"] < 1e-12
     broken = dict(t, yp=t["yp"] + 1e-3)  # a proton excess no electron or muon neutralizes
     with pytest.raises(ValueError, match="charge neutrality in the core: residual 1.000e-03"):
-        check_composition(Background.from_face_table(broken, g14=1.5).faces)
+        check_composition(points_from_table(broken))
     lost = dict(t, yn=t["yn"] - 1e-3)  # baryons that disappeared
     with pytest.raises(ValueError, match="baryon number"):
-        check_composition(Background.from_face_table(lost, g14=1.5).faces)
+        check_composition(points_from_table(lost))
 
 
 def test_a_grossly_inconsistent_crust_is_reported():
@@ -195,7 +162,7 @@ def test_a_grossly_inconsistent_crust_is_reported():
         yp=np.zeros(6),
         ye=np.full(6, 0.2),
     )  # a crust with ye = 0.2 where 26/56 = 0.464 is expected
-    points = Background.from_face_table(crust, g14=1.5).faces
+    points = points_from_table(crust)
     with pytest.warns(
         UserWarning, match="Crust charge neutrality: ye differs from xh\\*zz/aa by 132%"
     ):
