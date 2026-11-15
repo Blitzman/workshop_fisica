@@ -745,6 +745,53 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
     "EN-4: the envelope is attached at the base of the cooled domain (base density 1e10 g/cm^3 by default), with the local temperature there and the surface gravity at the edge of the table, with the surface factor applied; not at the surface with an isothermal interior.",
     "Cleaned: a comment in thermal_fluxes.py and a sentence of the README no longer say that the item is open; the README envelope section now cites the iron fit to Potekhin, Chabrier and Yakovlev 1997 and the accreted fit to Potekhin et al. 2003 (to be checked), states that the partially accreted model is not offered, and states where the envelope is attached. No code changed."
    ]
+  },
+  {
+   "id": "D-033",
+   "status": "decided",
+   "date": "15 November 2026",
+   "title": "Every available gap model is a documented choice of the code; the default stays 7, 12 and 8 (SF-2, SF-3)",
+   "text": "superfluid.py holds a catalogue of gap models: the 16 local models with their numbers, the 17 proton and triplet models of Ho et al. 2015 (Table II) and three of its nine neutron-singlet models (the others are not included, D-035). Each entry carries its own ratio k_B T_c / Delta, its source and what is known about it. The input files keep the default of the local version: crust neutrons 7, core neutrons 12, core protons 8.",
+   "by": "Requested in the project chat; implemented by Claude",
+   "effects": [
+    "Numbering: 1-7, 8-10 and 11-16 are the local table (crust neutrons, core protons, core neutrons); 17-25 are the Ho et al. proton models (AO, BCLL, BS, CCDK, CCYms, CCYps, EEHO, EEHOr, T); 26-33 their triplet models (AO, BEEHS, EEHO, EEHOr, SYHHP, T, TTav, TToa); 34-36 three of their nine neutron-singlet models (SCLBL, SFB, WAP; the other six are not included, D-035). In the input file a model can be used only in its own region (crust neutrons: 1-7, 34-36; core neutrons: 11-16, 26-33; core protons: 8-10, 17-25), and an invalid choice now says which numbers are valid.",
+    "T_c ratio per model: 0.5669 for every singlet entry, 0.8416 for the local triplet entries and 0.1187 for the Ho et al. triplet entries, so that the two conventions cannot be mixed. The dimensionless gap v(T/T_c) does not depend on it. GAP_MODELS (now with every entry) and TC_GAP_RATIO are kept for compatibility.",
+    "Checks (one-off, D-026): the gap and T_c arrays of the local models 1-16 are bit-identical to those of the module before the catalogue; the 17 Ho et al. proton and triplet entries reproduce the peak T_c of the old notebook through the code; the default run before the corrections of D-034 was byte-identical in cooling_curve.csv, time_steps.csv, temperature_profiles.csv and neutrino_processes.csv; the refusals (a triplet model in the crust, a proton model in the core neutrons, an unknown number) work.",
+    "Runs with Ho et al. models (BSk26, 1.4 Msun) go through the whole pipeline: triplet 28 (EEHO) gives the same L as local 11 at the tabulated ages (231.20 at 841 yr), with a 0.46 difference in ln L at 4165 yr that is a 2.7 % shift in time of a drop of slope 17 caused by the 0.45 % rounding of the amplitude 0.068; proton 20 (CCDK) gives 33.44 against 33.42 at 841 yr for the default; triplet 30 (SYHHP) 33.7, triplet 33 (TToa) 213 and proton 23 (EEHO) 28.8, in 10^32 erg/s at 841 yr.",
+    "Documentation: the README section SUPERFLUID GAP MODELS (numbering, conventions, origin of the local table, the whole catalogue with peak T_c), the docstring of superfluid.py, the comments of the input files, and python3 superfluid.py, which prints every entry with its source and notes."
+   ]
+  },
+  {
+   "id": "D-034",
+   "status": "decided",
+   "date": "15 November 2026",
+   "title": "Literature audit of the superfluid routines: corrections integrated, sources recorded (NU-7, NU-10, NU-11)",
+   "text": "The corrections of the audit of 15 November 2026 are applied to the pairing factors of the emissivities (emissivity_factors.py) and of the heat capacity (heat_capacity.py), and the sources it identified are recorded in the code and the README. The default choices are unchanged.",
+   "by": "Corrections written in the audit chat; reviewed, integrated and tested by Claude",
+   "effects": [
+    "NU-11: the neutron branch of the modified Urca with triplet neutrons and normal protons used the proton-singlet fit of Y01 Eq. 212 below v = 15 (a surrogate meant for moderate pairing) and switched to an asymptote with xi = 0.209 above it, which made the factor jump by 52. It now uses the neutron-only expressions of Gusakov 2002 (Table 2, Eqs. A1, A2, A7, A10), joined over v = 3-4 to the intermediate form and over v = 8-20 to the asymptote of Y01 Eq. 216 with xi = 0.130 (Yakovlev and Levenfish 1995, Eqs. 26 and 29), by cubic interpolations in log R. The recommendation of the report of 14 November (use the Y01 fit at every v) was wrong: that fit is up to 53 times larger than the corrected factor at v = 15.",
+    "NU-10: the two-species direct-Urca factor (Y01 Eqs. 204-205), which also builds the combined modified-Urca and np-bremsstrahlung factors, had a sharp switch at radius 5 (a jump by 1.4 to 3.5). It is now continuous (relative step 1e-7) with the matching offset decaying as exp(-(r-5)/5), recovers the single-species fits on the axes and stays at or below 1; its two-species accuracy outside the fit domain is not quantified. The exponent floor of -150 is removed from every pairing factor and from the heat-capacity factor (the factors are evaluated in log space); exp_with_floor stays in the module only for the plasmon-decay rate, which still uses it.",
+    "Verification (this chat): all 17 single-species factors agree with the previous module to 1e-14 over v = 0-50; the corrected factor equals 9.28379e-11 at v = 15, is non-increasing, equals 1 at v = 0 and the asymptote from v = 20; 21 functions evaluated up to v = 2e10 for scalars and vectors raise no overflow, invalid operation or division by zero; the heat-capacity factor agrees to 1e-14 where it is above 1e-30 and keeps its jump at T_c (2.42 singlet, 2.19 triplet); pyflakes is clean and the 42 fast and the slow test pass.",
+    "Effect on the cooling (BSk26, 1.4 Msun, all 20 variants of the superfluid comparison rerun): at most 0.4 % in L at any of the ages 100 to 1e5 yr; the default changes by 0.1 % at 841 yr (33.42 to 33.44) and by at most 0.001 in ln L over the whole curve. The corrections act where the modified Urca is already negligible. These are the first luminosities after the corrections; the audit had none.",
+    "NU-7: the local coefficient 2 g_A^2 = 3.175 is the vector-suppressed choice of Page et al. 2009, Eq. 11 (with the singlet coefficients of its Eqs. 9-10), not an omission without source; Y01's bare vertex gives 1 + 2 g_A^2 = 4.175, and Leinson 2010 (Eq. 96) and Potekhin and Chabrier 2018 (Sect. 3.4) about g_A^2/2 = 0.794. The default keeps 3.175. The alternatives are documented in the comments and the README, not options of the code. Also recorded: alpha(n) = 1.76 - 0.63 (n0/n)^(2/3) is Yakovlev and Levenfish 1995, Eq. 12.",
+    "Limit found in the review (open): the corrected neutron-only factor is not continuous with the combined factor at the temperature where the protons become superfluid. The combined factor at v_p -> 0 is 1.01, 1.08, 1.43, 2.17, 4.68, 8.6, 13.7 and 16.9 times the neutron-only one at v_n = 0.5, 1, 2, 3, 5, 8, 12 and 15; the previous code had the opposite mismatch, 0.94 to 0.32. A full remedy needs the two-species fits of Gusakov. It acts only where the neutrons are strongly paired and the rate is already small.",
+    "Not applied, listed by the audit: options for the PBF coefficient; the proton p_F uses the neutron mass (0.14 % in p_F if mstar_p is relative to the proton mass); the low-temperature splice of v (+0.03 % singlet and +1.2 % triplet at T/T_c = 0.1); the np bremsstrahlung factor for neutron-only triplet pairing (its limit v_p -> 0 does not match the direct-Urca surrogate); the conductivity callers and the factors R, Z, R_C of conductivity_core.py; the source of model 6 and of the Fortran numbering of NSCool; the other six neutron-singlet rows of Ho et al. 2015 (not included, D-035).",
+    "Statements of the report of 14 November corrected by the audit: (1) Ho et al. Table II has nine neutron-singlet rows besides the proton and triplet ones; (2) the convention of models 12-14 is confirmed, 0.8416, and model 13 is a published large-gap fit; (3) the NU-11 asymptote has the right power v^6, the prefactor was 60.8 % high, and the Y01 fit below 15 is a surrogate; (4) the local numbering is not NSCool's; (5) 3.175 has a source (Page et al. 2009)."
+   ]
+  },
+  {
+   "id": "D-035",
+   "status": "decided",
+   "date": "15 November 2026",
+   "title": "Remaining superfluid points: other neutron-singlet rows ignored, other pair-breaking options only documented, limits that do not matter for the cooling kept",
+   "text": "Three answers close the superfluid part: (1) the six neutron-singlet rows of Ho et al. 2015 that are not in the project are ignored, because the local models and the three included already cover the relevant range; (2) the default pair-breaking coefficient stays and the other options are only documented; (3) whatever is irrelevant for the cooling is kept as it is.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "(1) The three neutron-singlet entries included (SCLBL, SFB, WAP) were renumbered 34-36 and the reserved numbers (34-39) and their error were removed; nothing was pushed with the earlier numbers 40-42. superfluid.py, the input comments, the README and D-033 follow the new numbering.",
+    "(2) NU-7: the default stays 2 g_A^2 = 3.175; the options of Y01 (4.175) and of Leinson 2010 and Potekhin and Chabrier 2018 (about 0.794) stay as documentation in the comments of emissivity.py and in the README.",
+    "(3) Kept, with the reason: the discontinuity between the neutron-only and the combined modified-Urca factor at the temperature where the protons become superfluid (acts only where the rate is already small); the low-temperature splice of v (+0.03 % singlet, +1.2 % triplet at T/T_c = 0.1); the np-bremsstrahlung factor for neutron-only triplet pairing; the neutron mass in the proton p_F (0.14 % in p_F if mstar_p is relative to the proton mass); model 6 without identified source; the lineage of the local numbering with respect to the Fortran NSCool.",
+    "The conductivity callers that the audit could not see were read in the code (conductivity_core.py): R and Z receive the proton singlet gap for the proton terms, as intended; the neutron triplet gap is also fed through the same R and Z fits for the lepton-neutron terms, which has no source, and R_C^2 multiplies the neutron conduction, as in Baiko et al. 2001; the corrections to the neutron collision frequencies are set to 1 (a comment in the code). Test: with these factors set to 1 the luminosity changes by at most 0.2 % up to 1e5 yr and by 1 % at 1e6 yr, for the default pairing and for the strong triplet gap of model 13 (all three factors off: 0.14 % and 0.85 % at 841 yr and 1e6 yr for the default). They do not matter for the cooling and are kept."
+   ]
   }
  ],
  "findings": [
@@ -1112,14 +1159,18 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "high",
    "ev": "code",
-   "next": "Tabulate Q_pbf for both codes at the same T, T_c and density, then decide the triplet normalisation (4.17, 3.17 or 0.19 × 4.17 = 0.79).",
+   "next": "Closed by D-034 and D-035.",
    "detail": [
     "Triplet coefficient, local over GitHub: 0.76 against the Y01 value, 4.0 against the updated one. Pair-breaking emission dominates when modified Urca is suppressed, so this sets the cooling in the superfluid cases that matter most for the Marino et al. question.",
     "The dimensionless emission functions F_A and F_B are identical in both codes (see NU-10).",
-    "Pair breaking now uses the actual Fermi momenta of the background (D-014): p_F/(m_N c) = ħc k_F/(m_N c²), with m_N the neutron mass. The former 0.353 (n/n0)^(1/3) with n0 = 0.170 gave a p_F about 1.9 % too small."
+    "Pair breaking now uses the actual Fermi momenta of the background (D-014): p_F/(m_N c) = ħc k_F/(m_N c²), with m_N the neutron mass. The former 0.353 (n/n0)^(1/3) with n0 = 0.170 gave a p_F about 1.9 % too small.",
+    "D-034: the audit identified 3.175 as the Page et al. 2009 choice; the options and their sources are in the comments of emissivity.py and the README. The effect on L of the coefficient (4.17 or 0.79) is in the report of 14 November (33 to 28.5 or 93)."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-034",
+    "D-035"
+   ],
+   "final": "The default keeps the local coefficient 3.175 (Page et al. 2009, Eq. 11); the other options (Y01 4.175; Leinson 2010 and Potekhin and Chabrier 2018 about 0.794) are only documented."
   },
   {
    "id": "NU-8",
@@ -1163,12 +1214,16 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "agree",
    "impact": "high",
    "ev": "run",
-   "next": "Keep a single copy in the unified code.",
+   "next": "Closed by D-034 and D-035.",
    "detail": [
-    "Compared 15 factor functions numerically (direct Urca, modified Urca n and p, bremsstrahlung np, pp, nn, pair-breaking singlet and triplet, and the combined factors): identical to 1e-15 on a grid of v from 0.5 to 20. Single exception: NU-11."
+    "Compared 15 factor functions numerically (direct Urca, modified Urca n and p, bremsstrahlung np, pp, nn, pair-breaking singlet and triplet, and the combined factors): identical to 1e-15 on a grid of v from 0.5 to 20. Single exception: NU-11.",
+    "D-034: the audit found no other disagreement with Y01 in the single-species fits; the changes concern the two-species approximations and the exponent floor.",
+    "D-035: the limits that do not matter for the cooling are kept (the discontinuity with the combined factor, the splice of v, the np-bremsstrahlung factor for neutron-only pairing)."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-034"
+   ],
+   "final": "One copy, emissivity_factors.py, corrected by D-034 (direct-Urca matching at radius 5, no exponent floor)."
   },
   {
    "id": "NU-11",
@@ -1179,12 +1234,16 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "low",
    "ev": "run",
-   "next": "Decide against Y01 Eq. 227 which form is right above v = 15.",
+   "next": "Closed by D-034 and D-035.",
    "detail": [
-    "The local factor drops by a factor 52 at v = 15 relative to the Y01 fit (a discontinuity). The factor itself is below 5e-9 there, so it only matters for T far below T_c."
+    "The local factor drops by a factor 52 at v = 15 relative to the Y01 fit (a discontinuity). The factor itself is below 5e-9 there, so it only matters for T far below T_c.",
+    "D-034: after the correction the factor at v = 15 is 9.28e-11, against 4.9e-9 (Y01 surrogate) and 5.8e-9 to 8.1e-11 on the two sides of the old switch.",
+    "D-035: the limits that do not matter for the cooling are kept (the discontinuity with the combined factor, the splice of v, the np-bremsstrahlung factor for neutron-only pairing)."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-034"
+   ],
+   "final": "Corrected: neutron-only expressions of Gusakov 2002 joined to the asymptote of Y01 Eq. 216 with xi = 0.130; the switch at v = 15 and the factor 52 are gone."
   },
   {
    "id": "CO-1",
@@ -1352,14 +1411,19 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "close",
    "impact": "high",
    "ev": "run",
-   "next": "Build a model-by-model concordance table (name, source paper, parameters, peak T_c) and drop duplicates.",
+   "next": "Closed by D-033 and D-035.",
    "detail": [
     "After converting the triplet normalisation, local model 11 matches the Ho et al. EEHO triplet (0.068 vs 0.48 × 0.1187/0.8416 = 0.0677). Local models 11 and 15 are identical, and so are 2 and 7.",
     "No match within 3 % for local triplet models 12, 13, 14, 16 or for local proton models 8, 9, 10 against the Ho et al. entries (the local proton model 8 and CCDK are similar but not equal: peak T_c 6.80e9 K locally, 6.71e9 K in the Ho et al. table). These are different parameter sets or different sources.",
-    "Peak T_c of the local defaults: neutron triplet (model 12) 1.08e9 K; proton (model 8) 6.8e9 K; crust neutron (model 7) 8.5e9 K."
+    "Peak T_c of the local defaults: neutron triplet (model 12) 1.08e9 K; proton (model 8) 6.8e9 K; crust neutron (model 7) 8.5e9 K.",
+    "D-033: the catalogue replaces the concordance table that was proposed here: every entry has its source and its relation to the Ho et al. models in the code itself (python3 superfluid.py).",
+    "D-034: the audit traced the local rows to Andersson, Comer and Glampedakis 2005 and Ho, Glampedakis and Andersson 2012; 2 and 7, and 11 and 15, are aliases; model 6 is unresolved; the local numbers are not the selectors of NSCool. It also found that the Ho et al. Table II has nine neutron-singlet rows that the old transcription omitted: the statement of the report of 14 November that the table covers only protons and triplets was wrong."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-033",
+    "D-035"
+   ],
+   "final": "All available gap choices are in the code, documented: the local models 1-16, the Ho et al. models 17-33 and three neutron-singlet models (34-36); the other six neutron-singlet rows of Ho et al. are ignored. The default stays 7, 12 and 8."
   },
   {
    "id": "SF-3",
@@ -1370,12 +1434,16 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "high",
    "ev": "run",
-   "next": "Never mix the two tables without conversion; record the normalisation in each model’s metadata.",
+   "next": "Settled by D-033 and D-034.",
    "detail": [
-    "The ratio 0.8416/0.1187 = 7.09 is a convention in how Δ is tabulated, not a physics difference, as the EEHO match in SF-2 shows. It becomes an error as soon as parameters are copied between the codes."
+    "The ratio 0.8416/0.1187 = 7.09 is a convention in how Δ is tabulated, not a physics difference, as the EEHO match in SF-2 shows. It becomes an error as soon as parameters are copied between the codes.",
+    "D-034: the audit shows that 0.8416 is the weak-coupling ratio for the minimum gap of the type-B state (Yakovlev et al. 2001, Table 5) and is the one that Andersson et al. 2005 use for the local triplet models 11, 13, 14, 15 and 16; the deep fit of Ho et al. 2012 (model 12) prints 0.8418, which the code does not use (0.024 % in T_c). The factor 7.09 between the two conventions is a difference of amplitude normalisation (Ho et al. 2015 Eq. 1), not an error of the local table. The doubt about models 12-14 of the report of 14 November (a peak of 5.4e9 K for model 13 looked implausible) is answered: model 13 is a published large-gap fit (Baldo et al. 1998 through ACG05 j); the 0.88e9 K upper limit belongs to the eight Ho et al. triplets only."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-033",
+    "D-034"
+   ],
+   "final": "The ratio k_B T_c / Delta is stored per model: 0.5669 (singlets), 0.8416 (local triplets, confirmed by the literature audit) and 0.1187 (Ho et al. triplets)."
   },
   {
    "id": "SF-4",
