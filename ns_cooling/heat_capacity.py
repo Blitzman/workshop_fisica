@@ -53,16 +53,17 @@ def heat_capacity_pairing_factor(T_K, Tc_K, pairing_type):
     R = np.ones_like(T_K)
     mask = (Tc_K > 0) & (T_K <= Tc_K)
     v = dimensionless_pairing_gap(T_K[mask] / Tc_K[mask], pairing_type)
-    # Fits of the superfluid reduction of the heat capacity: Yakovlev, Levenfish and Shibanov (1999), Eq. 18 (README; read from the PDF in the GitHub work);
-    # equal to the transcription of the GitHub code (D-019).
+    # Fits of the superfluid reduction of the heat capacity: Yakovlev, Levenfish and Shibanov (1999), Eq. 18 (checked in the paper by the
+    # literature audit, and equal to the transcription of the old GitHub code, D-019). The full log factor is evaluated before the
+    # exponential and there is no exponent floor, so that R tends to zero at low temperature (decision D-034).
     if pairing_type == 1:
         a = 0.4186 + np.hypot(1.007, 0.5010 * v)
         z = 1.456 - np.hypot(1.456, v)
-        R[mask] = a**2.5 * np.exp(np.maximum(z, -150.0))
+        R[mask] = np.exp(2.5 * np.log(a) + z)
     elif pairing_type == 2:
         a = 0.6893 + np.hypot(0.790, 0.2824 * v)
         z = 1.934 - np.hypot(1.934, v)
-        R[mask] = a**2 * np.exp(np.maximum(z, -150.0))
+        R[mask] = np.exp(2.0 * np.log(a) + z)
     else:
         raise ValueError("pairing_type must be 1 or 2")
     return R

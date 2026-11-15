@@ -78,8 +78,9 @@ class ProcessFactors:
         self.s = s
         taus = (s.tau_crust, s.tau_n, s.tau_p)
         self.vc, self.vn, self.vp = [self.gap(t, k) for t, k in zip(taus, (1, 2, 1))]
-        # alpha(n) = 1.76 - 0.63 (n0/n)^(2/3): source not recorded, probably the earlier parametrisation of Yakovlev and
-        # Levenfish (1995). Yakovlev et al. (2001) use the constant alpha_n = 1.13 (item NU-1, open).
+        # alpha(n) = 1.76 - 0.63 (n0/n)^(2/3): Yakovlev and Levenfish (1995), Eq. (12), checked in the paper by the literature audit.
+        # Yakovlev et al. (2001), Eq. (140) and the text around it, adopt the constant alpha_n = 1.13 in their numerical examples
+        # (item NU-1, open). The regulariser 1e-20 and the mask alpha > 0 are choices of this code.
         self.urca_alpha = 1.76 - 0.63 / (s.rho / RHO0 * s.yn + 1e-20) ** (2.0 / 3.0)
         m = (self.urca_alpha > 0) & (s.yp > 0)
         self.Rmn = self.combined(
@@ -299,10 +300,12 @@ def core_pbf_emissivity(s):
     out = np.zeros_like(T)
     m = (s.xh == 0) & (s.tau_n <= 1) & (s.yn > 0)
     pf = HBARC_MEV_FM * s.kf_n[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
-    # Pair breaking and formation (README: Yakovlev, Kaminker and Levenfish 1999, to be checked, and Yakovlev et al. 2001): prefactor 1.17e21.
-    # The neutron triplet term 2 g_A^2 omits the vector part (item NU-7, open). g_A = 1.26 and sin^2(theta_W) = 0.23 are the values of the
-    # original implementation, source not recorded (Bottaro et al. use g_A = 1.27); the structure 4/81 (p_F/m*)^4 and 11/42 of the proton term:
-    # source not recorded.
+    # Pair breaking and formation. Rate normalisation: Yakovlev et al. (2001), Eq. (236) (1.17e21, N_nu = 3). The weak coefficients are the
+    # vector-suppressed ones of Page et al. (2009), Eqs. (9)-(11): triplet 2 g_A^2 = 3.175 (Y01's bare vertex gives 1 + 2 g_A^2 = 4.175;
+    # Leinson 2010, Eq. 96, and Potekhin and Chabrier 2018, Sect. 3.4, give about g_A^2/2 = 0.794, the factor 0.19 of the bare rate);
+    # singlet 4/81 (p_F/m*)^4 with the proton axial term of Kaminker, Haensel and Yakovlev (1999). g_A = 1.26 and sin^2(theta_W) = 0.23 are
+    # the values of Page et al. (2009) (Bottaro et al. use g_A = 1.27, which would raise the axial terms by 1.6 %). Checked in the papers
+    # by the literature audit (item NU-7: the default keeps the local value).
     out[m] = 1.17e21 * s.mstar_n[m] * pf * N_NU * (2.0 * 1.26**2) * f.Fn[m] * (T[m] * 1e-9) ** 7
     m = (s.xh == 0) & (s.tau_p <= 1) & (s.yp > 0)
     pf = HBARC_MEV_FM * s.kf_p[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
@@ -398,7 +401,7 @@ def crust_pbf_emissivity(s):
     pf = HBARC_MEV_FM * s.kf_n[m] / NEUTRON_MASS_MEV  # p_F / (m_N c) from the background (D-014)
     mn = s.mstar_n[m]
     S = 4.0 / 81.0 * (pf / mn) ** 4
-    # Neutron singlet pair breaking in the crust: same constants as in the core, source not recorded.
+    # Singlet neutron weak coefficient from Page et al. (2009), Eq. (9).
     a = S + 1.26**2 * pf**2 * (1.0 + 11.0 / 42.0 / mn**2)
     out[m] = 1.17e21 * mn * pf * N_NU * a * f.Fc[m] * (T[m] * 1e-9) ** 7
     return out

@@ -393,6 +393,78 @@ kf_n = 2.23, 2.40 and 2.61 fm^-1 against kf_p + kf_e = 1.72, 1.86 and 2.03 fm^-1
 at 1.0 and 1.4 Msun (at the center of the 1.4 Msun star kf_p + kf_mu = 2.094 against kf_n = 2.119 fm^-1) and
 open at 1.8 Msun, in 7 of the 11 core cells where the electron channel is open.
 
+SUPERFLUID GAP MODELS
+Every available choice of gap is an entry of GAP_CATALOGUE in superfluid.py (python3 superfluid.py prints it, with the source and the
+notes of every entry). The input file takes the number of the model for each region, and a model can be used only in its own region:
+    a) crust neutrons, 1S0:   1-7 local table, 34-36 Ho et al. 2015 (neutron singlet)
+    b) core neutrons, 3P2:    11-16 local table, 26-33 Ho et al. 2015
+    c) core protons, 1S0:     8-10 local table, 17-25 Ho et al. 2015
+The default of the input files is 7, 12 and 8 (local table), the same choices as before the catalogue existed. Using another model is
+one line of the input file; nothing else has to change.
+Convention of the critical temperature. Every model gives the gap Delta(k_F) in the four-parameter form of Ho et al. 2015, and the critical
+temperature is k_B T_c = r Delta with the ratio r of the entry: 0.5669 for every singlet entry; 0.8416 for the triplet entries of the local
+table, the weak-coupling value for the minimum gap Delta_B of the type-B state, whose gap is Delta_B sqrt(1 + 3 cos^2 theta) (Yakovlev et
+al. 2001, Table 5; Andersson et al. 2005, Eq. 20); 0.1187 for the triplet entries of Ho et al. 2015 (their Eq. 1), whose amplitude is
+about 7.09 times Delta_B. The ratio is stored per model, so that the two conventions cannot be mixed; there is no basis for applying
+0.1187 to the local triplet models. The deep fit of Ho et al. 2012 (model 12) prints 0.8418; the code uses 0.8416 (0.024 % in T_c).
+Origin of the local table (literature audit of 15 November 2026). Its numbers are those of the original implementation, not the selectors of
+Page's NSCool, whose documented numbers differ. The rows are fits published by Andersson, Comer and Glampedakis 2005 (ACG05, Table I) and by
+Ho, Glampedakis and Andersson 2012 (HGA12, Table 1): 1 = ACG05 A; 2 and 7 = ACG05 a = the crust fit of HGA12 (aliases); 3, 4, 5 = ACG05 b, c,
+d; 8 = the proton fit of HGA12; 9 = ACG05 f (Amundsen and Ostgaard 1985); 10 = ACG05 g; 11 and 15 = ACG05 l (Elgaroy et al. 1996,
+nonrelativistic) = the shallow fit of HGA12 (aliases); 12 = the deep fit of HGA12; 13 = ACG05 j (Baldo et al. 1998); 14 = ACG05 k (Elgaroy et
+al. 1996); 16 = ACG05 m (Elgaroy et al. 1996, relativistic). Model 6 is unresolved: no source was identified. Ho et al. 2015 note that their
+SYHHP (model 30) replaces the deep fit of HGA12. The local models differ from the Ho et al. entries of the same attribution (CCDK, BCLL, EEHO,
+EEHOr, AO) by other fit constants; the differences are listed in the notes of the entries.
+Ho et al. 2015, Table II: the proton and triplet rows (17-33) were transcribed in the old GitHub work and all reproduce the table. Of its nine
+neutron-singlet rows only SCLBL, SFB and WAP (34-36) are included, with the tuples given by the audit; the other six (AWP2, AWP3, CCDK, CLS,
+GIPSF, MSH) are not, because the local models and these three already cover the range (decision D-035).
+The whole catalogue (r = k_B T_c / Delta; peak T_c in 10^9 K over the Fermi momentum):
+    No. Region               Label              r Peak Tc [1e9 K]  kF range [fm^-1]  Remark
+      1 crust neutrons, 1S0  local 1       0.5669          19.782    0.02 -  1.55  ACG05 A
+      2 crust neutrons, 1S0  local 2       0.5669           8.511    0.10 -  1.70  ACG05 a = HGA12 crust; = 7
+      3 crust neutrons, 1S0  local 3       0.5669           6.563    0.40 -  1.65  ACG05 b
+      4 crust neutrons, 1S0  local 4       0.5669           3.529    0.30 -  1.05  ACG05 c
+      5 crust neutrons, 1S0  local 5       0.5669          14.443    0.30 -  1.30  ACG05 d
+      6 crust neutrons, 1S0  local 6       0.5669          11.213    0.05 -  1.63  source unresolved
+      7 crust neutrons, 1S0  local 7       0.5669           8.511    0.10 -  1.70  default; ACG05 a; = 2
+      8 core protons, 1S0    local 8       0.5669           6.795    0.00 -  1.30  default; HGA12; ~ 20 (CCDK)
+      9 core protons, 1S0    local 9       0.5669           1.912    0.15 -  1.27  ACG05 f
+     10 core protons, 1S0    local 10      0.5669           5.691    0.10 -  1.05  ACG05 g; ~ 18 (BCLL)
+     11 core neutrons, 3P2   local 11      0.8416           0.488    1.28 -  2.37  ACG05 l = HGA12 shallow; = 15
+     12 core neutrons, 3P2   local 12      0.8416           1.082    2.00 -  3.10  default; HGA12 deep
+     13 core neutrons, 3P2   local 13      0.8416           5.387    1.05 -  2.82  ACG05 j (Baldo et al.)
+     14 core neutrons, 3P2   local 14      0.8416           1.308    1.10 -  2.70  ACG05 k (Elgaroy et al.)
+     15 core neutrons, 3P2   local 15      0.8416           0.488    1.28 -  2.37  alias of 11
+     16 core neutrons, 3P2   local 16      0.8416           0.170    1.21 -  1.62  ACG05 m (Elgaroy et al.)
+     17 core protons, 1S0    Ho2015 AO     0.5669           2.433    0.15 -  1.05  
+     18 core protons, 1S0    Ho2015 BCLL   0.5669           5.407    0.05 -  1.05  
+     19 core protons, 1S0    Ho2015 BS     0.5669           4.722    0.00 -  0.80  
+     20 core protons, 1S0    Ho2015 CCDK   0.5669           6.706    0.00 -  1.30  
+     21 core protons, 1S0    Ho2015 CCYms  0.5669           5.189    0.00 -  1.10  
+     22 core protons, 1S0    Ho2015 CCYps  0.5669           4.441    0.00 -  0.95  
+     23 core protons, 1S0    Ho2015 EEHO   0.5669           5.851    0.00 -  1.20  
+     24 core protons, 1S0    Ho2015 EEHOr  0.5669           6.704    0.00 -  1.10  
+     25 core protons, 1S0    Ho2015 T      0.5669           3.284    0.15 -  1.20  
+     26 core neutrons, 3P2   Ho2015 AO     0.1187           0.819    1.20 -  3.30  
+     27 core neutrons, 3P2   Ho2015 BEEHS  0.1187           0.388    1.00 -  3.20  
+     28 core neutrons, 3P2   Ho2015 EEHO   0.1187           0.486    1.28 -  2.37  
+     29 core neutrons, 3P2   Ho2015 EEHOr  0.1187           0.166    1.20 -  1.60  
+     30 core neutrons, 3P2   Ho2015 SYHHP  0.1187           0.883    2.08 -  2.70  
+     31 core neutrons, 3P2   Ho2015 T      0.1187           0.879    1.55 -  2.35  
+     32 core neutrons, 3P2   Ho2015 TTav   0.1187           0.552    1.10 -  2.92  
+     33 core neutrons, 3P2   Ho2015 TToa   0.1187           0.624    1.10 -  3.20  
+     34 crust neutrons, 1S0  Ho2015 SCLBL  0.5669           6.522    0.35 -  1.67  Ho15 neutron singlet
+     35 crust neutrons, 1S0  Ho2015 SFB    0.5669           5.391    0.10 -  1.55  Ho15 neutron singlet
+     36 crust neutrons, 1S0  Ho2015 WAP    0.5669           6.025    0.15 -  1.40  Ho15 neutron singlet
+Pairing factors (emissivity_factors.py, heat_capacity.py), corrected on 15 November 2026 after the audit (decision D-034): the neutron branch
+of the modified Urca with triplet neutrons and normal protons uses the neutron-only expressions of Gusakov (2002) joined to the asymptote
+of Y01 Eq. (216) with xi = 0.130, in place of the proton-singlet fit that was used below v = 15 and a hard switch to an asymptote with xi = 0.209;
+the two-species direct-Urca factor is continuous at radius 5 and recovers the single-species fits on the axes; no factor has an exponent floor.
+Effect on the cooling of the example star (BSk26, 1.4 Msun) in all 20 variants of the superfluid comparison: at most 0.4 % in L at any age
+(the default: 0.1 % at 841 yr). Known limit (item NU-10): the corrected neutron-only factor is not continuous with the combined factor at the
+temperature where the protons become superfluid; the combined factor at v_p -> 0 is 1.4 times the neutron-only one at v_n = 2, 4.7 times at 5
+and 17 times at 15. This acts only where the neutrons are strongly paired and the modified Urca is already negligible.
+
 UNITS AND ASSUMPTIONS
 Physical constants are the CODATA 2018 values of constants.py (including sigma_SB and k_B in MeV/K).
 Neutrino flavours: the standard nucleon bremsstrahlung carries N_nu = 3 (constants.N_NU) once, with the
@@ -565,7 +637,8 @@ the equations were transcribed from the paper, with their numbers, in the old Gi
 (to be checked) means that the reference was not recorded in the original implementation and is given from memory of
 the literature: check it against the paper before quoting it. The paper of Bottaro, Caputo and Fiorillo and the
 expressions derived for this version are cited exactly, and the places where the implementation differs from a
-source are stated.
+source are stated. (checked in the audit) means that the literature audit of 15 November 2026 checked the equations or tables in the
+paper itself.
 
 Structure of the star
 - Tolman-Oppenheimer-Volkoff equations in x = ln(P/Pc) (tov.py): Tolman (1939), Phys. Rev. 55, 364;
@@ -608,20 +681,26 @@ Neutrino emissivities (emissivity.py, emissivity_factors.py)
   PDF): nucleon bremsstrahlung Eqs. 165-167 (the local rates equal them since D-020), pairing reduction factors
   Eqs. 199-229 (equal to the local formulas except the asymptotic form for v > 15, item NU-11) and pair breaking
   Eqs. 236-241.
-- Modified Urca, standard rates: the source of the local prefactors (8.55e21 neutron branch, 8.53e21 proton branch,
-  alpha(n), beta = 0.68) is not recorded. They differ from Y01, Eqs. 140 and 142 (8.1e21 with alpha_n = 1.13); they
-  are probably the earlier parametrization of Yakovlev and Levenfish (1995), A&A 297, 717 (to be checked). The
-  original rates are Friman and Maxwell (1979), ApJ 232, 541 (to be checked). Item NU-1 is open.
-- Superfluid reduction of the rates: Y01 Eqs. 199-229 as the primary source; the original sources are Yakovlev and
-  Levenfish (1995) and Levenfish and Yakovlev (1994) (to be checked).
+- Modified Urca, standard rates: alpha(n) = 1.76 - 0.63 (n0/n)^(2/3) is Yakovlev and Levenfish (1995), A&A 297, 717, Eq. 12 (checked in
+  the audit); Y01, Eqs. 140 and 142, adopt the constant alpha_n = 1.13 (8.1e21). The source of the prefactors 8.55e21 (neutron branch) and
+  8.53e21 (proton branch) and of beta = 0.68 is not recorded. The original rates are Friman and Maxwell (1979), ApJ 232, 541 (to be
+  checked). Item NU-1 is open.
+- Superfluid reduction of the rates: Y01 Eqs. 199-229 and Yakovlev, Levenfish and Shibanov (1999), Phys. Usp. 42, 737 (checked in the audit);
+  the neutron branch of the modified Urca with neutron triplet pairing and normal protons: Gusakov (2002), A&A 389, 702, Table 2 and
+  Eqs. A1, A2, A7, A10, joined to Y01 Eq. 216 with xi = 0.130 (Yakovlev and Levenfish 1995, Eqs. 26 and 29; checked in the audit); the
+  sources of the two-species approximations are Y01 Eqs. 204-205, 225-229. Levenfish and Yakovlev (1994) (to be checked).
 - Direct Urca: Lattimer, Pethick, Prakash and Haensel (1991), Phys. Rev. Lett. 66, 2701; emissivity prefactor
   Q = (457 pi / 10080) G^2 cos^2(theta_C) (1 + 3 g_A^2) m*_n m*_p mu_l (k_B T)^6 as in Yakovlev et al. (2001).
   The threshold k_n <= k_p + k_l uses the proton Fermi momentum from the proton density. The muon channel
   (lepton factor mu_mu, threshold k_n <= k_p + k_mu) is the same expression for the muon, verified here
   numerically as described in DIRECT URCA THRESHOLD; it is not taken from a published formula.
-- Cooper pair breaking and formation: Y01 Eqs. 236-241 and Yakovlev, Kaminker and Levenfish (1999), A&A 343, 650
-  (to be checked). The update of the triplet rate of Potekhin and Chabrier (2018), A&A 609, A74 =
-  arXiv:1711.07662, Sect. 3 (read from the PDF) is not implemented (item NU-7).
+- Cooper pair breaking and formation: rate normalisation Y01 Eq. 236 (1.17e21, N_nu = 3) and the functions F_A and F_B of Eqs. 237-241
+  (checked in the audit); the weak coefficients are the vector-suppressed ones of Page, Lattimer, Prakash and Steiner (2009), ApJ 707, 1131,
+  Eqs. 9-11 (checked in the audit): triplet 2 g_A^2 = 3.175, singlet 4/81 (p_F/m*)^4 with the proton axial term of Kaminker, Haensel and
+  Yakovlev (1999), A&A 345, L14, Eqs. 5-8; g_A = 1.26 and sin^2 theta_W = 0.23 as in Page et al. Y01's bare vertex gives 1 + 2 g_A^2 = 4.175;
+  Leinson (2010), Phys. Rev. C 81, 025501, Eq. 96 (anomalous axial vertices) and Potekhin and Chabrier (2018), A&A 609, A74, Sect. 3.4
+  give about g_A^2/2 = 0.794, 0.19 of the bare rate. The default keeps the local value 3.175 (item NU-7); the alternatives are not options
+  of the code. The earlier source of the same rates is Yakovlev, Kaminker and Levenfish (1999), A&A 343, 650 (to be checked).
 - Plasmon decay and pair annihilation: Itoh et al. (1996), ApJS 102, 411 (to be checked). Electron-ion
   bremsstrahlung: Haensel, Kaminker and Yakovlev (1996), A&A 314, 328 (to be checked). Electron-proton
   bremsstrahlung: Kaminker and Haensel (1999), Acta Phys. Pol. B 30, 1125 (to be checked).
@@ -637,13 +716,16 @@ Neutrino emissivities (emissivity.py, emissivity_factors.py)
   and 3.37) and in-medium effects.
 
 Superfluidity (superfluid.py)
-- Gap models 1-16 (crust neutron 1S0, proton 1S0, core neutron 3P2) with the parameters of GAP_MODELS: the
-  numbering follows the NSCool code (Page) (to be checked); the source of each row is not recorded. Compared with
-  Ho, Elshamouty, Heinke and Potekhin (2015), Phys. Rev. C 91, 015806 = arXiv:1412.7759, Eqs. 1-2 and Table II (read
-  from the PDF): model 11 equals EEHO (triplet) after the conversion of the normalization, models 11 and 15, and 2
-  and 7, are identical, and the other rows do not match any model of that paper within 3 % (item SF-2).
-- Dimensionless gap v(T/Tc): Y01 Eq. 188 (read from the PDF; equal in both codes) and Levenfish and Yakovlev (1994)
-  (to be checked).
+- Gap models (superfluid.py, see SUPERFLUID GAP MODELS): the local table 1-16 comes from Andersson, Comer and Glampedakis (2005), Nucl. Phys. A
+  763, 212, Table I and Eqs. 19-22, and from Ho, Glampedakis and Andersson (2012), MNRAS 422, 2632, Table 1, Eq. 7 and Sect. 2.3 (checked in the
+  audit); model 9 also appears in Aguilera, Pons and Miralles (2008), A&A 486, 255, Table 2; the underlying microscopic papers named there are
+  Amundsen and Ostgaard (1985), Nucl. Phys. A 437, 487, Baldo et al. (1998), Phys. Rev. C 58, 1921, and Elgaroy et al. (1996), Nucl. Phys. A
+  607, 425. Models 17-36: Ho, Elshamouty, Heinke and Potekhin (2015), Phys. Rev. C 91, 015806 = arXiv:1412.7759, Eqs. 1-2 and Table II (read
+  from the PDF, checked in the audit). The Page NSCool guide (Control Files v0.0, pp. 17-21) uses selector numbers different from the local
+  ones (checked in the audit); the Fortran code itself was not inspected.
+- Dimensionless gap v(T/Tc): Y01 Eq. 188 (read from the PDF, checked in the audit; equal in both codes) and Levenfish and Yakovlev (1994)
+  (to be checked). Below T/Tc = 0.1 the code uses v = 1/(alpha (T/Tc + 1e-10)), which differs from the fit by +0.03 % (singlet) and +1.2 % (triplet)
+  at T/Tc = 0.1 (audit).
 
 Thermal conductivity (conductivity_core.py, conductivity_crust.py)
 - Core electrons and neutrons, the collision frequencies and the factors R, Z, R_C: Shternin and Yakovlev (2007),

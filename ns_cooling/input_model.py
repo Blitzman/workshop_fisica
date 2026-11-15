@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 
 from stellar_structure import STRUCTURE_KEYS, StructureOptions, build_stellar_models
-from superfluid import GAP_MODELS
+from superfluid import GAP_MODEL_NUMBERS, REGIONS
 from thermal_fluxes import MODELS as ENVELOPE_MODELS
 
 OPTIONS = ("envelope_model",) + STRUCTURE_KEYS
@@ -46,18 +46,21 @@ def read_parameters(path):
     """
     lines = Path(path).read_text().splitlines()
 
-    def pair(i):
+    def pair(i, key):
         flag, model = map(int, lines[i].split())
-        if flag not in (0, 1) or model not in GAP_MODELS:
-            raise ValueError(f"Invalid configuration on line {i + 1}")
+        if flag not in (0, 1) or model not in GAP_MODEL_NUMBERS[key]:
+            raise ValueError(
+                f"Invalid configuration on line {i + 1}: the switch must be 0 or 1 and the gap model one of "
+                f"{list(GAP_MODEL_NUMBERS[key])} ({REGIONS[key]['description']}; see the README, SUPERFLUID GAP MODELS)"
+            )
         return {"enabled": bool(flag), "model": model}
 
     cfg = dict(
         structure=lines[1].strip(),
         Tinit8=float(lines[3].replace("D", "e").replace("d", "e")),
-        crust_n=pair(8),
-        core_n=pair(10),
-        core_p=pair(12),
+        crust_n=pair(8, "crust_n"),
+        core_n=pair(10, "core_n"),
+        core_p=pair(12, "core_p"),
     )
     if not np.isfinite(cfg["Tinit8"]) or cfg["Tinit8"] <= 0:
         raise ValueError("Initial temperature must be positive and finite")
