@@ -792,6 +792,65 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
     "(3) Kept, with the reason: the discontinuity between the neutron-only and the combined modified-Urca factor at the temperature where the protons become superfluid (acts only where the rate is already small); the low-temperature splice of v (+0.03 % singlet, +1.2 % triplet at T/T_c = 0.1); the np-bremsstrahlung factor for neutron-only triplet pairing; the neutron mass in the proton p_F (0.14 % in p_F if mstar_p is relative to the proton mass); model 6 without identified source; the lineage of the local numbering with respect to the Fortran NSCool.",
     "The conductivity callers that the audit could not see were read in the code (conductivity_core.py): R and Z receive the proton singlet gap for the proton terms, as intended; the neutron triplet gap is also fed through the same R and Z fits for the lepton-neutron terms, which has no source, and R_C^2 multiplies the neutron conduction, as in Baiko et al. 2001; the corrections to the neutron collision frequencies are set to 1 (a comment in the code). Test: with these factors set to 1 the luminosity changes by at most 0.2 % up to 1e5 yr and by 1 % at 1e6 yr, for the default pairing and for the strong triplet gap of model 13 (all three factors off: 0.14 % and 0.85 % at 841 yr and 1e6 yr for the default). They do not matter for the cooling and are kept."
    ]
+  },
+  {
+   "id": "D-036",
+   "status": "decided",
+   "date": "15 November 2026",
+   "title": "Direct Urca stays as it is (NU-8)",
+   "text": "The local direct Urca (electron and muon channels, prefactor 4.0e27, E_ref = 331.4 MeV) is kept. An independent audit of the emissivities, read afterwards, confirms it.",
+   "by": "Decided in the project chat",
+   "effects": [
+    "The audit checked in the papers that the leading rate and the channel rule agree with Y01 (Eqs. 120-121, Sect. 3.3(c)). The muon rule is published there, after Eq. 121: the statement in the README and the code that the muon channel was not taken from a published formula was wrong and is corrected. In beta equilibrium mu_e = mu_mu, so a second open channel doubles the unpaired rate.",
+    "The rounded prefactor 4.0e27 corresponds to 330.18 MeV with the constants used; the analytic coefficient (457 pi / 10080) G_F^2 cos^2(theta_C) (1 + 3 g_A^2) with g_A = 1.26 and cos(theta_C) = 0.974 gives 4.015e27, so the local value is 0.37 % lower. It is kept.",
+    "The step threshold is the zero-temperature prescription; Y01 Sect. 3.3(b) discusses the broadening at finite temperature. The default BSk26 star never opens the channel, so nothing in the default result depends on it."
+   ]
+  },
+  {
+   "id": "D-037",
+   "status": "decided",
+   "date": "15 November 2026",
+   "title": "Independent audit of the emissivities: recorded in the documentation, behaviour unchanged; recommendations revised",
+   "text": "The independent literature audit of the emissivity routines is incorporated in the README, in the comments of emissivity.py, emissivity_updated.py and emissivity_factors.py and in the tracker. No behaviour of the code changed (the syntax trees of the three modules are identical apart from comments). Its findings were checked here where the code allowed it, and the cooling effect of each flagged item was measured, which the audit had not done.",
+   "by": "Requested in the project chat; implemented by Claude",
+   "effects": [
+    "Documentation changed: the README (the contradiction on the default rates is removed, the section on the updated rates now says Historical validation with the neutron Fermi momentum stated, the direct-Urca muon rule is cited, the reference group of the emissivities is rewritten with the sources and equation numbers of the audit, and a section records the notes and the measured effects); the source comments of the three emissivity modules; the tracker rows NU-1 to NU-5 and NU-7 and the new rows NU-12 to NU-14.",
+    "Sources identified: both modified-Urca prefactors (8.55e21, 8.53e21) are Yakovlev and Levenfish 1995, Eqs. 14 and 16, and alpha(n) is their Eq. 12; the proton branch is their angular approximation, which Y01 correct after Eq. 142. The electron-ion fit is Kaminker et al. 1999, Eq. 40 (p. 1021) and Y01 Eq. 76, not Haensel et al. 1996. The plasmon rate is Y01 Eqs. 23, 38 and 42 after Itoh et al. 1996; the pair rate is Itoh et al. 1996, Eqs. 2.1-2.10 and Table 1, and every coefficient agrees. The source of the electron-proton coefficient 2.4e17 is not identified and the expression differs from Kaminker and Haensel 1999.",
+    "Verified here: Q_c = G_F^2 m_e^9 evaluated from the constants is 1.0239e23 erg cm^-3 s^-1, so the 1.203e23 of the code has two digits swapped (+17.5 %); the pair-annihilation composition: Z/A equals Y_e in all 53 core cells, and differs from it in crust cells with free neutrons (by 1/x_h); the legacy alpha > 0 mask cannot act in the core (the smallest neutron density in the core cells is 0.084 fm^-3, alpha vanishes at 0.034 fm^-3). The last term of the electron-ion fit uses the natural logarithm in the code, and the audit finds log10 in the papers (not re-read here).",
+    "Measured (BSk26, 1.4 Msun, default pairing, L at the age): plasmon normalisation corrected +11 % at 0.1 yr, +4 % at 1 yr, +1.7 % at 30 yr, below 0.5 % after 100 yr; electron-ion log10 -1.1 % at 100 yr, -0.5 % at 300 yr, below 0.2 % after 841 yr; crust nn pion mass 135 MeV below 0.8 % at any age (unpaired star at 100 yr); electron-proton bremsstrahlung switched off +0.6 % at 300 yr; pair annihilation switched off -77 % at 0.03 yr, -2 % at 0.3 yr, below 0.02 % after 1 yr; np bremsstrahlung on the neutron-only path replaced by the Eq. 229 limit below 0.01 % (also with protons normal); bounds: plasmon decay switched off +880 % at 0.1 yr and +38 % at 30 yr, electron-ion bremsstrahlung switched off +13 % at 100 yr and +6 % at 300 yr.",
+    "Revised recommendations (the decisions are open): NU-1 to NU-3: replace the local standard modified Urca by Y01 Eqs. 140 and 142 with the muon channels (the reason is now stronger: the local proton branch reproduces an approximation that Y01 correct). NU-4: keep the defaults. NU-5: port the in-medium factor, if at all, only as a separate option below the direct-Urca threshold on top of the standard (Y01) neutron branch, off by default, with its domain stated (n_B above 0.1 fm^-3 for electrons and 0.3 fm^-3 for muons), and never multiplied by the Bottaro et al. rate. NU-12 and NU-13: correct the plasmon normalisation and the electron-ion logarithm. NU-14: keep and document.",
+    "Statements of earlier documents corrected by the audit: the source of the modified-Urca prefactors is recorded (not unknown); the muon rule of the direct Urca is published; the electron-ion fit is attributed to Kaminker et al. 1999, not Haensel et al. 1996; the README paragraph that said the driver replaces the modified Urca and the bremsstrahlung by the updated rates is wrong (the default is the standard modified Urca with the updated bremsstrahlung); the first row of the table of section B7 of the report of 14 November, local standard rates, is the production baseline and includes the updated core bremsstrahlung."
+   ]
+  },
+  {
+   "id": "D-038",
+   "status": "decided",
+   "date": "16 November 2026",
+   "title": "The standard modified Urca is that of Yakovlev et al. 2001 with electron and muon channels; the legacy rate stays as an option; the plasmon constant and the electron-ion logarithm are corrected (NU-1, NU-2, NU-3, NU-12, NU-13)",
+   "text": "Decided after the independent audit of the emissivities. NU-1: a single published prescription, Y01 Eq. 140 (n_p/n_0, alpha_n = 1.13, beta_n = 0.68), replaces the density-dependent rate of Yakovlev and Levenfish 1995, whose provenance is kept so that old runs can be reproduced. NU-2: the proton branch is that of Y01 Eq. 142, which corrects the earlier angular integral and opens quadratically. NU-3: the published lepton-velocity factor and a separate opening condition for the proton branch of each lepton. NU-12 and NU-13: the plasmon normalisation and the logarithm of the electron-ion fit are corrected (the answer 'NU-12, correct the log' was read as covering both).",
+   "by": "Decided in the project chat; implemented by Claude",
+   "effects": [
+    "Implementation (emissivity.py, modified_urca_emissivity): for each lepton l = e, mu, Q_n(l) = 8.1e21 (m*_n/m_n)^3 (m*_p/m_p) (n_p/n_0)^(1/3) T_9^8 alpha_n beta_n (v_Fl/c), with v_Fl/c = p_Fl / sqrt(p_Fl^2 + m_l^2 c^2) computed exactly (Y01 give about 1 for electrons and (n_mu/n_e)^(1/3) for muons), and Q_p(l) = Q_n(l) (m*_p/m*_n)^2 (p_Fl + 3 p_Fp - p_Fn)^2 / (8 p_Fl p_Fp) where p_Fl + 3 p_Fp > p_Fn. The effective masses of the background are ratios to one nucleon mass, so the factor (m_p/m_n)^2 = 0.99725 that the audit mentions for species-normalised masses does not apply. The cells (the 53 core cells of the example star), the pairing factors and the registry name are unchanged. The phase space above the direct-Urca threshold (Gusakov 2002, Sect. 2), which Y01 Eq. 141 does not cover, is not implemented.",
+    "Options of the driver: --murca y01 (default), --murca yl95 (the legacy rate, unchanged code; --murca friman-maxwell, its former name, is still accepted) and --murca bottaro; --old-rates selects the standard rates (with --murca yl95 the legacy modified Urca) and cannot be combined with --murca bottaro; the start-up message names the rate. The legacy function is modified_urca_yl95_emissivity, selected by use_yl95_modified_urca().",
+    "Verification (one-off, D-026): against the old GitHub transcription of Y01 (neutrino.murca, with muons) at identical inputs the new rate agrees to 0.1 % on all 53 core faces (ratio 0.99904 to 0.99999, from the exact lepton velocity) at T = 3e8, 1e9 and 3e9 K, with no face where one is zero and the other is not; the shares at 1e9 K are 51-93 % neutron branch with electrons, 0-40 % neutron branch with muons, 5-8 % proton branch with electrons, 0-4 % proton branch with muons. With --murca yl95 and the two corrections undone in a temporary copy, the four output files of a default run are byte-identical to those made before D-038, also with the old name; the 42 fast tests and the slow one pass; pyflakes is clean. The earlier comparison runs made with the old GitHub function give the same luminosity within 0.04 % at 841 yr (0.6 % at 300 yr, where the two small corrections act).",
+    "Effect on the cooling (BSk26, 1.4 Msun, L at the age): the modified-Urca change alone is -2.3 % at 100 yr, -9.3 % at 300 yr, -2.6 % at 841 yr, -0.4 % at 3000 yr and at most 0.2 % from 1e4 yr for the default pairing; about -7 % at every age above 300 yr without pairing; -3.2 % at 300 yr and -1.0 % at 841 yr for the triplet-only star. With the two corrections the default star changes by +10.6 % at 0.1 yr, +4.2 % at 1 yr, +0.7 % at 30 yr, -3.0 % at 100 yr, -9.7 % at 300 yr, -2.7 % at 841 yr and -0.1 % at 1e5 yr. The run ends at 738180.5 yr in 418 accepted steps (422 and 742126.5 yr before).",
+    "The proton branch is open on every core face of the example star for both leptons (excess p_Fl + 3 p_Fp - p_Fn from 0.47 to 1.43 fm^-1 for electrons and 0.12 to 1.25 fm^-1 for muons), so the quadratic opening is not exercised by this star; it matters for other EOS or masses.",
+    "NU-12: Q_c of the plasmon decay is 1.023e23 (Y01 Eq. 23; G_F^2 m_e^9 from the constants gives 1.0239e23), where the code had 1.203e23. NU-13: the last term of the electron-ion fit uses log10, as in Kaminker et al. 1999 Eq. 40 and Y01 Eq. 76 (according to the audit; not re-read here), where the code had the natural logarithm; the unused import of the natural logarithm was removed. Effects: plasmon +11 % at 0.1 yr, +4 % at 1 yr, below 0.5 % after 100 yr; electron-ion -1.1 % at 100 yr, below 0.2 % after 841 yr.",
+    "Reproducing earlier runs: --murca yl95 gives the same modified Urca, but not the same numbers at the first decades, because of the two corrections (+10.6 % at 0.1 yr and +4.2 % at 1 yr for the default star, below 1 % after 30 yr, from the plasmon term). The code before D-038 is commit 43bb683 of the repository. Items NU-4, NU-5 and NU-14 are still open."
+   ]
+  },
+  {
+   "id": "D-039",
+   "status": "decided",
+   "date": "16 November 2026",
+   "title": "Baseline of the emissivities: Y01 modified Urca with electrons and muons plus the Bottaro core bremsstrahlung; the in-medium port is deferred; the minor crust and lepton items are kept and documented (NU-4, NU-5, NU-14)",
+   "text": "NU-4: the baseline is the Y01 modified Urca with electrons and muons plus the Bottaro et al. core bremsstrahlung; this keeps the useful bremsstrahlung update and gives the comparison of the modified-Urca prescriptions a traceable baseline. The option --murca bottaro is documented as implementing the leading formulas and retaining the historical beta multipliers. NU-5: the port is deferred and the factor is dropped for now until a further review; Y01 stays the default; the deferred study is documented. NU-14: kept and documented.",
+   "by": "Decided in the project chat; documented by Claude",
+   "effects": [
+    "No behaviour changed: the baseline is the default that D-038 produced (Y01 modified Urca with both lepton channels, Bottaro core bremsstrahlung, standard crust processes). The documentation changed: the README (CURRENT RATE SELECTION states the baseline; the section on the updated rates describes the option as a comparison option implementing the leading formulas of the paper, Eqs. 3.16, 3.28 and 3.37-3.39, and retaining the beta multipliers of Friman and Maxwell, 0.68 of which removes 32 % of the raw modified-Urca rate; the notes of the audit record D-039) and the docstring of emissivity_updated.py, whose list of differences with the standard rates now refers to the Y01 rate.",
+    "NU-5, deferred study, recorded in the README (section DEFERRED STUDY: IN-MEDIUM MODIFIED URCA): what exists (the old GitHub code at commit e4321df, neutrino.py, alpha_u from Eqs. 8-9, 12 and 14 of Shternin, Baldo and Haensel 2018, and murca(inmedium=True), which replaces alpha_n beta_n of the neutron branch); its effect against the Y01 baseline with muons (default pairing -5 % at 100 yr, -34 % at 300 yr, -4.6 % at 841 yr, -0.8 % at 3000 yr, -0.2 % at 1e4 yr; no pairing about -34 % at every age from 300 yr; triplet only -18 % at 300 yr and -8.8 % at 841 yr); and what a resumed study has to settle: the validity domain (within 20 % of the full result above n_B = 0.1 fm^-3 for electrons and 0.3 fm^-3 for muons; singular near the threshold), the relation to the Bottaro et al. rates (complementary, never multiplied without recalibration), the mass normalisation (about 3.3 %), and the interplay with the pairing factors. If resumed, the form recommended by the audit is a separate option, off by default, on top of the Y01 neutron branch below the direct-Urca threshold.",
+    "NU-14: the crust nn bremsstrahlung (pion mass and filling factor), the electron-proton bremsstrahlung, the pair-annihilation composition, the np bremsstrahlung on the neutron-only path and the legacy alpha > 0 mask are kept as they are. They are documented in the README (notes of the audit), in the comments of emissivity.py and emissivity_factors.py, and in the tracker; the measured effects are below 0.8 %, 0.6 %, 2 % at 0.3 yr only, below 0.01 % and none respectively."
+   ]
   }
  ],
  "findings": [
@@ -1055,16 +1114,20 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "high",
    "ev": "run",
-   "next": "Evaluate both on the BSk26 profile at fixed T; then choose one parametrisation (the 2001 one is more recent).",
+   "next": "Closed by D-038.",
    "detail": [
     "Computed ratio local/GitHub at identical inputs (m* = 0.7, npe matter, T9 = 1, Yp 0.04–0.12): 0.96–1.00 at n_b = 0.16 fm⁻³, 1.20–1.23 at 0.32 fm⁻³, 1.30–1.32 at 0.48 fm⁻³. The two agree at saturation and separate by 20–30 % at two to three times saturation density, through the density-dependent α.",
     "The local rate also uses Ye where GitHub uses n_p; they differ whenever muons are present.",
     "Hypothesis, not tested: part of the GitHub open issue I1 (modified-Urca luminosity 0.57–0.73 of the Ofengeim et al. fit at high mass) could be this. The sign is consistent.",
     "The ratios above were computed with the old reference density (0.170 fm⁻³). With D-014 the local rate is higher by about 3 % at the same density, so they have to be recomputed (not done).",
-    "D-025: the GitHub open issue I1, whose sign this hypothesis compared with, belongs to the dropped code and is no longer tracked."
+    "D-025: the GitHub open issue I1, whose sign this hypothesis compared with, belongs to the dropped code and is no longer tracked.",
+    "D-037 (audit): the exact source of both prefactors is Yakovlev and Levenfish 1995, Eqs. 14 and 16, after Friman and Maxwell 1979 (the density dependence is their Eq. 62; their Eq. 65c freezes it at saturation); alpha(n) is YL95 Eq. 12. The prefactor 8.55e21 is 5.56 % above Y01's 8.1e21 alone; Y01 use n_p (the local code uses rho Ye) and apply Eq. 142 to physical effective masses (an extra (m_p/m_n)^2 = 0.99725 when the input masses are normalised to each species). alpha vanishes at n_n = 0.214 n0 and the 1e-20 guard and the alpha > 0 mask are local; the mask never acts in the core (smallest n_n 0.084 fm^-3). Y01 Eq. 141 assumes the phase space below the direct-Urca threshold; Gusakov 2002, Sect. 2, extends it to larger proton fractions.",
+    "D-038: implemented; the new rate agrees with the old GitHub transcription of Y01 to 0.1 % on every core face; the effect on L is -9.3 % at 300 yr and -2.6 % at 841 yr for the default star and about -7 % without pairing."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-038"
+   ],
+   "final": "The standard modified Urca neutron branch is Y01 Eq. 140 (n_p/n_0, alpha_n = 1.13, beta_n = 0.68, 8.1e21); the Yakovlev-Levenfish 1995 rate stays as --murca yl95 to reproduce old runs."
   },
   {
    "id": "NU-2",
@@ -1075,12 +1138,16 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "med",
    "ev": "code",
-   "next": "Compare the proton/neutron branch ratio and the opening density on the BSk26 profile.",
+   "next": "Closed by D-038.",
    "detail": [
-    "Different parametrisations of the same Friman–Maxwell branch; effect not yet quantified."
+    "Different parametrisations of the same Friman–Maxwell branch; effect not yet quantified.",
+    "D-037 (audit): the local proton branch reproduces the angular approximation of YL95, which Y01 correct after Eq. 142. The local rate steps on at a finite value where Y01's vanishes quadratically; the clamp to zero is local and redundant in charge-neutral npe-mu matter; the thresholds agree and each lepton needs its own.",
+    "D-038: the proton branch carries its own opening condition for each lepton and vanishes quadratically; it is open on every core face of the example star, so the default result does not depend on the opening."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-038"
+   ],
+   "final": "The proton branch is Y01 Eq. 142: neutron-branch rate times (m*_p/m*_n)^2 (p_Fl + 3 p_Fp - p_Fn)^2 / (8 p_Fl p_Fp), which corrects the earlier angular integral and opens quadratically."
   },
   {
    "id": "NU-3",
@@ -1091,10 +1158,15 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "differ",
    "impact": "med",
    "ev": "docs",
-   "next": "Include in the NU-1/NU-2 comparison with muons switched on; BSk22 and BSk26 both have muons in the core.",
-   "detail": [],
-   "decisions": [],
-   "final": ""
+   "next": "Closed by D-038.",
+   "detail": [
+    "D-037 (audit): Y01 Sect. 3.4(d), after Eq. 142, give the muon rule (v_Fl/c with v_Fmu/c = (n_mu/n_e)^(1/3) in beta equilibrium). The muon share (up to 44 % of the Y01 total) and the proton-branch excess are separate effects; the effect of the legacy proton branch alone was never isolated.",
+    "D-038: the muon share of the Y01 rate is 0-40 % (neutron branch) and 0-4 % (proton branch) across the core at 1e9 K; the lepton velocity is computed exactly from the Fermi momenta."
+   ],
+   "decisions": [
+    "D-038"
+   ],
+   "final": "Electron and muon channels with the published lepton velocity v_Fl/c and a separate opening condition for the proton branch of each lepton."
   },
   {
    "id": "NU-4",
@@ -1105,13 +1177,17 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "local",
    "impact": "high",
    "ev": "docs",
-   "next": "For comparison runs use --old-rates (all standard rates) first; treat the updated set as a separate decision.",
+   "next": "Closed by D-039.",
    "detail": [
     "Driver default (v16 README header): standard Friman–Maxwell modified Urca plus BCF bremsstrahlung. --murca bottaro selects BCF modified Urca; --old-rates selects all standard rates.",
-    "The local README contradicts itself: an older section says the driver replaces both processes, the v16 header says only bremsstrahlung. I followed the v16 header; to confirm with the author."
+    "The local README contradicts itself: an older section says the driver replaces both processes, the v16 header says only bremsstrahlung. I followed the v16 header; to confirm with the author.",
+    "D-037 (audit): the formulas agree with the paper within its leading expressions; the general angular integral is absent (the paper finds it 20-30 % larger for the neutron branch) and the paper's own comparison cannot give the error for BSk26 or near the direct-Urca boundary. The beta multipliers are legacy factors outside the derived rates: the paper uses 0.56, 0.66 and 0.68 in its comparisons, 0.70 is traceable to Y01, and 0.68 removes 32 % of the raw rate. m_pi = 138 MeV and cos(theta_C) = 0.974 are choices of this code. The printed Eq. 3.11 omits g_A^2. The module reuses the legacy alpha > 0 mask of the standard rate, which cannot act in the core.",
+    "D-038: the standard modified Urca is now Y01, so --old-rates selects Y01 with the standard bremsstrahlung (with --murca yl95 the legacy rate); --murca bottaro is unchanged."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-039"
+   ],
+   "final": "The baseline is the Y01 modified Urca with electrons and muons plus the Bottaro et al. core bremsstrahlung; --murca bottaro stays as a comparison option, documented as implementing the leading formulas and retaining the historical beta multipliers."
   },
   {
    "id": "NU-5",
@@ -1122,10 +1198,15 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "gh",
    "impact": "high",
    "ev": "docs",
-   "next": "Candidate to port. Physics decision: BCF includes no in-medium effects, so the two are complementary, not alternatives.",
-   "detail": [],
-   "decisions": [],
-   "final": ""
+   "next": "Closed by D-039.",
+   "detail": [
+    "D-037 (audit): the approximation of Shternin et al. (Eq. 14) stays within 20 % of their full result above n_B = 0.1 fm^-3 for electrons and 0.3 fm^-3 for muons; it is singular as p_n - p_p - p_l tends to zero from above, so the old extrapolation to every point with a positive momentum deficit is not a controlled prescription. Their fitted coefficient already normalises the scattering contribution of their own model, so it must not be multiplied by the Bottaro et al. rate without recalibration. If the old ratios mean m*/m, the normalisation of Eq. 12 is about 3.3 % below the result with m_u. The effect on L is -7 % in the default star and -38 % without pairing (-34 % against Y01 with muons).",
+    "D-039: deferred. The study is recorded in the README (DEFERRED STUDY: IN-MEDIUM MODIFIED URCA) with its effect against the Y01 baseline (default -4.6 % at 841 yr, unpaired about -34 %) and the points that a resumed study must settle."
+   ],
+   "decisions": [
+    "D-039"
+   ],
+   "final": "Deferred: the in-medium enhancement is not ported and is dropped for now until a further review; Y01 stays the default; the deferred study is documented in the README."
   },
   {
    "id": "NU-6",
@@ -1164,7 +1245,8 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
     "Triplet coefficient, local over GitHub: 0.76 against the Y01 value, 4.0 against the updated one. Pair-breaking emission dominates when modified Urca is suppressed, so this sets the cooling in the superfluid cases that matter most for the Marino et al. question.",
     "The dimensionless emission functions F_A and F_B are identical in both codes (see NU-10).",
     "Pair breaking now uses the actual Fermi momenta of the background (D-014): p_F/(m_N c) = ħc k_F/(m_N c²), with m_N the neutron mass. The former 0.353 (n/n0)^(1/3) with n0 = 0.170 gave a p_F about 1.9 % too small.",
-    "D-034: the audit identified 3.175 as the Page et al. 2009 choice; the options and their sources are in the comments of emissivity.py and the README. The effect on L of the coefficient (4.17 or 0.79) is in the report of 14 November (33 to 28.5 or 93)."
+    "D-034: the audit identified 3.175 as the Page et al. 2009 choice; the options and their sources are in the comments of emissivity.py and the README. The effect on L of the coefficient (4.17 or 0.79) is in the report of 14 November (33 to 28.5 or 93).",
+    "D-037 (audit): the three values are the bare axial term only (3.175, with the vector contribution of 1 omitted), Y01's bare vertex (4.175) and the anomalous-vertex result of Leinson 2010 and Potekhin and Chabrier 2018 (0.794). The singlet expression of the code is a hybrid (vector term suppressed by 4 (v_F/c)^4/81 after Kolomeitsev and Voskresensky 2010, axial term with 11/42) and not the exact result of Potekhin and Chabrier; the weighting of the crust rate by the free-neutron volume is to be checked."
    ],
    "decisions": [
     "D-034",
@@ -1181,13 +1263,16 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "status": "local",
    "impact": "high",
    "ev": "docs",
-   "next": "Port to the unified code. Needed for BSk22 (above 1.15 M☉) and BSk24 (above 1.6 M☉); cross-check the prefactor against Yakovlev et al. 2001.",
+   "next": "Closed by D-036.",
    "detail": [
     "Both codes agree on the threshold condition. The muon-channel formula is, by the local README’s own statement, verified numerically and not taken from a published formula.",
-    "With n0 = 0.16 fm⁻³ (D-014), E_ref is 331.4 MeV. The exact coefficient implies 330.2 MeV for the prefactor 4.0e27, so the new value is +0.4 % from it; the former 337.3 MeV was +2.2 % off."
+    "With n0 = 0.16 fm⁻³ (D-014), E_ref is 331.4 MeV. The exact coefficient implies 330.2 MeV for the prefactor 4.0e27, so the new value is +0.4 % from it; the former 337.3 MeV was +2.2 % off.",
+    "D-036: the audit checked the rate and the muon rule against Y01 (Eqs. 120-121, Sect. 3.3(c)); the statement above that the muon formula is not published was wrong. The rounded prefactor is 0.37 % below the analytic coefficient 4.015e27."
    ],
-   "decisions": [],
-   "final": ""
+   "decisions": [
+    "D-036"
+   ],
+   "final": "The local direct Urca is kept (electron and muon channels, prefactor 4.0e27): confirmed by the independent audit, which also shows that the muon rule is published (Y01, Sect. 3.3(c))."
   },
   {
    "id": "NU-9",
@@ -1199,7 +1284,9 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
    "impact": "med",
    "ev": "docs",
    "next": "Needed as soon as the crust is included (EOS-4).",
-   "detail": [],
+   "detail": [
+    "D-037 (audit): the crust and lepton processes have findings that are tracked in NU-12 (plasmon normalisation), NU-13 (electron-ion logarithm) and NU-14 (the details that do not matter for the cooling)."
+   ],
    "decisions": [
     "D-003"
    ],
@@ -1918,6 +2005,61 @@ h1{font-size:1.75rem;line-height:1.2;margin:0 0 .6rem;font-weight:650;letter-spa
     "D-016"
    ],
    "final": "Direct commits to main; no further branches."
+  },
+  {
+   "id": "NU-12",
+   "cat": "nu",
+   "item": "Plasmon decay: normalisation Q_c",
+   "gh": "Not implemented.",
+   "loc": "Q_c = 1.203e23 erg cm^-3 s^-1 in emissivity.py; Y01 Eq. 23 give 1.023e23 and G_F^2 m_e^9 evaluated from the constants of the code is 1.0239e23: two digits are swapped (+17.5 %).",
+   "status": "local",
+   "impact": "low",
+   "ev": "docs",
+   "next": "Closed by D-038.",
+   "detail": [
+    "Found by the independent audit of the emissivities and verified here from the fundamental constants. The coefficients 16.23, 4.604 and 0.9248 are Y01 Eqs. 38 and 42 after Itoh et al. 1996 (checked in the audit). The plasmon process dominates the first years in the crust: switching it off raises L by 880 % at 0.1 yr and 38 % at 30 yr. After 100 yr the correction is below 0.5 %."
+   ],
+   "decisions": [
+    "D-038"
+   ],
+   "final": "Corrected: Q_c = 1.023e23 (Y01 Eq. 23)."
+  },
+  {
+   "id": "NU-13",
+   "cat": "nu",
+   "item": "Electron-ion bremsstrahlung: logarithm of the last term",
+   "gh": "Not implemented.",
+   "loc": "The fit of Kaminker et al. 1999 (Eq. 40) and Y01 (Eq. 76) is evaluated with the natural logarithm in the last term, - 6.77 log(1 + 0.228 rho/2.8e14), inside a power of ten whose other logarithms are log10.",
+   "status": "local",
+   "impact": "low",
+   "ev": "docs",
+   "next": "Closed by D-038.",
+   "detail": [
+    "Found by the independent audit. The ratio of the code to the paper is (1 + 0.228 rho/2.8e14)^(-6.77 (ln 10 - 1)): 0.931, 0.501 and 0.386 at 1e13, 1e14 and 1.4e14 g/cm^3. The attribution in the code (Haensel, Kaminker and Yakovlev 1996) is replaced by K99 Eq. 40 and Y01 Eq. 76; the earlier paper is the liquid-phase calculation. Switching the process off raises L by 13 % at 100 yr and 6 % at 300 yr, so the process matters early and the correction is small against that."
+   ],
+   "decisions": [
+    "D-038"
+   ],
+   "final": "Corrected: log10 in the last term of the electron-ion fit."
+  },
+  {
+   "id": "NU-14",
+   "cat": "nu",
+   "item": "Other crust and lepton details found by the audit",
+   "gh": "Not implemented.",
+   "loc": "Crust nn bremsstrahlung with m_pi = 139 MeV and the baryon fraction yn as filling factor; electron-proton bremsstrahlung of unidentified origin with a hard cut at 2.82e14 g/cm^3; pair annihilation with rho Z/A; np bremsstrahlung factor on the neutron-only path; legacy alpha > 0 mask.",
+   "status": "local",
+   "impact": "low",
+   "ev": "docs",
+   "next": "Closed by D-039.",
+   "detail": [
+    "Crust nn: Y01 specify the neutral pion (135 MeV) and define the filling factor as a volume fraction; the factor changes by up to 11 % at small p_F and L by less than 0.8 %. Electron-proton: the expression agrees with Kaminker and Haensel 1999 only in T^8 and m*_p^2, has no screening, pairing factor or smooth density dependence, and the source of 2.4e17 is not identified; switching it off changes L by 0.6 % at 300 yr at most. Pair annihilation: every coefficient agrees with Itoh et al. 1996; the composition rho Z/A equals rho Y_e in the core cells but not in crust cells with free neutrons (1/x_h larger), where the process is negligible; it matters only before about 0.3 yr. np bremsstrahlung: for neutron-only triplet pairing the code uses Y01 Eq. 220 where the limit v_p -> 0 of Eq. 229 is the direct-Urca type-B factor (0.39 times at v_n = 5); the effect on L is below 0.01 %. The alpha > 0 mask cannot act in the core.",
+    "D-039: kept; the comments of emissivity.py now say so."
+   ],
+   "decisions": [
+    "D-039"
+   ],
+   "final": "Kept as they are and documented (README, code comments, tracker)."
   }
  ]
 }</script>
