@@ -1,12 +1,16 @@
 CURRENT RATE SELECTION
 ----------------------
-The driver defaults to Friman-Maxwell modified Urca, using the existing
-modified_urca_emissivity implementation and its superfluid factors.
-Only MURCA changes: nucleon bremsstrahlung remains Bottaro-Caputo-Fiorillo.
+The driver defaults to the modified Urca of Yakovlev et al. (2001), Eqs. 140 and 142, with electron and muon channels
+(--murca y01, the implementation modified_urca_emissivity) and its superfluid factors; since decision D-038 this is the
+standard rate. Nucleon bremsstrahlung remains Bottaro-Caputo-Fiorillo. The baseline of the emissivities (D-039) is therefore the Y01
+modified Urca with electrons and muons plus the Bottaro et al. core bremsstrahlung: it keeps the useful bremsstrahlung update and gives the
+comparison of the modified-Urca prescriptions a traceable baseline.
 No factor-of-20 experiment is enabled.
+--murca yl95 selects the legacy density-dependent rate of Yakovlev and Levenfish (1995), electrons only, which was the
+default before D-038 (--murca friman-maxwell is its former name); it reproduces the earlier runs.
 --murca bottaro selects the alternative MURCA calculation.
 --old-rates is retained for compatibility and selects ALL standard rates,
-including bremsstrahlung; it cannot be combined with --murca bottaro.
+including bremsstrahlung (with --murca yl95 the legacy modified Urca); it cannot be combined with --murca bottaro.
 The startup message reports both selections. Each run retains its callable
 registry snapshot for consistent energy diagnostics and process monitoring.
 Direct calls to run_cooling still use the currently registered processes;
@@ -92,9 +96,10 @@ or:
 By default this runs ONE BSk26 star of 1.4 solar masses with the corrected
 Gudmundsson envelope (input_bsk26). Other inputs remain available:
     python cooling_driver.py --input input_bsk22
-The driver defaults to Friman-Maxwell modified Urca and Bottaro-Caputo-Fiorillo
+The driver defaults to the Yakovlev et al. (2001) modified Urca and Bottaro-Caputo-Fiorillo
 nucleon bremsstrahlung. To change MURCA only:
     python cooling_driver.py --murca bottaro
+    python cooling_driver.py --murca yl95            # the legacy rate of the runs made before D-038
 To select all standard rates, including bremsstrahlung:
     python cooling_driver.py --old-rates
 The run prints which rates are used. Scripts that call run_cooling directly use the standard processes
@@ -301,8 +306,15 @@ proton branches), neutron-neutron, neutron-proton, proton-proton and electron-pr
 bremsstrahlung, Cooper pair breaking and formation (core and crust), direct Urca,
 electron-ion bremsstrahlung, plasmon decay and pair annihilation. Direct Urca has an electron
 and a muon channel, each allowed where its own threshold below is met. The standard modified Urca
-treats the core leptons as electrons; the driver replaces it and the nucleon bremsstrahlung by the
-updated rates (UPDATED NEUTRINO EMISSIVITIES below), which have the muon branches.
+is that of Yakovlev et al. (2001) (D-038), for each of the two lepton channels (electrons and muons). Neutron branch, Eq. 140:
+Q_n(l) = 8.1e21 (m*_n/m_n)^3 (m*_p/m_p) (n_p/n_0)^(1/3) T_9^8 alpha_n beta_n (v_Fl/c), alpha_n = 1.13, beta_n = 0.68, with v_Fl/c =
+p_Fl / sqrt(p_Fl^2 + m_l^2 c^2) the lepton velocity (about 1 for electrons and (n_mu/n_e)^(1/3) for muons in beta equilibrium); proton branch,
+Eq. 142: Q_p(l) = Q_n(l) (m*_p/m*_n)^2 (p_Fl + 3 p_Fp - p_Fn)^2 / (8 p_Fl p_Fp) where p_Fl + 3 p_Fp > p_Fn, with its own opening condition for each
+lepton, vanishing quadratically at the threshold. The effective masses of the background are ratios to one nucleon mass, so (m*_p/m*_n)^2 is
+the ratio of the ratios. The legacy rate of Yakovlev and Levenfish (1995) (--murca yl95) treats the core leptons as electrons. The driver
+default is the Y01 modified Urca with the updated nucleon bremsstrahlung in the core (CURRENT RATE SELECTION above); --murca bottaro
+selects the updated modified Urca, which has the muon branches, and --old-rates selects all the standard rates (UPDATED NEUTRINO
+EMISSIVITIES below).
 Conductivity (conductivity.py). Core electrons, muons and neutrons (conductivity_core.py) and
 crust electrons (conductivity_crust.py). Composition per baryon in the core: Yp = Ye + Ymu,
 Yn = 1 - Yp.
@@ -337,9 +349,9 @@ Closed forms used (natural units, one neutrino flavor unless stated):
   velocity and not as relativistic particles;
 - modified Urca, proton branch, Eq. 3.39: (p_l + 3 p_p - p_n)^2 / mu_l for each lepton, open
   where p_l + 3 p_p > p_n (each lepton has its own threshold).
-Compared with the standard rates: the rho-meson suppression, the exchange and interference
-terms, the Landau-parameter structure of the amplitude, the proton Fermi momentum (not the
-electron one) in the modified-Urca phase space, and the electron and muon channels together.
+Compared with the standard rates (the legacy rate lacked the muon channels and used the electron Fermi momentum; the Y01 standard rate of D-038
+has both channels and the proton density): the rho-meson suppression, the exchange and interference terms and the Landau-parameter structure of
+the amplitude.
 The short-range suppression factors of Friman and Maxwell (0.56 nn, 0.66 np, 0.70 pp, 0.68
 modified Urca) are kept, as in the paper's comparisons; the nucleon effective masses enter as
 overall powers, the Landau parameters use the bare mass. The pairing reduction factors are those
@@ -349,7 +361,12 @@ processes are unchanged. Not included: the non-triangular modified-Urca integral
 and 3.37, a four-dimensional numerical integral per point, which the paper finds 20-30% larger
 for the neutron branch) and in-medium effects. A muon branch of Direct Urca is not part of
 the paper.
-Use (Friman-Maxwell MURCA and updated bremsstrahlung are the driver defaults):
+Status of the option (D-039): --murca bottaro is a comparison option. It implements the leading formulas of the paper (Eqs. 3.16, 3.28 and 3.37-3.39,
+not the general angular integrals, which the paper finds 20-30 % larger for the neutron branch) and retains the historical multipliers beta of
+Friman and Maxwell (0.56 nn, 0.66 np, 0.70 pp, 0.68 modified Urca), which lie outside the derived rates (0.68 removes 32 % of the raw
+modified-Urca rate, and the comparison with the paper cannot establish that they give a consistent account of the residual correlations for a
+given EOS). Its bremsstrahlung is the default in the core.
+Use (the Yakovlev et al. 2001 modified Urca and the updated bremsstrahlung are the driver defaults):
     python cooling_driver.py --old-rates              # the standard rates instead
     from emissivity_updated import updated_rates      # context manager; or use_updated_rates()
     with updated_rates():                             # use_standard_rates() restores the others
@@ -359,12 +376,13 @@ the muon channels, the modified Urca, the bremsstrahlung, the suppression factor
 the non-triangular correction):
     python compare_emissivities.py --input input_bsk26 --star "1.40 Msun"
 writes results_emissivities/emissivity_comparison.csv and .png and prints the luminosity ratios.
-Validation (tests): the closed forms equal numerical integrals of the amplitudes of the paper
-(Eqs. 3.3 and 3.13) to better than 1e-5; the bremsstrahlung reproduces the values of the paper's
+Historical validation (the checks made when the updated rates were implemented; several are no longer automatic tests since D-028 and D-029,
+and the numbers are those of that step; they compare with the limiting formulas and figures of the paper, not with its full angular integral):
+the closed forms equal numerical integrals of the amplitudes of the paper (Eqs. 3.3 and 3.13) to better than 1e-5; the bremsstrahlung reproduces the values of the paper's
 Figs. 1 and 3 (for p_n = 1.75 fm^-1, T = 1e9 K, bare masses, 3 flavors: nn 4.3e19 erg cm^-3 s^-1, 10.5e19
 without the rho meson; np 5.6e19, 6.7e19 with Landau parameters and no rho meson); the modified Urca
-neutron branch relative to the standard rate in npe matter is 0.62 at p_n = 1.5 fm^-1 and 0.33 at
-2.2 fm^-1; the lepton velocities, the thresholds, the T^8 and mass scalings and the registry
+neutron branch relative to the standard rate in npe matter is 0.62 at p_n = k_Fn = 1.5 fm^-1 and 0.33 at
+2.2 fm^-1 (neutron densities 0.114 and 0.360 fm^-3); the lepton velocities, the thresholds, the T^8 and mass scalings and the registry
 replacement are checked.
 
 DIRECT URCA THRESHOLD
@@ -381,6 +399,8 @@ energy, and the phase-space integral with exact kinematics gives Q = (457 pi / 1
 (1 + 3 g_A^2) m*_n m*_p mu_l (k_B T)^6 for the electron and the muon alike (0.999 of the coefficient at
 T = 0.1 MeV), and Q_mu / Q_e = mu_mu / mu_e. The sharp threshold is the usual approximation; within a
 few MeV of it the thermal smearing of the Fermi surfaces matters (as for the electron channel).
+The muon rule is published: Yakovlev et al. (2001), Sect. 3.3(c), after Eq. 121 (checked in the audit of the emissivities). The rounded prefactor
+4.0e27 is 0.37 % below the 4.015e27 of the analytic coefficient with g_A = 1.26 and cos(theta_C) = 0.974; it is kept (D-036).
 In npe matter the electron threshold is Yp >= 1/9;
 with muons the threshold depends on the composition: for BSk22 the threshold star is
 1.148 Msun, against 0.883 Msun for Yp = 1/9. In BSk22 the threshold is at a central
@@ -392,6 +412,46 @@ kf_n = 2.23, 2.40 and 2.61 fm^-1 against kf_p + kf_e = 1.72, 1.86 and 2.03 fm^-1
 1.52, 1.67 and 1.87 fm^-1 for 1.0, 1.4 and 1.8 Msun. In the BSk22 stars the muon channel is closed
 at 1.0 and 1.4 Msun (at the center of the 1.4 Msun star kf_p + kf_mu = 2.094 against kf_n = 2.119 fm^-1) and
 open at 1.8 Msun, in 7 of the 11 core cells where the electron channel is open.
+
+NOTES OF THE AUDIT OF THE EMISSIVITIES
+An independent literature audit of the emissivity routines (15 November 2026) compared every equation and constant with the papers. Its
+findings are recorded in the comments of emissivity.py, emissivity_updated.py and emissivity_factors.py, in the references above and in
+the tracker (items NU-1 to NU-5 and NU-12 to NU-14; decisions D-036 to D-039). Decision D-038 acted on part of them: the standard modified
+Urca is now that of Yakovlev et al. (2001) with electron and muon channels (the legacy rate of Yakovlev and Levenfish 1995 is --murca yl95), and
+the plasmon normalisation and the logarithm of the electron-ion fit were corrected. Decision D-039 closed the rest: NU-4 (the baseline is the Y01 modified Urca with the Bottaro et al. core bremsstrahlung),
+NU-5 (the in-medium study is deferred, see DEFERRED STUDY below) and NU-14 (kept and documented). The effect of D-038 on the cooling of the 1.4 Msun BSk26 star
+(L at the age; "default" is the default pairing):
+    modified Urca Y01 instead of the legacy rate:  default star -2.3 % at 100 yr, -9.3 % at 300 yr, -2.6 % at 841 yr, -0.4 % at 3000 yr,
+                                                   at most 0.2 % from 10^4 yr; star without pairing about -7 % at every age above 300 yr;
+                                                   triplet-only star -3.2 % at 300 yr, -1.0 % at 841 yr
+    plasmon normalisation 1.203e23 -> 1.023e23:    +11 % at 0.1 yr, +4 % at 1 yr, +1.7 % at 30 yr, below 0.5 % after 100 yr
+    electron-ion fit, log -> log10:                -1.1 % at 100 yr, -0.5 % at 300 yr, below 0.2 % after 841 yr
+Items found by the audit and measured, but kept and documented (item NU-14, D-039; effect of switching each off or replacing it):
+    crust nn bremsstrahlung, pion 139 -> 135 MeV:  below 0.8 % at any age (unpaired star, 100 yr)
+    electron-proton bremsstrahlung switched off:   +0.6 % at 300 yr, below 0.2 % at other ages
+    pair annihilation switched off:                -77 % at 0.03 yr, -2 % at 0.3 yr, below 0.02 % after 1 yr
+    np bremsstrahlung, neutron-only triplet path:  below 0.01 % at any age (also for the triplet-only star)
+    legacy alpha > 0 mask: never acts in the core (the smallest neutron density in the core is 0.084 fm^-3, alpha vanishes at 0.034).
+Check of the new modified Urca: against the old GitHub transcription of Y01 at identical inputs it agrees to 0.1 % on all 53 core faces
+(the difference is the exact lepton velocity); the earlier comparison runs made with that function give the same luminosity within 0.04 % at
+841 yr; with --murca yl95 and the two corrections undone the run is byte-identical to the one made before D-038.
+
+DEFERRED STUDY: IN-MEDIUM MODIFIED URCA (item NU-5, decision D-039)
+The in-medium enhancement of the modified Urca of Shternin, Baldo and Haensel (2018), Phys. Lett. B 786, 28 = arXiv:1807.06569, is not part of the
+unified code: the port is deferred and the factor is dropped for now, until a further review. Y01 stays the default. What exists: the old GitHub
+code (commit e4321df, neutrino.py: alpha_u from Eqs. 8-9, 12 and 14, and murca(inmedium=True), which replaces alpha_n beta_n of the neutron branch
+by alpha_U and leaves the proton branch as in Eq. 142). Its effect on the cooling of the 1.4 Msun BSk26 star, measured on 14 November with that
+function inside the unified state and against the Y01 baseline with muons (L at the age):
+    default pairing:  -5 % at 100 yr, -34 % at 300 yr, -4.6 % at 841 yr (31.0 against 32.5 x 10^32 erg/s), -0.8 % at 3000 yr, -0.2 % at 10^4 yr
+    no pairing:       about -34 % at every age from 300 yr (43.5 against 65.5 x 10^32 erg/s at 841 yr)
+    triplet only:     -18 % at 300 yr, -8.8 % at 841 yr, -5 % from 10^4 yr
+What a resumed study has to settle (from the audit of the emissivities): (1) the validity domain: Eq. 14 stays within 20 % of the full result of the paper only
+above n_B = 0.1 fm^-3 for electrons and 0.3 fm^-3 for muons, and it is singular as p_n - p_p - p_l tends to zero from above, so the old extrapolation to every
+point with a positive momentum deficit is not a controlled prescription; (2) its relation to the other rates: the fitted coefficient already normalises the
+scattering contribution of the model of the paper, so it must not be multiplied by the Bottaro et al. rate without recalibration, and the Bottaro et al. rates
+contain no in-medium effect, so the two are complementary; (3) the mass normalisation: if the effective masses mean m*/m, the normalisation of Eq. 12 is about
+3.3 % below the result with m_u; (4) the interplay with the pairing factors, which matters for the default star. If resumed, the form recommended by the audit is a
+separate option, off by default, on top of the Y01 neutron branch below the direct-Urca threshold, with its domain stated.
 
 SUPERFLUID GAP MODELS
 Every available choice of gap is an entry of GAP_CATALOGUE in superfluid.py (python3 superfluid.py prints it, with the source and the
@@ -637,8 +697,8 @@ the equations were transcribed from the paper, with their numbers, in the old Gi
 (to be checked) means that the reference was not recorded in the original implementation and is given from memory of
 the literature: check it against the paper before quoting it. The paper of Bottaro, Caputo and Fiorillo and the
 expressions derived for this version are cited exactly, and the places where the implementation differs from a
-source are stated. (checked in the audit) means that the literature audit of 15 November 2026 checked the equations or tables in the
-paper itself.
+source are stated. (checked in the audit) means that one of the literature audits of 15 November 2026 (the superfluid routines and the
+neutrino emissivities) checked the equations or tables in the paper itself.
 
 Structure of the star
 - Tolman-Oppenheimer-Volkoff equations in x = ln(P/Pc) (tov.py): Tolman (1939), Phys. Rev. 55, 364;
@@ -677,43 +737,59 @@ Heat capacity (heat_capacity.py)
   coefficients (the original implementation did not record the source).
 
 Neutrino emissivities (emissivity.py, emissivity_factors.py)
-- Yakovlev, Kaminker, Gnedin and Haensel (2001), Phys. Rep. 354, 1 = arXiv:astro-ph/0012122 (Y01, read from the
-  PDF): nucleon bremsstrahlung Eqs. 165-167 (the local rates equal them since D-020), pairing reduction factors
-  Eqs. 199-229 (equal to the local formulas except the asymptotic form for v > 15, item NU-11) and pair breaking
-  Eqs. 236-241.
-- Modified Urca, standard rates: alpha(n) = 1.76 - 0.63 (n0/n)^(2/3) is Yakovlev and Levenfish (1995), A&A 297, 717, Eq. 12 (checked in
-  the audit); Y01, Eqs. 140 and 142, adopt the constant alpha_n = 1.13 (8.1e21). The source of the prefactors 8.55e21 (neutron branch) and
-  8.53e21 (proton branch) and of beta = 0.68 is not recorded. The original rates are Friman and Maxwell (1979), ApJ 232, 541 (to be
-  checked). Item NU-1 is open.
+- Yakovlev, Kaminker, Gnedin and Haensel (2001), Phys. Rep. 354, 1 = arXiv:astro-ph/0012122 (Y01, read from the PDF, checked in the audit):
+  nucleon bremsstrahlung Eqs. 165-167 (the local rates equal them since D-020), modified Urca Eqs. 140-142 (with the lepton rule after
+  Eq. 142), plasmon decay Eqs. 23, 38 and 42, electron-ion bremsstrahlung Eq. 76, crust neutron bremsstrahlung Eqs. 88-89, direct Urca
+  Eqs. 120-121 and Sect. 3.3(c), pairing reduction factors Eqs. 199-229 and pair breaking Eqs. 236-241.
+- Friman and Maxwell (1979), ApJ 232, 541, Eqs. 45, 52, 61-65c and Table I (checked in the audit): the density dependence of the modified Urca
+  (Eq. 62; Eq. 65c freezes it at saturation), the shape of the crust neutron bremsstrahlung and the suppression factors beta.
+- Yakovlev and Levenfish (1995), A&A 297, 717, Eqs. 12, 14-16 and 24 (checked in the audit): the legacy modified Urca of the code (--murca yl95).
+  alpha(n) = 1.76 - 0.63 (n0/n)^(2/3) is their Eq. 12 and the prefactors 8.55e21 (neutron branch) and 8.53e21 (proton branch) are their Eqs. 14
+  and 16. Their proton branch is an angular approximation that Y01 correct after Eq. 142. The standard rate is that of Y01 since D-038:
+  8.1e21 with alpha_n = 1.13 and beta_n = 0.68, n_p in place of rho Ye, a proton branch that opens smoothly and both lepton channels (items
+  NU-1 to NU-3, decided). The new function reproduces the old GitHub transcription of Y01 to 0.1 % on every core face of the example star.
 - Superfluid reduction of the rates: Y01 Eqs. 199-229 and Yakovlev, Levenfish and Shibanov (1999), Phys. Usp. 42, 737 (checked in the audit);
   the neutron branch of the modified Urca with neutron triplet pairing and normal protons: Gusakov (2002), A&A 389, 702, Table 2 and
   Eqs. A1, A2, A7, A10, joined to Y01 Eq. 216 with xi = 0.130 (Yakovlev and Levenfish 1995, Eqs. 26 and 29; checked in the audit); the
-  sources of the two-species approximations are Y01 Eqs. 204-205, 225-229. Levenfish and Yakovlev (1994) (to be checked).
-- Direct Urca: Lattimer, Pethick, Prakash and Haensel (1991), Phys. Rev. Lett. 66, 2701; emissivity prefactor
-  Q = (457 pi / 10080) G^2 cos^2(theta_C) (1 + 3 g_A^2) m*_n m*_p mu_l (k_B T)^6 as in Yakovlev et al. (2001).
-  The threshold k_n <= k_p + k_l uses the proton Fermi momentum from the proton density. The muon channel
-  (lepton factor mu_mu, threshold k_n <= k_p + k_mu) is the same expression for the muon, verified here
-  numerically as described in DIRECT URCA THRESHOLD; it is not taken from a published formula.
+  sources of the two-species approximations are Y01 Eqs. 204-205, 225-229. Levenfish and Yakovlev (1994) (to be checked). Gusakov (2002),
+  Sect. 2, also gives the phase space for larger proton fractions (above the direct-Urca threshold).
+- Direct Urca: Lattimer, Pethick, Prakash and Haensel (1991), Phys. Rev. Lett. 66, 2701 (the threshold; only the abstract was read in the
+  audit); emissivity prefactor Q = (457 pi / 10080) G^2 cos^2(theta_C) (1 + 3 g_A^2) m*_n m*_p mu_l (k_B T)^6 as in Yakovlev et al.
+  (2001), Eqs. 120-121 (checked in the audit). The threshold k_n <= k_p + k_l uses the proton Fermi momentum from the proton density. The muon
+  channel (lepton factor mu_mu, threshold k_n <= k_p + k_mu) is the same expression for the muon; the rule is published in Y01, Sect.
+  3.3(c), after Eq. 121 (checked in the audit), and was verified here numerically as described in DIRECT URCA THRESHOLD.
 - Cooper pair breaking and formation: rate normalisation Y01 Eq. 236 (1.17e21, N_nu = 3) and the functions F_A and F_B of Eqs. 237-241
-  (checked in the audit); the weak coefficients are the vector-suppressed ones of Page, Lattimer, Prakash and Steiner (2009), ApJ 707, 1131,
-  Eqs. 9-11 (checked in the audit): triplet 2 g_A^2 = 3.175, singlet 4/81 (p_F/m*)^4 with the proton axial term of Kaminker, Haensel and
-  Yakovlev (1999), A&A 345, L14, Eqs. 5-8; g_A = 1.26 and sin^2 theta_W = 0.23 as in Page et al. Y01's bare vertex gives 1 + 2 g_A^2 = 4.175;
-  Leinson (2010), Phys. Rev. C 81, 025501, Eq. 96 (anomalous axial vertices) and Potekhin and Chabrier (2018), A&A 609, A74, Sect. 3.4
-  give about g_A^2/2 = 0.794, 0.19 of the bare rate. The default keeps the local value 3.175 (item NU-7); the alternatives are not options
-  of the code. The earlier source of the same rates is Yakovlev, Kaminker and Levenfish (1999), A&A 343, 650 (to be checked).
-- Plasmon decay and pair annihilation: Itoh et al. (1996), ApJS 102, 411 (to be checked). Electron-ion
-  bremsstrahlung: Haensel, Kaminker and Yakovlev (1996), A&A 314, 328 (to be checked). Electron-proton
-  bremsstrahlung: Kaminker and Haensel (1999), Acta Phys. Pol. B 30, 1125 (to be checked).
-- In-medium modified Urca: Shternin, Baldo and Haensel (2018), Phys. Lett. B 786, 28 = arXiv:1807.06569, Eqs. 8-9
-  and 12 (read from the PDF); not implemented (item NU-5).
-- Updated modified Urca and nucleon bremsstrahlung (emissivity_updated.py): Bottaro, Caputo and Fiorillo (2024),
-  JCAP, arXiv:2406.18640: Eqs. 3.3, 3.7-3.9 and 3.11 (nn, pp), 3.13 and 3.15-3.17 (np), 3.22 and 3.28 (modified
-  Urca, neutron branch, triangular), 3.39 (proton branch). Parameters of the paper: m_pi = 138 MeV, m_rho =
-  769 MeV, C_rho = 1.4, Landau parameters F0' = 0.7 and G0 = 1.1, G = G_F cos(theta_C), g_A = 1.27. Differences
-  with the paper: the nucleon effective masses enter as overall powers, the pairing reduction factors are those of
-  the standard processes, the Friman-Maxwell suppression factors beta (0.56 nn, 0.66 np, 0.70 pp, 0.68 modified
-  Urca) are kept, and the rates apply in the core only. Not implemented: the non-triangular integrals (Eqs. 3.34
-  and 3.37) and in-medium effects.
+  (checked in the audit), after Yakovlev, Kaminker and Levenfish (1999), A&A 343, 650, Eq. 22 (checked in the audit). The weak coefficients are
+  the vector-suppressed ones of Page, Lattimer, Prakash and Steiner (2009), ApJ 707, 1131, Eqs. 9-11 (checked in the audit): triplet
+  2 g_A^2 = 3.175, which is the bare axial term only (the vector contribution 1 of Y01 is omitted); singlet 4/81 (p_F/m*)^4 with the proton
+  axial term of Kaminker, Haensel and Yakovlev (1999), A&A 345, L14, Eqs. 5-8; g_A = 1.26 and sin^2 theta_W = 0.23 as in Page et al. Y01's bare
+  vertex gives 1 + 2 g_A^2 = 4.175; Leinson (2010), Phys. Rev. C 81, 025501, Eq. 96 (anomalous axial vertices) and Potekhin and Chabrier
+  (2018), A&A 609, A74, Sect. 3.4 give about g_A^2/2 = 0.794, 0.19 of the bare rate. The neutron singlet vector term is that of Kolomeitsev and
+  Voskresensky (2010), arXiv:1003.2741, Eqs. 140-143 (4 (v_F/c)^4 / 81); Leinson and Perez (2006), Phys. Lett. B 638, 114, give 148 (v_F/c)^4 / 2835.
+  The local singlet expression is a hybrid of these and not the exact result of Potekhin and Chabrier. The default keeps the local value
+  3.175 (item NU-7); the alternatives are not options of the code.
+- Plasmon decay: Y01 Eqs. 23, 38 and 42, and Itoh et al. (1996), ApJS 102, 411, Sect. 4 (checked in the audit). The code had Q_c = 1.203e23
+  where G_F^2 m_e^9 = 1.0239e23 erg cm^-3 s^-1 and Y01 Eq. 23 print 1.023e23: two digits were swapped; corrected in D-038 (item NU-12). Pair annihilation:
+  Itoh et al. (1996), Eqs. 2.1-2.10 and Table 1 (checked in the audit; every coefficient agrees). Electron-ion bremsstrahlung: Kaminker,
+  Pethick, Potekhin, Thorsson and Yakovlev (1999), A&A 343, 1009, Eq. 40 (p. 1021), and Y01 Eq. 76 (checked in the audit; the code had the
+  natural logarithm in the last term where the papers use log10; corrected in D-038, item NU-13); Haensel, Kaminker and Yakovlev (1996), A&A 314, 328, is
+  the earlier liquid-phase calculation (read for its scope). Electron-proton bremsstrahlung: Kaminker and Haensel (1999), Acta Phys. Pol. B 30,
+  1125 = arXiv:astro-ph/9908249, Eqs. 40-45 (checked in the audit); the local expression differs from it and the source of its 2.4e17 is
+  not identified (item NU-14).
+- In-medium modified Urca: Shternin, Baldo and Haensel (2018), Phys. Lett. B 786, 28 = arXiv:1807.06569, Eqs. 8-9, 12 and 14 and Fig. 2 (read from
+  the PDF, checked in the audit); not implemented: the study is deferred (item NU-5, D-039; section DEFERRED STUDY above). Their approximation (Eq. 14) is within 20 % of their full result above n_B = 0.1 fm^-3
+  for electrons and 0.3 fm^-3 for muons, it is singular as p_n - p_p - p_l tends to zero from above, and the old extrapolation to every
+  point with a positive momentum deficit is not a controlled threshold prescription. Their fitted coefficient already normalises the
+  scattering contribution of their own model: it must not be multiplied by the Bottaro et al. rate without recalibration.
+- Updated modified Urca and nucleon bremsstrahlung (emissivity_updated.py): Bottaro, Caputo and Fiorillo (2024), JCAP 11, 015 = arXiv:2406.18640
+  (checked in the audit): Eqs. 3.3, 3.7-3.9 and 3.11 (nn, pp), 3.13 and 3.15-3.17 (np), 3.22 and 3.28 (modified Urca, neutron branch,
+  triangular), 3.39 (proton branch). Parameters of the paper: m_rho = 769 MeV, C_rho = 1.4, Landau parameters F0' = 0.7 and G0 = 1.1, G = G_F
+  cos(theta_C), g_A = 1.27; the paper leaves m_pi symbolic, so m_pi = 138 MeV and cos(theta_C) = 0.974 are choices of this code. The printed Eq.
+  3.11 omits the factor g_A^2 that is carried through Eq. 3.6. Differences with the paper: the nucleon effective masses enter as overall
+  powers, the pairing reduction factors are those of the standard processes, the Friman-Maxwell suppression factors beta (0.56 nn, 0.66 np,
+  0.70 pp, 0.68 modified Urca) are legacy multipliers outside the derived rates (the paper uses 0.56, 0.66 and 0.68 in its comparisons, 0.70 is
+  traceable to Y01, and 0.68 removes 32 % of the raw modified-Urca rate), and the rates apply in the core only. Not implemented: the general
+  angular integrals (Eqs. 3.34 and 3.37) and in-medium effects, which Sect. 5 of the paper leaves open.
 
 Superfluidity (superfluid.py)
 - Gap models (superfluid.py, see SUPERFLUID GAP MODELS): the local table 1-16 comes from Andersson, Comer and Glampedakis (2005), Nucl. Phys. A
@@ -785,6 +861,6 @@ state and the registries, and the standard neutrino rates (modified Urca, nucleo
 New physics is validated first by a one-off comparison with a published result, recorded in the tracker (D-026);
 it becomes a test only if you ask for one.
 
-Validation of the current default: the 1.4 Msun Gudmundsson run with FM MURCA
-completed in 414 accepted steps (3 rejected), stopping at 741495.54 yr
-on the photon luminosity threshold. No factor-of-20 scaling is applied.
+Validation of the current default: the 1.4 Msun Gudmundsson run with the Y01 modified Urca
+completed in 418 accepted steps (3 rejected), stopping at 738180.51 yr
+on the photon luminosity threshold (D-038; with --murca yl95 the earlier default: 422 steps, 742126.51 yr). No factor-of-20 scaling is applied.

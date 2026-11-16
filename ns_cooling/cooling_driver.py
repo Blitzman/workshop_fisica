@@ -11,7 +11,7 @@ import numpy as np
 from config import CoolingConfig
 from cooling import run_cooling
 from emissivity_updated import use_standard_rates, use_updated_rates
-from emissivity import NEUTRINO_PROCESSES, modified_urca_emissivity
+from emissivity import NEUTRINO_PROCESSES, modified_urca_emissivity, use_yl95_modified_urca
 from energy_balance import energy_budget, energy_closure, validate_energy_options
 from input_model import load_backgrounds, read_parameters
 
@@ -125,23 +125,29 @@ def main():
         default=0.02,
         help="Largest acceptable closure error per decade (fraction of the energy lost)",
     )
-    parser.add_argument("--murca", choices=("friman-maxwell", "bottaro"), default="friman-maxwell",
-                        help="Modified Urca prescription (default: friman-maxwell); bremsstrahlung unchanged")
+    parser.add_argument("--murca", choices=("y01", "yl95", "friman-maxwell", "bottaro"), default="y01",
+                        help="Modified Urca prescription: y01 (default; Yakovlev et al. 2001, electrons and muons), yl95 "
+                        "(the legacy Yakovlev-Levenfish 1995 rate, to reproduce runs made before D-038; friman-maxwell is its "
+                        "former name) or bottaro (Bottaro-Caputo-Fiorillo 2024); bremsstrahlung unchanged")
     parser.add_argument(
         "--old-rates",
         action="store_true",
-        help="Use the standard (Friman-Maxwell) modified Urca and nucleon bremsstrahlung rates "
-        "(legacy option selecting all standard rates; incompatible with --murca bottaro)",
+        help="Use the standard modified Urca (Yakovlev et al. 2001, or the legacy rate with --murca yl95) and the standard "
+        "nucleon bremsstrahlung rates (legacy option selecting all standard rates; incompatible with --murca bottaro)",
     )
     args = parser.parse_args()
+    if args.murca == "friman-maxwell":
+        args.murca = "yl95"  # the former name of the legacy rate
     if args.old_rates and args.murca == "bottaro":
         parser.error("--old-rates cannot be combined with --murca bottaro")
     if args.old_rates:
         use_standard_rates()
     else:
         use_updated_rates()
-        if args.murca == "friman-maxwell":
+        if args.murca == "y01":
             NEUTRINO_PROCESSES.register("modified_urca", replace=True)(modified_urca_emissivity)
+    if args.murca == "yl95":
+        use_yl95_modified_urca()
     if args.check_energy:
         try:
             validate_energy_options(args.energy_start_years, args.energy_tolerance)
@@ -169,8 +175,9 @@ def main():
     several = len(stars) > 1
     out = args.out.resolve()
     entries, curves = [], []
-    rates = ("MURCA: Friman-Maxwell; nucleon bremsstrahlung: standard" if args.old_rates
-             else f"MURCA: {args.murca}; nucleon bremsstrahlung: Bottaro-Caputo-Fiorillo")
+    murca = {"y01": "Yakovlev et al. 2001", "yl95": "Yakovlev-Levenfish 1995 (legacy)", "bottaro": "Bottaro-Caputo-Fiorillo"}[args.murca]
+    rates = (f"MURCA: {murca}; nucleon bremsstrahlung: standard" if args.old_rates
+             else f"MURCA: {murca}; nucleon bremsstrahlung: Bottaro-Caputo-Fiorillo")
     print(f"Neutrino rates: {rates}")
     for label, background in stars:
         if several:

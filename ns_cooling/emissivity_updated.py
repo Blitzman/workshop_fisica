@@ -10,11 +10,15 @@ forms of the paper are implemented, in natural units (hbar = c = k_B = 1, energi
     modified Urca, proton      Eq. 3.39 (approximation of the maximum exchanged momenta), electrons
                                and muons, each lepton with its own threshold p_l + 3 p_p > p_n
 
-Differences with the standard (Friman-Maxwell) rates implemented in ``emissivity.py``: the
-rho-meson suppression of the tensor and spin-spin interactions, the exchange (u-channel)
-and interference terms, the Landau-parameter structure of the amplitude, the proton Fermi
-momentum (not the electron one) in the modified-Urca phase space, and the lepton factor
-v_l = p_l / mu_l that makes the muon channel small where the muons are not relativistic.
+Baseline (decision D-039): the standard modified Urca of Yakovlev et al. (2001) with electron and muon channels
+(``emissivity.modified_urca_emissivity``) plus the bremsstrahlung of this module in the core; this is the driver default. The modified
+Urca of this module (``--murca bottaro``) is an option for comparison with that traceable baseline: it implements the leading formulas of
+the paper (Eqs. 3.16, 3.28 and 3.37-3.39, not the general angular integrals) and retains the historical short-range multipliers beta.
+
+Differences with the standard modified Urca of Y01 implemented in ``emissivity.py`` (which has both lepton channels and the proton
+density since D-038): the rho-meson suppression of the tensor and spin-spin interactions, the exchange (u-channel) and interference
+terms, and the Landau-parameter structure of the amplitude. The lepton factor v_l = p_l / mu_l makes the muon channel small where the
+muons are not relativistic, as in Y01.
 
 Not included: the non-triangular modified-Urca integral (Eqs. 3.34 and 3.37, a four-dimensional
 numerical integral per point, which the paper finds larger than the triangular result by
@@ -24,7 +28,9 @@ The paper's emissivities are for one neutrino flavor; the bremsstrahlung is mult
 flavors, the modified Urca emits the flavor of its lepton only.
 
 The short-range suppression factors of Friman and Maxwell (beta = 0.56 nn, 0.66 np, 0.70 pp,
-0.68 modified Urca) are kept, as in the paper's comparisons (``short_range_suppression``).
+0.68 modified Urca) are kept, as in the paper's comparisons (``short_range_suppression``). They are historical multipliers outside the
+derived rates: 0.68 removes 32 % of the raw modified-Urca rate, and the comparison with the paper cannot establish that they give a
+consistent account of the residual correlations for a given EOS (audit of the emissivities).
 Nucleon effective masses enter as overall powers (m*_n/m_n)^a (m*_p/m_p)^b; the Landau parameters
 use the bare nucleon mass.
 
@@ -50,16 +56,21 @@ from constants import (
 import emissivity as standard
 from emissivity import NEUTRINO_PROCESSES, process_factors
 
+# Approximations of the paper that this module keeps (checked in the audit of the emissivities): the leading formulas of Eqs. (3.16),
+# (3.28) and (3.37)-(3.39); the general angular integrals are not included; in-medium effects are not included (Sec. 5 of the paper leaves
+# a combined calculation open). The printed Eq. (3.11) omits the factor g_A^2 that is carried through Eq. (3.6), and it is kept here.
 # Couplings and meson parameters of the paper (Sec. 2).
 G_A = 1.27  # axial coupling
 COS_CABIBBO = 0.974
-M_PI = 138.0  # pion mass [MeV]
+M_PI = 138.0  # pion mass [MeV]; the paper leaves m_pi symbolic, so 138 and cos(theta_C) = 0.974 are choices of this code (audit)
 M_RHO = 769.0  # rho-meson mass [MeV]
 C_RHO = 1.4  # rho-meson coupling strength
 F_PI = 1.0  # pi-nucleon coupling (f_pi^2 / 4 pi = 0.08 is f_pi ~ 1)
 F0_PRIME, G0 = 0.7, 1.1  # Landau parameters F0' and G0 (F0 and G0' drop out of the rates)
 N_FLAVORS = 3  # neutrino flavors of the bremsstrahlung
-BETA = dict(nn=0.56, np=0.66, pp=0.70, murca=0.68)  # short-range suppression of Friman and Maxwell
+# Short-range suppression of Friman and Maxwell: legacy multipliers outside the derived rates. The paper uses 0.56, 0.66 and 0.68 in its
+# comparisons and the 0.70 of pp is traceable to Y01; 0.68 removes 32 % of the raw modified-Urca rate (audit).
+BETA = dict(nn=0.56, np=0.66, pp=0.70, murca=0.68)
 
 _G = FERMI_COUPLING_MEV  # G_F
 _G_CHARGED = FERMI_COUPLING_MEV * COS_CABIBBO  # G = G_F cos(theta_C)
@@ -312,7 +323,7 @@ def use_updated_rates(short_range_suppression=True):
 
 
 def use_standard_rates():
-    """Restore the standard (Friman-Maxwell) modified Urca and nucleon bremsstrahlung."""
+    """Restore the standard modified Urca (Yakovlev et al. 2001, D-038) and nucleon bremsstrahlung."""
     for name, function in _STANDARD.items():
         NEUTRINO_PROCESSES.register(name, replace=True)(function)
 

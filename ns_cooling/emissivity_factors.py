@@ -227,7 +227,7 @@ def brems_np_neutron_triplet_factor(v):
     """Dimensionless pairing-reduction factor; v = Delta(T)/(k_B T)."""
     return brems_np_neutron_singlet_factor(
         v
-    )  # Same expression as the corresponding singlet/proton channel, as in the model.
+    )  # Same expression as the singlet/proton channel (Y01 Eq. 220), as in the model. The v_p -> 0 limit of the combined Eq. (229) is the direct-Urca type-B factor, 0.39 times this at v_n = 5 (audit); the measured effect on L is below 0.01 % and it is kept (D-035).
 
 
 def brems_nn_neutron_singlet_factor(v):
