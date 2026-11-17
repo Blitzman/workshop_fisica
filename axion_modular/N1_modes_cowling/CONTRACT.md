@@ -8,7 +8,7 @@ Outputs go to `N1_modes_cowling/outputs/` (override with `--out`). Upstream arti
 (override with the `--*-dir` options), so this module runs on its own as soon as those files exist.
 
 ## Contract
-Reads: S1 tables + manifest (part `tables`); R `paper2_tables.ref.json` (both parts).
+Reads: S1 dense state tables + EOS table + manifest (part `tables`); R `paper2_tables.ref.json` (both parts).
 
 | artifact | kind | content |
 |---|---|---|

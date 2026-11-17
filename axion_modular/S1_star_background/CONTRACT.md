@@ -13,9 +13,9 @@ Reads: nothing (BSk26 analytic fits in `bsk26.py`).
 | artifact | kind | content |
 |---|---|---|
 | `eos_bsk26.csv + .meta.json` | table | n [fm^-3], eps and p [MeV fm^-3] (monotone-in-p subset used by the solver) |
-| `star_noaxion.csv, star_nua<nu>.csv + .meta.json` | table | r, y = (m, p, Phi, theta, theta') and y' at the nodes; geometric units, km; metadata: M, R, theta_c, Phi_shift, r_end, constants, Hermite error |
+| `star_noaxion.csv, star_nua<nu>.csv + .meta.json` | table | dense STATE table: r, ln p, m, Phi, theta, theta' on 2,499 nodes (2,000 inside, surface-clustered; 500 in the tail); geometric units, km; metadata: M, R, theta_c, Phi_shift, r_end, r_k, constants, integrator settings, interpolation error |
 | `manifest.json `extra`` | data | `stars` (M, R, theta_c, rows, error, seconds), `condensate_exists`, `nu_a_list` |
 
 Every run also writes `outputs/manifest.json` (checks, runtime, environment, sha256 of each artifact and of each input).
 
-Consumers rebuild y(r) by cubic Hermite interpolation (N1/star_table.py). The grid is refined (up to 128 subdivisions of each integrator step) until the interpolant reproduces the integrator's dense solution within 1e-6 (the achieved error is in the metadata and S1 fails its own check if the target is not met). The integrator itself runs at rtol 1e-6 with theta_c located to 1e-6; the original precision is available through `--rtol 1e-11 --shoot-tol 0 --tol 1e-9 --k0 8`.
+Consumers interpolate the five columns with a cubic spline (not-a-knot), as TWO splines split at the node `r_k` (the radius where the EOS is switched off; one spline across it rings). S1 measures exactly that interpolation against the integrator's dense solution at ~28,000 radii and fails its own check above 1e-5 (the achieved error is in the metadata). Everything else (energy density, c_s^2, couplings, Phi', lambda', m') is computed by the consumer from the state and `eos_bsk26.csv`. The integrator runs at rtol 1e-6 with theta_c located to 1e-6; the original precision is available through `--rtol 1e-11 --shoot-tol 0`.

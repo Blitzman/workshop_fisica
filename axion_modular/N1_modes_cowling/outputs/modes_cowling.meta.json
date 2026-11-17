@@ -2,7 +2,7 @@
  "schema": "axion-table/1",
  "name": "modes_cowling",
  "title": "Cowling modes of the stars with condensate",
- "n_rows": 3,
+ "n_rows": 36,
  "columns": [
   {
    "name": "nu_a_kHz",
@@ -56,20 +56,86 @@
  "parameters": {
   "l": 2,
   "reference_noaxion": {
-   "M": 1.5359313228473745,
-   "R": 11.71939228115855,
+   "M": 1.535931322225003,
+   "R": 11.71939247407055,
    "modes": [
-    2.428852213085038,
-    7.170559886472575,
-    10.194126667027454
+    2.4288522157798016,
+    7.170560111133613,
+    10.194127103766476
    ]
   },
   "stars": {
+   "2.8": {
+    "M": 1.509314031993058,
+    "R": 11.674168036310377,
+    "thc": 1.1049234967386856,
+    "seconds": 36.666844606399536
+   },
+   "3": {
+    "M": 1.458606681628865,
+    "R": 11.57296737796431,
+    "thc": 1.9758462937184256,
+    "seconds": 11.570636749267578
+   },
+   "4": {
+    "M": 1.4276670800735987,
+    "R": 11.383376180150849,
+    "thc": 2.978624766339134,
+    "seconds": 10.454558372497559
+   },
+   "5": {
+    "M": 1.4531015729042915,
+    "R": 11.363376919747898,
+    "thc": 3.1024098967521785,
+    "seconds": 10.94299578666687
+   },
    "6": {
-    "M": 1.4724732729913332,
-    "R": 11.364864951246611,
-    "thc": 3.131041941424866,
-    "seconds": 44.091270208358765
+    "M": 1.472473328545581,
+    "R": 11.364865311059905,
+    "thc": 3.1310419467855692,
+    "seconds": 11.155924558639526
+   },
+   "7": {
+    "M": 1.48645624108504,
+    "R": 11.368577038186828,
+    "thc": 3.138660011870293,
+    "seconds": 11.329928874969482
+   },
+   "8": {
+    "M": 1.496841359678978,
+    "R": 11.3711533387232,
+    "thc": 3.140768674560957,
+    "seconds": 11.048049688339233
+   },
+   "10": {
+    "M": 1.5110749856524415,
+    "R": 11.371730821853044,
+    "thc": 3.1415271290637805,
+    "seconds": 12.504832983016968
+   },
+   "11": {
+    "M": 1.5161321514237067,
+    "R": 11.370217881002649,
+    "thc": 3.141574189648028,
+    "seconds": 13.904293775558472
+   },
+   "12": {
+    "M": 1.5202888144254008,
+    "R": 11.367873972890154,
+    "thc": 3.141587458889242,
+    "seconds": 13.30754041671753
+   },
+   "13": {
+    "M": 1.5237613827416796,
+    "R": 11.36490533166938,
+    "thc": 3.141591194788798,
+    "seconds": 16.371274948120117
+   },
+   "15": {
+    "M": 1.5292250904266342,
+    "R": 11.357748537926517,
+    "thc": 3.1415925392081583,
+    "seconds": 43.44212102890015
    }
   }
  },
@@ -80,7 +146,7 @@
    "commit": "26f2fcc",
    "dirty": true
   },
-  "created": "2026-11-17T09:45:54Z",
+  "created": "2026-11-17T13:01:49Z",
   "env": {
    "python": "3.12.3",
    "platform": "Linux x86_64",
@@ -105,18 +171,73 @@
   {
    "name": "star_noaxion.csv",
    "path": "S1_star_background/outputs/star_noaxion.csv",
-   "sha256": "8ea9210cdd6b15d623b6ddcde326618fc0600c51ad635a3499269042ee026c38"
+   "sha256": "3371fc805cbc1a8d578811dc54d77c65429e17b2e20641f742983f8df5f2d4f1"
   },
   {
    "name": "manifest.json",
    "path": "S1_star_background/outputs/manifest.json",
-   "sha256": "9cdd5d86aee46db1f70f7873a9d2133a25e2a25c7d48f54698273a4023192427"
+   "sha256": "a243452957f162c53caac5554f7c26061befa7d5b0636deaa0fcbbe44958315d"
+  },
+  {
+   "name": "star_nua2.8.csv",
+   "path": "S1_star_background/outputs/star_nua2.8.csv",
+   "sha256": "f6e89752a7fe8efdfd9ad89ebf4b56d0622a8818912b1177771d5038e8ce086e"
+  },
+  {
+   "name": "star_nua3.csv",
+   "path": "S1_star_background/outputs/star_nua3.csv",
+   "sha256": "e1edcf4298980592c842dedee2376ed76894dfc730c5e6f276699c95f31e96a5"
+  },
+  {
+   "name": "star_nua4.csv",
+   "path": "S1_star_background/outputs/star_nua4.csv",
+   "sha256": "1d07b70a6296223f5eb3638bf9f07b6c18c07880ac6d420ed53f7bed515f0716"
+  },
+  {
+   "name": "star_nua5.csv",
+   "path": "S1_star_background/outputs/star_nua5.csv",
+   "sha256": "a0bbc020e8f8fc6fb80d483cd72fe3ed9662a9c4ef030def7108b98936c06a52"
   },
   {
    "name": "star_nua6.csv",
    "path": "S1_star_background/outputs/star_nua6.csv",
-   "sha256": "6032d4c597c323f68dc2674b9d359d707ae5cdce7c21b15d773b3683b86ee04a"
+   "sha256": "0a27f0d03164543fbb65d10a198c8afe6b45fe8a3120a3a0ccb6ec7e989c0c3a"
+  },
+  {
+   "name": "star_nua7.csv",
+   "path": "S1_star_background/outputs/star_nua7.csv",
+   "sha256": "18331bef7ab1a7bd335b77f217564102eca63abb0d63456a181812d6205b93dd"
+  },
+  {
+   "name": "star_nua8.csv",
+   "path": "S1_star_background/outputs/star_nua8.csv",
+   "sha256": "3a653d5c26959266cd6aaff1dcbb6d64d869aedc7be281f5535c231e953f807d"
+  },
+  {
+   "name": "star_nua10.csv",
+   "path": "S1_star_background/outputs/star_nua10.csv",
+   "sha256": "610a4152fb5dd93da52ab85191ea710a55a07937ec8bbd1b40063bfec4088ce9"
+  },
+  {
+   "name": "star_nua11.csv",
+   "path": "S1_star_background/outputs/star_nua11.csv",
+   "sha256": "7abeec51202f73962a663c0de12766f29514e2f549d2a1a945a7fa94ae2d010b"
+  },
+  {
+   "name": "star_nua12.csv",
+   "path": "S1_star_background/outputs/star_nua12.csv",
+   "sha256": "215f4fd611efdcb600b7dd04b5fb27f828fcbc5a7e354839e65d5fb4f74e3324"
+  },
+  {
+   "name": "star_nua13.csv",
+   "path": "S1_star_background/outputs/star_nua13.csv",
+   "sha256": "3bdc05fa3651134ae0710e1b36ead4c91da03eaa65dbc854118e30d5c58ebd84"
+  },
+  {
+   "name": "star_nua15.csv",
+   "path": "S1_star_background/outputs/star_nua15.csv",
+   "sha256": "fdcfa07e40b515798c63e9a59e786a3c756540327d52c6a37471435a663bf9b0"
   }
  ],
- "csv_sha256": "2629f984d1b38bc439400a1a4c4c81b3f957944d8bab32cbfd9aa9c2cdf3c57e"
+ "csv_sha256": "bc8d9dfd6933c715fdaf3e0ec057c596dddd81cbf6ba0d737f99e41079b8d715"
 }

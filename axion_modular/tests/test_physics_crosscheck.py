@@ -26,5 +26,7 @@ def test_rhs_and_matter_agree_with_S1(name):
     for r in rng.uniform(0.05, 0.98 * st.R, 60):
         y = st.y_at(r)
         a, b = np.array(st.rhs(r, y)), np.array(ref.rhs(r, list(y)))
-        assert np.allclose(a, b, rtol=1e-12, atol=0), (r, a, b)
+        # N1 evaluates the EOS with a stacked polynomial (S1: scipy splines); matter() includes a spline derivative (c_s^2) and
+        # cancellations at the condensate wall, so last-bit differences are amplified (seen 1.2e-12): tolerance 1e-10
+        assert np.allclose(a, b, rtol=1e-10, atol=0), (r, a, b)
         assert np.allclose(st.matter(y[1], y[3]), ref.matter(y[1], y[3]), rtol=1e-10, atol=0)

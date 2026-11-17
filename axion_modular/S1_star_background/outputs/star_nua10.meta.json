@@ -1,0 +1,117 @@
+{
+ "schema": "axion-table/1",
+ "name": "star_nua10",
+ "title": "Background profile (TOV + Klein-Gordon): dense state table",
+ "n_rows": 2499,
+ "columns": [
+  {
+   "name": "r_km",
+   "dtype": "float64",
+   "unit": "km",
+   "description": "areal radius (node)"
+  },
+  {
+   "name": "ln_p",
+   "dtype": "float64",
+   "unit": "1",
+   "description": "natural log of the pressure in geometric units (km^-2)"
+  },
+  {
+   "name": "m_km",
+   "dtype": "float64",
+   "unit": "km",
+   "description": "gravitational mass inside r (G=c=1)"
+  },
+  {
+   "name": "Phi",
+   "dtype": "float64",
+   "unit": "1",
+   "description": "lapse potential, Phi(r_end) unshifted (add Phi_shift from the metadata)"
+  },
+  {
+   "name": "theta",
+   "dtype": "float64",
+   "unit": "rad",
+   "description": "axion field a/f_a"
+  },
+  {
+   "name": "thetap",
+   "dtype": "float64",
+   "unit": "km^-1",
+   "description": "dtheta/dr"
+  }
+ ],
+ "parameters": {
+  "nu_a_kHz": 10.0,
+  "p0_MeV_fm3": 100.0,
+  "E0_geo_km2": 2.662759868359869e-06,
+  "E0_MeV_fm3": 2.0114011643856005,
+  "nc_fm3": 0.04022802328771201,
+  "beta": 0.88,
+  "sigma_N_MeV": 50.0,
+  "eps": 0.1,
+  "m_pi_MeV": 134.98,
+  "f_pi_MeV": 92.1,
+  "ma_per_km": 0.2095845021951682,
+  "fa2_geo": 1.3336330599393314e-05,
+  "theta_c": 3.1415271290637805,
+  "R_km": 11.371730821853044,
+  "M_km": 2.2313586321917493,
+  "M_msun": 1.5110749856524415,
+  "Phi_shift": -0.5034521335121009,
+  "r_end_km": 44.20728512646215,
+  "M_total_km": 2.2376561651272424,
+  "KGEO": 1.3238333135663823e-06,
+  "MSUN_km": 1.4766696910334391,
+  "CKMS": 299792.458,
+  "HBARC_MeV_fm": 197.3269804593025,
+  "p_min_MeV_fm3": 9.124572027595528e-10,
+  "integrator": {
+   "method": "DOP853",
+   "rtol": 1e-06,
+   "atol": 1e-30,
+   "max_step_km": 0.25,
+   "start_r_km": 1e-05,
+   "shoot_tol": 1e-06
+  },
+  "r_k_km": 11.371733160860279,
+  "dense": {
+   "n_in": 2000,
+   "n_out": 500,
+   "n_rows": 2499,
+   "interior_grid": "surface-clustered",
+   "cluster_exponent": 5.0,
+   "tail_grid": "uniform",
+   "interpolation": "cubic spline, not-a-knot, per column",
+   "interp_err": {
+    "p": 1.9490238745840182e-07,
+    "m": 3.2164100582430685e-07,
+    "Phi": 1.805432426336228e-06,
+    "theta": 1.1380612978761276e-08,
+    "theta_p": 1.0512117758817174e-07
+   },
+   "interp_max_err": 1.805432426336228e-06,
+   "interp_tol": 1e-05
+  }
+ },
+ "producer": {
+  "module": "S1_star_background",
+  "script": "run.py",
+  "git": {
+   "commit": "26f2fcc",
+   "dirty": true
+  },
+  "created": "2026-11-17T12:58:14Z",
+  "env": {
+   "python": "3.12.3",
+   "platform": "Linux x86_64",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "matplotlib": "3.11.2"
+  }
+ },
+ "inputs": [],
+ "csv_sha256": "610a4152fb5dd93da52ab85191ea710a55a07937ec8bbd1b40063bfec4088ce9"
+}

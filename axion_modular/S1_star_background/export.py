@@ -1,74 +1,15 @@
-"""S1: write the EOS and the star profiles as solver-grade tables (CSV + sidecar metadata).
+"""S1: write the EOS and the star profiles as tables (CSV + sidecar metadata).
 
-A profile table stores, at a grid of radii, the five state variables y = (m, p, Phi, theta, theta') of the background
-ODE AND their derivatives y' = rhs(r, y). A consumer reconstructs y(r) with cubic Hermite interpolation (N1 does this).
-The grid is the integrator's own step nodes subdivided K times; K is increased until the Hermite interpolant
-reproduces the integrator's dense solution within `tol` at every midpoint (the achieved error is written to the
-metadata and checked by run.py). Units: geometric (G = c = 1), lengths in km: m [km], p [km^-2], theta' [km^-1].
+A profile table is the dense STATE table of dense.py (ln p, m, Phi, theta, theta' on ~2,500 nodes, about 150 kB). The metadata
+carry every constant the consumer needs and the interpolation error measured at write time. Units: geometric (G = c = 1),
+lengths in km: m [km], p [km^-2], theta' [km^-1].
 """
 import numpy as np
-from scipy.interpolate import CubicHermiteSpline
 
 from common import artifacts as A
 
 from . import star as S
-
-COLUMNS = ['r_km', 'm_km', 'p_km2', 'Phi', 'theta', 'thetap', 'dm', 'dp', 'dPhi', 'dtheta', 'dthetap']
-UNITS = {'r_km': 'km', 'm_km': 'km', 'p_km2': 'km^-2', 'Phi': '1', 'theta': 'rad', 'thetap': 'km^-1', 'dm': '1',
-         'dp': 'km^-3', 'dPhi': 'km^-1', 'dtheta': 'km^-1', 'dthetap': 'km^-2'}
-DESC = {'r_km': 'areal radius', 'm_km': 'gravitational mass inside r (G=c=1)', 'p_km2': 'pressure (G=c=1)',
-        'Phi': 'lapse potential, Phi(r_end) unshifted (add Phi_shift from the metadata)', 'theta': 'axion field a/f_a',
-        'thetap': 'dtheta/dr', 'dm': 'dm/dr', 'dp': 'dp/dr', 'dPhi': 'dPhi/dr', 'dtheta': 'dtheta/dr (= thetap)',
-        'dthetap': 'd^2 theta/dr^2'}
-FLOORS = np.array([0.0, 0.0, 0.0, 1e-6, 1e-6])      # relative floor (x max|y_j|) for components that can cross zero
-
-
-def _nodes(t, K):
-    t = np.asarray(t)
-    a, b = t[:-1], t[1:]
-    sub = np.linspace(0.0, 1.0, K, endpoint=False)
-    r = (a[:, None] + (b - a)[:, None] * sub[None, :]).ravel()
-    return np.concatenate([r, t[-1:]])
-
-
-def _rhs_at(st, r, Y):
-    return np.array([st.rhs(float(ri), Y[:, i]) for i, ri in enumerate(r)]).T
-
-
-def sample_star(st, tol=1e-6, K0=1, Kmax=128):
-    """Returns (columns dict, info dict) with the Hermite-validated grid.
-
-    K doubles from K0 until the interpolation error is <= tol or K reaches Kmax (then the achieved error is reported and
-    run.py flags it). With the integrator at rtol = 1e-6 the steps are long, so up to ~64-128 subdivisions are needed
-    (at Kmax = 64 the 7 kHz star reached only 1.6e-6)."""
-    s = st.sol
-    K = K0
-    while True:
-        r = _nodes(s.t, K)
-        Y = s.sol(r)
-        dY = _rhs_at(st, r, Y)
-        mid = 0.5 * (r[1:] + r[:-1])
-        ref = s.sol(mid)
-        worst, worst_at = 0.0, None
-        scale = np.abs(Y).max(axis=1)
-        for j in range(5):
-            h = CubicHermiteSpline(r, Y[j], dY[j])(mid)
-            den = np.maximum(np.abs(ref[j]), FLOORS[j] * scale[j]) + 1e-300
-            e = np.abs(h - ref[j]) / den
-            k = int(np.argmax(e))
-            if e[k] > worst:
-                worst, worst_at = float(e[k]), (j, float(mid[k]))
-        if worst <= tol or K >= Kmax:
-            break
-        K *= 2
-    cols = {'r_km': r}
-    for j, nm in enumerate(['m_km', 'p_km2', 'Phi', 'theta', 'thetap']):
-        cols[nm] = Y[j]
-    for j, nm in enumerate(['dm', 'dp', 'dPhi', 'dtheta', 'dthetap']):
-        cols[nm] = dY[j]
-    info = {'K': K, 'n_rows': int(len(r)), 'hermite_max_rel_err': worst, 'hermite_tol': tol,
-            'worst_component_and_r': worst_at, 'n_solver_steps': int(len(s.t) - 1)}
-    return cols, info
+from .dense import COLUMNS, DESC, UNITS, dense_state, validate_dense
 
 
 def star_parameters(st):
@@ -83,14 +24,17 @@ def star_parameters(st):
                            'shoot_tol': st.shoot_tol}}
 
 
-def write_star(out_dir, st, name, module, inputs=(), tol=1e-6, k0=1):
-    cols, info = sample_star(st, tol=tol, K0=k0)
+def write_star(out_dir, st, name, module, inputs=(), tol=1e-5, n_in=2000, n_out=500):
+    cols, rk = dense_state(st, n_in, n_out)
+    err = validate_dense(st, cols, rk)
     par = star_parameters(st)
-    par['hermite'] = info
-    meta = A.save_table(out_dir / f'{name}.csv', cols, name=name, units=UNITS, descriptions=DESC, parameters=par,
-                        module=module, script='run.py', inputs=inputs,
-                        title='Background profile (TOV + Klein-Gordon), state and derivatives')
-    return meta, info
+    par['r_k_km'] = rk
+    par['dense'] = {'n_in': n_in, 'n_out': n_out, 'n_rows': int(len(cols['r_km'])), 'interior_grid': 'surface-clustered',
+                    'cluster_exponent': 5.0, 'tail_grid': 'uniform', 'interpolation': 'cubic spline, not-a-knot, per column',
+                    'interp_err': err, 'interp_max_err': max(err.values()), 'interp_tol': tol}
+    meta = A.save_table(out_dir / f'{name}.csv', cols, name=name, units=UNITS, descriptions=DESC, parameters=par, module=module,
+                        script='run.py', inputs=inputs, title='Background profile (TOV + Klein-Gordon): dense state table')
+    return meta, par['dense']
 
 
 def write_eos(out_dir, module):
