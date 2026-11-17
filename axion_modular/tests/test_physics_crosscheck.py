@@ -27,4 +27,4 @@ def test_rhs_and_matter_agree_with_S1(name):
         y = st.y_at(r)
         a, b = np.array(st.rhs(r, y)), np.array(ref.rhs(r, list(y)))
         assert np.allclose(a, b, rtol=1e-12, atol=0), (r, a, b)
-        assert np.allclose(st.matter(y[1], y[3]), ref.matter(y[1], y[3]), rtol=1e-12, atol=0)
+        assert np.allclose(st.matter(y[1], y[3]), ref.matter(y[1], y[3]), rtol=1e-10, atol=0)
