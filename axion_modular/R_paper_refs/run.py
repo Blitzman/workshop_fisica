@@ -5,6 +5,7 @@ Writes: outputs/paper1_equations.eq.json    Paper I (2510.16245): Eqs. (2.6a-d),
         outputs/paper2_equations.eq.json    Paper II (2610.37308): Eqs. (8a-d)                  (+ .pdf)
         outputs/ld_sources.eq.json          Lindblom-Detweiler as typed in 4 sources + fixes    (+ .pdf)
         outputs/paper2_tables.ref.json      Paper II Tables I-IV as data
+        outputs/literature_modes.ref.json   LMI 1997 and Yoshida-Kojima 1997 polytrope mode frequencies (read by N2)
         outputs/manifest.json
 These are REFERENCES (kind = 'transcribed'); they are compared against derived equations in D1/D2, never used to derive.
 """
@@ -17,7 +18,7 @@ from common.checks import Timer, report
 from common.pdf import pdf_from_artifact
 
 from . import ld_sources as LD
-from . import paper1, paper2, tables
+from . import literature, paper1, paper2, tables
 
 MODULE = 'R_paper_refs'
 
@@ -77,6 +78,12 @@ def main(argv=None):
     arts.append(tj)
     res.append(('paper2_tables.ref.json: Tables I-IV written (rows: %s)' % {k: len(v['nu_a_kHz_rows'])
                 for k, v in tables.as_json()['tables'].items()}, True, ''))
+    lj = out / 'literature_modes.ref.json'
+    lj.write_text(json.dumps(literature.as_json(), indent=1), encoding='utf-8')
+    arts.append(lj)
+    nlit = len(literature.LMI97) + sum(len(d) for t in literature.YK97.values() for d in t.values())
+    res.append((f'literature_modes.ref.json: LMI 1997 (l = 2-5) and Yoshida-Kojima 1997 (M/R = 0.1, 0.2; {nlit - 4} mode entries) written',
+                nlit == 4 + 2 * 4 * 3, ''))
     report('R: referencias del paper', res)
     A.write_manifest(out / 'manifest.json', MODULE, artifacts=arts, checks=res, seconds=tm.seconds())
     print(f'R done in {tm.seconds()} s')

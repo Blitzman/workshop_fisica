@@ -1,0 +1,152 @@
+{
+ "schema": "axion-reftable/1",
+ "source": "LMI 1997 (gr-qc/9704046) Table I; YK 1997 (gr-qc/9705081) Tables 1-2",
+ "units": "sqrt(M/R^3)",
+ "LMI97": {
+  "star": {
+   "kappa_cgs": 133460.0,
+   "mass_msun": 1.4,
+   "R_km": 14.45,
+   "eos": "p = kappa rho^2, rho = energy density"
+  },
+  "l": {
+   "2": {
+    "re_w": 1.2016,
+    "im_w": 0.000395
+   },
+   "3": {
+    "re_w": 1.5862,
+    "im_w": 3.96e-06
+   },
+   "4": {
+    "re_w": 1.8738,
+    "im_w": 4.01e-08
+   },
+   "5": {
+    "re_w": 2.1129,
+    "im_w": 3.63e-10
+   }
+  }
+ },
+ "YK97": {
+  "eos": "n = 1 polytrope",
+  "M_over_R": {
+   "0.1": {
+    "2": {
+     "f": {
+      "exact": 1.21,
+      "cowling": 1.52
+     },
+     "p1": {
+      "exact": 3.11,
+      "cowling": 3.43
+     },
+     "p2": {
+      "exact": 4.83,
+      "cowling": 5.09
+     }
+    },
+    "3": {
+     "f": {
+      "exact": 1.62,
+      "cowling": 1.82
+     },
+     "p1": {
+      "exact": 3.61,
+      "cowling": 3.85
+     },
+     "p2": {
+      "exact": 5.36,
+      "cowling": 5.58
+     }
+    },
+    "4": {
+     "f": {
+      "exact": 1.93,
+      "cowling": 2.07
+     },
+     "p1": {
+      "exact": 4.03,
+      "cowling": 4.22
+     },
+     "p2": {
+      "exact": 5.84,
+      "cowling": 6.01
+     }
+    },
+    "5": {
+     "f": {
+      "exact": 2.18,
+      "cowling": 2.29
+     },
+     "p1": {
+      "exact": 4.4,
+      "cowling": 4.55
+     },
+     "p2": {
+      "exact": 6.27,
+      "cowling": 6.42
+     }
+    }
+   },
+   "0.2": {
+    "2": {
+     "f": {
+      "exact": 1.17,
+      "cowling": 1.35
+     },
+     "p1": {
+      "exact": 2.7,
+      "cowling": 2.99
+     },
+     "p2": {
+      "exact": 4.12,
+      "cowling": 4.38
+     }
+    },
+    "3": {
+     "f": {
+      "exact": 1.52,
+      "cowling": 1.64
+     },
+     "p1": {
+      "exact": 3.19,
+      "cowling": 3.39
+     },
+     "p2": {
+      "exact": 4.64,
+      "cowling": 4.84
+     }
+    },
+    "4": {
+     "f": {
+      "exact": 1.78,
+      "cowling": 1.87
+     },
+     "p1": {
+      "exact": 3.59,
+      "cowling": 3.74
+     },
+     "p2": {
+      "exact": 5.1,
+      "cowling": 5.26
+     }
+    },
+    "5": {
+     "f": {
+      "exact": 2.01,
+      "cowling": 2.08
+     },
+     "p1": {
+      "exact": 3.94,
+      "cowling": 4.06
+     },
+     "p2": {
+      "exact": 5.52,
+      "cowling": 5.65
+     }
+    }
+   }
+  }
+ }
+}

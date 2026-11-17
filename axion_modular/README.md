@@ -10,16 +10,19 @@ the notation contract. `axion_ns/` is untouched and still works.
 D0_derive_action ───────────────► D1_derive_radial   D2_derive_nonradial   N1_modes_cowling ◄── S1_star_background
 (action → field equations,             │  (Paper I)    (Paper II + new)         (modes, atom)      (BSk26 + condensate,
  static background)                    ▼                                                           profile tables)
-                                  T_toy_model          report (reads the manifests of all)
+                                  T_toy_model                │
+                                                             ▼
+                                                    N2_modes_fullgr_noaxion (validation of the extended system vs LMI / Yoshida-Kojima)
+                                       report (reads the manifests of all)
 ```
-Not part of this layout yet: N2 (full-GR modes without axion), N3 (with axion), N4 (radial modes), A (radial analysis).
+Not part of this layout yet: N3 (full-GR modes with axion), N4 (radial modes), A (radial analysis).
 
 ## Run
 
 ```bash
 pip install numpy scipy sympy mpmath matplotlib pytest      # + a LaTeX (pdflatex) for the equation PDFs
 cd axion_modular
-make R D0 D1 D2 S1 N1 T report test          # everything; D2 (about 8 min) is the long one, S1 about 25 s, N1 about 4 min
+make R D0 D1 D2 S1 N1 N2 T report test      # everything; D2 (about 8 min) and N2 (about 17 min of CPU, divided by the cores) are the long ones
 python -m D1_derive_radial.run --help                         # every module has its own entry point and options
 ```
 A module needs only the files of its upstream modules (see its `CONTRACT.md`), not their code or a previous run in the same
@@ -74,6 +77,13 @@ original precision (`--rtol 1e-11 --shoot-tol 0`) one star took about 108 s. Cur
 the 12 stars (10-16 s per star, but 37 s at 2.8 kHz and 43 s at 15 kHz; previous route 966 s), 214 s for the whole `make N1`
 including the atom levels. N1 reads each star through one spline lookup (about 9 microseconds per background evaluation against
 about 60 for the previous Hermite/EOS route).
+
+## N2 status
+N2 (validation of the extended system without axion against Lindblom-Mendell-Ipser 1997 and Yoshida-Kojima 1997) was built and
+smoke-tested (`make N2-quick`, LMI star only) but **its full validation (`make N2`, 7 checks) has not been run by the author**: run it
+before relying on it. What was measured: the compiled matrices equal the legacy ones to 1e-15, one Cowling evaluation agrees to 3e-14
+(1.6x faster), the LMI f-mode agrees with LMI and the legacy code within the repo's tolerances (2.7x faster), and loosening rtol breaks
+the amplitude method (`MIGRATION.md`, item 11).
 
 ## Known limitations
 

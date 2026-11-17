@@ -5,61 +5,66 @@
   "module": "R_paper_refs",
   "script": null,
   "git": {
-   "commit": "26f2fcc",
+   "commit": "129248f",
    "dirty": true
   },
-  "created": "2026-11-17T09:29:45Z",
+  "created": "2026-11-17T16:23:13Z",
   "env": {
-   "python": "3.12.3",
-   "platform": "Linux x86_64",
+   "python": "3.14.10",
+   "platform": "Darwin x86_64",
    "sympy": "1.14.0",
-   "mpmath": "1.3.0",
+   "mpmath": "1.4.1",
    "numpy": "2.5.4",
    "scipy": "1.18.1",
    "matplotlib": "3.11.2"
   }
  },
- "seconds": 1.5,
+ "seconds": 1.8,
  "inputs": [],
  "artifacts": [
   {
    "path": "paper1_equations.eq.json",
-   "sha256": "1ffab215ef57ed1fb1af2b7dc7433d54e6eccdb3b98e16d5aad9641869bd57d7",
-   "bytes": 8542
+   "sha256": "a4e7762739ea637b930d336e02114f54857b2c401bb4d16ad33257e1bc486160",
+   "bytes": 8544
   },
   {
    "path": "paper1_equations.pdf",
-   "sha256": "76e26ebdc92ff1f33e6e5de29f90ca8f84563a6fcb3057eac7441805efc29e7f",
-   "bytes": 152859
+   "sha256": "692f85ca2e7ea43871d429b9cad1d1d1bad390df61045440241638e6a14ed68b",
+   "bytes": 203985
   },
   {
    "path": "paper2_equations.eq.json",
-   "sha256": "d3c9c969ab41003ccef05fef5aef212997a297527b83a332e4625388521f19f4",
-   "bytes": 5875
+   "sha256": "5b0e2368c15e93d3b2d029090624ae5d55443f6903ceda5c8c1da75fb0df78d9",
+   "bytes": 5877
   },
   {
    "path": "paper2_equations.pdf",
-   "sha256": "7a8bdc2832d6e42829318dba2b88ee468ddf956da206bd85122efa9234c17462",
-   "bytes": 131902
+   "sha256": "b41b269cc30eb940a66bcef36c4235fa59b1aa4d9afb212fc01e24887d6949be",
+   "bytes": 182857
   },
   {
    "path": "ld_sources.eq.json",
-   "sha256": "c0b5d997318a03def4d33d002a1518da12ce46c8e45ef1bc686ecd164669eb63",
-   "bytes": 30246
+   "sha256": "604420971d498b4302617b3dab5d4d496dbcb3c39a0344dd14d7312b5e083cc9",
+   "bytes": 30248
   },
   {
    "path": "ld_sources.pdf",
-   "sha256": "d91bc9f742ac1f62910685151baca0d449b6cefe07566d56bc0f7938b908ace8",
-   "bytes": 209467
+   "sha256": "bb7bb00d72b326a83b772c0e0fdde9009cbfa33abbe8ccca9d56916e3b3a46c6",
+   "bytes": 257180
   },
   {
    "path": "paper2_tables.ref.json",
    "sha256": "e8bb931c43d85b13be4fae89d6ca7a76057e048613546a9d92f52b2b1bb1f4c8",
    "bytes": 3796
+  },
+  {
+   "path": "literature_modes.ref.json",
+   "sha256": "db2d71796683a0da4913c8a191131972e045635ecac417b170868ce79fc46f9f",
+   "bytes": 2286
   }
  ],
  "summary": {
-  "n_ok": 4,
+  "n_ok": 5,
   "n_fail": 0,
   "n_descriptive": 0
  },
@@ -81,6 +86,11 @@
   },
   {
    "name": "paper2_tables.ref.json: Tables I-IV written (rows: {'T1': 9, 'T2': 12, 'T3': 8, 'T4': 8})",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "literature_modes.ref.json: LMI 1997 (l = 2-5) and Yoshida-Kojima 1997 (M/R = 0.1, 0.2; 24 mode entries) written",
    "ok": true,
    "note": ""
   }

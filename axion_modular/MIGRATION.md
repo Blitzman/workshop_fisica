@@ -91,6 +91,29 @@ header of each new file says what it was moved from and what changed.
     star next to the condensate threshold); the cause of the larger Im nu of p1 at 6 kHz is not identified (it may be the 1e-6 to
     5e-6 interpolation errors of Phi and theta', or the S1 tolerance; more nodes cost nothing and could be tried); and N1 keeps its
     copy of the `matter`/`rhs` formulas, checked against S1 in `tests/test_physics_crosscheck.py`.
+11. **N2: compiled with CSE, tolerances unchanged.** The numerical matrices are compiled from the artifacts with `lambdify(cse=True)`
+    (A y compiled directly; EXT and ZL share one symbolic solve). Measured on the LMI star, l = 2, one core:
+    * the extended system from D2's artifact equals the legacy `fullgr.EXT` (6/6 keys); the star is identical to 12 digits; the matrices
+      agree to 1.1e-15 (LD) and 3.9e-16 (Cowling);
+    * one Cowling evaluation: 3.2e-14 relative, 0.19 s -> 0.12 s; one amplitude evaluation: 1.66 s -> 0.55 s (3.0x), but the VALUES differ by
+      1.3e-3 relative at the resonance (the amplitude is a near-cancellation: 5e-6 against a scale of 0.7);
+    * the LMI f-mode through `full_mode`: legacy Re w = 1.201606 (+6.1e-6 from LMI), Im w = 3.943e-4 (-1.8e-3); new Re w = 1.201600
+      (-9.6e-8), Im w = 3.946e-4 (-9.9e-4); 54 s -> 20 s (2.7x). Both pass the criteria (5e-5, 2%); they differ from each other by 6e-6 in Re w
+      and 8e-4 in Im w: that is the noise of the method at rtol 1e-11;
+    * **loosening rtol breaks the amplitude method**: rtol 1e-10 moves Re w by +7.7e-5 (> 5e-5), 1e-9 by +1.9e-3 (Im w +83%), 1e-8 gives Im w
+      -72%. `atol` is not the lever: from 1e-12 to 1e-24 the amplitude wobbles by +-1% (resonance) / +-0.1% (off resonance) without converging,
+      and the cost grows 170x (2 million rhs calls at 1e-24); at rtol 1e-10 no atol rescues it (value -23%..-34%).
+    * Conditioning (measured): both interior solutions reach W ~ 1.6e6 and 9e5 at R(1 - 1e-7) and the X(R) = 0 combination cancels W by 5e5
+      (2.5e5 at 1.45 u); this explains a W error of ~5e-6 and the resonance noise (4e-3 predicted, 1e-2 observed) but NOT the off-resonance noise
+      (1e-5 predicted, 1e-3 observed): the rest is not understood. A better-conditioned matching (integrating the regular solution inward from
+      the surface to a fitting point) would be a change of method that needs its own validation against LMI and Yoshida-Kojima; not done.
+    * Cowling X(R) is well conditioned: rtol 1e-8 changes it by 1e-9 (2.2x faster); `--cowling-rtol 1e-8` is an option whose effect on the
+      24 Yoshida-Kojima roots has not been checked.
+    * The matrix A depends on w only through w^2 as A = A_-1/w^2 + A_0 + w^2 A_1 (fit residual 1e-15 at one radius; symbolic degrees agree);
+      tabulating the three coefficient matrices against r would make one right-hand side call ~6 us instead of ~26 us (synthetic ceiling, with an
+      accuracy that was not tested). Not implemented.
+
+    The full validation (`make N2`) was NOT run by the author; the 7 checks have only been exercised through a smoke run.
 
 ## Known limitations (not fixed here)
 
