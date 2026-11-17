@@ -35,8 +35,12 @@ def _rhs_at(st, r, Y):
     return np.array([st.rhs(float(ri), Y[:, i]) for i, ri in enumerate(r)]).T
 
 
-def sample_star(st, tol=1e-9, K0=8, Kmax=64):
-    """Returns (columns dict, info dict) with the Hermite-validated grid."""
+def sample_star(st, tol=1e-6, K0=1, Kmax=128):
+    """Returns (columns dict, info dict) with the Hermite-validated grid.
+
+    K doubles from K0 until the interpolation error is <= tol or K reaches Kmax (then the achieved error is reported and
+    run.py flags it). With the integrator at rtol = 1e-6 the steps are long, so up to ~64-128 subdivisions are needed
+    (at Kmax = 64 the 7 kHz star reached only 1.6e-6)."""
     s = st.sol
     K = K0
     while True:
@@ -75,11 +79,12 @@ def star_parameters(st):
             'r_end_km': float(st.sol.t[-1]), 'M_total_km': float(st.sol.y[0, -1]),
             'KGEO': S.KGEO, 'MSUN_km': S.MSUN, 'CKMS': S.CKMS, 'HBARC_MeV_fm': S.HBARC,
             'p_min_MeV_fm3': float(S._eos.p_min),
-            'integrator': {'method': 'DOP853', 'rtol': 1e-11, 'atol': 1e-30, 'max_step_km': 0.25, 'start_r_km': 1e-5}}
+            'integrator': {'method': 'DOP853', 'rtol': st.rtol, 'atol': st.atol, 'max_step_km': st.max_step, 'start_r_km': 1e-5,
+                           'shoot_tol': st.shoot_tol}}
 
 
-def write_star(out_dir, st, name, module, inputs=(), tol=1e-9):
-    cols, info = sample_star(st, tol=tol)
+def write_star(out_dir, st, name, module, inputs=(), tol=1e-6, k0=1):
+    cols, info = sample_star(st, tol=tol, K0=k0)
     par = star_parameters(st)
     par['hermite'] = info
     meta = A.save_table(out_dir / f'{name}.csv', cols, name=name, units=UNITS, descriptions=DESC, parameters=par,

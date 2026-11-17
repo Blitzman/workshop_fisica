@@ -44,9 +44,16 @@ written only after its checks pass: `fullgr_extended`).
   T (4, 14) and N1 (6) with the committed `results/checks.json`: same names (they embed the computed numbers) and same outcome.
   `tests/test_data_vs_legacy.py`: `fig_toy.json`, `radial_branches.json`, `levels.json` equal the legacy files.
 * **N1 against the old modes** at nu_a = 6 kHz: `tests/test_n1_witness.py` (vs `results/fig_axcow.json`, 4 digits: all 9 numbers agree) and,
-  at full precision against the original code (`make test-slow`, measured): worst relative difference in Re nu **1.6e-8**
-  (typically 1e-9 to 1e-10); Im nu of the weakly damped p1 mode (1.7055 mHz) differs by 2e-5 relative. This is the price of the
-  CSV + Hermite hand-over (S1 bounds the interpolation error at 1e-9; the modes amplify it by about 10-15x, more for Im nu).
+  at full precision against the original code (`make test-slow`). Measured at nu_a = 6 kHz, relative differences from the original:
+
+  | S1 setting | Re nu (worst) | Im nu of p1 (1.7055 mHz) | Im nu of p2 |
+  |---|---|---|---|
+  | original precision (rtol 1e-11, Hermite 1e-9) | 1.6e-8 | 2.2e-5 | 4e-8 |
+  | **current defaults (all 1e-6)**, measured with a Hermite cap of 64 | 3.6e-8 | 5.5e-6 | 1.2e-6 |
+
+  For all 12 stars, N1 on the 1e-6 tables agrees with the legacy `fig_axcow.json` (4 digits) within 0.005 percentage points and
+  passes its 6 paper checks. There is **no full-precision comparison with the original for the other 11 stars** (only the 4-digit
+  one), and none for the 2.8 kHz threshold star at base precision. See `MIGRATION.md`, "Deliberate differences" 5 and 9.
 * **Reproducibility.** With `PYTHONHASHSEED=0`, all 10 equation artifacts have identical content hashes across independent runs
   (D1 and D2 were run twice). Inputs are recorded by the upstream *content* hash, so a rerun of an unchanged module does not
   make its consumers look stale; the Dummy symbols of `Subs` objects are serialized by order of appearance (SymPy's own index is
@@ -57,16 +64,24 @@ written only after its checks pass: `fullgr_extended`).
 
 ## Measured runtimes (this sandbox: 1 CPU core, Python 3.12)
 
-R 1.5 s, D0 4 s, D1 24 s, D2 420-460 s, S1 witness 220 s (one star + no-axion; ~200 s per additional star), N1 witness 68 s,
-T 107 s, tests 1 s. For comparison, the legacy `checks.json` (6-core i5) lists steps 1-3 = 63 s, 5+7 = 543 s, 4+14 = 238 s.
+R 1.5 s, D0 4 s, D1 24 s, D2 420-460 s, T 107 s, tests 1 s. For comparison, the legacy `checks.json` (6-core i5) lists
+steps 1-3 = 63 s, 5+7 = 543 s, 4+14 = 238 s.
+
+S1 at the default tolerances (all 1e-6): about 5 s for the witness (no-axion star + nu_a = 6 kHz) and about 47 s for all 12 stars
+(measured in the experiment; the final defaults raise the Hermite cap to 128 and were not rerun). At the original precision
+(`--rtol 1e-11 --shoot-tol 0 --tol 1e-9 --k0 8`) one star takes about 108 s. N1 then dominates: 986 s for the 12 stars on one
+core (50-60 s per star, but 167 s at 2.8 kHz and 235 s at 15 kHz); N1 witness 68 s.
 
 ## Known limitations
 
 * S1's TOV + Klein-Gordon integrator and N1's perturbation equations are hand-typed, as in the original; they are **not** compiled
   from the equation artifacts (`axion_ns/AGENTS.md` section 1). Only T has the bridge so far. See `MIGRATION.md`.
 * The shipped S1/N1 outputs are the **witness** (nu_a = 6 kHz + the no-axion star): the Table I/II/IV comparisons of N1 therefore
-  cover one star, and the Table IV mass check is descriptive. `make S1 N1` computes all 12 (S1 ~200 s per star on one core;
-  each star table is 4-9 MB, so they are not shipped).
+  cover one star, and the Table IV mass check is descriptive. `make S1 N1` computes all 12 (S1 about 1 min, N1 about 16 min on
+  one core). Each star table is roughly 2-9 MB at the default tolerances (estimated from the row counts, which range from 7,000 to
+  39,000), so the tables of the 12 stars (about 55 MB) are not shipped.
+* The shipped S1 tables were produced before the tolerances were consolidated (rtol 1e-11, Hermite 1e-9); regenerate them with
+  `make S1-witness` (or `make S1`) and then `make N1-witness`. Until N1 is rerun, `report/index.html` shows it as STALE.
 * Python 3.12 (the legacy `pyproject.toml` asks for >= 3.13); one CPU core.
 * PDFs of the raw D0 equations contain terms too long to read; the readable forms are `background`, `radial_linear`, etc.
 * `MIGRATION.md` maps every legacy file to its new place and lists the deliberate differences.

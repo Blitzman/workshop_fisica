@@ -6,6 +6,11 @@ Moved from axion_ns/axstar.py (the background half: constants, EOS instance, Sta
 Geometric units G = c = 1 with lengths in km. All axion scales come from two numbers: E0 = eps m_pi^2 f_pi^2
 (= n_c sigma_N) and m_a; f_a^2 = beta E0 / (4 m_a^2) and x = n_b / n_c.
 Hand-coded ODEs: they are NOT yet compiled from D0's equations (see README, section "Known limitations").
+
+Tolerances: the original code integrated with rtol = 1e-11 and located theta_c to 1e-16 (about 66 integrations of ~1.4 s
+each). This module now defaults to rtol = 1e-6 and a shooting precision of 1e-6, which was measured to be 22x faster with
+changes of ~1e-8 in M, R and the mode frequencies (MIGRATION.md, "Deliberate differences" 5). Pass rtol=1e-11,
+shoot_tol=None to reproduce the original precision.
 """
 import numpy as np
 from scipy import constants as C
@@ -56,7 +61,11 @@ class Star:
     """Fondo estático. nu_a = None: sin axión. axion=False con nu_a: mismo fondo, pero en los modos
     se apaga delta theta (Tabla I). Guarda funciones r -> fondo dentro (y fuera, para el axión)."""
 
-    def __init__(self, nu_a=None, p0=P0, e0=E0):
+    def __init__(self, nu_a=None, p0=P0, e0=E0, rtol=1e-6, atol=1e-30, max_step=0.25, shoot_tol=1e-6):
+        # Integration controls. DEFAULTS (consolidated, see MIGRATION.md): rtol = 1e-6 and shoot_tol = 1e-6 (the bisection of
+        # delta = pi - theta_c stops when its bracket is 1e-6 relative). atol (1e-30) and max_step (0.25 km) are unchanged.
+        # LEGACY precision of axion_ns: rtol=1e-11, shoot_tol=None (64 bisections in ln delta + linear refinement to 1e-16).
+        self.rtol, self.atol, self.max_step, self.shoot_tol = rtol, atol, max_step, shoot_tol
         self.nu_a, self.p0, self.E0 = nu_a, p0, e0 * KGEO
         self.nc = e0 / SIGMA_N
         self.ma = omega_of(nu_a) if nu_a else 0.0
@@ -118,7 +127,7 @@ class Star:
             ev.terminal = True
         turn.terminal, turn.direction = True, 1
         s = solve_ivp(self.rhs, (r0, rmax), self._start(r0, thc), events=[up, down, turn],
-                      method='DOP853', rtol=1e-11, atol=1e-30, dense_output=keep, max_step=0.25)
+                      method='DOP853', rtol=self.rtol, atol=self.atol, dense_output=keep, max_step=self.max_step)
         # H32: un disparo que no termina no se clasifica en silencio. Excepción: el integrador se para justo en la
         # superficie (p en el umbral p_min de la EOS, donde el lado derecho salta de la materia al vacío). Pasa con el
         # politropo del paso 17: es la llegada a la superficie y R sale de ahí igual que antes (14,155 km)
@@ -137,20 +146,28 @@ class Star:
         lo, hi = np.log(1e-300), np.log(np.pi - 0.3)    # delta pequeño -> se dispara; theta_c = 0.3 -> oscila y cruza
         if self._integrate(np.pi - np.exp(hi)) > 0:
             raise ValueError('sin condensado')
-        for _ in range(64):
+        if self.shoot_tol is None:
+            n_bis, tol_lin = 64, 1e-16
+        else:
+            n_bis, tol_lin = 200, self.shoot_tol
+        for _ in range(n_bis):
             mid = 0.5 * (lo + hi)
             if self._integrate(np.pi - np.exp(mid)) > 0:
                 lo = mid
             else:
                 hi = mid
+            if self.shoot_tol is not None and hi - lo < self.shoot_tol:     # bracket of ln(delta) = relative bracket of delta
+                break
         dlo, dhi = np.exp(lo), np.exp(hi)
-        for _ in range(60):                         # afinado lineal
+        for _ in range(60):                         # linear refinement
+            if self.shoot_tol is not None:
+                break                               # already within shoot_tol
             mid = 0.5 * (dlo + dhi)
             if self._integrate(np.pi - mid) > 0:
                 dlo = mid
             else:
                 dhi = mid
-            if dhi - dlo < 1e-16 * max(dhi, 1e-300) or mid in (dlo, dhi):
+            if dhi - dlo < tol_lin * max(dhi, 1e-300) or mid in (dlo, dhi):
                 break
         self.thc = np.pi - dlo
         self._integrate(self.thc, keep=True)

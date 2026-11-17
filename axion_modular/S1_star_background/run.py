@@ -1,4 +1,8 @@
-"""S1 entry point:  python -m S1_star_background.run [--nu-a 2.8,3,...] [--witness] [--out DIR] [--tol 1e-9]
+"""S1 entry point:  python -m S1_star_background.run [--nu-a 2.8,3,...] [--witness] [--out DIR] [--tol 1e-6]
+
+Tolerances (defaults, consolidated): background ODE rtol 1e-6, shooting precision 1e-6, Hermite table tolerance 1e-6,
+about 4 s per star. The original precision (about 108 s per star) is
+    python -m S1_star_background.run --rtol 1e-11 --shoot-tol 0 --tol 1e-9 --k0 8
 
 Reads : nothing (BSk26 analytic fits are in bsk26.py).
 Writes: outputs/eos_bsk26.csv(+.meta.json)          BSk26 EOS table
@@ -32,17 +36,23 @@ def main(argv=None):
     ap.add_argument('--nu-a', default=','.join(f'{x:g}' for x in NUS))
     ap.add_argument('--witness', action='store_true', help='only nu_a = 6.0 kHz (fast development point)')
     ap.add_argument('--out', default=str(HERE / 'outputs'))
-    ap.add_argument('--tol', type=float, default=1e-9)
+    ap.add_argument('--tol', type=float, default=1e-6, help='Hermite table tolerance (default 1e-6)')
+    ap.add_argument('--rtol', type=float, default=1e-6, help='background ODE rtol (default 1e-6; original code: 1e-11)')
+    ap.add_argument('--shoot-tol', type=float, default=1e-6,
+                    help='shooting precision in delta (default 1e-6; 0 = the original 64 bisections + refinement to 1e-16)')
+    ap.add_argument('--max-step', type=float, default=0.25, help='max integrator step (km)')
+    ap.add_argument('--k0', type=int, default=1, help='initial subdivisions per solver step in the table (doubles up to 128)')
     args = ap.parse_args(argv)
     out, tm = Path(args.out), Timer()
+    kw = dict(rtol=args.rtol, shoot_tol=(None if args.shoot_tol <= 0 else args.shoot_tol), max_step=args.max_step)
     nus = [6.0] if args.witness else [float(x) for x in args.nu_a.split(',') if x]
 
     arts, res, stars = [], [], {}
     write_eos(out, MODULE)
     arts.append(out / 'eos_bsk26.csv')
 
-    st0 = S.Star(None)
-    meta0, info0 = write_star(out, st0, 'star_noaxion', MODULE, tol=args.tol)
+    st0 = S.Star(None, **kw)
+    meta0, info0 = write_star(out, st0, 'star_noaxion', MODULE, tol=args.tol, k0=args.k0)
     arts.append(out / 'star_noaxion.csv')
     stars['noaxion'] = {'M_msun': st0.M / S.MSUN, 'R_km': st0.R, **info0}
     res.append((f"Fondo BSk26 sin axión, p_c = 100 MeV/fm^3: M = {st0.M / S.MSUN:.3f} M_sun, R = {st0.R:.2f} km "
@@ -53,8 +63,8 @@ def main(argv=None):
 
     for nu in nus:
         t0 = time.time()
-        st = S.Star(nu)
-        meta, info = write_star(out, st, tag(nu), MODULE, tol=args.tol)
+        st = S.Star(nu, **kw)
+        meta, info = write_star(out, st, tag(nu), MODULE, tol=args.tol, k0=args.k0)
         arts.append(out / f'{tag(nu)}.csv')
         stars[f'{nu:g}'] = {'M_msun': st.M / S.MSUN, 'R_km': st.R, 'theta_c': st.thc, 'seconds': round(time.time() - t0, 1),
                             **info}
@@ -68,7 +78,7 @@ def main(argv=None):
     # condensate threshold (Paper I: it disappears below ~2.8 kHz)
     cond = {}
     try:
-        S.Star(2.5)
+        S.Star(2.5, **kw)
         cond['2.5'] = True
     except ValueError:
         cond['2.5'] = False

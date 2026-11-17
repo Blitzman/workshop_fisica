@@ -45,13 +45,36 @@ header of each new file says what it was moved from and what changed.
 2. **D0 also writes the background equations**, so D1 and D2 depend only on D0 and R, not on each other.
 3. **`step1` was split** because two of its checks concern the derivation itself (D0) and the rest compare with the paper (D1).
 4. **The paper's equations live in R** and derivation files cannot import them (enforced by `tests/test_independence.py`).
-5. **S1/N1 use Hermite tables** instead of the integrator's dense output. Interpolation error is bounded by S1 (1e-9) and
-   the effect on the modes is measured by `tests/verify_vs_legacy_n1.py`.
+5. **S1/N1 use Hermite tables** instead of the integrator's dense output. S1 writes the interpolation error it achieved into
+   the metadata and fails its own check if it exceeds the tolerance (default 1e-6); the effect on the modes is measured by
+   `tests/verify_vs_legacy_n1.py` (see item 9).
 6. **N1 reports only the stars it was given.** Check texts state how many values they cover; a full run needs all 12 stars.
 7. **Inputs are fingerprinted by content.** `input_record` stores the `content_sha256` of equation artifacts (file hashes change with
    every run because of timestamps), and Dummy symbols are serialized by order of appearance. Found by checking that two runs of D1
    produced different hashes for identical equations.
 8. **`PYTHONHASHSEED=0`** is fixed by the Makefile so that artifact hashes are reproducible.
+9. **S1 tolerances consolidated at 1e-6** (background ODE `rtol`, shooting precision, Hermite table tolerance). The original code
+   used rtol 1e-11 and located theta_c to 1e-16 (about 66 integrations per star). `atol` (1e-30), `max_step` (0.25 km), the EOS
+   table and the event thresholds are unchanged. The original precision is still available:
+   `python -m S1_star_background.run --rtol 1e-11 --shoot-tol 0 --tol 1e-9 --k0 8`.
+
+   Evidence (single runs, one CPU core, Python 3.12):
+
+   | | original precision | 1e-6 defaults |
+   |---|---|---|
+   | S1, witness (no-axion + nu_a = 6 kHz) | 109.6 s | 4.9 s |
+   | S1, 11 other stars | not run (about 108 s each expected) | 42 s |
+   | star at 6 kHz: theta_c, M, R, Phi_shift (relative change) | - | 1.7e-9, 3.8e-8, 3.2e-8, 2.2e-8 |
+   | N1 modes at 6 kHz vs the original code | Re nu 1.6e-8, Im p1 2.2e-5 | Re nu 3.6e-8, Im p1 5.5e-6, Im p2 1.2e-6 |
+   | N1, 12 stars, vs legacy `fig_axcow.json` (4 digits) | - | within 0.005 percentage points; 6/6 paper checks pass |
+
+   What it does NOT show: a full-precision comparison with the original for the 11 other stars, in particular the 2.8 kHz star
+   next to the condensate threshold, where theta_c = pi - delta is most sensitive; and the 1 km step cap (configuration B in the
+   experiment) was only tried at 6 kHz and is not adopted. The Hermite cap was raised from 64 to 128 subdivisions because the
+   7 kHz star reached only 1.6e-6 at 64 (above the 1e-6 target); **the raised cap was not run**. With the integrator at 1e-6 the
+   table ends earlier (r_end 66.6 km against 119.5 km at 6 kHz, because the decaying branch is trusted over a shorter distance);
+   N1 uses `r_end` only as the radius where the tabulated background hands over to Schwarzschild with theta = 0.
+   N1's cost does not drop (it is dominated by background lookups inside its own right-hand side), so the end-to-end gain is about 2.7x.
 
 ## Known limitations (not fixed here)
 
