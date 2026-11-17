@@ -44,6 +44,12 @@ uv run python report/build.py                 # regenera results/informe_axiones
 
 Las figuras salen en `results/toy_qnm_landscape.png` y `results/paper2_atom_levels.png`.
 
+## Reorganización modular
+
+`axion_modular/` contiene la misma cadena reorganizada en módulos que se ejecutan por separado e intercambian ficheros
+(ecuaciones en JSON + PDF, tablas en CSV): ver `axion_modular/README.md` y `axion_modular/MIGRATION.md`. `axion_ns/` no
+se ha modificado.
+
 ## Cómo se verifica
 
 - Las ecuaciones de los papers se comparan **módulo las ecuaciones de fondo**: se despeja una
