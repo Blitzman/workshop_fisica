@@ -1,0 +1,47 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,adjustbox,xcolor,fancyhdr,hyperref}
+\usepackage[margin=16mm]{geometry}
+\setlength{\parindent}{0pt}\setlength{\parskip}{3pt}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small toy\_model.eq.json}\fancyhead[R]{\small sha256 d7b5c674e97faf84}\fancyfoot[C]{\small\thepage}
+\hypersetup{colorlinks=true,urlcolor=blue}
+\begin{document}
+{\Large\bfseries Simplified model of Sec. IV (Paper I), derived from (3.3)}\par
+\smallskip
+\begin{tabular}{@{}lp{0.62\textwidth}@{}}\textbf{artifact} & toy\_model.eq.json\\\textbf{kind} & derived\\\textbf{producer} & D1\_derive\_radial\\\textbf{git} & 26f2fcc\\\textbf{created} & 2026-11-17T09:30:35Z\\\textbf{content sha256} & d7b5c674e97faf843d1eb343df369f89...\\\textbf{input field\_equations.eq.json} & cc51730fd8b76ce0...\\\textbf{input background.eq.json} & 51ca7bf4984bd84b...\\\textbf{input paper1\_equations.eq.json} & e6e1c39cc3b2d0df...\\\textbf{description} & Planar, gradient-free limit of (3.3) with the approximations (4.1); dimensionless form, matching determinant f(omega) of Eq. (4.13) in tan form (symbols k\_p, k\_m, k\_a, k\_out, x\_0). The roots k\_pm\textasciicircum{}2 / Delta are verified to solve det(M - k\textasciicircum{}2) = 0.\\\end{tabular}
+\par\medskip\hrule\medskip
+
+\textit{Generated from the JSON artifact; do not retype equations from this file. Each expression is the left side of an equation ``$= 0$'' unless stated otherwise.}\par
+
+\bigskip\par\noindent\textbf{toy\_4\_2a}\quad toy\_4\_2a\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{N \beta \sigma_{N} \frac{d^{2}}{d r^{2}} \operatorname{deltatheta}{\left(r \right)}}{4}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + \frac{\omega^{2} \operatorname{deltap}{\left(r \right)} \frac{d}{d N} \epsilon_{0}{\left(N \right)}}{N \frac{d^{2}}{d N^{2}} \epsilon_{0}{\left(N \right)}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + \frac{\omega^{2} \operatorname{deltap}{\left(r \right)} \operatorname{mstar}{\left(A \right)}}{N \frac{d^{2}}{d N^{2}} \epsilon_{0}{\left(N \right)}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{m_{N} \omega^{2} \operatorname{deltap}{\left(r \right)}}{N \frac{d^{2}}{d N^{2}} \epsilon_{0}{\left(N \right)}} + \frac{d^{2}}{d r^{2}} \operatorname{deltap}{\left(r \right)}\;=\;0$}\par
+\bigskip\par\noindent\textbf{toy\_4\_2b}\quad toy\_4\_2b\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle \omega^{2} \operatorname{deltatheta}{\left(r \right)} + \frac{N \beta \sigma_{N} \operatorname{deltatheta}{\left(r \right)}}{4 f_{a}^{2}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{\beta \epsilon f_{\pi}^{2} m_{\pi}^{2} \operatorname{deltatheta}{\left(r \right)}}{4 f_{a}^{2}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + \frac{\beta \sigma_{N} \operatorname{deltap}{\left(r \right)}}{4 N f_{a}^{2} \frac{d^{2}}{d N^{2}} \epsilon_{0}{\left(N \right)}} + \frac{d^{2}}{d r^{2}} \operatorname{deltatheta}{\left(r \right)}\;=\;0$}\par
+\bigskip\par\noindent\textbf{dimless\_4\_5a}\quad dimless\_4\_5a\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle \frac{c_{s2} k_{2} \left(\alpha \tilde{\theta} - \tilde{p}\right) + \bar{\omega}^{2} \tilde{p}}{c_{s2}}\;=\;0$}\par
+\bigskip\par\noindent\textbf{dimless\_4\_5b}\quad dimless\_4\_5b\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle \tilde{\theta} \left(\alpha + \bar{\omega}^{2} - 1\right) -  k_{2} \tilde{\theta} + \alpha \lambda_{2} \tilde{p}\;=\;0$}\par
+\bigskip\par\noindent\textbf{char\_poly}\quad char\_poly\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle \frac{- \alpha^{2} c_{s2} k_{2} \lambda_{2} - \alpha c_{s2} k_{2} + \alpha \bar{\omega}^{2} + c_{s2} k_{2}^{2} - c_{s2} k_{2} \bar{\omega}^{2} + c_{s2} k_{2} - k_{2} \bar{\omega}^{2} + \bar{\omega}^{4} - \bar{\omega}^{2}}{c_{s2}}\;=\;0$}\par
+\bigskip\par\noindent\textbf{delta\_4\_12}\quad delta\_4\_12\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle \left(\alpha^{2} \lambda_{2} + \alpha + \bar{\omega}^{2} - 1 - \frac{\bar{\omega}^{2}}{c_{s2}}\right)^{2} + \frac{4 \alpha^{2} \lambda_{2} \bar{\omega}^{2}}{c_{s2}}\;=\;0$}\par
+\bigskip\par\noindent\textbf{kplus2\_4\_12}\quad kplus2\_4\_12\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{1}{2} + \frac{\alpha}{2} + \frac{\bar{\omega}^{2}}{2}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + \frac{\sqrt{\frac{4 \alpha^{2} \lambda_{2} \bar{\omega}^{2}}{c_{s2}} + \left(\alpha^{2} \lambda_{2} + \alpha + \bar{\omega}^{2} - 1 - \frac{\bar{\omega}^{2}}{c_{s2}}\right)^{2}}}{2} + \frac{\alpha^{2} \lambda_{2}}{2}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + \frac{\bar{\omega}^{2}}{2 c_{s2}}\;=\;0$}\par
+\bigskip\par\noindent\textbf{kminus2\_4\_12}\quad kminus2\_4\_12\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{1}{2} + \frac{\alpha}{2} + \frac{\bar{\omega}^{2}}{2}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{\sqrt{\frac{4 \alpha^{2} \lambda_{2} \bar{\omega}^{2}}{c_{s2}} + \left(\alpha^{2} \lambda_{2} + \alpha + \bar{\omega}^{2} - 1 - \frac{\bar{\omega}^{2}}{c_{s2}}\right)^{2}}}{2} + \frac{\alpha^{2} \lambda_{2}}{2}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + \frac{\bar{\omega}^{2}}{2 c_{s2}}\;=\;0$}\par
+\bigskip\par\noindent\textbf{f\_4\_13\_tan}\quad f\_4\_13\_tan\par
+{\small\textit{display:} expanded for typesetting (same expression).}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle i k_{out} k_{p}^{2} + k_{m} k_{p}^{2} \tan{\left(k_{m} x_{0} \right)} + k_{a}^{2} k_{p} \tan{\left(k_{p} x_{0} \right)} -  i k_{m}^{2} k_{out} -  k_{a}^{2} k_{m} \tan{\left(k_{m} x_{0} \right)}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - k_{m}^{2} k_{p} \tan{\left(k_{p} x_{0} \right)}\;=\;0$}\par
+\end{document}

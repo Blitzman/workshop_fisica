@@ -1,0 +1,54 @@
+{
+ "schema": "axion-table/1",
+ "name": "eos_bsk26",
+ "title": "BSk26 equation of state",
+ "n_rows": 4000,
+ "columns": [
+  {
+   "name": "n_fm3",
+   "dtype": "float64",
+   "unit": "fm^-3",
+   "description": "baryon number density"
+  },
+  {
+   "name": "eps_MeV_fm3",
+   "dtype": "float64",
+   "unit": "MeV fm^-3",
+   "description": "total energy density"
+  },
+  {
+   "name": "p_MeV_fm3",
+   "dtype": "float64",
+   "unit": "MeV fm^-3",
+   "description": "pressure"
+  }
+ ],
+ "parameters": {
+  "name": "BSk26 analytic fits (Potekhin et al., bskfit18.f)",
+  "n_min": 1e-08,
+  "n_max": 1.6,
+  "N_initial": 4000,
+  "p_min_MeV_fm3": 9.124572027595528e-10,
+  "note": "monotonic-in-p subset; consumers rebuild CubicSpline(ln p, ln eps), (ln p, ln n) exactly as bsk26.EOS does"
+ },
+ "producer": {
+  "module": "S1_star_background",
+  "script": "run.py",
+  "git": {
+   "commit": "26f2fcc",
+   "dirty": true
+  },
+  "created": "2026-11-17T08:16:05Z",
+  "env": {
+   "python": "3.12.3",
+   "platform": "Linux x86_64",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "matplotlib": "3.11.2"
+  }
+ },
+ "inputs": [],
+ "csv_sha256": "9ce72d3c04c704efb36700dea8ace90ec77d767c4962f27f6920c85421a61ffa"
+}

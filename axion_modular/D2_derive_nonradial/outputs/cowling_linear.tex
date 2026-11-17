@@ -1,0 +1,66 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,adjustbox,xcolor,fancyhdr,hyperref}
+\usepackage[margin=16mm]{geometry}
+\setlength{\parindent}{0pt}\setlength{\parskip}{3pt}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small cowling\_linear.eq.json}\fancyhead[R]{\small sha256 1794e6246b45ca31}\fancyfoot[C]{\small\thepage}
+\hypersetup{colorlinks=true,urlcolor=blue}
+\begin{document}
+{\Large\bfseries Nonradial perturbations in Cowling, derived from the action}\par
+\smallskip
+\begin{tabular}{@{}lp{0.62\textwidth}@{}}\textbf{artifact} & cowling\_linear.eq.json\\\textbf{kind} & derived\\\textbf{producer} & D2\_derive\_nonradial\\\textbf{git} & 26f2fcc\\\textbf{created} & 2026-11-17T09:38:08Z\\\textbf{content sha256} & 1794e6246b45ca3149ea51bfaaed95a6...\\\textbf{input background.eq.json} & 51ca7bf4984bd84b...\\\textbf{description} & Linearization (l generic, m = 0, factor (r/R)\textasciicircum{}l extracted, Legendre eliminated) of KG, radial and angular momentum and baryon conservation with a frozen metric.\\\end{tabular}
+\par\medskip\hrule\medskip
+
+\textit{Generated from the JSON artifact; do not retype equations from this file. Each expression is the left side of an equation ``$= 0$'' unless stated otherwise.}\par
+
+\bigskip\par\noindent\textbf{(8a) momento radial}\quad (8a) momento radial\par
+{\small\textit{ref:} derived from the action in Cowling}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle m_{N} \operatorname{deltan}{\left(r \right)} \frac{d}{d r} \Phi_{0}{\left(r \right)}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \operatorname{deltan}{\left(r \right)} \frac{d}{d r} \Phi_{0}{\left(r \right)} \left. \frac{d}{d \xi} \epsilon_{0}{\left(\xi \right)} \right|_{\substack{ \xi=n_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \operatorname{deltan}{\left(r \right)} \operatorname{mstar}{\left(a_{0}{\left(r \right)} \right)} \frac{d}{d r} \Phi_{0}{\left(r \right)}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \operatorname{deltan}{\left(r \right)} \frac{d}{d r} a_{0}{\left(r \right)} \left. \frac{d}{d \xi_{1}} \operatorname{mstar}{\left(\xi_{1} \right)} \right|_{\substack{ \xi_{1}=a_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - n_{0}{\left(r \right)} \frac{d}{d r} \operatorname{deltan}{\left(r \right)} \left. \frac{d^{2}}{d \xi^{2}} \epsilon_{0}{\left(\xi \right)} \right|_{\substack{ \xi=n_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \operatorname{deltan}{\left(r \right)} \frac{d}{d r} n_{0}{\left(r \right)} \left. \frac{d^{2}}{d \xi^{2}} \epsilon_{0}{\left(\xi \right)} \right|_{\substack{ \xi=n_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - f_{a} n_{0}{\left(r \right)} \frac{d}{d r} \operatorname{deltatheta}{\left(r \right)} \left. \frac{d}{d \xi_{1}} \operatorname{mstar}{\left(\xi_{1} \right)} \right|_{\substack{ \xi_{1}=a_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \operatorname{deltan}{\left(r \right)} n_{0}{\left(r \right)} \frac{d}{d r} \Phi_{0}{\left(r \right)} \left. \frac{d^{2}}{d \xi^{2}} \epsilon_{0}{\left(\xi \right)} \right|_{\substack{ \xi=n_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \operatorname{deltan}{\left(r \right)} n_{0}{\left(r \right)} \frac{d}{d r} n_{0}{\left(r \right)} \left. \frac{d^{3}}{d \xi^{3}} \epsilon_{0}{\left(\xi \right)} \right|_{\substack{ \xi=n_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - f_{a} \operatorname{deltatheta}{\left(r \right)} n_{0}{\left(r \right)} \frac{d}{d r} \Phi_{0}{\left(r \right)} \left. \frac{d}{d \xi_{1}} \operatorname{mstar}{\left(\xi_{1} \right)} \right|_{\substack{ \xi_{1}=a_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - f_{a} \operatorname{deltatheta}{\left(r \right)} n_{0}{\left(r \right)} \frac{d}{d r} a_{0}{\left(r \right)} \left. \frac{d^{2}}{d \xi^{2}} \operatorname{mstar}{\left(\xi \right)} \right|_{\substack{ \xi=a_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{l \operatorname{deltan}{\left(r \right)} n_{0}{\left(r \right)} \left. \frac{d^{2}}{d \xi^{2}} \epsilon_{0}{\left(\xi \right)} \right|_{\substack{ \xi=n_{0}{\left(r \right)} }}}{r}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{f_{a} l \operatorname{deltatheta}{\left(r \right)} n_{0}{\left(r \right)} \left. \frac{d}{d \xi_{1}} \operatorname{mstar}{\left(\xi_{1} \right)} \right|_{\substack{ \xi_{1}=a_{0}{\left(r \right)} }}}{r}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + \frac{\omega^{2} W{\left(r \right)} n_{0}{\left(r \right)} e^{- 2 \Phi_{0}{\left(r \right)}} e^{\lambda_{0}{\left(r \right)}} \left. \frac{d}{d \xi} \epsilon_{0}{\left(\xi \right)} \right|_{\substack{ \xi=n_{0}{\left(r \right)} }}}{r}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + \frac{\omega^{2} W{\left(r \right)} \operatorname{mstar}{\left(a_{0}{\left(r \right)} \right)} n_{0}{\left(r \right)} e^{- 2 \Phi_{0}{\left(r \right)}} e^{\lambda_{0}{\left(r \right)}}}{r}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{m_{N} \omega^{2} W{\left(r \right)} n_{0}{\left(r \right)} e^{- 2 \Phi_{0}{\left(r \right)}} e^{\lambda_{0}{\left(r \right)}}}{r}\;=\;0$}\par
+\bigskip\par\noindent\textbf{(8b) bariones}\quad (8b) bariones\par
+{\small\textit{ref:} derived from the action in Cowling}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - i \omega \operatorname{deltan}{\left(r \right)} e^{\lambda_{0}{\left(r \right)}} -  \frac{i \omega n_{0}{\left(r \right)} \frac{d}{d r} W{\left(r \right)}}{r}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{i \omega W{\left(r \right)} \frac{d}{d r} n_{0}{\left(r \right)}}{r} -  \frac{i \omega W{\left(r \right)} n_{0}{\left(r \right)}}{r^{2}} -  \frac{i l \omega W{\left(r \right)} n_{0}{\left(r \right)}}{r^{2}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{i l \omega \operatorname{calV}{\left(r \right)} n_{0}{\left(r \right)} e^{\lambda_{0}{\left(r \right)}}}{r^{2}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{i l^{2} \omega \operatorname{calV}{\left(r \right)} n_{0}{\left(r \right)} e^{\lambda_{0}{\left(r \right)}}}{r^{2}}\;=\;0$}\par
+\bigskip\par\noindent\textbf{(8c) momento angular}\quad (8c) momento angular\par
+{\small\textit{ref:} derived from the action in Cowling}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \operatorname{deltan}{\left(r \right)} n_{0}{\left(r \right)} \left. \frac{d^{2}}{d \xi^{2}} \epsilon_{0}{\left(\xi \right)} \right|_{\substack{ \xi=n_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - f_{a} \operatorname{deltatheta}{\left(r \right)} n_{0}{\left(r \right)} \left. \frac{d}{d \xi_{1}} \operatorname{mstar}{\left(\xi_{1} \right)} \right|_{\substack{ \xi_{1}=a_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + m_{N} \omega^{2} \operatorname{calV}{\left(r \right)} n_{0}{\left(r \right)} e^{- 2 \Phi_{0}{\left(r \right)}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \omega^{2} \operatorname{calV}{\left(r \right)} n_{0}{\left(r \right)} e^{- 2 \Phi_{0}{\left(r \right)}} \left. \frac{d}{d \xi} \epsilon_{0}{\left(\xi \right)} \right|_{\substack{ \xi=n_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \omega^{2} \operatorname{calV}{\left(r \right)} \operatorname{mstar}{\left(a_{0}{\left(r \right)} \right)} n_{0}{\left(r \right)} e^{- 2 \Phi_{0}{\left(r \right)}}\;=\;0$}\par
+\bigskip\par\noindent\textbf{(8d) KG interior}\quad (8d) KG interior\par
+{\small\textit{ref:} derived from the action in Cowling}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle \operatorname{deltan}{\left(r \right)} \left. \frac{d}{d \xi_{1}} \operatorname{mstar}{\left(\xi_{1} \right)} \right|_{\substack{ \xi_{1}=a_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + f_{a} \operatorname{deltatheta}{\left(r \right)} \left. \frac{d^{2}}{d \xi^{2}} V{\left(\xi \right)} \right|_{\substack{ \xi=a_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - f_{a} e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d^{2}}{d r^{2}} \operatorname{deltatheta}{\left(r \right)} + \frac{f_{a} l \operatorname{deltatheta}{\left(r \right)}}{r^{2}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + \frac{f_{a} l^{2} \operatorname{deltatheta}{\left(r \right)}}{r^{2}} + f_{a} e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d}{d r} \operatorname{deltatheta}{\left(r \right)} \frac{d}{d r} \lambda_{0}{\left(r \right)}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + f_{a} \operatorname{deltatheta}{\left(r \right)} n_{0}{\left(r \right)} \left. \frac{d^{2}}{d \xi^{2}} \operatorname{mstar}{\left(\xi \right)} \right|_{\substack{ \xi=a_{0}{\left(r \right)} }}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - f_{a} \omega^{2} \operatorname{deltatheta}{\left(r \right)} e^{- 2 \Phi_{0}{\left(r \right)}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - f_{a} e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d}{d r} \Phi_{0}{\left(r \right)} \frac{d}{d r} \operatorname{deltatheta}{\left(r \right)}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{2 f_{a} e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d}{d r} \operatorname{deltatheta}{\left(r \right)}}{r} -  \frac{f_{a} l \operatorname{deltatheta}{\left(r \right)} e^{- 2 \lambda_{0}{\left(r \right)}}}{r^{2}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{f_{a} l^{2} \operatorname{deltatheta}{\left(r \right)} e^{- 2 \lambda_{0}{\left(r \right)}}}{r^{2}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{2 f_{a} l e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d}{d r} \operatorname{deltatheta}{\left(r \right)}}{r}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + \frac{f_{a} l \operatorname{deltatheta}{\left(r \right)} e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d}{d r} \lambda_{0}{\left(r \right)}}{r}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \frac{f_{a} l \operatorname{deltatheta}{\left(r \right)} e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d}{d r} \Phi_{0}{\left(r \right)}}{r}\;=\;0$}\par
+\bigskip\par\noindent\textbf{Trt\_ax}\quad T\textasciicircum{}r\_t of the axion (energy flux), general fields of (t, r, theta)\par
+{\small\textit{ref:} used for appendix B (B4)}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - e^{- 2 \lambda_{0}{\left(r \right)}} \frac{\partial}{\partial r} a{\left(t,r,\theta \right)} \frac{\partial}{\partial t} a{\left(t,r,\theta \right)}\;=\;0$}\par
+\end{document}

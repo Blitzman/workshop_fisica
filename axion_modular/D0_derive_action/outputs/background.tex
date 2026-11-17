@@ -1,0 +1,48 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,adjustbox,xcolor,fancyhdr,hyperref}
+\usepackage[margin=16mm]{geometry}
+\setlength{\parindent}{0pt}\setlength{\parskip}{3pt}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small background.eq.json}\fancyhead[R]{\small sha256 51ca7bf4984bd84b}\fancyfoot[C]{\small\thepage}
+\hypersetup{colorlinks=true,urlcolor=blue}
+\begin{document}
+{\Large\bfseries Static background equations (TOV + Klein-Gordon form)}\par
+\smallskip
+\begin{tabular}{@{}lp{0.62\textwidth}@{}}\textbf{artifact} & background.eq.json\\\textbf{kind} & derived\\\textbf{producer} & D0\_derive\_action\\\textbf{git} & 26f2fcc\\\textbf{created} & 2026-11-17T09:29:43Z\\\textbf{content sha256} & 51ca7bf4984bd84b4040c602c35c1c7f...\\\textbf{description} & Static limit of the field equations: Phi(t,r) -> Phi0(r), lambda -> lambda0, a -> a0, n -> n0, xi -> 0.\\\end{tabular}
+\par\medskip\hrule\medskip
+
+\textit{Generated from the JSON artifact; do not retype equations from this file. Each expression is the left side of an equation ``$= 0$'' unless stated otherwise.}\par
+
+\bigskip\par\noindent\textbf{Gtt}\quad G\_tt - 8 pi G T\_tt\par
+{\small\textit{display:} expanded for typesetting (same expression).}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle \frac{e^{2 \Phi_{0}{\left(r \right)}}}{r^{2}} -  \frac{e^{2 \Phi_{0}{\left(r \right)}} e^{- 2 \lambda_{0}{\left(r \right)}}}{r^{2}} -  8 \pi G V{\left(a_{0}{\left(r \right)} \right)} e^{2 \Phi_{0}{\left(r \right)}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - 8 \pi G \epsilon_{0}{\left(n_{0}{\left(r \right)} \right)} e^{2 \Phi_{0}{\left(r \right)}} + \frac{2 e^{2 \Phi_{0}{\left(r \right)}} e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d}{d r} \lambda_{0}{\left(r \right)}}{r}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - 8 \pi G \operatorname{mstar}{\left(a_{0}{\left(r \right)} \right)} n_{0}{\left(r \right)} e^{2 \Phi_{0}{\left(r \right)}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - 4 \pi G e^{2 \Phi_{0}{\left(r \right)}} e^{- 2 \lambda_{0}{\left(r \right)}} \left(\frac{d}{d r} a_{0}{\left(r \right)}\right)^{2} + 8 \pi G m_{N} n_{0}{\left(r \right)} e^{2 \Phi_{0}{\left(r \right)}}\;=\;0$}\par
+\bigskip\par\noindent\textbf{Gtr}\quad G\_tr - 8 pi G T\_tr\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle 0\;=\;0$}\par
+\bigskip\par\noindent\textbf{Grr}\quad G\_rr - 8 pi G T\_rr\par
+{\small\textit{display:} expanded for typesetting (same expression).}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle \frac{1}{r^{2}} -  \frac{e^{2 \lambda_{0}{\left(r \right)}}}{r^{2}} + \frac{2 \frac{d}{d r} \Phi_{0}{\left(r \right)}}{r} -  4 \pi G \left(\frac{d}{d r} a_{0}{\left(r \right)}\right)^{2}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + 8 \pi G V{\left(a_{0}{\left(r \right)} \right)} e^{2 \lambda_{0}{\left(r \right)}} + 8 \pi G \epsilon_{0}{\left(n_{0}{\left(r \right)} \right)} e^{2 \lambda_{0}{\left(r \right)}}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - 8 \pi G n_{0}{\left(r \right)} e^{2 \lambda_{0}{\left(r \right)}} \frac{d}{d n_{0}{\left(r \right)}} \epsilon_{0}{\left(n_{0}{\left(r \right)} \right)}\;=\;0$}\par
+\bigskip\par\noindent\textbf{KG}\quad Klein-Gordon: box a + V' + n m*'\par
+{\small\textit{display:} expanded for typesetting (same expression).}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle n_{0}{\left(r \right)} \frac{d}{d a_{0}{\left(r \right)}} \operatorname{mstar}{\left(a_{0}{\left(r \right)} \right)} -  e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d^{2}}{d r^{2}} a_{0}{\left(r \right)}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d}{d r} a_{0}{\left(r \right)} \frac{d}{d r} \lambda_{0}{\left(r \right)}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d}{d r} \Phi_{0}{\left(r \right)} \frac{d}{d r} a_{0}{\left(r \right)} -  \frac{2 e^{- 2 \lambda_{0}{\left(r \right)}} \frac{d}{d r} a_{0}{\left(r \right)}}{r}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle + \frac{d}{d a_{0}{\left(r \right)}} V{\left(a_{0}{\left(r \right)} \right)}\;=\;0$}\par
+\bigskip\par\noindent\textbf{FLUID\_r}\quad radial momentum: div T(total) = 0, with KG eliminated\par
+{\small\textit{display:} expanded for typesetting (same expression).}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle m_{N} n_{0}{\left(r \right)} \frac{d}{d r} \Phi_{0}{\left(r \right)}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - n_{0}{\left(r \right)} \frac{d}{d r} \Phi_{0}{\left(r \right)} \frac{d}{d n_{0}{\left(r \right)}} \epsilon_{0}{\left(n_{0}{\left(r \right)} \right)}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - \operatorname{mstar}{\left(a_{0}{\left(r \right)} \right)} n_{0}{\left(r \right)} \frac{d}{d r} \Phi_{0}{\left(r \right)}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - n_{0}{\left(r \right)} \frac{d}{d r} a_{0}{\left(r \right)} \frac{d}{d a_{0}{\left(r \right)}} \operatorname{mstar}{\left(a_{0}{\left(r \right)} \right)}$}\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle - n_{0}{\left(r \right)} \frac{d^{2}}{d n_{0}{\left(r \right)}^{2}} \epsilon_{0}{\left(n_{0}{\left(r \right)} \right)} \frac{d}{d r} n_{0}{\left(r \right)}\;=\;0$}\par
+\bigskip\par\noindent\textbf{BAR}\quad baryon number conservation\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle 0\;=\;0$}\par
+\bigskip\par\noindent\textbf{ident\_ax}\quad identity: div T\_ax\textasciicircum{}mu\_r - (box a + V') d\_r a (must be 0)\par
+\noindent\adjustbox{max width=\textwidth}{$\displaystyle 0\;=\;0$}\par
+\end{document}

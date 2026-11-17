@@ -1,0 +1,177 @@
+{
+ "schema": "axion-manifest/1",
+ "module": "T_toy_model",
+ "producer": {
+  "module": "T_toy_model",
+  "script": null,
+  "git": {
+   "commit": "26f2fcc",
+   "dirty": true
+  },
+  "created": "2026-11-17T09:47:49Z",
+  "env": {
+   "python": "3.12.3",
+   "platform": "Linux x86_64",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "matplotlib": "3.11.2"
+  }
+ },
+ "seconds": 107.0,
+ "inputs": [
+  {
+   "name": "toy_model.eq.json",
+   "path": "D1_derive_radial/outputs/toy_model.eq.json",
+   "sha256": "d7b5c674e97faf843d1eb343df369f89c603b23e12a010702ac8db09afd59509"
+  }
+ ],
+ "artifacts": [
+  {
+   "path": "toy_qnm_landscape.png",
+   "sha256": "48f175bb76458e4052a16af854f8de18bf2c44abfb66b664288ff9ae132f1449",
+   "bytes": 178724
+  },
+  {
+   "path": "fig_toy.json",
+   "sha256": "de101a1290966a95f22aef682c0bbef97de672eecd77c7d231bb53f7508bd306",
+   "bytes": 225456
+  },
+  {
+   "path": "radial_branches.json",
+   "sha256": "b44c2a7bb7ff7721def8ccd6ad079f32c1b0101d97bd639349787810751562dc",
+   "bytes": 24696
+  }
+ ],
+ "summary": {
+  "n_ok": 19,
+  "n_fail": 3,
+  "n_descriptive": 2
+ },
+ "checks": [
+  {
+   "name": "Puente D1 -> T: f_toy (Ec. 4.13, forma con tangentes) coincide con la f(omega) derivada en D1 (24 puntos aleatorios, diferencia relativa máx. 1.0e-16)",
+   "ok": true,
+   "note": "lambdify(mpmath) de f_4_13_tan"
+  },
+  {
+   "name": "Puente D1 -> T: f_k (forma entera en k, branches.py) = f_4_13_tan x cos(k_p x0) cos(k_m x0) (diferencia relativa máx. 1.0e-16)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "beta = 4z/(1+z)^2 = 0.877 (paper: 0.88)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Reducción de masa sigma_N [1-g(pi f_a)] = 32.4 MeV (paper: ~32 MeV)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "m_a = 3 kHz <-> 12.4 peV (paper: 12 peV)",
+   "ok": true,
+   "note": "E = h nu"
+  },
+  {
+   "name": "m_a R para 3 kHz y R=12 km = 0.75 (paper: 0.12)",
+   "ok": false,
+   "note": "el paper usa nu R/c = 0.12; m_a c^2/hbar = 2 pi nu  -> factor 2 pi"
+  },
+  {
+   "name": "m_a^2 f_a^2 = eps beta m_pi^2 f_pi^2 / 4 = eps x (4.4-4.8) MeV/fm^3 (paper: eps x 13)",
+   "ok": false,
+   "note": "m_pi^2 f_pi^2 = 20.1-21.9 MeV/fm^3; el paper siguiente (2610.37308) da eps m_pi^2 f_pi^2 ~ 2 MeV/fm^3 para eps=0.1, coherente con esto"
+  },
+  {
+   "name": "lambda^2 con (eps+p)=500 MeV/fm^3, c_s^2=0.3: eps x (0.029-0.032) (paper: eps x 0.02)",
+   "ok": false,
+   "note": "incluso con el 13 del paper: 13/150 = 0.087; las dos cifras del paper no son coherentes entre sí"
+  },
+  {
+   "name": "n_c(eps=1) = m_pi^2 f_pi^2/sigma_N = 0.40 fm^-3 = 2.5 n_sat (paper: ~2 n_sat)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Fig. 3 reproducida: 10 modos fluidos (Im~0) + 5 modos axiónicos",
+   "ok": true,
+   "note": "axiónicos: 3.56-2.15i, 9.53-3.25i, 15.01-3.89i, 20.39-4.35i, 25.71-4.71i"
+  },
+  {
+   "name": "Variante theta=pi (m_eff^2 = 25.6 m_a^2, sin acoplo): 10 modos fluidos SIN amortiguar + 6 axiónicos",
+   "ok": null,
+   "note": "axiónicos: 5.55-0.33i, 8.96-1.70i, 13.68-2.63i, 18.70-3.24i, 23.83-3.69i"
+  },
+  {
+   "name": "Figura guardada en results/toy_qnm_landscape.png",
+   "ok": null,
+   "note": ""
+  },
+  {
+   "name": "f(k) en la variable k coincide con f_toy(w) del paso 4 (Re w > 1): diferencia relativa 7.5e-31",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Modo fluido fundamental en x0 = 0.6: w = 1.43104-2.78e-03i (cuasi-normal, Im k = -0.0039 < 0)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "H9: el par cuasi-normal k = ±a - ib (b ≈ 0.0079...0.0119) colisiona en el eje imaginario negativo en x0 = 0.8514671 (raíz doble, residuo 1e-15; λ² = 1e-3), con k = -0.0120972i y w - 1 = -7.317e-05: ya por debajo del umbral. Quedan dos virtuales; uno cruza k = 0 (w = 1) en x0 = 0.8515243 y pasa a ligado. En x0 = 0.86: un ligado (kappa = +0.1339, w = 0.99099) y un virtual (kappa = -0.1605)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "H8: |Im w| ~ (Re w - 1)^0.457 en el tramo intermedio Re k > 5|Im k| (λ² = 1e-4; ½ si Im k fuera constante, que varía un 19 % en el tramo)",
+   "ok": true,
+   "note": "ajuste en un tramo finito, no una ley asintótica: más cerca del umbral domina la colisión de polos. El amortiguamiento solo se anula en la colisión, x0 = 0.8594224655, con w - 1 = -8.3769e-07 (por debajo del umbral, = k²/2 a este orden, k = -0.0012944i); el virtual cruza k = 0 en x0 = 0.8594231785"
+  },
+  {
+   "name": "H10: cruce evitado fluido-axión, Δw²_min/λ = 7.598, 7.598, 7.596, 7.577 para λ² = 1e-6…1e-3 (en x0 ≈ 1.073): separación ∝ λ",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Modo inestable del modelo simplificado (m²_in = m_a²(1 - α)): sin acoplo aparece para x0 > 0.10725018 (analítico arctan(1/√(α-1))/√(α-1) = 0.10725018); con λ² = 1e-3, para x0 > 0.10720993; en los parámetros de la figura (x0 = 0.6) w² = -6.177 (crece como e^(2.49 m_a t))",
+   "ok": true,
+   "note": "el paso 4 no lo veía: buscaba solo Im w ≤ 0.01; el acoplo apenas mueve el umbral"
+  },
+  {
+   "name": "Variante theta = pi (m²_in = 25.6 m_a², sin acoplo): sin estados ligados ni inestables",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Identidad Im w = +Re k·Im k/Re w (de w² = 1 + k²): residuo 0.0e+00; con el signo − que escribimos por error en el informe: 5.6e-03",
+   "ok": true,
+   "note": "errata señalada por la revisión"
+  },
+  {
+   "name": "Ninguna raíz reportada es un cero espurio de D (min |D| = 21.4)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Método independiente (principio del argumento sobre f/√D, sin Muller): par cuasi-normal, x0 = 0.80, Re k > 0: 1.00 (esperado 1); par completo, x0 = 0.80: 2.00 (esperado 2); ligado, x0 = 0.86: 1.00 (esperado 1); virtual, x0 = 0.86: 1.00 (esperado 1); inestable, x0 = 0.6: 1.00 (esperado 1)",
+   "ok": true,
+   "note": "H14"
+  },
+  {
+   "name": "Control negativo 1 (onda entrante, i k -> -i k): el estado ligado de x0 = 0.86 deja de estar en kappa > 0 en la misma posición",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2 (m²_in = 1 - α -> α - 1): desaparece el umbral de inestabilidad (x0_c = None)",
+   "ok": true,
+   "note": ""
+  }
+ ],
+ "extra": {
+  "part": "all"
+ }
+}

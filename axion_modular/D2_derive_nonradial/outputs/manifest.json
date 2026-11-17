@@ -1,0 +1,342 @@
+{
+ "schema": "axion-manifest/1",
+ "module": "D2_derive_nonradial",
+ "producer": {
+  "module": "D2_derive_nonradial",
+  "script": null,
+  "git": {
+   "commit": "26f2fcc",
+   "dirty": true
+  },
+  "created": "2026-11-17T09:44:52Z",
+  "env": {
+   "python": "3.12.3",
+   "platform": "Linux x86_64",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "matplotlib": "3.11.2"
+  }
+ },
+ "seconds": 436.6,
+ "inputs": [
+  {
+   "name": "background.eq.json",
+   "path": "D0_derive_action/outputs/background.eq.json",
+   "sha256": "51ca7bf4984bd84b4040c602c35c1c7f1cfc63ddd5f6dd5b08dc621a519272f3"
+  },
+  {
+   "name": "paper2_equations.eq.json",
+   "path": "R_paper_refs/outputs/paper2_equations.eq.json",
+   "sha256": "a676226a96fa173394a5f382d1110e73cc9e105c3f80e3a79cb1ff85ca8cc687"
+  },
+  {
+   "name": "ld_sources.eq.json",
+   "path": "R_paper_refs/outputs/ld_sources.eq.json",
+   "sha256": "489cff5e12753bde1caec140b64d2d2be402d1de08734e02bc741fc256379ad3"
+  }
+ ],
+ "artifacts": [
+  {
+   "path": "cowling_linear.eq.json",
+   "sha256": "b1c496d331473ff51ae0c293199b799877e42acbc66b233f79ca0c88e91d4a51",
+   "bytes": 9481
+  },
+  {
+   "path": "cowling_linear.pdf",
+   "sha256": "31a45c329688f071345851b95711715a1080d041c12ea964e49e728eefe1cd1d",
+   "bytes": 135782
+  },
+  {
+   "path": "fullgr_linear.eq.json",
+   "sha256": "61d7e5adb41d309b48bff433fa474c4f27e818b00e63156d006904fb3dc6ffe2",
+   "bytes": 28687
+  },
+  {
+   "path": "fullgr_linear.pdf",
+   "sha256": "9dd6911c68bd2b7a7bf0f5e320c0875032cfff3a65fc720d8cd2b870f582ff2c",
+   "bytes": 158822
+  },
+  {
+   "path": "fullgr_extended.eq.json",
+   "sha256": "9889f1fe9ed4463079ed8bd00c1579814db5c36c519fd715051a3eecc8224e7e",
+   "bytes": 14380
+  },
+  {
+   "path": "fullgr_extended.pdf",
+   "sha256": "e2a1c9aca6f22d857f6465f37e43d134d5f0cbd170cb514aaefe1a7a395e205c",
+   "bytes": 169221
+  }
+ ],
+ "summary": {
+  "n_ok": 52,
+  "n_fail": 0,
+  "n_descriptive": 0
+ },
+ "checks": [
+  {
+   "name": "Paper II (8a) momento radial == linealización de la acción (Cowling)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Paper II (8b) bariones == linealización de la acción (Cowling)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Paper II (8c) momento angular == linealización de la acción (Cowling)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Paper II (8d) KG interior == linealización de la acción (Cowling)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo: (8a) sin el término l/r en (dtheta' + l dtheta/r) -> se detecta",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo: (8b) sin Phi' en el lado izquierdo -> se detecta",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo: (8d) con 2l/r en vez de 2(l+1)/r -> se detecta",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Exterior: (8d) con n_b=0 y dtheta=(R/r)^l dtheta_ext es la Ec. (13)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (15): dtheta'/dtheta = L_ext - l/R",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (10b): el orden 1/r de (8d) impone dtheta'(0) = 0",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (10a): delta p(0) del orden 1/r de (8a)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "El orden 1/r de (8b) es compatible con (10a) (misma condición)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ecs. (16a,b): delta p'(0) = 0 y [(eps+p)W]'(0) = 0",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (16c): dtheta''(0)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (17): delta p(0) = c_s^2 (eps+p) delta n_b(0)/n_b es exacta con p = p(n)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ecs. (A2)-(A4): Liouville elimina la derivada primera y da el potencial U",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (A6): Psi = Q^{-1/2} e^{iw} resuelve (A3) si Q cumple la ecuación de Milne",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ecs. (A7) y (A18): derivadas logarítmicas L+- y su inversión para (Q, Q')",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (A10): L_ext a partir de L+",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (A13): U desarrollado hasta O(1/r~^2)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (A14): z = -2ik~r~, kappa, mu reducen (A13) a la ecuación de Whittaker",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ecs. (21)-(22): psi = r dtheta_ext en coordenada tortuga y potencial Delta V",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (23): k~_n^2 = -alpha^2/n^2 para el problema de Coulomb (n = l+1, l+2)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (B4): sqrt(-g) T^r_t del axión",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (B6): luminosidad promediada <L> = f_a^2/2 r^2 e^{Phi-lambda} Re w Im L_ext |dtheta_ext|^2",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (B7b): energía del modo axiónico",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ec. (B7a): energía del modo fluido (término cuadrático de T^t_t)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Parte sin traza de las ecuaciones angulares: H2 = H0, sin contribución del axión",
+   "ok": true,
+   "note": "-(H0(r) - H2(r))/2"
+  },
+  {
+   "name": "Métrica congelada (H0 = H1 = K = 0): las cuatro ecuaciones de materia son las de Cowling (paso 5)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Bianchi: G_tt linealizada es redundante (con axión)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Bianchi: la traza angular linealizada es redundante (con axión)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "La ligadura algebraica de H0 se conserva al integrar (su derivada se anula con el sistema)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Sin axión: H1', K', W', H0 y V de Lindblom-Detweiler (Zhao y Lattimer, arXiv:2204.03037)",
+   "ok": true,
+   "note": "coinciden: [\"H1'\", \"K'\", \"W'\", 'H0', 'V']"
+  },
+  {
+   "name": "X' de Zhao y Lattimer: no coincide tal cual; con -2 w^2 en el término de W, sí (errata de signo)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Burgio et al. (arXiv:1106.2736): W' coincide; H1', K', X', H0 y V fallan tal cual y coinciden con una corrección mínima cada una",
+   "ok": true,
+   "note": "H1': falta el factor H_1 en el primer término; K': signo de psi'/2 en el coeficiente de K; X': falta H_0 y el signo de psi'/2 es el contrario: (1/r - psi'/2) H_0; H0: signo del último término de K; V: r^{(psi-lambda)/2} donde va e^{(psi-lambda)/2}"
+  },
+  {
+   "name": "Kunjipurayil et al. (arXiv:2205.02081, coautor T. Zhao): las seis coinciden, X' con -2 w^2",
+   "ok": true,
+   "note": "coinciden: [\"H1'\", \"K'\", \"W'\", \"X'\", 'H0', 'V']"
+  },
+  {
+   "name": "Zhang et al. (arXiv:2601.21911): H1', K', W', X' y H0 coinciden, escritas ya con las cinco correcciones de Burgio et al.; en V pone w^3 donde va w^2",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo: 16 pi -> 8 pi en H1' de LD se detecta",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Exterior sin axión: Z = r^{l+2}(K - e^psi H1)/(nr+3M) cumple la ecuación de Zerilli",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Exterior con axión (theta_0 = 0): delta theta no ve la métrica y cumple la Ec. (13) del Paper II",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Centro: H0(0) = K(0), H1(0) = [2l K(0) + 16 pi G (eps+p) W(0)]/[l(l+1)] y V(0) = -W(0)/l, como en LD, sin corrección axiónica",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Centro: X(0) = X_LD(0) + e^{Phi_c}[n dm*/dtheta Delta theta(0) - (8 pi G/3)(eps+p) V(theta_c) W(0)]",
+   "ok": true,
+   "note": "Delta theta(0) = delta theta(0) + theta_0''(0) W(0)"
+  },
+  {
+   "name": "Centro: delta theta''(0) = Ec. (16c) del Paper II - 3 K(0) theta_0''(0)/(2l+3)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Sistema extendido, H1': se sigue de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Sistema extendido, K': se sigue de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Sistema extendido, W' (sin cambios): se sigue de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Sistema extendido, X': se sigue de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Sistema extendido, relación algebraica de H0: se sigue de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Sistema extendido, relación algebraica de V: se sigue de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Sistema extendido, Klein-Gordon: Ec. (8d) + términos métricos: se sigue de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Todos los términos nuevos se anulan sin axión",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo: quitar el flujo 8 pi G r f_a^2 theta_0' delta theta de K' se detecta",
+   "ok": true,
+   "note": ""
+  }
+ ],
+ "extra": {
+  "stage": "all"
+ }
+}

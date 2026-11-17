@@ -1,0 +1,204 @@
+{
+ "schema": "axion-manifest/1",
+ "module": "D1_derive_radial",
+ "producer": {
+  "module": "D1_derive_radial",
+  "script": null,
+  "git": {
+   "commit": "26f2fcc",
+   "dirty": true
+  },
+  "created": "2026-11-17T09:30:35Z",
+  "env": {
+   "python": "3.12.3",
+   "platform": "Linux x86_64",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "matplotlib": "3.11.2"
+  }
+ },
+ "seconds": 24.4,
+ "inputs": [
+  {
+   "name": "field_equations.eq.json",
+   "path": "D0_derive_action/outputs/field_equations.eq.json",
+   "sha256": "cc51730fd8b76ce0e2a55da5fda012cef6656716a4555abe22f3d2425f6ad74d"
+  },
+  {
+   "name": "background.eq.json",
+   "path": "D0_derive_action/outputs/background.eq.json",
+   "sha256": "51ca7bf4984bd84b4040c602c35c1c7f1cfc63ddd5f6dd5b08dc621a519272f3"
+  },
+  {
+   "name": "paper1_equations.eq.json",
+   "path": "R_paper_refs/outputs/paper1_equations.eq.json",
+   "sha256": "e6e1c39cc3b2d0df422c18c514289183428a3d024a32f483981af6314e6ff0e1"
+  }
+ ],
+ "artifacts": [
+  {
+   "path": "radial_linear.eq.json",
+   "sha256": "37248adf58d3915f074edc6e824ed13352c1fe5ff66a2d41c3af157412ee35f2",
+   "bytes": 13022
+  },
+  {
+   "path": "radial_linear.pdf",
+   "sha256": "21b742897287976c8755068201869d4e1ee43dfdab70b735b0418647b4afd89b",
+   "bytes": 134169
+  },
+  {
+   "path": "toy_model.eq.json",
+   "sha256": "771c33adb121792a22096bfe85768683f3a55329ba0efef08b3cc4e755d5fdaf",
+   "bytes": 8939
+  },
+  {
+   "path": "toy_model.pdf",
+   "sha256": "dfc1ee770b3286c7a0c5af621a0401790a9ff0661d49712897e28d372f40445e",
+   "bytes": 134651
+  }
+ ],
+ "summary": {
+  "n_ok": 27,
+  "n_fail": 0,
+  "n_descriptive": 0
+ },
+ "checks": [
+  {
+   "name": "Paper (2.6a) p' == derivada de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Paper (2.6b) Phi' == derivada de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Paper (2.6c) M' == derivada de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Paper (2.6d) KG == derivada de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Límite sin axión reproduce TOV estándar (p' = -(eps+p) Phi')",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Paper (3.3a) KG == linealización de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Paper (3.3b) rr == linealización de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Paper (3.3c) tr == linealización de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Paper (3.3d) Euler == linealización de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Paper (3.3e) continuidad == linealización de la acción",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo: (3.3b) con 8 pi en vez de 4 pi -> se detecta",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo: (3.3a) con signo cambiado en el término 2 delta lambda -> se detecta",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo: (3.3e) sin el término delta lambda -> se detecta",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "G_tt linealizada es redundante (Bianchi + conservación bariónica)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Exterior: (3.3a) -> KG en Schwarzschild, Ec. (3.7)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Toy (Ec. 4.2a) se sigue de (3.3d)+(3.3e) con las aproximaciones del paper",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Toy (Ec. 4.2b) se sigue de (3.3a) con las aproximaciones del paper",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Forma adimensional -> matriz M de la Ec. (4.6)",
+   "ok": true,
+   "note": "fila 1 = combinación de filas"
+  },
+  {
+   "name": "det(M - k^2) == Ec. (4.7) (salvo factor c_s^2)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Cuadrática en omegabar^2 == Ec. (4.8)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Raíces omegabar^2(k) == expresión del paper",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "k_+-^2 y Delta (Ec. 4.12) son raíces de det(M - k^2) = 0",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ajuste interior/exterior con dp(x0)=0 reproduce f(omega) de la Ec. (4.13)",
+   "ok": true,
+   "note": "sqrt(Delta) = k_+^2 - k_-^2"
+  },
+  {
+   "name": "Límite lambda->0: f ∝ k_a tan(k_a x0) + i k_out  (Ec. 4.11)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "V'' + n m*'' en theta=0 vale m_a^2 (1 - alpha)  [la aproximación del paper]",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "dm*/da = -beta sigma sin(theta)/(4 f_a g): se ANULA en theta = 0 y theta = pi",
+   "ok": true,
+   "note": "dm*/da = -sqrt(2)*beta*sigma_N*sin(theta)/(4*f_a*sqrt(beta*cos(theta) - beta + 2))"
+  },
+  {
+   "name": "En theta=pi (fondo del toy si alpha>1): m_eff^2/m_a^2 = (alpha-1)/sqrt(1-beta) > 0",
+   "ok": true,
+   "note": "el toy usa 1-alpha < 0 (taquiónico), que corresponde a theta=0"
+  }
+ ]
+}

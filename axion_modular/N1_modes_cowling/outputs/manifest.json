@@ -1,0 +1,179 @@
+{
+ "schema": "axion-manifest/1",
+ "module": "N1_modes_cowling",
+ "producer": {
+  "module": "N1_modes_cowling",
+  "script": null,
+  "git": {
+   "commit": "26f2fcc",
+   "dirty": true
+  },
+  "created": "2026-11-17T09:46:01Z",
+  "env": {
+   "python": "3.12.3",
+   "platform": "Linux x86_64",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "matplotlib": "3.11.2"
+  }
+ },
+ "seconds": 67.5,
+ "inputs": [
+  {
+   "name": "paper2_tables.ref.json",
+   "path": "R_paper_refs/outputs/paper2_tables.ref.json",
+   "sha256": "e8bb931c43d85b13be4fae89d6ca7a76057e048613546a9d92f52b2b1bb1f4c8"
+  },
+  {
+   "name": "eos_bsk26.csv",
+   "path": "S1_star_background/outputs/eos_bsk26.csv",
+   "sha256": "9ce72d3c04c704efb36700dea8ace90ec77d767c4962f27f6920c85421a61ffa"
+  },
+  {
+   "name": "star_noaxion.csv",
+   "path": "S1_star_background/outputs/star_noaxion.csv",
+   "sha256": "8ea9210cdd6b15d623b6ddcde326618fc0600c51ad635a3499269042ee026c38"
+  },
+  {
+   "name": "manifest.json",
+   "path": "S1_star_background/outputs/manifest.json",
+   "sha256": "9cdd5d86aee46db1f70f7873a9d2133a25e2a25c7d48f54698273a4023192427"
+  },
+  {
+   "name": "star_nua6.csv",
+   "path": "S1_star_background/outputs/star_nua6.csv",
+   "sha256": "6032d4c597c323f68dc2674b9d359d707ae5cdce7c21b15d773b3683b86ee04a"
+  }
+ ],
+ "artifacts": [
+  {
+   "path": "modes_cowling.csv",
+   "sha256": "2629f984d1b38bc439400a1a4c4c81b3f957944d8bab32cbfd9aa9c2cdf3c57e",
+   "bytes": 423
+  },
+  {
+   "path": "atom_levels.csv",
+   "sha256": "d213faa1efcf53365d7472f9ccc0d8b62f213738f58469dc6481a281e051d1ee",
+   "bytes": 5089
+  },
+  {
+   "path": "paper2_atom_levels.png",
+   "sha256": "fcd31a9a723e5f4fb4a5d17f2ac3436a3f301e3bcba0f3f7edf0fb3986f4190c",
+   "bytes": 144151
+  },
+  {
+   "path": "levels.json",
+   "sha256": "6dd42d78d10554a85421a6a94ba83b6651707ced036e007de56c8e645ac92d7a",
+   "bytes": 7123
+  }
+ ],
+ "summary": {
+  "n_ok": 18,
+  "n_fail": 0,
+  "n_descriptive": 1
+ },
+ "checks": [
+  {
+   "name": "Cowling sin axión: f, p1, p2 = 2.429, 7.171, 10.194 kHz (Paper II: 2.43, 7.15, 10.18); máx. dif. 0.29 %",
+   "ok": true,
+   "note": "ajuste analítico de BSk26 frente a la tabla del grupo; el paper da un 0.3 % de acuerdo con otros cálculos"
+  },
+  {
+   "name": "Tabla IV: masas de las estrellas con axión",
+   "ok": null,
+   "note": "ninguna estrella de la Tabla IV en esta ejecución"
+  },
+  {
+   "name": "Tabla I (solo fondo): los 3 desplazamientos nu/nu_0 - 1 coinciden con el paper dentro de 0.6 puntos (máx. 0.18)",
+   "ok": true,
+   "note": "nu_0: la nota sin axión de cada cálculo"
+  },
+  {
+   "name": "Tabla II (acoplado), parte real: los 3 desplazamientos dentro de 0.6 puntos (máx. 0.09; modo f, 0.01)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Tabla II: los modos amortiguados son los mismos (Im nu = 0 por debajo de nu_a), sin excepciones",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Tabla II, amortiguamiento: los 2 |Im nu| >= 1 Hz del paper, dentro de un factor 2 (cociente 0.98-1.22); tau_a mínimo = 12.5 ms (paper: 12 ms)",
+   "ok": true,
+   "note": "el amortiguamiento depende de delta theta(R), muy sensible al fondo (Fig. 6 del paper); tau_a mínimo solo es comparable con las 12 estrellas de la Tabla II"
+  },
+  {
+   "name": "lambda_a = hbar/(m_a c) = 19.7 km para m_a = 1e-11 eV (paper: ~20 km)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "nu_a = m_a/2pi = 2.42 kHz para m_a = 1e-11 eV (paper: ~2.4 kHz)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Tabla I: desplazamientos f, p1, p2 a 15 kHz = 18.1%, 14.5%, 19.0% (texto: 18%, 15%, 19%; resumen: hasta ~20%)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Texto vs tablas: f 2.43->2.87->2.50, p1 7.15->8.19->7.96, p2 10.18->12.11->12.00, máximo de f = 2.56 kHz en 5-6 kHz",
+   "ok": true,
+   "note": "el acoplo dinámico compensa el 84% del desplazamiento de f (\"almost entirely\")"
+  },
+  {
+   "name": "Tabla II: Im nu != 0 exactamente cuando Re nu > nu_a (36 entradas)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "tau_a mínimo = 1/(2 pi x 13 Hz) = 12 ms (texto: ~10 ms)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Tabla III: el asterisco marca exactamente Re nu < nu_a; Fig. 4 = fila de 4 kHz (10.2-3.8i, 22.4-5.7i)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Tabla IV: alpha = G M m_a reproduce la columna alpha (máx. dif. 0.0005)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Tabla IV: nu_n coherente con la columna -k~^2 n^2/alpha^2 (máx. dif. 0.005 kHz)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Tabla IV reproducida desde el exterior de Schwarzschild: para nu_a <= 10 kHz, máx. dif. 5 Hz (precisión de la tabla: 10 Hz)",
+   "ok": true,
+   "note": "independiente del interior (plano/Dirichlet, R = 10.5-12 km)"
+  },
+  {
+   "name": "Tabla IV, nu_a = 11-15 kHz: valores del paper dentro de la banda debida al interior",
+   "ok": true,
+   "note": "la banda crece con m_a R: 56 Hz a 15 kHz; todas dentro"
+  },
+  {
+   "name": "Cruces evitados: nivel n=3 a 12.19 kHz = 11.93-11.94 kHz y n=4 a 12.06 kHz = 11.92-11.92 kHz, frente a p2 = 11.93 kHz",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Figura guardada en results/paper2_atom_levels.png",
+   "ok": true,
+   "note": ""
+  }
+ ],
+ "extra": {
+  "nu_a_computed": [
+   6.0
+  ]
+ }
+}

@@ -1,0 +1,102 @@
+{
+ "schema": "axion-manifest/1",
+ "module": "S1_star_background",
+ "producer": {
+  "module": "S1_star_background",
+  "script": null,
+  "git": {
+   "commit": "26f2fcc",
+   "dirty": true
+  },
+  "created": "2026-11-17T08:19:45Z",
+  "env": {
+   "python": "3.12.3",
+   "platform": "Linux x86_64",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "matplotlib": "3.11.2"
+  }
+ },
+ "seconds": 220.1,
+ "inputs": [],
+ "artifacts": [
+  {
+   "path": "eos_bsk26.csv",
+   "sha256": "9ce72d3c04c704efb36700dea8ace90ec77d767c4962f27f6920c85421a61ffa",
+   "bytes": 251919
+  },
+  {
+   "path": "star_noaxion.csv",
+   "sha256": "8ea9210cdd6b15d623b6ddcde326618fc0600c51ad635a3499269042ee026c38",
+   "bytes": 3430368
+  },
+  {
+   "path": "star_nua6.csv",
+   "sha256": "6032d4c597c323f68dc2674b9d359d707ae5cdce7c21b15d773b3683b86ee04a",
+   "bytes": 4380073
+  }
+ ],
+ "summary": {
+  "n_ok": 2,
+  "n_fail": 0,
+  "n_descriptive": 1
+ },
+ "checks": [
+  {
+   "name": "Fondo BSk26 sin axión, p_c = 100 MeV/fm^3: M = 1.536 M_sun, R = 11.72 km (Paper I: 1.53 M_sun, 11.7 km)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Tablas de perfil: el interpolante de Hermite reproduce la solución densa del integrador dentro de 1e-09 (peor caso 1.8e-10, 2 estrellas)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Umbral del condensado: no hay a 2.5 kHz y sí a 2.8 kHz (Paper I: desaparece por debajo de ~2.8 kHz)",
+   "ok": null,
+   "note": "nu_a = 2.8 no calculado en esta ejecución (descriptivo)"
+  }
+ ],
+ "extra": {
+  "stars": {
+   "noaxion": {
+    "M_msun": 1.5359313228473745,
+    "R_km": 11.71939228115855,
+    "K": 64,
+    "n_rows": 24321,
+    "hermite_max_rel_err": 1.7635090017025672e-10,
+    "hermite_tol": 1e-09,
+    "worst_component_and_r": [
+     0,
+     0.022889587710682828
+    ],
+    "n_solver_steps": 380
+   },
+   "6": {
+    "M_msun": 1.4724732729913332,
+    "R_km": 11.364864951246611,
+    "theta_c": 3.131041941424866,
+    "seconds": 216.9,
+    "K": 32,
+    "n_rows": 19937,
+    "hermite_max_rel_err": 1.0490046996042321e-10,
+    "hermite_tol": 1e-09,
+    "worst_component_and_r": [
+     1,
+     11.249937021801877
+    ],
+    "n_solver_steps": 623
+   }
+  },
+  "condensate_exists": {
+   "2.5": false
+  },
+  "nu_a_list": [
+   6.0
+  ],
+  "witness": true
+ }
+}
