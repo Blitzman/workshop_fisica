@@ -14,16 +14,17 @@ D0_derive_action ───────────────► D1_derive_radi
                                                              ▼
                                                     N2_modes_fullgr_noaxion (validation of the extended system vs LMI / Yoshida-Kojima)
                                   N3_modes_fullgr_axion (beyond Cowling, with the axion: reads D2 + S1 + R tables, N1 optionally)
+                                  N4_modes_radial (radial modes: reads D0 + D1 equations, S1 tables and extra stars, R's Paper I tables)
                                        report (reads the manifests of all)
 ```
-Not part of this layout yet: N4 (radial modes), A (radial analysis).
+Not part of this layout yet: A (radial analysis).
 
 ## Run
 
 ```bash
 pip install numpy scipy sympy mpmath matplotlib pytest      # + a LaTeX (pdflatex) for the equation PDFs
 cd axion_modular
-make R D0 D1 D2 S1 N1 N2 N3 T report test  # everything; D2 (about 8 min) and N2 (about 17 min of CPU, divided by the cores) are the long ones
+make R D0 D1 D2 S1 S1-extra N1 N2 N3 N4 T report test  # everything; D2 (about 8 min) and N2 (about 17 min of CPU, divided by the cores) are the long ones
 python -m D1_derive_radial.run --help                         # every module has its own entry point and options
 ```
 A module needs only the files of its upstream modules (see its `CONTRACT.md`), not their code or a previous run in the same
@@ -97,6 +98,14 @@ about 60 for the previous Hermite/EOS route).
   here with the same magnitudes; the H31 "above threshold" check was relaxed from `== 0` to `< 1e-12` (roundoff 2e-17).
 * Fast tests: 26 passed, 1 skipped. The N3 interior matrix with the axion off equals N2's to 1.9e-15 (`python -m tests.compare_n3_n2_matrix`, manual).
 * Not ported: the end-to-end LMI polytrope check of the legacy step 10 (needs a polytrope EOS table in S1; N2 validates the same equations).
+
+## N4 status (radial modes)
+N4 ports the legacy steps 15, 16, 19, 20, 22 and 26 (step 17, the Font et al. comparison, is not ported by decision). The radial matrices are derived from D0's and D1's artifacts and
+satisfy A = A_0 + w^2 A_1 exactly, so two coefficient tables are enough; a `det_entire` evaluation takes 0.11 s instead of about 2.7 s and the whole module about 35 minutes on one core (legacy: 23,205 s
+wall on 6 workers). It needs S1's extra stars (`make S1-extra`, about 2 minutes, untracked). Against the committed legacy `results/radial_*.json` (`python -m tests.n4_gate`): Table 1 and 2 of
+Paper I within 9.5e-5 (real parts) and 1.1e-3 (damping), the F and H1 modes within 2.2e-8 and 1.8e-8, the avoided-crossing gap 49.1 Hz (legacy 49.07), all counts equal except three at the noise floor or
+tied to the matching radius (step 20: deep region 0 against the legacy's 2 with no root located; old-lapse control 5 against 8; old-lapse deep 2 against 0). N4's checks: 22: 4/4, 26: 3 OK / 2 failures / 2 descriptive
+(the two failures are failing in the committed legacy result too, with the same numbers), 15: 13/13, 19: 2/2, 20: 4/4, 16: 7/7. Item 13 of `MIGRATION.md` lists the adaptations.
 
 ## N2 status
 N2 (validation of the extended system without axion against Lindblom-Mendell-Ipser 1997 and Yoshida-Kojima 1997) was built and

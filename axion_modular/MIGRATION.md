@@ -48,7 +48,12 @@ header of each new file says what it was moved from and what changed.
 | `axstar.py` (`exterior_L`, `muller`) | `N3/modes.py` | extracted verbatim from N1's copy |
 | `step10_axion_gr.py` | `N3/validation.py`, `N3/run.py` | table-based; the LMI polytrope check and the comparison with N2's matrix are not ported (the latter is `tests/compare_n3_n2_matrix.py`) |
 | `step25_exterior_convergence.py` | `N3/validation.py` (`step25`) | starting points from N3's own step 10 table |
-| `radial.py`, `step15-17,19,20,22,26` | not yet | module N4 |
+| `radial.py` (derivation: `reduced_equations`, `first_order_system`, `interior_matrix`, `exterior_matrix`) | `N4/systems.py` | from D0's `background.eq.json` and D1's `radial_linear.eq.json` instead of `pipeline` |
+| `radial.py` (`interior`, `outward`, `det`, `det_entire`, `exterior_psi`, `fluid_fraction`) | `N4/modes.py` | right-hand sides from `N4/tables.py` (A = A_0 + w^2 A_1 tabulated as r^2 A); `exterior_psi` takes the exterior flat function and beta |
+| `radial.py` (`winding`, `winding_converged`, `muller`) | `N4/modes.py` | verbatim |
+| `step15`, `step16`, `step19`, `step20`, `step22`, `step26` (`*_radial_star`, `*_radial_stability`, `*_avoided_crossing`, `*_damped_count`, `*_exterior_contour`, `*_paper1_tables`) | `N4/validation.py`, `N4/run.py` | stars from S1 (the 12 and the extra set); adaptations in item 13 |
+| `step26_paper1_tables.py` (Tables 1-3 of Paper I) | `R_paper_refs/paper1_radial_tables.py` | the paper's numbers as data |
+| `step17_radial_validation.py` | not ported | external validation against Font et al. 2002 (needs a polytrope star); dropped by decision |
 | `step18,21,23,24` | not yet | module A |
 
 ## Deliberate differences
@@ -157,6 +162,32 @@ header of each new file says what it was moved from and what changed.
       dominated by axion emission); they fail here identically. The H31 "above threshold" check asked for a difference of exactly 0 and now allows 1e-12 (roundoff 2e-17).
     * N1 on the new tables: 19 of 19 paper checks; coupled shifts within 0.0056 percentage points of the legacy `fig_axcow.json`.
     * N3 interior matrix with the axion off against N2's: 1.9e-15 (`tests/compare_n3_n2_matrix.py`).
+
+13. **N4: the radial system from D0/D1 artifacts, with coefficient tables (assessment and runs, one core).**
+    * *Structure.* The radial matrices are a 4 x 4 interior (12 non-zero entries, 3,639 operations, 986 after CSE) and a 2 x 2 exterior (3 entries, 68 -> 45), derived from D0's background
+      equations and D1's linearised radial equations (20 s to compile). A(r, w) = A_0(r) + w^2 A_1(r) EXACTLY (fit residual 2.5e-16 interior, 1.1e-16 exterior; no 1/w^2 term, unlike N3), so
+      only two coefficient matrices are tabulated (r^2 A, on the stored S1 nodes). Right-hand-side error against the exact arithmetic: <= 3.4e-11 near the centre, 1.1e-11 in the last 50 m,
+      3.5e-13 in the tail, <= 7e-8 elsewhere. The entries of A grow to 1e13 towards the surface (as W in N2); the product A y keeps its accuracy.
+    * *Cost.* In the legacy a `det_entire` evaluation made about 10,000 `bgvals` calls (83% of the time in `bgvals`, 11% in A): 203 us per call; with the tables 7.2 us per call and 0.11 s per
+      evaluation instead of about 2.7 s. The legacy contour counts were small (step 20: 5,399 points; step 16: about 5,000 plus 3 x 459 axis points), so the whole N4 takes about 35 minutes on one
+      core against the legacy 23,205 s wall on 6 workers.
+    * *Modes (nu_a = 6 kHz, committed `radial_star.json`).* F = 3.4492123635 kHz (2.2e-8), H1 = 8.114832172 - 0.003649453i (Re 1.8e-8, damping 1.2e-5).
+    * *Steps (time on one core; the results of the committed legacy in brackets).* 22: 27 s, 4/4. 26: 115 s, Table 1 within 9.5e-5, Table 2 real parts within 9.5e-5 and imaginary parts within
+      1.1e-3; the two failing checks (Table 1 max deviation 1.09% at f0, 2.8 kHz; Table 2 dampings 11/22 within 25%) are `False` in the committed legacy result with the same numbers (known
+      disagreements with the paper); Table 3, descriptive: Muller converges in 8/14 seeds (legacy 6/14). 15: 83 s, 13/13 (turning point p_c = 904.9, legacy 904.96; ladder n_eff
+      2.012 ... 5.967 as the legacy). 19: about 300 s, 2/2, minimum gap 49.1 Hz at nu_a = 3.509 kHz (legacy 49.07 Hz at 3.5086). 20: 595 s, 4/4; index 2 in the main region and 0 in the thin strip as
+      the legacy, fluid modes 8.1148 - 3.65i and 11.67 - 21.7i (4.3e-5); the counts that differ are in settings at the noise floor or tied to the matching radius: deep region 0 (legacy 2, with no
+      root located: its H23 check was `False`, here `True`), old-lapse control 5 (legacy 8) and old-lapse deep 2 (legacy 0); a cavity resonance moves with r_m (80 km here, 117 km in the legacy).
+      16: 871 s, 7/7 (index 1 beyond the maximum mass and 0 before it without axion; the axion control at p_c = 1000 has index 1 and a sign change at 0.58 kHz; 6 and 3.4 kHz have index 0).
+    * *Extra stars.* S1 supplies, in an untracked `outputs_extra/` (about 20 MB, `make S1-extra`, 2 minutes): nu_a = 3.4, 3.5 and the 15 values of step 19, the nu_a = 6 star at p_c = 1000, and
+      no-axion stars for p_c = 700..1100 in steps of 10 (58 stars, worst interpolation error 6.9e-7). The legacy built them on the fly.
+    * *Adaptations.* (a) The turning point of step 15 is read from the fixed grid with cubic splines (the legacy used a bounded minimiser and a root finder on fresh stars). (b) Step 19 uses the 15
+      values of nu_a the legacy ended up with after its run-time refinement. (c) The matching radius is R + 0.7 (r_end - R) (see item 12). (d) Robustness of Im nu: the start-radius variant
+      r0 = 1e-4 km is r0 = 3e-3 km (the tables start at 1e-3 km) and the matching-radius variants are 0.8 and 0.6 of r_m. (e) The window of the retired "axion resonance" (step 15) is "above the
+      threshold and damped": the legacy window was tied to its r_m (the resonance sits at 6.290 - 0.802i for r_m = 80 km and moves to 8.261 - 1.742i at 64 km). (f) `real_root` rejects poles of
+      `det`: the exterior wave vanishes at r_m for some real frequencies, and with a shorter r_m than the legacy's a pole fell inside the bracket of the n = 2 gravitational-atom level.
+      (g) `exterior_psi` uses g''(0) = -beta/4 instead of `axstar.g2(0.0)`.
+    * *Not ported.* Step 17 (Font et al. 2002 and the Garching table): it needs a polytrope star; dropped by decision.
 
 ## Known limitations (not fixed here)
 
