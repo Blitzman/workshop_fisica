@@ -8,7 +8,7 @@
    "commit": "26f2fcc",
    "dirty": true
   },
-  "created": "2026-11-17T13:01:56Z",
+  "created": "2026-11-17T20:37:49Z",
   "env": {
    "python": "3.12.3",
    "platform": "Linux x86_64",
@@ -19,7 +19,7 @@
    "matplotlib": "3.11.2"
   }
  },
- "seconds": 213.7,
+ "seconds": 249.2,
  "inputs": [
   {
    "name": "paper2_tables.ref.json",
@@ -34,79 +34,79 @@
   {
    "name": "star_noaxion.csv",
    "path": "S1_star_background/outputs/star_noaxion.csv",
-   "sha256": "3371fc805cbc1a8d578811dc54d77c65429e17b2e20641f742983f8df5f2d4f1"
+   "sha256": "00edbac976edb044ba2612ef65c1bd7856f3eb0b49290c0ba763d7d9ecb73314"
   },
   {
    "name": "manifest.json",
    "path": "S1_star_background/outputs/manifest.json",
-   "sha256": "a243452957f162c53caac5554f7c26061befa7d5b0636deaa0fcbbe44958315d"
+   "sha256": "99c6577cf874b32dd6092cb1d5520df32e2bfde48b2133110b8ddcd177de0704"
   },
   {
    "name": "star_nua2.8.csv",
    "path": "S1_star_background/outputs/star_nua2.8.csv",
-   "sha256": "f6e89752a7fe8efdfd9ad89ebf4b56d0622a8818912b1177771d5038e8ce086e"
+   "sha256": "7e1a456ed089a741513d22d185c6515fbc6f1af720640288f5fa688f2fbf7853"
   },
   {
    "name": "star_nua3.csv",
    "path": "S1_star_background/outputs/star_nua3.csv",
-   "sha256": "e1edcf4298980592c842dedee2376ed76894dfc730c5e6f276699c95f31e96a5"
+   "sha256": "d8c6551b31cc7de9cf4e7b424ca2c554fcf40a440086bac1bb46a9493486d003"
   },
   {
    "name": "star_nua4.csv",
    "path": "S1_star_background/outputs/star_nua4.csv",
-   "sha256": "1d07b70a6296223f5eb3638bf9f07b6c18c07880ac6d420ed53f7bed515f0716"
+   "sha256": "235e1eaffc5049bb28b32deb46dbd92fcd924ae7c6a17c4a0c5a46bf6c299f2d"
   },
   {
    "name": "star_nua5.csv",
    "path": "S1_star_background/outputs/star_nua5.csv",
-   "sha256": "a0bbc020e8f8fc6fb80d483cd72fe3ed9662a9c4ef030def7108b98936c06a52"
+   "sha256": "a71a12b96f5f51b2eef3adaa56e49fb559212d9564b10987afbf547a9d35ef86"
   },
   {
    "name": "star_nua6.csv",
    "path": "S1_star_background/outputs/star_nua6.csv",
-   "sha256": "0a27f0d03164543fbb65d10a198c8afe6b45fe8a3120a3a0ccb6ec7e989c0c3a"
+   "sha256": "547ae04f8a7e5c8d8571ff59857cfbe655cf2a9e8728f8d5128fb5a0b5f4a6dc"
   },
   {
    "name": "star_nua7.csv",
    "path": "S1_star_background/outputs/star_nua7.csv",
-   "sha256": "18331bef7ab1a7bd335b77f217564102eca63abb0d63456a181812d6205b93dd"
+   "sha256": "0d206479485c977e48cb6d284c577ba1cff1baa5eebba173ae6d77a5ebf67d48"
   },
   {
    "name": "star_nua8.csv",
    "path": "S1_star_background/outputs/star_nua8.csv",
-   "sha256": "3a653d5c26959266cd6aaff1dcbb6d64d869aedc7be281f5535c231e953f807d"
+   "sha256": "482f4d4c3b677676bc1bee7a8b4ad82592d23cf33dfedef331f2fc656ea61052"
   },
   {
    "name": "star_nua10.csv",
    "path": "S1_star_background/outputs/star_nua10.csv",
-   "sha256": "610a4152fb5dd93da52ab85191ea710a55a07937ec8bbd1b40063bfec4088ce9"
+   "sha256": "0c8b7a34ddd8ec5dce4453e6507c2a1ba9fd938ae3a0ef145cba330f792a73a6"
   },
   {
    "name": "star_nua11.csv",
    "path": "S1_star_background/outputs/star_nua11.csv",
-   "sha256": "7abeec51202f73962a663c0de12766f29514e2f549d2a1a945a7fa94ae2d010b"
+   "sha256": "49ef9633b2af5ab4648d5bb66d9bb67451c9a9291cbf2a4a5a37d91e9b4a0c42"
   },
   {
    "name": "star_nua12.csv",
    "path": "S1_star_background/outputs/star_nua12.csv",
-   "sha256": "215f4fd611efdcb600b7dd04b5fb27f828fcbc5a7e354839e65d5fb4f74e3324"
+   "sha256": "65439e43be2ad8cf51a25a82528a8ee6bb891473807d76ee286613bc65497349"
   },
   {
    "name": "star_nua13.csv",
    "path": "S1_star_background/outputs/star_nua13.csv",
-   "sha256": "3bdc05fa3651134ae0710e1b36ead4c91da03eaa65dbc854118e30d5c58ebd84"
+   "sha256": "ca91082b638365f6d4f3df36ecec97a03f49fd31021dfdbcda9758250f8b1b76"
   },
   {
    "name": "star_nua15.csv",
    "path": "S1_star_background/outputs/star_nua15.csv",
-   "sha256": "fdcfa07e40b515798c63e9a59e786a3c756540327d52c6a37471435a663bf9b0"
+   "sha256": "99cf4a5882ebe3f383ba26a10345b9f7a7460fc79d7c96216fc89c0f2a8ad635"
   }
  ],
  "artifacts": [
   {
    "path": "modes_cowling.csv",
-   "sha256": "bc8d9dfd6933c715fdaf3e0ec057c596dddd81cbf6ba0d737f99e41079b8d715",
-   "bytes": 4151
+   "sha256": "b7c7c3f02da871041b7c7972579e7f4888a58933ce17e24d6f4db6d432834361",
+   "bytes": 4171
   },
   {
    "path": "atom_levels.csv",

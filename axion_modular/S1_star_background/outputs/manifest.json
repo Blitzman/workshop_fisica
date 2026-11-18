@@ -8,7 +8,7 @@
    "commit": "26f2fcc",
    "dirty": true
   },
-  "created": "2026-11-17T12:58:21Z",
+  "created": "2026-11-17T20:21:07Z",
   "env": {
    "python": "3.12.3",
    "platform": "Linux x86_64",
@@ -19,7 +19,7 @@
    "matplotlib": "3.11.2"
   }
  },
- "seconds": 24.8,
+ "seconds": 75.5,
  "inputs": [],
  "artifacts": [
   {
@@ -29,68 +29,68 @@
   },
   {
    "path": "star_noaxion.csv",
-   "sha256": "3371fc805cbc1a8d578811dc54d77c65429e17b2e20641f742983f8df5f2d4f1",
-   "bytes": 210905
+   "sha256": "00edbac976edb044ba2612ef65c1bd7856f3eb0b49290c0ba763d7d9ecb73314",
+   "bytes": 596435
   },
   {
    "path": "star_nua2.8.csv",
-   "sha256": "f6e89752a7fe8efdfd9ad89ebf4b56d0622a8818912b1177771d5038e8ce086e",
-   "bytes": 293125
+   "sha256": "7e1a456ed089a741513d22d185c6515fbc6f1af720640288f5fa688f2fbf7853",
+   "bytes": 830508
   },
   {
    "path": "star_nua3.csv",
-   "sha256": "e1edcf4298980592c842dedee2376ed76894dfc730c5e6f276699c95f31e96a5",
-   "bytes": 292153
+   "sha256": "d8c6551b31cc7de9cf4e7b424ca2c554fcf40a440086bac1bb46a9493486d003",
+   "bytes": 827506
   },
   {
    "path": "star_nua4.csv",
-   "sha256": "1d07b70a6296223f5eb3638bf9f07b6c18c07880ac6d420ed53f7bed515f0716",
-   "bytes": 291696
+   "sha256": "235e1eaffc5049bb28b32deb46dbd92fcd924ae7c6a17c4a0c5a46bf6c299f2d",
+   "bytes": 825123
   },
   {
    "path": "star_nua5.csv",
-   "sha256": "a0bbc020e8f8fc6fb80d483cd72fe3ed9662a9c4ef030def7108b98936c06a52",
-   "bytes": 291061
+   "sha256": "a71a12b96f5f51b2eef3adaa56e49fb559212d9564b10987afbf547a9d35ef86",
+   "bytes": 825150
   },
   {
    "path": "star_nua6.csv",
-   "sha256": "0a27f0d03164543fbb65d10a198c8afe6b45fe8a3120a3a0ccb6ec7e989c0c3a",
-   "bytes": 291385
+   "sha256": "547ae04f8a7e5c8d8571ff59857cfbe655cf2a9e8728f8d5128fb5a0b5f4a6dc",
+   "bytes": 825235
   },
   {
    "path": "star_nua7.csv",
-   "sha256": "18331bef7ab1a7bd335b77f217564102eca63abb0d63456a181812d6205b93dd",
-   "bytes": 290787
+   "sha256": "0d206479485c977e48cb6d284c577ba1cff1baa5eebba173ae6d77a5ebf67d48",
+   "bytes": 824618
   },
   {
    "path": "star_nua8.csv",
-   "sha256": "3a653d5c26959266cd6aaff1dcbb6d64d869aedc7be281f5535c231e953f807d",
-   "bytes": 291151
+   "sha256": "482f4d4c3b677676bc1bee7a8b4ad82592d23cf33dfedef331f2fc656ea61052",
+   "bytes": 824241
   },
   {
    "path": "star_nua10.csv",
-   "sha256": "610a4152fb5dd93da52ab85191ea710a55a07937ec8bbd1b40063bfec4088ce9",
-   "bytes": 290744
+   "sha256": "0c8b7a34ddd8ec5dce4453e6507c2a1ba9fd938ae3a0ef145cba330f792a73a6",
+   "bytes": 824252
   },
   {
    "path": "star_nua11.csv",
-   "sha256": "7abeec51202f73962a663c0de12766f29514e2f549d2a1a945a7fa94ae2d010b",
-   "bytes": 290625
+   "sha256": "49ef9633b2af5ab4648d5bb66d9bb67451c9a9291cbf2a4a5a37d91e9b4a0c42",
+   "bytes": 824590
   },
   {
    "path": "star_nua12.csv",
-   "sha256": "215f4fd611efdcb600b7dd04b5fb27f828fcbc5a7e354839e65d5fb4f74e3324",
-   "bytes": 290175
+   "sha256": "65439e43be2ad8cf51a25a82528a8ee6bb891473807d76ee286613bc65497349",
+   "bytes": 824461
   },
   {
    "path": "star_nua13.csv",
-   "sha256": "3bdc05fa3651134ae0710e1b36ead4c91da03eaa65dbc854118e30d5c58ebd84",
-   "bytes": 291275
+   "sha256": "ca91082b638365f6d4f3df36ecec97a03f49fd31021dfdbcda9758250f8b1b76",
+   "bytes": 824508
   },
   {
    "path": "star_nua15.csv",
-   "sha256": "fdcfa07e40b515798c63e9a59e786a3c756540327d52c6a37471435a663bf9b0",
-   "bytes": 290876
+   "sha256": "99cf4a5882ebe3f383ba26a10345b9f7a7460fc79d7c96216fc89c0f2a8ad635",
+   "bytes": 824541
   }
  ],
  "summary": {
@@ -100,12 +100,12 @@
  },
  "checks": [
   {
-   "name": "Fondo BSk26 sin axión, p_c = 100 MeV/fm^3: M = 1.536 M_sun, R = 11.72 km (Paper I: 1.53 M_sun, 11.7 km)",
+   "name": "Fondo BSk26 sin axión, p_c = 100 MeV/fm^3: M = 1.536 M_sun, R = 11.71 km (Paper I: 1.53 M_sun, 11.7 km)",
    "ok": true,
    "note": ""
   },
   {
-   "name": "Tablas de estado: la spline cúbica reproduce la solución del integrador dentro de 1e-05 (peor caso 4.7e-06, 13 estrellas, peor: 7)",
+   "name": "Tablas de estado: la spline cúbica reproduce la solución del integrador dentro de 1e-05 (peor caso 1.3e-07, 13 estrellas, peor: 7)",
    "ok": true,
    "note": ""
   },
@@ -118,288 +118,249 @@
  "extra": {
   "stars": {
    "noaxion": {
-    "M_msun": 1.535931322225003,
-    "R_km": 11.71939247407055,
-    "seconds": 0.1,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.5359313225135915,
+    "R_km": 11.706896538534965,
+    "seconds": 0.3,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 2.0773124479040195e-07,
-     "m": 3.986869174683509e-07,
-     "Phi": 2.103825177591387e-06,
+     "p": 3.283831863102457e-09,
+     "m": 9.373058457312765e-12,
+     "Phi": 1.9032819857149285e-11,
      "theta": 0.0,
      "theta_p": 0.0
     },
-    "interp_max_err": 2.103825177591387e-06,
+    "interp_max_err": 3.283831863102457e-09,
     "interp_tol": 1e-05
    },
    "2.8": {
-    "M_msun": 1.509314031993058,
-    "R_km": 11.674168036310377,
-    "theta_c": 1.1049234967386856,
-    "seconds": 2.6,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.5093102333348603,
+    "R_km": 11.661585345267795,
+    "theta_c": 1.1049226353499622,
+    "seconds": 8.6,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 8.897893312486572e-07,
-     "m": 3.962565673501215e-07,
-     "Phi": 2.137924742662933e-06,
-     "theta": 7.821262366844414e-07,
-     "theta_p": 2.5304942814231595e-06
+     "p": 7.537584776763632e-09,
+     "m": 8.587465142752093e-12,
+     "Phi": 1.8185477758647268e-11,
+     "theta": 1.829572431230809e-08,
+     "theta_p": 2.378018020944849e-10
     },
-    "interp_max_err": 2.5304942814231595e-06,
+    "interp_max_err": 1.829572431230809e-08,
     "interp_tol": 1e-05
    },
    "3": {
-    "M_msun": 1.458606681628865,
-    "R_km": 11.57296737796431,
-    "theta_c": 1.9758462937184256,
-    "seconds": 2.4,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.4585949185164906,
+    "R_km": 11.560328219948966,
+    "theta_c": 1.9758461325127836,
+    "seconds": 8.0,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 3.0890674087114566e-07,
-     "m": 3.8680954872592704e-07,
-     "Phi": 2.2857735711509546e-06,
-     "theta": 7.581033743900476e-07,
-     "theta_p": 2.371943220643984e-06
+     "p": 1.9481021222970477e-09,
+     "m": 1.262784201731944e-11,
+     "Phi": 1.494759457154699e-11,
+     "theta": 2.028951434712379e-08,
+     "theta_p": 1.6953054442475322e-10
     },
-    "interp_max_err": 2.371943220643984e-06,
+    "interp_max_err": 2.028951434712379e-08,
     "interp_tol": 1e-05
    },
    "4": {
-    "M_msun": 1.4276670800735987,
-    "R_km": 11.383376180150849,
-    "theta_c": 2.978624766339134,
-    "seconds": 2.2,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.4276414140282248,
+    "R_km": 11.37180370105927,
+    "theta_c": 2.978624694447642,
+    "seconds": 6.9,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 2.2875869629186987e-07,
-     "m": 3.431560072748653e-07,
-     "Phi": 1.8431655213805185e-06,
-     "theta": 2.1478620479995798e-07,
-     "theta_p": 5.811711242231433e-07
+     "p": 1.1710685132236835e-09,
+     "m": 1.0878667075402001e-11,
+     "Phi": 1.615013489623121e-11,
+     "theta": 2.959498683604347e-08,
+     "theta_p": 5.524766398726651e-10
     },
-    "interp_max_err": 1.8431655213805185e-06,
+    "interp_max_err": 2.959498683604347e-08,
     "interp_tol": 1e-05
    },
    "5": {
-    "M_msun": 1.4531015729042915,
-    "R_km": 11.363376919747898,
-    "theta_c": 3.1024098967521785,
-    "seconds": 2.1,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.4530748273742153,
+    "R_km": 11.35264000774824,
+    "theta_c": 3.102409875604322,
+    "seconds": 5.6,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 9.01080131890604e-08,
-     "m": 3.325090747053242e-07,
-     "Phi": 1.7669263891625783e-06,
-     "theta": 9.896471541213891e-08,
-     "theta_p": 2.2647242404385849e-07
+     "p": 2.5298695959157696e-09,
+     "m": 1.0407191822242949e-11,
+     "Phi": 1.479973100226857e-11,
+     "theta": 3.414316693282645e-08,
+     "theta_p": 2.8312863866436064e-10
     },
-    "interp_max_err": 1.7669263891625783e-06,
+    "interp_max_err": 3.414316693282645e-08,
     "interp_tol": 1e-05
    },
    "6": {
-    "M_msun": 1.472473328545581,
-    "R_km": 11.364865311059905,
-    "theta_c": 3.1310419467855692,
-    "seconds": 2.1,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.4724475351714965,
+    "R_km": 11.354671864018556,
+    "theta_c": 3.131041941422845,
+    "seconds": 5.9,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 9.463981679786332e-08,
-     "m": 3.2842659601634585e-07,
-     "Phi": 1.762946361189642e-06,
-     "theta": 5.665504829567348e-08,
-     "theta_p": 1.0455889747437647e-07
+     "p": 8.919104442629189e-10,
+     "m": 1.1076581297476331e-11,
+     "Phi": 1.276304032152501e-11,
+     "theta": 4.3055617913487525e-08,
+     "theta_p": 2.2741866533499432e-10
     },
-    "interp_max_err": 1.762946361189642e-06,
+    "interp_max_err": 4.3055617913487525e-08,
     "interp_tol": 1e-05
    },
    "7": {
-    "M_msun": 1.48645624108504,
-    "R_km": 11.368577038186828,
-    "theta_c": 3.138660011870293,
-    "seconds": 1.9,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.4864318404472503,
+    "R_km": 11.35879335140956,
+    "theta_c": 3.1386600109257636,
+    "seconds": 5.6,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 2.4416322931245536e-07,
-     "m": 3.260677126704766e-07,
-     "Phi": 1.7675004780869992e-06,
-     "theta": 3.906361111494839e-08,
-     "theta_p": 4.675670590389742e-06
+     "p": 5.876346586328079e-09,
+     "m": 7.891029857915055e-12,
+     "Phi": 1.5379979154428614e-11,
+     "theta": 1.2520877101960234e-07,
+     "theta_p": 2.3113137709152745e-10
     },
-    "interp_max_err": 4.675670590389742e-06,
+    "interp_max_err": 1.2520877101960234e-07,
     "interp_tol": 1e-05
    },
    "8": {
-    "M_msun": 1.496841359678978,
-    "R_km": 11.3711533387232,
-    "theta_c": 3.140768674560957,
-    "seconds": 1.9,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.4968182643691756,
+    "R_km": 11.361684825524257,
+    "theta_c": 3.140768674490333,
+    "seconds": 5.3,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 5.66068210509498e-07,
-     "m": 3.243495731674568e-07,
-     "Phi": 1.766583309285012e-06,
-     "theta": 3.621656299380055e-08,
-     "theta_p": 2.0628879690003032e-07
+     "p": 1.1219683905450705e-09,
+     "m": 7.259626588109521e-12,
+     "Phi": 1.4747393233260837e-11,
+     "theta": 7.260511182570312e-08,
+     "theta_p": 2.4548948288053784e-10
     },
-    "interp_max_err": 1.766583309285012e-06,
+    "interp_max_err": 7.260511182570312e-08,
     "interp_tol": 1e-05
    },
    "10": {
-    "M_msun": 1.5110749856524415,
-    "R_km": 11.371730821853044,
-    "theta_c": 3.1415271290637805,
-    "seconds": 1.8,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.5110541777042956,
+    "R_km": 11.362767941295166,
+    "theta_c": 3.1415271290334204,
+    "seconds": 5.5,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 1.9490238745840182e-07,
-     "m": 3.2164100582430685e-07,
-     "Phi": 1.805432426336228e-06,
-     "theta": 1.1380612978761276e-08,
-     "theta_p": 1.0512117758817174e-07
+     "p": 1.984760735085098e-09,
+     "m": 6.97598969960907e-12,
+     "Phi": 1.5611587415338223e-11,
+     "theta": 8.469789457624166e-08,
+     "theta_p": 2.592125833357667e-10
     },
-    "interp_max_err": 1.805432426336228e-06,
+    "interp_max_err": 8.469789457624166e-08,
     "interp_tol": 1e-05
    },
    "11": {
-    "M_msun": 1.5161321514237067,
-    "R_km": 11.370217881002649,
-    "theta_c": 3.141574189648028,
-    "seconds": 1.9,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.5161123590448076,
+    "R_km": 11.361469857605393,
+    "theta_c": 3.1415741896373914,
+    "seconds": 6.0,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 1.1855799292219727e-07,
-     "m": 3.2045409737443867e-07,
-     "Phi": 1.8204801758404796e-06,
-     "theta": 7.762067452320608e-09,
-     "theta_p": 1.0010220360551331e-07
+     "p": 8.677184591041477e-10,
+     "m": 7.870214497755569e-12,
+     "Phi": 1.363139887071483e-11,
+     "theta": 7.340797235662476e-08,
+     "theta_p": 2.650022488559465e-10
     },
-    "interp_max_err": 1.8204801758404796e-06,
+    "interp_max_err": 7.340797235662476e-08,
     "interp_tol": 1e-05
    },
    "12": {
-    "M_msun": 1.5202888144254008,
-    "R_km": 11.367873972890154,
-    "theta_c": 3.141587458889242,
-    "seconds": 1.8,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.5202699288968722,
+    "R_km": 11.359316933321146,
+    "theta_c": 3.1415874588861423,
+    "seconds": 5.9,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 6.994066885198211e-07,
-     "m": 3.1933155689598295e-07,
-     "Phi": 1.833213189955322e-06,
-     "theta": 5.6943259829226016e-09,
-     "theta_p": 1.076517769997686e-07
+     "p": 1.7052955936088055e-09,
+     "m": 8.127259760143373e-12,
+     "Phi": 1.429959040946577e-11,
+     "theta": 1.1408168659470853e-07,
+     "theta_p": 2.603608331199456e-10
     },
-    "interp_max_err": 1.833213189955322e-06,
+    "interp_max_err": 1.1408168659470853e-07,
     "interp_tol": 1e-05
    },
    "13": {
-    "M_msun": 1.5237613827416796,
-    "R_km": 11.36490533166938,
-    "theta_c": 3.141591194788798,
-    "seconds": 1.9,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.52374335191178,
+    "R_km": 11.356527312441212,
+    "theta_c": 3.141591194788066,
+    "seconds": 6.1,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 5.452022211708808e-07,
-     "m": 3.182580887153676e-07,
-     "Phi": 1.8429282123751166e-06,
-     "theta": 4.491000605492949e-09,
-     "theta_p": 1.0695848912765891e-07
+     "p": 1.2926832297016286e-09,
+     "m": 9.192261474901732e-12,
+     "Phi": 1.3841290319301837e-11,
+     "theta": 8.935857977222805e-08,
+     "theta_p": 2.584973491838365e-10
     },
-    "interp_max_err": 1.8429282123751166e-06,
+    "interp_max_err": 8.935857977222805e-08,
     "interp_tol": 1e-05
    },
    "15": {
-    "M_msun": 1.5292250904266342,
-    "R_km": 11.357748537926517,
-    "theta_c": 3.1415925392081583,
-    "seconds": 1.9,
-    "n_in": 2000,
-    "n_out": 500,
-    "n_rows": 2499,
-    "interior_grid": "surface-clustered",
-    "cluster_exponent": 5.0,
-    "tail_grid": "uniform",
-    "interpolation": "cubic spline, not-a-knot, per column",
+    "M_msun": 1.529208459668538,
+    "R_km": 11.349674498018032,
+    "theta_c": 3.1415925392081085,
+    "seconds": 5.7,
+    "n_rows": 7197,
+    "n_interior": 6198,
+    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 1.714801226981999e-07,
-     "m": 3.162348553520322e-07,
-     "Phi": 1.8632814423354734e-06,
-     "theta": 2.7728218184374142e-09,
-     "theta_p": 1.0907495371326469e-07
+     "p": 1.9329888107257776e-09,
+     "m": 7.770697383875361e-12,
+     "Phi": 1.6260736010555848e-11,
+     "theta": 5.4762378425776555e-08,
+     "theta_p": 2.5791444853369117e-10
     },
-    "interp_max_err": 1.8632814423354734e-06,
+    "interp_max_err": 5.4762378425776555e-08,
     "interp_tol": 1e-05
    }
   },

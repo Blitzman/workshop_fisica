@@ -1,8 +1,9 @@
 """N1: the background star as seen by the mode solver, rebuilt from S1's tables (no import from S1).
 
 Inputs (written by S1): eos_bsk26.csv and star_*.csv (+ .meta.json). The star table is the dense STATE table
-(ln p, m, Phi, theta, theta' on ~2,500 nodes); all five columns are interpolated with ONE cubic spline lookup per radius (not-a-knot;
-two splines, split at the node r_k where the EOS is switched off; this is the interpolation whose error S1 measures and records). The EOS is rebuilt from its table exactly as bsk26.EOS builds it, but
+(ln p, m, Phi, theta, theta' on ~7,000 nodes, finer in r near the surface); interpolated with ONE cubic spline lookup per radius (not-a-knot;
+two splines, split at the node R_stop = r_k where the star hands over to the fluid-free tail; the tail has no ln p). This is the interpolation whose
+error S1 measures and records. The EOS is rebuilt from its table exactly as bsk26.EOS builds it, but
 ln eps, ln n and d ln eps / d ln p are evaluated together as one stacked polynomial. Everything else (energy density, sound
 speed, couplings, Phi', lambda', m') is exact arithmetic from the state: `_matter` and `rhs` are copies of
 axion_ns/axstar.py::Star.matter / Star.rhs, validated against S1's Star in tests/ (test_physics_crosscheck).
@@ -76,7 +77,8 @@ class StarTable:
         i = int(np.searchsorted(r, self.rk))
         assert r[i] == self.rk, 'r_k must be a node of the table'
         # two splines, one on each side of r_k (S1 validates exactly this interpolation; one spline across the kink rings)
-        self._fi, self._fo = _FastSpline(r[:i + 1], Y[:i + 1]), _FastSpline(r[i:], Y[i:])
+        # the tail (r > R_stop) has no fluid: no ln p column (stored as -inf), p = 0 there
+        self._fi, self._fo = _FastSpline(r[:i + 1], Y[:i + 1]), _FastSpline(r[i:], Y[i:, 1:])
 
     # ---- background functions (same definitions as axion_ns/axstar.py)
     def g(self, t):
@@ -91,8 +93,11 @@ class StarTable:
 
     def y_at(self, r):
         """(m, p, Phi, theta, theta') at r (Phi without the shift); replaces st.sol.sol(r)."""
-        lnp, m, Phi, t, tp = (self._fi(r) if r <= self.rk else self._fo(r)).tolist()
-        return m, math.exp(lnp), Phi, t, tp
+        if r <= self.rk:
+            lnp, m, Phi, t, tp = self._fi(r).tolist()
+            return m, math.exp(lnp), Phi, t, tp
+        m, Phi, t, tp = self._fo(r).tolist()
+        return m, 0.0, Phi, t, tp
 
     def _matter(self, p, t):
         """(eps, n_b, x, c_s^2, q1, q2, g) in km^-2; zeros outside the star (same as Star.matter)."""

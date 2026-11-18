@@ -1,8 +1,8 @@
 {
  "schema": "axion-table/1",
  "name": "star_nua8",
- "title": "Background profile (TOV + Klein-Gordon): dense state table",
- "n_rows": 2499,
+ "title": "Background profile (TOV + Klein-Gordon): dense state table from the ln p integration",
+ "n_rows": 7197,
  "columns": [
   {
    "name": "r_km",
@@ -14,7 +14,7 @@
    "name": "ln_p",
    "dtype": "float64",
    "unit": "1",
-   "description": "natural log of the pressure in geometric units (km^-2)"
+   "description": "natural log of the pressure in geometric units (km^-2); -inf in the fluid-free tail"
   },
   {
    "name": "m_km",
@@ -26,7 +26,7 @@
    "name": "Phi",
    "dtype": "float64",
    "unit": "1",
-   "description": "lapse potential, Phi(r_end) unshifted (add Phi_shift from the metadata)"
+   "description": "lapse potential, Phi(r0) = 0 unshifted (add Phi_shift from the metadata)"
   },
   {
    "name": "theta",
@@ -54,43 +54,43 @@
   "f_pi_MeV": 92.1,
   "ma_per_km": 0.16766760175613454,
   "fa2_geo": 2.0838016561552056e-05,
-  "theta_c": 3.140768674560957,
-  "R_km": 11.3711533387232,
-  "M_km": 2.2103402681232294,
-  "M_msun": 1.496841359678978,
-  "Phi_shift": -0.500072283839527,
-  "r_end_km": 57.46273149966825,
-  "M_total_km": 2.2184096788843646,
+  "theta_c": 3.140768674490333,
+  "R_km": 11.361684825524257,
+  "M_km": 2.210306163979239,
+  "M_msun": 1.4968182643691756,
+  "Phi_shift": -0.500072048505115,
+  "r_end_km": 82.04455619835863,
+  "M_total_km": 2.218409667606242,
+  "r_k_km": 11.361684825524257,
   "KGEO": 1.3238333135663823e-06,
   "MSUN_km": 1.4766696910334391,
   "CKMS": 299792.458,
   "HBARC_MeV_fm": 197.3269804593025,
   "p_min_MeV_fm3": 9.124572027595528e-10,
   "integrator": {
+   "variable": "ln p (structure), r (vacuum tail)",
    "method": "DOP853",
-   "rtol": 1e-06,
+   "rtol": 1e-08,
    "atol": 1e-30,
    "max_step_km": 0.25,
-   "start_r_km": 1e-05,
-   "shoot_tol": 1e-06
+   "max_step_s": 0.25,
+   "start_r_km": 0.01,
+   "p_frac": 1e-10,
+   "shoot_tol": 1e-12
   },
-  "r_k_km": 11.371155819605658,
   "dense": {
-   "n_in": 2000,
-   "n_out": 500,
-   "n_rows": 2499,
-   "interior_grid": "surface-clustered",
-   "cluster_exponent": 5.0,
-   "tail_grid": "uniform",
-   "interpolation": "cubic spline, not-a-knot, per column",
+   "n_rows": 7197,
+   "n_interior": 6198,
+   "nodes": "uniform in ln p + uniform in r + geometric near the centre",
+   "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
    "interp_err": {
-    "p": 5.66068210509498e-07,
-    "m": 3.243495731674568e-07,
-    "Phi": 1.766583309285012e-06,
-    "theta": 3.621656299380055e-08,
-    "theta_p": 2.0628879690003032e-07
+    "p": 1.1219683905450705e-09,
+    "m": 7.259626588109521e-12,
+    "Phi": 1.4747393233260837e-11,
+    "theta": 7.260511182570312e-08,
+    "theta_p": 2.4548948288053784e-10
    },
-   "interp_max_err": 1.766583309285012e-06,
+   "interp_max_err": 7.260511182570312e-08,
    "interp_tol": 1e-05
   }
  },
@@ -101,7 +101,7 @@
    "commit": "26f2fcc",
    "dirty": true
   },
-  "created": "2026-11-17T12:58:12Z",
+  "created": "2026-11-17T20:20:38Z",
   "env": {
    "python": "3.12.3",
    "platform": "Linux x86_64",
@@ -113,5 +113,5 @@
   }
  },
  "inputs": [],
- "csv_sha256": "3a653d5c26959266cd6aaff1dcbb6d64d869aedc7be281f5535c231e953f807d"
+ "csv_sha256": "482f4d4c3b677676bc1bee7a8b4ad82592d23cf33dfedef331f2fc656ea61052"
 }
