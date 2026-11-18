@@ -5,6 +5,7 @@ Writes: outputs/paper1_equations.eq.json    Paper I (2510.16245): Eqs. (2.6a-d),
         outputs/paper2_equations.eq.json    Paper II (2610.37308): Eqs. (8a-d)                  (+ .pdf)
         outputs/ld_sources.eq.json          Lindblom-Detweiler as typed in 4 sources + fixes    (+ .pdf)
         outputs/paper2_tables.ref.json      Paper II Tables I-IV as data
+        outputs/paper1_tables.ref.json      Paper I Tables 1-3 (radial modes) as data (read by N4)
         outputs/literature_modes.ref.json   LMI 1997 and Yoshida-Kojima 1997 polytrope mode frequencies (read by N2)
         outputs/manifest.json
 These are REFERENCES (kind = 'transcribed'); they are compared against derived equations in D1/D2, never used to derive.
@@ -18,7 +19,7 @@ from common.checks import Timer, report
 from common.pdf import pdf_from_artifact
 
 from . import ld_sources as LD
-from . import literature, paper1, paper2, tables
+from . import literature, paper1, paper1_radial_tables, paper2, tables
 
 MODULE = 'R_paper_refs'
 
@@ -84,6 +85,12 @@ def main(argv=None):
     nlit = len(literature.LMI97) + sum(len(d) for t in literature.YK97.values() for d in t.values())
     res.append((f'literature_modes.ref.json: LMI 1997 (l = 2-5) and Yoshida-Kojima 1997 (M/R = 0.1, 0.2; {nlit - 4} mode entries) written',
                 nlit == 4 + 2 * 4 * 3, ''))
+    pj = out / 'paper1_tables.ref.json'
+    pj.write_text(json.dumps(paper1_radial_tables.as_json(), indent=1), encoding='utf-8')
+    arts.append(pj)
+    P1 = paper1_radial_tables
+    res.append((f'paper1_tables.ref.json: Tables 1-3 of Paper I written (rows: T1 {len(P1.T1)}, T2 {len(P1.T2)}, T3 {len(P1.T3)} values of nu_a)',
+                (len(P1.T1), len(P1.T2), len(P1.T3)) == (8, 7, 7), ''))
     report('R: referencias del paper', res)
     A.write_manifest(out / 'manifest.json', MODULE, artifacts=arts, checks=res, seconds=tm.seconds())
     print(f'R done in {tm.seconds()} s')

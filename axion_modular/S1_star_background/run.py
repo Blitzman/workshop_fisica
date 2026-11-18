@@ -6,6 +6,7 @@ tail in r). Tolerances (defaults): ODE rtol 1e-8, shooting precision 1e-12 (abou
     python -m S1_star_background.run --rtol 1e-11 --shoot-tol 0
 
 Reads : nothing (BSk26 analytic fits are in bsk26.py).
+        --extra: only the extra stars of N4 (extra.py) into outputs_extra/ (untracked)
 Writes: outputs/eos_bsk26.csv(+.meta.json)          BSk26 EOS table
         outputs/star_noaxion.csv(+.meta.json)       reference star without axion (p_c = 100 MeV/fm^3), dense state table
         outputs/star_nua<nu>.csv(+.meta.json)       star with condensate for each nu_a (kHz); default: the 12 values of
@@ -44,6 +45,7 @@ def main(argv=None):
     ap.add_argument('--shoot-tol', type=float, default=1e-12,
                     help='shooting precision in delta (default 1e-12; 0 = the original 64 bisections + refinement to 1e-16)')
     ap.add_argument('--max-step', type=float, default=0.25, help='max integrator step (km)')
+    ap.add_argument('--extra', action='store_true', help='only the extra stars N4 needs (extra.py), into outputs_extra/ (not tracked by git)')
     ap.add_argument('--n-s', type=int, default=4000, help='table nodes uniform in ln p')
     ap.add_argument('--n-r', type=int, default=2000, help='table nodes uniform in r')
     ap.add_argument('--n-tail', type=int, default=1000, help='table nodes in the axion tail')
@@ -51,6 +53,9 @@ def main(argv=None):
     out, tm = Path(args.out), Timer()
     kw = dict(rtol=args.rtol, shoot_tol=(None if args.shoot_tol <= 0 else args.shoot_tol), max_step=args.max_step)
     nk = dict(n_s=args.n_s, n_r=args.n_r, n_tail=args.n_tail)
+    if args.extra:
+        from .extra import run_extra
+        return run_extra(HERE / 'outputs_extra' if args.out == str(HERE / 'outputs') else args.out, kw, args.tol)
     nus = [6.0] if args.witness else [float(x) for x in args.nu_a.split(',') if x]
 
     arts, res, stars = [], [], {}
