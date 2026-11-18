@@ -1,0 +1,158 @@
+{
+ "nu6": {
+  "per_tile": [
+   1,
+   1,
+   0,
+   0
+  ],
+  "tried": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "points": 1541,
+  "max_dphase": 0.93692824483295,
+  "total": 2,
+  "fluid_modes": [
+   [
+    8.114832187602659,
+    -0.0036494512712239875
+   ],
+   [
+    11.66975589688433,
+    -0.021689475834919012
+   ]
+  ],
+  "fluid_fraction": [
+   0.9811149280090142,
+   0.9162199942570518
+  ]
+ },
+ "thin": {
+  "per_tile": [
+   0,
+   0
+  ],
+  "tried": [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "points": 777,
+  "max_dphase": 0.978470635880803,
+  "total": 0
+ },
+ "deep": {
+  "per_tile": [
+   0,
+   0
+  ],
+  "tried": [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "points": 768,
+  "max_dphase": 0.05100210741816372,
+  "total": 0,
+  "roots": []
+ },
+ "lapse": {
+  "phi_inf_old": 0.0016208743115471158,
+  "tail_mass_frac": 0.004868003614381346
+ },
+ "old_lapse": {
+  "per_tile": [
+   1,
+   1,
+   3,
+   0
+  ],
+  "tried": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "points": 1542,
+  "max_dphase": 1.028633550734396,
+  "total": 5
+ },
+ "old_lapse_deep": {
+  "per_tile": [
+   0,
+   2
+  ],
+  "tried": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "points": 768,
+  "max_dphase": 0.46866716777635714,
+  "total": 2
+ },
+ "checks": [
+  {
+   "name": "H22(a): nu_a = 6 kHz, índice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ahí: 8.1148-3.65i (fluido 0.98), 11.6698-21.69i (fluido 0.92)",
+   "ok": true,
+   "note": "sin ceros adicionales: ninguna familia axiónica en esa región"
+  },
+  {
+   "name": "H26: franja casi real Re nu in [6.05, 12], Im nu in [-0.002, -1e-5] kHz: índice 0 (piezas [0, 0], convergidas [[0, 0], [0, 0]]; salto de fase máximo 0.98 rad)",
+   "ok": true,
+   "note": "fuera quedan |Im nu| < 0.01 Hz, Re nu < 6.05 kHz y Re nu > 12 kHz"
+  },
+  {
+   "name": "H23: región profunda Re nu in [6.05, 12], Im nu in [-5, -1.5] kHz: índice 0 (piezas [0, 0], convergidas [[0, 0], [0, 0]]); ningún cero: no hay análogo radial de a0 en esa región. Secuela, Tabla III (l = 2, Cowling): a0 = 9.0 -3.8i kHz",
+   "ok": true,
+   "note": "el resultado decide; no había predicción fuerte"
+  },
+  {
+   "name": "H22(b), control positivo: con la normalización antigua del lapso el índice sube a 5 (piezas [1, 1, 3, 0]): el recuento ve las resonancias de cavidad",
+   "ok": true,
+   "note": ""
+  }
+ ]
+}

@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MODULES = ['R_paper_refs', 'D0_derive_action', 'D1_derive_radial', 'D2_derive_nonradial', 'S1_star_background',
-           'N1_modes_cowling', 'N2_modes_fullgr_noaxion', 'N3_modes_fullgr_axion', 'T_toy_model', 'report']
+           'N1_modes_cowling', 'N2_modes_fullgr_noaxion', 'N3_modes_fullgr_axion', 'N4_modes_radial', 'T_toy_model', 'report']
 THIRD = {'numpy', 'scipy', 'sympy', 'mpmath', 'matplotlib'}
 
 

@@ -1,0 +1,365 @@
+{
+ "schema": "axion-manifest/1",
+ "module": "N4_modes_radial",
+ "producer": {
+  "module": "N4_modes_radial",
+  "script": null,
+  "git": {
+   "commit": "26f2fcc",
+   "dirty": true
+  },
+  "created": "2026-11-18T06:38:09Z",
+  "env": {
+   "python": "3.12.3",
+   "platform": "Linux x86_64",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "matplotlib": "3.11.2"
+  }
+ },
+ "seconds": 1109.2,
+ "inputs": [
+  {
+   "name": "background.eq.json",
+   "path": "D0_derive_action/outputs/background.eq.json",
+   "sha256": "51ca7bf4984bd84b4040c602c35c1c7f1cfc63ddd5f6dd5b08dc621a519272f3"
+  },
+  {
+   "name": "radial_linear.eq.json",
+   "path": "D1_derive_radial/outputs/radial_linear.eq.json",
+   "sha256": "fbda8604d9a2e8410acfa2f8ec93dd16074e12a43e5ef32c1c377f8fe72e8d8b"
+  },
+  {
+   "name": "paper1_tables.ref.json",
+   "path": "R_paper_refs/outputs/paper1_tables.ref.json",
+   "sha256": "d0bb6d97280e43a37980d748037bad9db66e84d3f35bc961478fb5abbe631ed3"
+  },
+  {
+   "name": "eos_bsk26.csv",
+   "path": "S1_star_background/outputs/eos_bsk26.csv",
+   "sha256": "9ce72d3c04c704efb36700dea8ace90ec77d767c4962f27f6920c85421a61ffa"
+  },
+  {
+   "name": "manifest.json",
+   "path": "S1_star_background/outputs/manifest.json",
+   "sha256": "99c6577cf874b32dd6092cb1d5520df32e2bfde48b2133110b8ddcd177de0704"
+  },
+  {
+   "name": "star_noaxion.csv",
+   "path": "S1_star_background/outputs/star_noaxion.csv",
+   "sha256": "00edbac976edb044ba2612ef65c1bd7856f3eb0b49290c0ba763d7d9ecb73314"
+  },
+  {
+   "name": "star_nua10.csv",
+   "path": "S1_star_background/outputs/star_nua10.csv",
+   "sha256": "0c8b7a34ddd8ec5dce4453e6507c2a1ba9fd938ae3a0ef145cba330f792a73a6"
+  },
+  {
+   "name": "star_nua11.csv",
+   "path": "S1_star_background/outputs/star_nua11.csv",
+   "sha256": "49ef9633b2af5ab4648d5bb66d9bb67451c9a9291cbf2a4a5a37d91e9b4a0c42"
+  },
+  {
+   "name": "star_nua12.csv",
+   "path": "S1_star_background/outputs/star_nua12.csv",
+   "sha256": "65439e43be2ad8cf51a25a82528a8ee6bb891473807d76ee286613bc65497349"
+  },
+  {
+   "name": "star_nua13.csv",
+   "path": "S1_star_background/outputs/star_nua13.csv",
+   "sha256": "ca91082b638365f6d4f3df36ecec97a03f49fd31021dfdbcda9758250f8b1b76"
+  },
+  {
+   "name": "star_nua15.csv",
+   "path": "S1_star_background/outputs/star_nua15.csv",
+   "sha256": "99cf4a5882ebe3f383ba26a10345b9f7a7460fc79d7c96216fc89c0f2a8ad635"
+  },
+  {
+   "name": "star_nua2.8.csv",
+   "path": "S1_star_background/outputs/star_nua2.8.csv",
+   "sha256": "7e1a456ed089a741513d22d185c6515fbc6f1af720640288f5fa688f2fbf7853"
+  },
+  {
+   "name": "star_nua3.csv",
+   "path": "S1_star_background/outputs/star_nua3.csv",
+   "sha256": "d8c6551b31cc7de9cf4e7b424ca2c554fcf40a440086bac1bb46a9493486d003"
+  },
+  {
+   "name": "star_nua4.csv",
+   "path": "S1_star_background/outputs/star_nua4.csv",
+   "sha256": "235e1eaffc5049bb28b32deb46dbd92fcd924ae7c6a17c4a0c5a46bf6c299f2d"
+  },
+  {
+   "name": "star_nua5.csv",
+   "path": "S1_star_background/outputs/star_nua5.csv",
+   "sha256": "a71a12b96f5f51b2eef3adaa56e49fb559212d9564b10987afbf547a9d35ef86"
+  },
+  {
+   "name": "star_nua6.csv",
+   "path": "S1_star_background/outputs/star_nua6.csv",
+   "sha256": "547ae04f8a7e5c8d8571ff59857cfbe655cf2a9e8728f8d5128fb5a0b5f4a6dc"
+  },
+  {
+   "name": "star_nua7.csv",
+   "path": "S1_star_background/outputs/star_nua7.csv",
+   "sha256": "0d206479485c977e48cb6d284c577ba1cff1baa5eebba173ae6d77a5ebf67d48"
+  },
+  {
+   "name": "star_nua8.csv",
+   "path": "S1_star_background/outputs/star_nua8.csv",
+   "sha256": "482f4d4c3b677676bc1bee7a8b4ad82592d23cf33dfedef331f2fc656ea61052"
+  },
+  {
+   "name": "manifest.json",
+   "path": "S1_star_background/outputs_extra/manifest.json",
+   "sha256": "78ca89c8c9bea33d285fef9185eb934134b7a515f20d718e0be7ed3ab893c3d3"
+  }
+ ],
+ "artifacts": [
+  {
+   "path": "radial_stability.json",
+   "sha256": "9d15ad854de4dffa2fb0be9f6ea8b06c7ed2fefa50c8ef23d7389ddf9e5fdd40",
+   "bytes": 3103
+  },
+  {
+   "path": "radial_contour.json",
+   "sha256": "f7801851e0bf5d7ae96795967b641b62aff9d348436e247057ab702f8003d846",
+   "bytes": 2391
+  },
+  {
+   "path": "radial_paper1.json",
+   "sha256": "7bec15c2d456fe2d18105a934b3a1dd12898e6d80239254c384fb6548c8951d7",
+   "bytes": 13930
+  },
+  {
+   "path": "radial_star.json",
+   "sha256": "466bdd69f37fdcf5d54194fe3a5be70c7996dc8b921b8237bba5d977afc1854c",
+   "bytes": 8223
+  },
+  {
+   "path": "radial_crossing.json",
+   "sha256": "17b96c8c253a8c5853ed8c576834fdbed68b8f8cdb389e54257b20fb84a75a33",
+   "bytes": 3406
+  },
+  {
+   "path": "radial_damped.json",
+   "sha256": "2b65772423c711b1d6095b4e245c8596a170b292d320f0fabd5a63a09eeed8b3",
+   "bytes": 2556
+  }
+ ],
+ "summary": {
+  "n_ok": 33,
+  "n_fail": 2,
+  "n_descriptive": 2
+ },
+ "checks": [
+  {
+   "name": "Control positivo sin axión: índice 1 más allá de la masa máxima (p_c = 1000) y 0 antes (p_c = 800)",
+   "ok": true,
+   "note": "H18(b)"
+  },
+  {
+   "name": "Control positivo con axión (nu_a = 6 kHz, p_c = 1000): índice 1; cambio de signo en el eje imaginario en gamma = 0.58 kHz",
+   "ok": true,
+   "note": "H18(c)"
+  },
+  {
+   "name": "nu_a = 6.0 kHz: ningún cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [0, 0], [0, 0]]; 1541 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 2e-15",
+   "ok": true,
+   "note": "H18(a)"
+  },
+  {
+   "name": "Robustez (6 kHz, franja central baja): índice 0 con 192 puntos por lado y 0 con eps/2",
+   "ok": true,
+   "note": "H18(d)"
+  },
+  {
+   "name": "Control negativo 1: sin quitar el factor e^(i k r_m) y con muestreo grueso, el contorno pierde vueltas (índice -1 en vez de 0)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2: con la rama principal de k también para Re omega < 0, la simetría F(-w*) = F(w)* se rompe (1.0e+00 frente a 2e-15)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "nu_a = 3.4 kHz: ningún cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [0, 0], [0, 0]]; 1546 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 6e-15",
+   "ok": true,
+   "note": "H18(a)"
+  },
+  {
+   "name": "H24(a): girar el rayo complejo ±0.4 rad cambia L = psi'/psi en r_m como mucho 1.0e-12 (relativo) en H1, artefacto antiguo, cero profundo, nivel ligado n = 2 H1: 9e-15; artefacto antiguo: 2e-14; cero profundo: 3e-15; nivel ligado n = 2: 1e-12",
+   "ok": true,
+   "note": "la condición saliente no depende del camino en el plano r complejo"
+  },
+  {
+   "name": "H24(b): alejar el punto de partida (n_decay 40 → 60) cambia L como mucho 4.3e-13: H1: 9e-16; artefacto antiguo: 1e-15; cero profundo: 3e-16; nivel ligado n = 2: 4e-13",
+   "ok": true,
+   "note": "el truncado del desarrollo asintótico (con la fase coulombiana) no influye"
+  },
+  {
+   "name": "Control negativo 1: con la onda entrante, L cambia al menos un 2 (relativo) en los puntos por encima del umbral",
+   "ok": true,
+   "note": "en el nivel ligado la mutación es la solución creciente: la integración no termina y se detecta"
+  },
+  {
+   "name": "Control negativo 2: con n_decay = 1 el cambio mínimo es 4.5e-04, frente a 1.0e-12 en (a)-(b): la prueba detecta un punto de partida demasiado cercano",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Tabla 1 (fondo con axión, δθ apagado): 28/28 frecuencias halladas; desviación máxima 1.09 % (f0 a 2.8 kHz)",
+   "ok": false,
+   "note": "H34(a)"
+  },
+  {
+   "name": "Sin axión frente a la fila sin axión de la Tabla 1: -0.19 %, +0.12 %, +0.02 %, +0.15 %",
+   "ok": null,
+   "note": "descriptivo: la prueba previa del cuaderno, ahora en el paso"
+  },
+  {
+   "name": "Tabla 2, partes reales: 28/28 modos hallados; desviación máxima 0.86 %; los 6 modos con Im = 0 del paper son ligados también aquí (frecuencia real)",
+   "ok": true,
+   "note": "H34(b)"
+  },
+  {
+   "name": "Tabla 2, amortiguamientos: 11/22 dentro del 25 %; cociente nuestro/paper entre 0.55 y 2.04; fuera: f0 a 2.8 kHz (2.04), f1 a 2.8 kHz (1.77), f2 a 2.8 kHz (1.73), f3 a 2.8 kHz (1.72), f3 a 4.0 kHz (0.55), f1 a 5.0 kHz (0.67), f1 a 6.0 kHz (1.78), f3 a 6.0 kHz (0.68), f1 a 8.0 kHz (1.31), f2 a 8.0 kHz (0.72), f2 a 12.0 kHz (1.55)",
+   "ok": false,
+   "note": "H34(c): criterio fijado antes de calcular, como mucho un modo fuera"
+  },
+  {
+   "name": "Tabla 3 (modos del axión): Muller converge en 8/14 semillas y en 2 queda cerca del valor del paper (a menos de un 10 % de su |Im|). En las que convergen, Re ν se desvía entre +1.16 % y +1.93 % e Im ν / paper va de 0.968 a 0.996. Las que no convergen tienen |Im| ≥ 4.30 kHz en el paper; las que sí, ≤ 3.81",
+   "ok": null,
+   "note": "H34(d), descriptivo"
+  },
+  {
+   "name": "Control negativo 1: la estrella sin axión se desvía de la Tabla 1 al menos un 9.1 % para ν_a ≥ 4 kHz",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2 (onda entrante): en las 22 raíces amortiguadas el determinante deja de anularse (|det|/escala ≥ 2.4e-02)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Ecuación exterior derivada (theta_0 = 0) = Ec. (3.7) del Paper I: error relativo 2.3e-16",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 1 (sin término de masa, el error real del 2026-11-07): error 2.67",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Sin axión (BSk26): masa máxima 2.1695 M☉ en p_c = 904.9 MeV/fm³; ω_F² = 0 en p_c = 904.9 (diferencia 0.00 %)",
+   "ok": true,
+   "note": "criterio de Chandrasekhar/punto de retorno; malla fija de estrellas y splines cúbicos"
+  },
+  {
+   "name": "Exterior en el rayo complejo: cumple Cauchy-Riemann (desajuste 3.0e-04). El de la recta real (axstar.exterior_L) se desvía 208 % en la resonancia muy amortiguada, 2e-04 en un modo poco amortiguado y 4e-11 bajo el umbral",
+   "ok": true,
+   "note": "la onda saliente crece con r y la integración hacia dentro es inestable; en los modos poco amortiguados de los pasos 9-10 este error es pequeño (no comprueba otras fuentes de error)"
+  },
+  {
+   "name": "ν_a = 6 kHz: modo F en 3.4492 kHz < ν_a, frecuencia real (|Im det|/|det| = 0e+00 en el eje), fracción fluida 0.976",
+   "ok": true,
+   "note": "H11(b)"
+  },
+  {
+   "name": "Átomo gravitatorio (α_g = 0.2748): n_eff = 2.012, 2.990, 3.979, 4.972, 5.967 para n = 2…6; carácter axiónico",
+   "ok": true,
+   "note": "H11(c)"
+  },
+  {
+   "name": "ν_a = 6 kHz: H1 = 8.1148 -0.0036i kHz (fracción fluida 0.981)",
+   "ok": true,
+   "note": "H11(b)"
+  },
+  {
+   "name": "Artefacto retirado: con la normalización antigua del lapso, la «resonancia axiónica» se mueve de 6.290 -0.802i a 8.261 -1.742i al cambiar el empalme (80 → 64 km); con la corrección, Muller desde esa semilla sale de la región (hacia nan +nani); el recuento de la región lo hace el paso 20",
+   "ok": true,
+   "note": "era una cavidad entre R y el radio de empalme (ventana: por encima del umbral y amortiguada, la del original dependía de su r_m; el segundo empalme es 0.8 r_m)"
+  },
+  {
+   "name": "Control negativo 2 (onda entrante): en la raíz H1 el determinante deja de anularse (|det|/escala = 1.5e-01)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "ν_a = 3,5 kHz: dos ligados 3.4037 y 3.4535 kHz con carácter mezclado (0.24 y 0.80 de fluido): cruce evitado F – átomo n = 1",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "ν_a = 3,4 kHz: F ya por encima del umbral, Re ν = 3.4091 kHz e Im ν = -0.56 Hz (fracción fluida 0.977)",
+   "ok": true,
+   "note": "el modo fluido pasa a cuasi-normal al cruzar ν_a"
+  },
+  {
+   "name": "Estabilidad radial: sin raíces en ω = iγ, γ ∈ [0,01; 10] kHz, para ν_a = 6 y 3,4 kHz (6: 0 cambios de signo, 3.4: 0 cambios de signo)",
+   "ok": true,
+   "note": "H12; un barrido de signo puede no ver pares de raíces muy próximas"
+  },
+  {
+   "name": "Robustez de Im ν: rtol, r0 y longitud exterior la cambian como mucho 3e-07 relativo; el radio de empalme (último paso hacia fuera) 5e-07 en H1 (6 kHz), 3e-07 en F (3,4 kHz)",
+   "ok": true,
+   "note": "H13; el radio de empalme es la incertidumbre dominante"
+  },
+  {
+   "name": "H21(a): separación de los dos ligados más bajos con mínimo 49.1 Hz en nu_a = 3.509 kHz (interior a la malla, refinada; 15 valores de nu_a)",
+   "ok": true,
+   "note": "la malla fina es la que el original eligió alrededor del mínimo"
+  },
+  {
+   "name": "H21(b): intercambio de carácter: a nu_a = 3.46 kHz fracción fluida 0.04 (inferior) y 0.96 (superior); a 3.70 kHz, 0.89 y 0.08",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "H22(a): nu_a = 6 kHz, índice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ahí: 8.1148-3.65i (fluido 0.98), 11.6698-21.69i (fluido 0.92)",
+   "ok": true,
+   "note": "sin ceros adicionales: ninguna familia axiónica en esa región"
+  },
+  {
+   "name": "H26: franja casi real Re nu in [6.05, 12], Im nu in [-0.002, -1e-5] kHz: índice 0 (piezas [0, 0], convergidas [[0, 0], [0, 0]]; salto de fase máximo 0.98 rad)",
+   "ok": true,
+   "note": "fuera quedan |Im nu| < 0.01 Hz, Re nu < 6.05 kHz y Re nu > 12 kHz"
+  },
+  {
+   "name": "H23: región profunda Re nu in [6.05, 12], Im nu in [-5, -1.5] kHz: índice 0 (piezas [0, 0], convergidas [[0, 0], [0, 0]]); ningún cero: no hay análogo radial de a0 en esa región. Secuela, Tabla III (l = 2, Cowling): a0 = 9.0 -3.8i kHz",
+   "ok": true,
+   "note": "el resultado decide; no había predicción fuerte"
+  },
+  {
+   "name": "H22(b), control positivo: con la normalización antigua del lapso el índice sube a 5 (piezas [1, 1, 3, 0]): el recuento ve las resonancias de cavidad",
+   "ok": true,
+   "note": ""
+  }
+ ],
+ "extra": {
+  "parts": [
+   "19",
+   "20"
+  ],
+  "procs": 1,
+  "n0": 48,
+  "n_max": 384,
+  "seconds": {
+   "19": 347.7,
+   "20": 737.4
+  },
+  "steps_in_manifest": [
+   "16",
+   "22",
+   "26",
+   "15",
+   "19",
+   "20"
+  ]
+ }
+}
