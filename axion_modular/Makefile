@@ -1,6 +1,7 @@
 # Each target runs ONE module with the upstream artifacts already on disk; `all` runs them in dependency order.
 PY ?= python3
-export PYTHONHASHSEED = 0          # SymPy simplify is hash-seed dependent (see axion_ns/AGENTS.md): fixed for reproducible artifacts
+# SymPy simplify is hash-seed dependent (see axion_ns/AGENTS.md): fixed for reproducible artifacts. The comment must NOT share the line: make keeps the spaces before a '#' in the value.
+export PYTHONHASHSEED = 0
 
 .PHONY: all R D0 D1 D2 S1 S1-extra S1-witness N1 N1-witness N2 N2-quick N3 N3-quick N4 N4-quick T T-fast report test test-slow clean help
 
