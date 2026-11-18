@@ -5,7 +5,7 @@ Writes: report/index.html   status per module (checks, runtime, artifacts with l
                             and a STALE flag when an upstream artifact recorded as input has changed since the run.
 
 This replaces, for the modules refactored so far, the bespoke builders of the legacy report/ folder (build.py,
-build_radial.py, ...), which are hard-wired to the outputs of the steps not yet ported (N3, N4, A). New modules plug in by
+build_radial.py, ...), which are hard-wired to the outputs of the steps not yet ported (N4, A). New modules plug in by
 adding one line to MODULES.
 """
 import argparse
@@ -27,6 +27,7 @@ MODULES = {
     'S1_star_background': ('BSk26 star with condensate: profile tables', []),
     'N1_modes_cowling': ('Cowling modes and gravitational-atom levels', ['S1_star_background', 'R_paper_refs']),
     'N2_modes_fullgr_noaxion': ('Polytrope modes without axion vs the literature (validation of the extended system)', ['D2_derive_nonradial', 'R_paper_refs']),
+    'N3_modes_fullgr_axion': ('Modes with the axion and the dynamic metric (beyond Cowling)', ['D2_derive_nonradial', 'S1_star_background', 'R_paper_refs']),
     'T_toy_model': ('Toy-model numerics (Paper I Fig. 3, branches)', ['D1_derive_radial']),
 }
 
@@ -109,7 +110,7 @@ ul.checks{{list-style:none;padding-left:.5rem}}li.FAIL{{color:#cf222e}}li.RES{{o
 <h1>axion_modular: module status</h1>
 <p>Generated from the manifests in <code>&lt;module&gt;/outputs/manifest.json</code>. Green: all checks pass;
 red: at least one check fails; amber: an input artifact changed after the run (re-run the module).
-Modules N3, N4 and A are not part of this layout yet.</p>
+Modules N4 and A are not part of this layout yet.</p>
 <p><small>Dependencies: {graph}</small></p>
 <table><tr><th>module</th><th>checks</th><th>time</th><th>reads</th><th>produced</th><th>artifacts</th></tr>
 {''.join(rows)}</table>

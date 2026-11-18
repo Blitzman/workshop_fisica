@@ -1,0 +1,228 @@
+{
+ "schema": "axion-manifest/1",
+ "module": "N3_modes_fullgr_axion",
+ "producer": {
+  "module": "N3_modes_fullgr_axion",
+  "script": null,
+  "git": {
+   "commit": "26f2fcc",
+   "dirty": true
+  },
+  "created": "2026-11-17T20:33:10Z",
+  "env": {
+   "python": "3.12.3",
+   "platform": "Linux x86_64",
+   "sympy": "1.14.0",
+   "mpmath": "1.3.0",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1",
+   "matplotlib": "3.11.2"
+  }
+ },
+ "seconds": 256.1,
+ "inputs": [
+  {
+   "name": "fullgr_extended.eq.json",
+   "path": "D2_derive_nonradial/outputs/fullgr_extended.eq.json",
+   "sha256": "9b8faf31b923ee5bb58a7040cfab0a223fc6860f0bb738e8b121d188ca88dfa3"
+  },
+  {
+   "name": "paper2_tables.ref.json",
+   "path": "R_paper_refs/outputs/paper2_tables.ref.json",
+   "sha256": "e8bb931c43d85b13be4fae89d6ca7a76057e048613546a9d92f52b2b1bb1f4c8"
+  },
+  {
+   "name": "eos_bsk26.csv",
+   "path": "S1_star_background/outputs/eos_bsk26.csv",
+   "sha256": "9ce72d3c04c704efb36700dea8ace90ec77d767c4962f27f6920c85421a61ffa"
+  },
+  {
+   "name": "star_noaxion.csv",
+   "path": "S1_star_background/outputs/star_noaxion.csv",
+   "sha256": "00edbac976edb044ba2612ef65c1bd7856f3eb0b49290c0ba763d7d9ecb73314"
+  },
+  {
+   "name": "manifest.json",
+   "path": "S1_star_background/outputs/manifest.json",
+   "sha256": "99c6577cf874b32dd6092cb1d5520df32e2bfde48b2133110b8ddcd177de0704"
+  },
+  {
+   "name": "star_nua2.8.csv",
+   "path": "S1_star_background/outputs/star_nua2.8.csv",
+   "sha256": "7e1a456ed089a741513d22d185c6515fbc6f1af720640288f5fa688f2fbf7853"
+  },
+  {
+   "name": "star_nua3.csv",
+   "path": "S1_star_background/outputs/star_nua3.csv",
+   "sha256": "d8c6551b31cc7de9cf4e7b424ca2c554fcf40a440086bac1bb46a9493486d003"
+  },
+  {
+   "name": "star_nua4.csv",
+   "path": "S1_star_background/outputs/star_nua4.csv",
+   "sha256": "235e1eaffc5049bb28b32deb46dbd92fcd924ae7c6a17c4a0c5a46bf6c299f2d"
+  },
+  {
+   "name": "star_nua5.csv",
+   "path": "S1_star_background/outputs/star_nua5.csv",
+   "sha256": "a71a12b96f5f51b2eef3adaa56e49fb559212d9564b10987afbf547a9d35ef86"
+  },
+  {
+   "name": "star_nua6.csv",
+   "path": "S1_star_background/outputs/star_nua6.csv",
+   "sha256": "547ae04f8a7e5c8d8571ff59857cfbe655cf2a9e8728f8d5128fb5a0b5f4a6dc"
+  },
+  {
+   "name": "star_nua7.csv",
+   "path": "S1_star_background/outputs/star_nua7.csv",
+   "sha256": "0d206479485c977e48cb6d284c577ba1cff1baa5eebba173ae6d77a5ebf67d48"
+  },
+  {
+   "name": "star_nua8.csv",
+   "path": "S1_star_background/outputs/star_nua8.csv",
+   "sha256": "482f4d4c3b677676bc1bee7a8b4ad82592d23cf33dfedef331f2fc656ea61052"
+  },
+  {
+   "name": "star_nua10.csv",
+   "path": "S1_star_background/outputs/star_nua10.csv",
+   "sha256": "0c8b7a34ddd8ec5dce4453e6507c2a1ba9fd938ae3a0ef145cba330f792a73a6"
+  },
+  {
+   "name": "star_nua11.csv",
+   "path": "S1_star_background/outputs/star_nua11.csv",
+   "sha256": "49ef9633b2af5ab4648d5bb66d9bb67451c9a9291cbf2a4a5a37d91e9b4a0c42"
+  },
+  {
+   "name": "star_nua12.csv",
+   "path": "S1_star_background/outputs/star_nua12.csv",
+   "sha256": "65439e43be2ad8cf51a25a82528a8ee6bb891473807d76ee286613bc65497349"
+  },
+  {
+   "name": "star_nua13.csv",
+   "path": "S1_star_background/outputs/star_nua13.csv",
+   "sha256": "ca91082b638365f6d4f3df36ecec97a03f49fd31021dfdbcda9758250f8b1b76"
+  },
+  {
+   "name": "star_nua15.csv",
+   "path": "S1_star_background/outputs/star_nua15.csv",
+   "sha256": "99cf4a5882ebe3f383ba26a10345b9f7a7460fc79d7c96216fc89c0f2a8ad635"
+  },
+  {
+   "name": "modes_cowling.csv",
+   "path": "N1_modes_cowling/outputs/modes_cowling.csv",
+   "sha256": "9e8c16ca2138ffd2762dde03e47e6ccdd01ee4acb748308d767400ca049128a2"
+  }
+ ],
+ "artifacts": [
+  {
+   "path": "modes_axion.csv",
+   "sha256": "50a4a345c7811e4cf660fd881f931270972be266fbfb26f9a8ceedcaa0df2213",
+   "bytes": 4812
+  },
+  {
+   "path": "exterior_convergence.json",
+   "sha256": "105a86f6f8e39b5111611748c47edd73c2f28f1ee274052d14111a144c61a1fa",
+   "bytes": 5762
+  }
+ ],
+ "summary": {
+  "n_ok": 10,
+  "n_fail": 3,
+  "n_descriptive": 2
+ },
+ "checks": [
+  {
+   "name": "Sustituciones del axión: 8/8 cantidades del Paper II (n dm*/dtheta, m_eff^2, eps(n, theta), c_s^2...)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 1e-08 e Im nu en 0.0 %",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Sin axión, la métrica dinámica baja las notas de Cowling: f, p1, p2 = 1.961, 6.594, 9.872 kHz frente a 2.429, 7.171, 10.194 (-19 %, -8 %, -3 %); f amortiguado por ondas gravitacionales en 0.174 s",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Las 36 notas acopladas (f, p1, p2 para 12 masas del axión) encontradas y amortiguadas",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Umbral: los modos p solo radian axiones por encima de nu_a (|Im nu| > 0.05 Hz si Re nu > nu_a; por debajo, solo ondas gravitacionales, < 0.05 Hz)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Con la métrica dinámica, el axión sube el modo f hasta un 7.5 % (Cowling, N1: 5.2 %) y su amortiguamiento por ondas gravitacionales pasa de 0.17 a 0.13 s (a 15 kHz)",
+   "ok": null,
+   "note": "resultado nuevo"
+  },
+  {
+   "name": "Amortiguamiento máximo por axiones: p2 a 5 kHz, 12.8 Hz (tau_a = 12.4 ms); la suma 1/tau_GW + 1/tau_a con el tau_a de Cowling (p2 a 8 kHz: 0.10 Hz frente a 1.0)",
+   "ok": null,
+   "note": "resultado nuevo"
+  },
+  {
+   "name": "H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k < 0 en 4/4 frecuencias, pero L = psi'/psi coincide con la de la rama que decae a 4e-12 relativo como mucho: 2.1-0.001i kHz: 2e-13, 2.4-0.01i kHz: 1e-14, 5-0.1i kHz: 1e-12, 5.9-0.5i kHz: 4e-12",
+   "ok": true,
+   "note": "la integración hacia dentro (40 longitudes de decaimiento) filtra la solución creciente"
+  },
+  {
+   "name": "H31: por encima del umbral la rama no cambia (diferencia 2e-17)",
+   "ok": true,
+   "note": "el original pedía == 0 (daba 0 exacto); aquí el redondeo deja ~1e-17"
+  },
+  {
+   "name": "Control negativo 1: arrancando a 2 longitudes de decaimiento, la rama principal cambia L al menos un 6e-01 relativo (frente a 4e-12 con 40)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2: por encima del umbral, la onda entrante cambia L al menos un 2 relativo",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracción mueven Re nu como mucho 2e-07 relativo: p1 a 8 kHz 1e-09; p2 a 12 kHz 2e-09; p1 a 7 kHz 1e-07; p2 a 11 kHz 2e-07; p2 a 8 kHz 4e-09; f a 15 kHz 2e-08",
+   "ok": false,
+   "note": ""
+  },
+  {
+   "name": "H33: e Im nu como mucho: p1 a 8 kHz (Im 0.00138 Hz) 4.9e-08 Hz; p2 a 12 kHz (Im 0.00323 Hz) 9.5e-06 Hz; p1 a 7 kHz (Im 0.479 Hz) 4.1e-04 Hz; p2 a 11 kHz (Im 5.03 Hz) 1.9e-02 Hz; p2 a 8 kHz (Im 0.1 Hz) 1.4e-04 Hz; f a 15 kHz (Im 1.2 Hz) 1.8e-05 Hz",
+   "ok": true,
+   "note": "criterio: 1 % de Im nu o la resolución de Muller (1e-9 |nu|), lo que sea mayor"
+  },
+  {
+   "name": "Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.0015 Hz, frente a 4.1e-04 Hz con las variantes de arriba",
+   "ok": false,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 7.5e-07 Hz",
+   "ok": false,
+   "note": ""
+  }
+ ],
+ "extra": {
+  "quick": false,
+  "procs": 1,
+  "matching_radius_rule": "R + 0.7 (r_end - R)",
+  "step10_seconds": {
+   "15": 13.5,
+   "13": 12.6,
+   "12": 13.0,
+   "11": 13.0,
+   "10": 13.1,
+   "8": 11.6,
+   "7": 12.0,
+   "6": 13.8,
+   "5": 14.7,
+   "4": 13.9,
+   "3": 14.5,
+   "2.8": 13.9
+  }
+ }
+}
