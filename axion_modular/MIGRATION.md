@@ -133,7 +133,7 @@ header of each new file says what it was moved from and what changed.
 
     The full validation (`make N2`) was run by the project owner on two computers with identical results (450 s on 4 processes, 360 s on 6): 5 of the 7 checks pass. The Im w check failed only for
     l = 5 (Im w = 3.8e-10, +4.7% against LMI; l = 2-4 within 0.4%); **decision (2026-11-18, project owner): l = 5 has a 5% tolerance**, flagged in the note of the check (the name of the check is
-    unchanged so that the golden test still matches it). The convergence check still fails (Re w moves 3e-5 against a limit of 1e-5; legacy 2e-6): open. The legacy passed both checks and the results
+    unchanged so that the golden test still matches it). The convergence check (Re w moves 3e-5 on both computers against the legacy limit of 1e-5; legacy value 2e-6) **now has a limit of 5e-5: decision (2026-11-18, project owner)**, recorded in the note of the check (its name is unchanged so that the golden test still matches it); with this and the l = 5 tolerance all 7 checks are expected to pass, but the validation has not been rerun with the new limits. The legacy passed both checks and the results
     do not depend on the computer; the cause is probably the roundoff of the CSE-compiled A y against the legacy matrix product, amplified by the amplitude-minimum method (hypothesis, not tested).
 
 12. **S1 integrates against ln p; the tables follow the solution; N3 tabulates the Laurent coefficients (measured, `tests/compare_s1_logp.py` and the N3 prototype).**

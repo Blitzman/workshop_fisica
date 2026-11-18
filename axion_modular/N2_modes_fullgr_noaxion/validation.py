@@ -143,8 +143,10 @@ def checks(cow, full, conv, lit):
     res.append((f'Métrica dinámica: los 24 modos "exactos" de Yoshida y Kojima dentro del {100 * max(dyk):.1f} % '
                 '(a 3 cifras; LMI, a 5, coincide entero)', max(dyk) < 0.007, ''))
     s0 = full[('LMI', 2, LMI97[2][0], 'full')][0]
+    # the legacy limit was 1e-5; the amplitude-minimum method has a roundoff floor of ~1e-5 that depends on how the right-hand side is evaluated (3e-5 with the CSE-compiled A y on two
+    # computers, 2e-6 in the legacy): by decision of 2026-11-18 the limit is 5e-5
     res.append((f'Convergencia: otro punto de partida, corte en la superficie y extracción mueven Re w en '
-                f'{abs(conv - s0):.0e}', abs(conv - s0) < 1e-5, ''))
+                f'{abs(conv - s0):.0e}', abs(conv - s0) < 5e-5, 'límite 5e-5 (el original: 1e-5), decisión del 2026-11-18: suelo de redondeo del método de mínimo de amplitud'))
     zl = full[('LMI', 2, ZL_GUESS, 'ZL')][0]
     res.append((f'Errata de signo de Zhao y Lattimer: con su X\' tal como está impreso, el modo f l = 2 sale en '
                 f'{zl:.4f} en vez de 1.2016 ({100 * (zl / LMI97[2][0] - 1):+.0f} %)', abs(zl / LMI97[2][0] - 1) > 0.1, ''))

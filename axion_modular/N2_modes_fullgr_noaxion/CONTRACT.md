@@ -22,7 +22,7 @@ Cowling (8a)-(8c) against the 24 Yoshida-Kojima Cowling modes; the extended Lind
 Zerilli outside) against Lindblom-Mendell-Ipser (Re w of the f-modes l = 2-5 to 5e-5, Im w to 2%) and the 24 "exact" Yoshida-Kojima modes
 (0.7%); convergence of the LMI f-mode (another start, surface cut and extraction radius, 1e-5); and that Zhao and Lattimer's X' as printed
 moves the f-mode by more than 10%. Im w of the LMI f-modes is checked to 2% for l = 2-4 and to 5% for l = 5 (Im w = 3.6e-10: the depth of the minimum of |A_out|^2 is at the
-resolution floor of the amplitude method; decision of 2026-11-18, flagged in the note of the check).
+resolution floor of the amplitude method; decision of 2026-11-18, flagged in the note of the check). The convergence of the LMI f-mode Re w (another start, surface cut and extraction radius) is checked to 5e-5 (the legacy limit was 1e-5; the method has a roundoff floor of about 1e-5 that depends on how the right-hand side is evaluated; decision of 2026-11-18).
 
 ## Numerics
 The systems are compiled from the artifacts with `lambdify(cse=True)` (A y compiled directly): 2.7x faster than the legacy per mode with

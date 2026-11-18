@@ -110,7 +110,7 @@ tied to the matching radius (step 20: deep region 0 against the legacy's 2 with 
 ## N2 status
 N2 (validation of the extended system without axion against Lindblom-Mendell-Ipser 1997 and Yoshida-Kojima 1997) was run in full by the project owner on two computers with identical
 results: 450 s on 4 processes and 360 s on 6 (my estimate for one core: 15-25 minutes). Of its 7 checks, 5 pass. The Im w check failed only for l = 5 (Im w = 3.8e-10, +4.7% against LMI; l = 2-4 are
-within 0.4%); by decision of 2026-11-18 l = 5 has a 5% tolerance, flagged in the note of the check. The convergence check still fails (Re w moves 3e-5 against a limit of 1e-5; the legacy had 2e-6): open.
+within 0.4%); by decision of 2026-11-18 l = 5 has a 5% tolerance, flagged in the note of the check. The convergence check (Re w moves 3e-5 on both computers; the legacy limit was 1e-5 and the legacy value 2e-6) has a limit of 5e-5 since the decision of 2026-11-18; with it and the l = 5 tolerance all 7 checks are expected to pass, but the validation has not been rerun with the new limits.
 The legacy passed both; the results do not depend on the computer, so this is not platform noise. The only difference in the integration is how the right-hand side is evaluated (A y compiled with CSE
 against the matrix compiled without it); the roundoff difference, amplified by the amplitude-minimum method, is the likely cause, but that has not been tested. What was measured before: the compiled
 matrices equal the legacy ones to 1e-15, one Cowling evaluation agrees to 3e-14 (1.6x faster), the LMI f-mode agrees with LMI and the legacy code within the repo's tolerances (2.7x faster), and
