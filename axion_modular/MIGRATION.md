@@ -25,7 +25,7 @@ header of each new file says what it was moved from and what changed.
 | `step5_nonradial.py` | `D2/checks_cowling.py` | `derived()` / `background_rules()` injected |
 | `step7_fullgr.py` | `D2/checks_fullgr.py` | module imports replaced by `init(...)` |
 | `bsk26.py` | `S1/bsk26.py` | unchanged |
-| `axstar.py` (background half) | `S1/star.py` | unchanged |
+| `axstar.py` (background half) | `S1/star.py` (physics) + `S1/star_logp.py` (integration against ln p) | `star.py` unchanged; the ln p integrator is new (item 12) |
 | `axstar.py` (mode half) | `N1/modes.py` | `st.sol.sol` -> `st.y_at`, `g2` -> `st.g2` |
 | `axstar.py` (`matter`, `rhs`) | `N1/star_table.py` | copies, validated against S1 in `tests/` |
 | `step9_axion_cowling.py` | `N1/run_tables.py` (+ the 3 background-only checks in `S1/run.py`) | stars read from tables; works on any subset of nu_a |
@@ -36,7 +36,20 @@ header of each new file says what it was moved from and what changed.
 | `run_all.py` | `Makefile` | dependency order instead of one process |
 | `report/build.py` (+ siblings) | `report/build.py` | generic, manifest-driven; the legacy builders stay in `report/` of the legacy tree |
 | `step11-13`, `gmodes*`, `rotation*`, `magnetar*` | `archive_unvalidated/README.md` | not ported (retired hypotheses) |
-| `step8`, `fmodes`, `step10`, `axgr`, `step25`, `radial`, `step15-17,19,20,22,26`, `step18,21,23,24` | not yet | modules N2, N3, N4, A |
+| `fmodes.py` (EOS, `Star`) | `N2/polytrope.py` | `integrate` takes the compiled system and explicit rtol/atol, and counts right-hand-side calls |
+| `fmodes.py` (systems) | `N2/systems.py` | read from D2's `fullgr_extended` and R's `paper2_equations`; `lambdify(cse=True)`; EXT and ZL from ONE symbolic solve |
+| `fmodes.py` (modes) | `N2/modes.py` | same algorithms, explicit `rtol` and `atol` |
+| `fmodes.py` (`YK97`), `step8_numerics.py` (`LMI97`) | `R_paper_refs/literature.py` | the published numbers as data |
+| `step8_numerics.py` (compute, checks) | `N2/validation.py`, `N2/run.py` | the 7 checks with the same texts; fork pool with `--procs` |
+| `step8_numerics.py` (axion background on a polytrope, m_eff, figures) | not ported | the schematic axion background and the figures |
+| `axgr.py` (symbolic half) | `N3/systems.py` | `fullgr.EXT` from D2's artifact; the matrices are compiled as flat lists |
+| `axgr.py` (`bgvals`) | `N3/background.py` | vectorised; Phi'' analytic instead of a finite difference |
+| `axgr.py` (`basis`, `incoming`, `center`, `zerilli_amplitudes`) | `N3/modes.py` | right-hand sides from `N3/tables.py` (Laurent tables) |
+| `axstar.py` (`exterior_L`, `muller`) | `N3/modes.py` | extracted verbatim from N1's copy |
+| `step10_axion_gr.py` | `N3/validation.py`, `N3/run.py` | table-based; the LMI polytrope check and the comparison with N2's matrix are not ported (the latter is `tests/compare_n3_n2_matrix.py`) |
+| `step25_exterior_convergence.py` | `N3/validation.py` (`step25`) | starting points from N3's own step 10 table |
+| `radial.py`, `step15-17,19,20,22,26` | not yet | module N4 |
+| `step18,21,23,24` | not yet | module A |
 
 ## Deliberate differences
 
@@ -53,7 +66,7 @@ header of each new file says what it was moved from and what changed.
    every run because of timestamps), and Dummy symbols are serialized by order of appearance. Found by checking that two runs of D1
    produced different hashes for identical equations.
 8. **`PYTHONHASHSEED=0`** is fixed by the Makefile so that artifact hashes are reproducible.
-9. **S1 tolerances consolidated at 1e-6** (background ODE `rtol` and shooting precision). The original code used rtol 1e-11 and
+9. **S1 tolerances consolidated at 1e-6** (superseded for the ln p star: the defaults are now rtol 1e-8 and shooting 1e-12, item 12) (background ODE `rtol` and shooting precision). The original code used rtol 1e-11 and
    located theta_c to 1e-16 (about 66 integrations per star). `atol` (1e-30), `max_step` (0.25 km), the EOS table and the event
    thresholds are unchanged. The original precision is still available:
    `python -m S1_star_background.run --rtol 1e-11 --shoot-tol 0`. Single runs, one CPU core, Python 3.12:
@@ -114,6 +127,36 @@ header of each new file says what it was moved from and what changed.
       accuracy that was not tested). Not implemented.
 
     The full validation (`make N2`) was NOT run by the author; the 7 checks have only been exercised through a smoke run.
+
+12. **S1 integrates against ln p; the tables follow the solution; N3 tabulates the Laurent coefficients (measured, `tests/compare_s1_logp.py` and the N3 prototype).**
+    * *Integrator.* `StarLogP` integrates (r, m, Phi, theta, theta') against s = ln p from r = 10 m (centre series, errors at 10 m: p 6.5e-13, theta 1e-13, theta' 6e-6 at 6 kHz) until
+      p = 1e-10 p_c, then the vacuum tail in r with the same events and shooting as `Star`. At the original precision it reproduces the r-method star: theta_c to 8.4e-10 of delta, R and
+      M at p = 1e-10 p_c to 3e-10 / 7e-11 (6 kHz); at the S1 defaults both agree with the reference to 1e-7..2e-6. No speed gain for axion stars (the cost is the tail, not the structure);
+      the gain is in the tables. The structure is cut 9 m before the old EOS floor: it drops a layer of mass 3.5e-10 M.
+    * *Nodes.* Uniform in ln p (r spacing 3.3 cm near the surface instead of 19 cm), uniform in r and 200 geometric nodes from 1 m to 1 km (the centre is a regular singular point), a
+      clustered tail of 1,000 nodes. `StarLogP.state_at_r` returns the exact state at any r (centre series / Newton inversion on r^2 / tail): the first version inverted r instead of r^2,
+      which converged slowly near the centre and left 1e-4 in theta' there (found by the validation, fixed). The validation floor for m, Phi and theta' (which vanish at the centre) is 1% of
+      the column maximum; the kink where the series meets the ODE (10 m) is 3e-8 of the maximum in absolute terms.
+    * *N3 tables.* A(r, w) = A_-1/w^2 + A_0 + w^2 A_1 exactly (residual 1.5e-16 at complex w); the three real coefficient matrices are evaluated exactly at the stored nodes and spline-interpolated;
+      what is interpolated is r^2 A (plain A fails 0.56 at 1-10 m from the centre). Right-hand-side error against the exact path: <= 1e-11 in the last 50 m below the surface (the old grid: O(1) at 9 m),
+      <= 1.4e-6 around the axion wall, <= 4.6e-15..1.1e-9 near the centre; one call 11 us against 519 us.
+    * *Matching radius.* The legacy `r_match` (first |theta| < 1e-7, else the end of the table) lands at the end of the table, where the tail of theta_0 is corrupted by the shooting
+      tolerance (1e-6). N3 uses R + 0.7 (r_end - R); for the 6 kHz f-mode the root moves 1.4e-8 (Re) and 3.4e-6 (Im) between 50 and 60 km, 2.3e-7 and 4.7e-5 at 30 km.
+    * *Mode-level agreement (6 kHz f-mode, same theta_c).* tables vs the legacy exact path on the same star 4.0e-9 (Re) and 3.5e-8 (Im); vs the legacy on the r-integrated star 1.2e-8 and 3.1e-6;
+      root in 4.3 s against 195 s; the root does not depend on rtol (1e-10 -> 1e-12 moves 5.7e-10 and 4.9e-8), unlike N2's amplitude minimum.
+    * *S1 tolerances for N3 (ladder at nu_a = 11 kHz, p2 damping; legacy 5.032 Hz).* 1e-6 / 1e-6: 5.0557 (4.7e-3, valid tail 41 km); 1e-6 / 1e-10: 5.0387; 1e-8 / 1e-8: 5.0496;
+      **1e-8 / 1e-12: 5.0332 (2.0e-4, tail 64 km)**; original 1e-11 / 1e-16: 5.0378 (1.1e-3). The shooting tolerance sets the valid tail and delta theta(R). The new defaults are rtol 1e-8
+      and shoot 1e-12 (5-9 s per star, 75 s for the 13 stars).
+    * *12-star gate* (`tests/n3_gate.py` against the committed `fig_axgr.json`, 6 digits): 111 of 114 comparisons within 1e-3; real parts within 4.4e-6, background-only shifts within 3.9e-6.
+      **Above 1e-3: three damping values**: p1 at 5 kHz 0.327943 -> 0.328412 Hz (1.4e-3), p2 at 10 kHz 3.910590 -> 3.902849 (2.0e-3), no-axion p2 0.000210 Hz (3.2e-3 relative, 7e-7 Hz absolute: the Muller
+      resolution is about 1e-5 Hz). *Cut of the star* (p_frac 1e-10 -> 1e-11, i.e. 10 m later): p2 at 10 kHz 3.9029 -> 3.9057 (towards the legacy), p2 at 11 kHz 5.0332 -> 5.0377 (away), p1 at 5 kHz unchanged
+      (0.328412 -> 0.328405): the near-threshold dampings depend on the surface definition at the 1e-3 level in either direction, so they are not reproducible better than that; the cause of the p1 at
+      5 kHz difference is not established (candidates not tested: the 10 m start, the tables near the wall, the shooting tail).
+    * *Step 25* (`N3/validation.py`): reproduces the legacy values (control 3: 0.00151 Hz here, 0.00173 Hz legacy; control 4: 7.5e-7 against 8.5e-7 Hz; H33 Re: 2e-7 against 2e-6). Three of its checks are
+      `False` in the committed legacy `exterior_convergence.json` too (H33 on Re nu against the 1e-7 criterion, negative controls 3 and 4: the n_far = 1 control does not move a mode whose damping is
+      dominated by axion emission); they fail here identically. The H31 "above threshold" check asked for a difference of exactly 0 and now allows 1e-12 (roundoff 2e-17).
+    * N1 on the new tables: 19 of 19 paper checks; coupled shifts within 0.0056 percentage points of the legacy `fig_axcow.json`.
+    * N3 interior matrix with the axion off against N2's: 1.9e-15 (`tests/compare_n3_n2_matrix.py`).
 
 ## Known limitations (not fixed here)
 

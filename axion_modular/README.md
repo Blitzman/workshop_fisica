@@ -13,16 +13,17 @@ D0_derive_action ───────────────► D1_derive_radi
                                   T_toy_model                │
                                                              ▼
                                                     N2_modes_fullgr_noaxion (validation of the extended system vs LMI / Yoshida-Kojima)
+                                  N3_modes_fullgr_axion (beyond Cowling, with the axion: reads D2 + S1 + R tables, N1 optionally)
                                        report (reads the manifests of all)
 ```
-Not part of this layout yet: N3 (full-GR modes with axion), N4 (radial modes), A (radial analysis).
+Not part of this layout yet: N4 (radial modes), A (radial analysis).
 
 ## Run
 
 ```bash
 pip install numpy scipy sympy mpmath matplotlib pytest      # + a LaTeX (pdflatex) for the equation PDFs
 cd axion_modular
-make R D0 D1 D2 S1 N1 N2 T report test      # everything; D2 (about 8 min) and N2 (about 17 min of CPU, divided by the cores) are the long ones
+make R D0 D1 D2 S1 N1 N2 N3 T report test  # everything; D2 (about 8 min) and N2 (about 17 min of CPU, divided by the cores) are the long ones
 python -m D1_derive_radial.run --help                         # every module has its own entry point and options
 ```
 A module needs only the files of its upstream modules (see its `CONTRACT.md`), not their code or a previous run in the same
@@ -77,6 +78,25 @@ original precision (`--rtol 1e-11 --shoot-tol 0`) one star took about 108 s. Cur
 the 12 stars (10-16 s per star, but 37 s at 2.8 kHz and 43 s at 15 kHz; previous route 966 s), 214 s for the whole `make N1`
 including the atom levels. N1 reads each star through one spline lookup (about 9 microseconds per background evaluation against
 about 60 for the previous Hermite/EOS route).
+
+## S1 / N1 / N3 status (the ln p star and the N3 port)
+* **S1 integrates the structure against ln p** (start at r = 10 m from the centre series, stop at p = 1e-10 p_c, then the vacuum axion tail in r) and writes tables whose nodes
+  follow the solution (uniform in ln p, uniform in r, geometric near the centre; 7,197 rows, 0.8 MB). R and M are defined at p = 1e-10 p_c, about 9 m before the old EOS floor
+  (no-axion star: M = 1.5359 Msun, R = 11.7069 km). Defaults: ODE rtol 1e-8 and theta_c located to 1e-12 (5-9 s per star; the full run of 13 stars takes 75 s); the worst
+  interpolation error written to the tables is 1.3e-7. The earlier default (1e-6 / 1e-6) shortened the valid axion tail (41 km instead of 64 km at 11 kHz) and moved the
+  damping of the p2 mode at 11 kHz by 4.7e-3.
+* **N1** reads the new tables with a two-line change (the tail has no ln p): 19 of 19 paper checks pass, the coupled shifts agree with the legacy `fig_axcow.json` to 0.0056
+  percentage points (36 values); the run takes 249 s.
+* **N3** (legacy steps 10 and 25) is table-based: one right-hand-side call costs about 10 us instead of 520 us; the whole run takes 256 s on one core (legacy: 5,064 s on 6
+  workers). Against the committed `results/fig_axgr.json` (`python -m tests.n3_gate`): **111 of 114 comparisons agree within 1e-3**, every real part within 4.4e-6, the
+  background-only shifts within 3.9e-6. The three above 1e-3 are damping values: p1 at 5 kHz (1.4e-3), p2 at 10 kHz (2.0e-3) and the no-axion p2 (3.2e-3 relative but
+  7e-7 Hz absolute, the noise floor of the search). The dampings of modes near the axion threshold are reproducible only to about 1e-3: stopping the star 10 m earlier or later
+  moves them by about 1e-3 in either direction (p2 at 10 and 11 kHz), and the original-precision run differs from the legacy by 1.1e-3 at 11 kHz; for p1 at 5 kHz the cause is
+  not established (the cut does not move it).
+* **Step 25** reproduces the legacy numbers. Three of its checks (H33 on Re nu, negative controls 3 and 4) fail in the committed legacy `exterior_convergence.json` as well and fail
+  here with the same magnitudes; the H31 "above threshold" check was relaxed from `== 0` to `< 1e-12` (roundoff 2e-17).
+* Fast tests: 26 passed, 1 skipped. The N3 interior matrix with the axion off equals N2's to 1.9e-15 (`python -m tests.compare_n3_n2_matrix`, manual).
+* Not ported: the end-to-end LMI polytrope check of the legacy step 10 (needs a polytrope EOS table in S1; N2 validates the same equations).
 
 ## N2 status
 N2 (validation of the extended system without axion against Lindblom-Mendell-Ipser 1997 and Yoshida-Kojima 1997) was built and
