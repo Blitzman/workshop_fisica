@@ -188,6 +188,11 @@ header of each new file says what it was moved from and what changed.
       `det`: the exterior wave vanishes at r_m for some real frequencies, and with a shorter r_m than the legacy's a pole fell inside the bracket of the n = 2 gravitational-atom level.
       (g) `exterior_psi` uses g''(0) = -beta/4 instead of `axstar.g2(0.0)`.
     * *Not ported.* Step 17 (Font et al. 2002 and the Garching table): it needs a polytrope star; dropped by decision.
+    * *Decision (2026-11-18, project owner).* The N4 caveats reported with the package were reviewed and accepted as they are: (1) the four differences from the committed legacy results (Table 2,
+      nu_a = 8 kHz, f3: damping 1.1e-3 relative; step 20: deep region 0 against 2, old-lapse control 5 against 8, old-lapse deep 2 against 0; their explanation in terms of the noise floor and the
+      matching radius was not proven); (2) the two checks of step 26 that fail here with the same numbers as in the committed legacy result (Table 1 maximum deviation 1.09% and Table 2 dampings
+      11/22 within 25%); (3) the adaptations (a)-(g) above; (4) the multi-process path of N4 (`--procs` > 1) was not exercised and the run was done in two pieces with a merged manifest: accepted as
+      untested, not as verified.
 
 ## Known limitations (not fixed here)
 

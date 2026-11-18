@@ -105,7 +105,7 @@ satisfy A = A_0 + w^2 A_1 exactly, so two coefficient tables are enough; a `det_
 wall on 6 workers). It needs S1's extra stars (`make S1-extra`, about 2 minutes, untracked). Against the committed legacy `results/radial_*.json` (`python -m tests.n4_gate`): Table 1 and 2 of
 Paper I within 9.5e-5 (real parts) and 1.1e-3 (damping), the F and H1 modes within 2.2e-8 and 1.8e-8, the avoided-crossing gap 49.1 Hz (legacy 49.07), all counts equal except three at the noise floor or
 tied to the matching radius (step 20: deep region 0 against the legacy's 2 with no root located; old-lapse control 5 against 8; old-lapse deep 2 against 0). N4's checks: 22: 4/4, 26: 3 OK / 2 failures / 2 descriptive
-(the two failures are failing in the committed legacy result too, with the same numbers), 15: 13/13, 19: 2/2, 20: 4/4, 16: 7/7. Item 13 of `MIGRATION.md` lists the adaptations.
+(the two failures are failing in the committed legacy result too, with the same numbers), 15: 13/13, 19: 2/2, 20: 4/4, 16: 7/7. Item 13 of `MIGRATION.md` lists the adaptations; the caveats above were reviewed and accepted by the project owner on 2026-11-18 (same item).
 
 ## N2 status
 N2 (validation of the extended system without axion against Lindblom-Mendell-Ipser 1997 and Yoshida-Kojima 1997) was built and
