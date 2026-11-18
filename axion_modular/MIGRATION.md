@@ -131,7 +131,10 @@ header of each new file says what it was moved from and what changed.
       tabulating the three coefficient matrices against r would make one right-hand side call ~6 us instead of ~26 us (synthetic ceiling, with an
       accuracy that was not tested). Not implemented.
 
-    The full validation (`make N2`) was NOT run by the author; the 7 checks have only been exercised through a smoke run.
+    The full validation (`make N2`) was run by the project owner on two computers with identical results (450 s on 4 processes, 360 s on 6): 5 of the 7 checks pass. The Im w check failed only for
+    l = 5 (Im w = 3.8e-10, +4.7% against LMI; l = 2-4 within 0.4%); **decision (2026-11-18, project owner): l = 5 has a 5% tolerance**, flagged in the note of the check (the name of the check is
+    unchanged so that the golden test still matches it). The convergence check still fails (Re w moves 3e-5 against a limit of 1e-5; legacy 2e-6): open. The legacy passed both checks and the results
+    do not depend on the computer; the cause is probably the roundoff of the CSE-compiled A y against the legacy matrix product, amplified by the amplitude-minimum method (hypothesis, not tested).
 
 12. **S1 integrates against ln p; the tables follow the solution; N3 tabulates the Laurent coefficients (measured, `tests/compare_s1_logp.py` and the N3 prototype).**
     * *Integrator.* `StarLogP` integrates (r, m, Phi, theta, theta') against s = ln p from r = 10 m (centre series, errors at 10 m: p 6.5e-13, theta 1e-13, theta' 6e-6 at 6 kHz) until
@@ -191,8 +194,17 @@ header of each new file says what it was moved from and what changed.
     * *Decision (2026-11-18, project owner).* The N4 caveats reported with the package were reviewed and accepted as they are: (1) the four differences from the committed legacy results (Table 2,
       nu_a = 8 kHz, f3: damping 1.1e-3 relative; step 20: deep region 0 against 2, old-lapse control 5 against 8, old-lapse deep 2 against 0; their explanation in terms of the noise floor and the
       matching radius was not proven); (2) the two checks of step 26 that fail here with the same numbers as in the committed legacy result (Table 1 maximum deviation 1.09% and Table 2 dampings
-      11/22 within 25%); (3) the adaptations (a)-(g) above; (4) the multi-process path of N4 (`--procs` > 1) was not exercised and the run was done in two pieces with a merged manifest: accepted as
-      untested, not as verified.
+      11/22 within 25%); (3) the adaptations (a)-(g) above; (4) the multi-process path of N4 was not exercised when the package was built (single-process runs, in two pieces with a merged manifest); it was
+      exercised afterwards on a second computer (next bullet); (5) the step 16 negative control 1 failing on that computer (next bullet): accepted as irrelevant.
+    * *Second computer (project owner, 2026-11-18; 12 cores, Python 3.14.10, numpy 2.5.4, scipy 1.18.1, sympy 1.14.0).* S1-extra: 58 stars, worst interpolation error 6.8e-7, about
+      10.5 s per axion star. N4 `--part fast` (6 processes) 286 s (compile 31 s; steps 22: 49 s, 26: 67 s, 15: 138 s); `--part all --procs 4`: step 16 451 s, 22 53 s, 26 70 s, 19 159 s,
+      step 15 862 s (an unexplained slowdown of this serial step, 6x its time in the previous run; not reproduced; ignored by decision), whole run 1,917 s. Results identical to the
+      single-process runs (same numbers and flags) for steps 22, 26, 15, 19 and 20; step 16 gives 6/7: the negative control 1 (the broken variant without the e^(i k r_m) factor and with coarse
+      sampling) returned index 0 instead of a non-zero one. The index of that broken variant is an aliasing artefact that depends on the platform (-1.0 in the single-process run, +3.0 in the
+      committed legacy); accepted as irrelevant. The adaptive sampling also differed slightly (nu_a = 3.4: 1,924 points against 1,546, one tile needing a third refinement), with the same
+      index 0. `tests/n4_gate.py` on that computer: identical to the single-process run, 143 comparisons with the same 4 above tolerance (Table 2 nu_a = 8 kHz f3 damping 1.1e-3; step 20 deep
+      region 0 against 2, old-lapse control 5 against 8, old-lapse deep 2 against 0); worst differences by file: Table 2 1.1e-3, turning point 6.5e-5, avoided-crossing gap 1.1e-6, fluid-mode
+      damping 4.4e-5; the check outcomes that differ from the legacy are H23 (False -> True) and the step 16 control (True -> False).
 
 ## Known limitations (not fixed here)
 

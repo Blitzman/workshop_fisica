@@ -21,7 +21,8 @@ Reads: D2 `fullgr_extended.eq.json`; R `paper2_equations.eq.json` and `literatur
 Cowling (8a)-(8c) against the 24 Yoshida-Kojima Cowling modes; the extended Lindblom-Detweiler system without axion (LD centre conditions,
 Zerilli outside) against Lindblom-Mendell-Ipser (Re w of the f-modes l = 2-5 to 5e-5, Im w to 2%) and the 24 "exact" Yoshida-Kojima modes
 (0.7%); convergence of the LMI f-mode (another start, surface cut and extraction radius, 1e-5); and that Zhao and Lattimer's X' as printed
-moves the f-mode by more than 10%.
+moves the f-mode by more than 10%. Im w of the LMI f-modes is checked to 2% for l = 2-4 and to 5% for l = 5 (Im w = 3.6e-10: the depth of the minimum of |A_out|^2 is at the
+resolution floor of the amplitude method; decision of 2026-11-18, flagged in the note of the check).
 
 ## Numerics
 The systems are compiled from the artifacts with `lambdify(cse=True)` (A y compiled directly): 2.7x faster than the legacy per mode with

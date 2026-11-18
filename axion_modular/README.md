@@ -105,14 +105,16 @@ satisfy A = A_0 + w^2 A_1 exactly, so two coefficient tables are enough; a `det_
 wall on 6 workers). It needs S1's extra stars (`make S1-extra`, about 2 minutes, untracked). Against the committed legacy `results/radial_*.json` (`python -m tests.n4_gate`): Table 1 and 2 of
 Paper I within 9.5e-5 (real parts) and 1.1e-3 (damping), the F and H1 modes within 2.2e-8 and 1.8e-8, the avoided-crossing gap 49.1 Hz (legacy 49.07), all counts equal except three at the noise floor or
 tied to the matching radius (step 20: deep region 0 against the legacy's 2 with no root located; old-lapse control 5 against 8; old-lapse deep 2 against 0). N4's checks: 22: 4/4, 26: 3 OK / 2 failures / 2 descriptive
-(the two failures are failing in the committed legacy result too, with the same numbers), 15: 13/13, 19: 2/2, 20: 4/4, 16: 7/7. Item 13 of `MIGRATION.md` lists the adaptations; the caveats above were reviewed and accepted by the project owner on 2026-11-18 (same item).
+(the two failures are failing in the committed legacy result too, with the same numbers), 15: 13/13, 19: 2/2, 20: 4/4, 16: 7/7 (6/7 on the owner's second computer, where the negative control 1 depends on the platform: accepted). Item 13 of `MIGRATION.md` lists the adaptations; the caveats above were reviewed and accepted by the project owner on 2026-11-18 (same item).
 
 ## N2 status
-N2 (validation of the extended system without axion against Lindblom-Mendell-Ipser 1997 and Yoshida-Kojima 1997) was built and
-smoke-tested (`make N2-quick`, LMI star only) but **its full validation (`make N2`, 7 checks) has not been run by the author**: run it
-before relying on it. What was measured: the compiled matrices equal the legacy ones to 1e-15, one Cowling evaluation agrees to 3e-14
-(1.6x faster), the LMI f-mode agrees with LMI and the legacy code within the repo's tolerances (2.7x faster), and loosening rtol breaks
-the amplitude method (`MIGRATION.md`, item 11).
+N2 (validation of the extended system without axion against Lindblom-Mendell-Ipser 1997 and Yoshida-Kojima 1997) was run in full by the project owner on two computers with identical
+results: 450 s on 4 processes and 360 s on 6 (my estimate for one core: 15-25 minutes). Of its 7 checks, 5 pass. The Im w check failed only for l = 5 (Im w = 3.8e-10, +4.7% against LMI; l = 2-4 are
+within 0.4%); by decision of 2026-11-18 l = 5 has a 5% tolerance, flagged in the note of the check. The convergence check still fails (Re w moves 3e-5 against a limit of 1e-5; the legacy had 2e-6): open.
+The legacy passed both; the results do not depend on the computer, so this is not platform noise. The only difference in the integration is how the right-hand side is evaluated (A y compiled with CSE
+against the matrix compiled without it); the roundoff difference, amplified by the amplitude-minimum method, is the likely cause, but that has not been tested. What was measured before: the compiled
+matrices equal the legacy ones to 1e-15, one Cowling evaluation agrees to 3e-14 (1.6x faster), the LMI f-mode agrees with LMI and the legacy code within the repo's tolerances (2.7x faster), and
+loosening rtol breaks the amplitude method (`MIGRATION.md`, item 11).
 
 ## Known limitations
 
