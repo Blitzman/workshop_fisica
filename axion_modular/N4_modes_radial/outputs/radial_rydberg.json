@@ -1,0 +1,65 @@
+{
+ "alpha_g": 0.274759625575436,
+ "n": [
+  2.0,
+  3.0,
+  4.0,
+  5.0,
+  6.0
+ ],
+ "x": [
+  0.990678192432516,
+  0.9957784505032822,
+  0.9976156079052223,
+  0.99847297424752,
+  0.998939909031276
+ ],
+ "n_minus_kappa": [
+  0.05787380730139757,
+  0.057067189469748314,
+  0.05677906391256826,
+  0.056645189483138125,
+  0.05657239227857236
+ ],
+ "n_minus_neff": [
+  -0.012277407832598453,
+  0.009788033024311193,
+  0.021227739851425564,
+  0.028187551401370747,
+  0.03285830411980406
+ ],
+ "n_minus_kappa_newton": [
+  -0.01698338049346093,
+  0.006627196326424389,
+  0.0188538787785979,
+  0.026288442425147274,
+  0.03127624691505648
+ ],
+ "ritz": {
+  "delta0": 0.05642295794978178,
+  "delta2": 0.005495513412930673,
+  "resid": 9.98592722060987e-06
+ },
+ "checks": [
+  {
+   "name": "H20(a): con el kappa de Whittaker (Ec. A14), n - kappa_n = 0.0579, 0.0571, 0.0568, 0.0566, 0.0566 para n = 2…6: constante dentro de 0.0013",
+   "ok": true,
+   "note": "sin ajuste"
+  },
+  {
+   "name": "H20(b): Rydberg-Ritz delta_n = delta_0 + delta_2/(n - delta_0)^2 con delta_0 = 0.0564, delta_2 = 0.0055; residuo máximo 1e-05",
+   "ok": true,
+   "note": "2 parámetros, 5 niveles"
+  },
+  {
+   "name": "Control negativo 1: con la fórmula hidrogenoide no relativista, n - n_eff varía 0.045 (lo que parecía un defecto creciente)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2: con el Coulomb newtoniano alpha/q (sin el factor 2 omega^2 - m_a^2), n - kappa varía 0.048",
+   "ok": true,
+   "note": ""
+  }
+ ]
+}

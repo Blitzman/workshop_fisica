@@ -1,0 +1,75 @@
+{
+ "radii": {
+  "default": 79.68541416456138,
+  "alt_0.85rm": 67.73260203987716,
+  "alt_0.7rm": 55.779789915192964,
+  "R": 11.354671864018556,
+  "theta_1e-5": 79.68541416456138,
+  "theta_1e-6": 79.68541416456138
+ },
+ "fluid": [
+  {
+   "nu": [
+    8.114832174867695,
+    -0.0036494530669229828
+   ],
+   "shift_pct": {
+    "alt_0.85rm": 1.6258071072821744e-08,
+    "alt_0.7rm": 3.4875636723438086e-08,
+    "R": 0.003357773428646483
+   },
+   "dIm_Hz": {
+    "alt_0.85rm": 2.4081002469866775e-07,
+    "alt_0.7rm": -5.709027703706959e-07,
+    "R": 0.07801165763493112
+   }
+  },
+  {
+   "nu": [
+    11.669755940066596,
+    -0.021689479406445535
+   ],
+   "shift_pct": {
+    "alt_0.85rm": 2.459005829102021e-07,
+    "alt_0.7rm": 2.704115983796638e-07,
+    "R": 0.006338737875094888
+   },
+   "dIm_Hz": {
+    "alt_0.85rm": 1.1756191645173608e-06,
+    "alt_0.7rm": 9.94360385697668e-07,
+    "R": -0.6984410508051528
+   }
+  }
+ ],
+ "deep": [],
+ "neg1": {
+  "ratio_ingoing": 0.14872566558882966,
+  "ratio_outgoing": 5.926568102197826e-08
+ },
+ "neg2": {
+  "shift_R_pct": 0.003357773428646483,
+  "shift_alt_pct": 3.4875636723438086e-08
+ },
+ "checks": [
+  {
+   "name": "H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1148 kHz, Im -3.65 Hz): 1.6e-08 % y 3.5e-08 % (Im: +2.4e-07 y -5.7e-07 Hz); (Re 11.6698 kHz, Im -21.69 Hz): 2.5e-07 % y 2.7e-07 % (Im: +1.2e-06 y +9.9e-07 Hz)",
+   "ok": true,
+   "note": "radios alternativos: 0.85 y 0.7 del de empalme"
+  },
+  {
+   "name": "H23b(ii): ningún cero profundo que mover: Muller no converge en la región (paso 20); la prueba no decide",
+   "ok": false,
+   "note": "si (i) y (ii) pasan: artefactos del empalme, no modos"
+  },
+  {
+   "name": "Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 5.9e-08 con la saliente)",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0034 %, más que con los radios alternativos (3.5e-08 %)",
+   "ok": true,
+   "note": ""
+  }
+ ]
+}

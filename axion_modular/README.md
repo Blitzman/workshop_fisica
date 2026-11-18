@@ -17,7 +17,7 @@ D0_derive_action ───────────────► D1_derive_radi
                                   N4_modes_radial (radial modes: reads D0 + D1 equations, S1 tables and extra stars, R's Paper I tables)
                                        report (reads the manifests of all)
 ```
-Not part of this layout yet: A (radial analysis).
+Every legacy step is now ported except step 17 (the Font et al. comparison, dropped by decision) and the pieces listed as not ported in `MIGRATION.md`.
 
 ## Run
 
@@ -100,7 +100,7 @@ about 60 for the previous Hermite/EOS route).
 * Not ported: the end-to-end LMI polytrope check of the legacy step 10 (needs a polytrope EOS table in S1; N2 validates the same equations).
 
 ## N4 status (radial modes)
-N4 ports the legacy steps 15, 16, 19, 20, 22 and 26 (step 17, the Font et al. comparison, is not ported by decision). The radial matrices are derived from D0's and D1's artifacts and
+N4 ports the legacy steps 15, 16, 19, 20, 22 and 26 (step 17, the Font et al. comparison, is not ported by decision) and, as extra parts (`--part analysis`), the radial analysis of steps 18, 21, 23 and 24 (about 100 s on one core; formerly planned as module A). The radial matrices are derived from D0's and D1's artifacts and
 satisfy A = A_0 + w^2 A_1 exactly, so two coefficient tables are enough; a `det_entire` evaluation takes 0.11 s instead of about 2.7 s and the whole module about 35 minutes on one core (legacy: 23,205 s
 wall on 6 workers). It needs S1's extra stars (`make S1-extra`, about 2 minutes, untracked). Against the committed legacy `results/radial_*.json` (`python -m tests.n4_gate`): Table 1 and 2 of
 Paper I within 9.5e-5 (real parts) and 1.1e-3 (damping), the F and H1 modes within 2.2e-8 and 1.8e-8, the avoided-crossing gap 49.1 Hz (legacy 49.07), all counts equal except three at the noise floor or

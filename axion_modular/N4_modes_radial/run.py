@@ -11,7 +11,7 @@ Writes: outputs/radial_contour.json (22), radial_paper1.json (26), radial_star.j
         (same keys as the legacy results/*.json) and outputs/manifest.json with the checks.
 Cost  : symbolic compile about 20 s; then (one core, estimates from 0.11 s per det_entire evaluation): 22 and 26 minutes, 15 about 3 minutes, 19 about 3 minutes, 20 and 16
         tens of minutes each (their contour sampling is thousands of det_entire evaluations: the legacy took 6,012 s and 9,561 s on 6 workers). --procs divides it (fork pool).
---part fast = 22, 26, 15.  --n0/--n-max: sampling of the contours of steps 16 and 20 (smoke tests only: results with a smaller n0 are not comparable with the legacy).
+--part fast = 22, 26, 15; --part analysis = 18, 21, 23, 24 (the old module A, extra parts of N4; they read the outputs of steps 15 and 20 from the output directory).  --n0/--n-max: sampling of the contours of steps 16 and 20 (smoke tests only: results with a smaller n0 are not comparable with the legacy).
 """
 import argparse
 import json
@@ -22,21 +22,25 @@ from pathlib import Path
 from common import artifacts as A
 from common.checks import Timer, report
 
+from . import analysis as AN
 from . import systems as SY
 from . import validation as V
 
 MODULE = 'N4_modes_radial'
 HERE = Path(__file__).resolve().parent
-ORDER = ['16', '22', '26', '15', '19', '20']
-FILES = {'22': 'radial_contour.json', '26': 'radial_paper1.json', '15': 'radial_star.json', '19': 'radial_crossing.json', '20': 'radial_damped.json', '16': 'radial_stability.json'}
+ORDER = ['16', '22', '26', '15', '19', '20', '18', '21', '23', '24']
+FILES = {'22': 'radial_contour.json', '26': 'radial_paper1.json', '15': 'radial_star.json', '19': 'radial_crossing.json', '20': 'radial_damped.json', '16': 'radial_stability.json',
+         '18': 'radial_rydberg.json', '21': 'radial_deep.json', '23': 'radial_eos.json', '24': 'radial_scattering.json'}
 TITLES = {'22': 'N4 / Paso 22: condición exterior frente al rayo complejo', '26': 'N4 / Paso 26: modos radiales frente a las Tablas 1-3 del Paper I',
           '15': 'N4 / Paso 15: modos radiales de la estrella con condensado (GR completa)', '19': 'N4 / Paso 19: cruce evitado F - átomo gravitatorio',
-          '20': 'N4 / Paso 20: recuento en el semiplano amortiguado', '16': 'N4 / Paso 16: estabilidad radial por el principio del argumento'}
+          '20': 'N4 / Paso 20: recuento en el semiplano amortiguado', '16': 'N4 / Paso 16: estabilidad radial por el principio del argumento',
+          '18': 'N4 / Paso 18: ley de Rydberg del átomo gravitatorio', '21': 'N4 / Paso 21: ceros profundos frente al radio de empalme',
+          '23': 'N4 / Paso 23: sensibilidad a la consistencia termodinámica de la EOS', '24': 'N4 / Paso 24: anchura de los modos desde la dispersión a frecuencia real'}
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument('--part', default='fast', help="'fast' (22, 26, 15), 'all', or a comma list such as 22,26")
+    ap.add_argument('--part', default='fast', help="'fast' (22, 26, 15), 'analysis' (18, 21, 23, 24: need the outputs of steps 15 and 20), 'all', or a comma list such as 22,26")
     ap.add_argument('--procs', type=int, default=min(6, os.cpu_count() or 1))
     ap.add_argument('--n0', type=int, default=48)
     ap.add_argument('--n-max', type=int, default=384)
@@ -47,7 +51,7 @@ def main(argv=None):
     ap.add_argument('--r-dir', default=str(HERE.parent / 'R_paper_refs' / 'outputs'))
     ap.add_argument('--out', default=str(HERE / 'outputs'))
     args = ap.parse_args(argv)
-    parts = ORDER if args.part == 'all' else (['22', '26', '15'] if args.part == 'fast' else [p for p in args.part.split(',') if p])
+    parts = ORDER if args.part == 'all' else (['22', '26', '15'] if args.part == 'fast' else (['18', '21', '23', '24'] if args.part == 'analysis' else [p for p in args.part.split(',') if p]))
     parts = [p for p in ORDER if p in parts]
     out, tm = Path(args.out), Timer()
     out.mkdir(parents=True, exist_ok=True)
@@ -78,8 +82,16 @@ def main(argv=None):
             r_, o_ = V.step19()
         elif p == '20':
             r_, o_ = V.step20(args.n0, args.n_max)
-        else:
+        elif p == '16':
             r_, o_ = V.step16(args.n0, args.n_max)
+        elif p == '18':
+            r_, o_ = AN.step18(out)
+        elif p == '21':
+            r_, o_ = AN.step21(out)
+        elif p == '23':
+            r_, o_ = AN.step23(out)
+        else:
+            r_, o_ = AN.step24(out)
         extra['seconds'][p] = round(time.time() - t0, 1)
         print(f'  step {p}: {extra["seconds"][p]} s', flush=True)
         res += report(TITLES[p], r_)

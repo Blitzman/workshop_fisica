@@ -9,6 +9,8 @@ the matching radius is `R + 0.7 (r_end - R)` (see matching_radius) instead of th
 det(omega) = determinant of Delta p(R) = 0 and the matching with the exterior wave (outgoing, sheet = 1, or bound) at r_m; det_entire multiplies by the exterior
 solution normalised at infinity (analytic, no poles) for the argument principle in Im omega > 0.
 """
+import types
+
 import numpy as np
 from scipy import constants as C
 from scipy.integrate import solve_ivp
@@ -222,7 +224,9 @@ def interior(st, tabs, omega, seed, r0=1e-3, r1=0.5, rtol=1e-10, r_eval=None):
 
 
 def outward(st, tabs, omega, y_R, rm, rtol=1e-10, r_eval=None):
-    """(dth, dth') from R to r_m with the tail of the condensate (exterior matrix)."""
+    """(dth, dth') from R to r_m with the tail of the condensate (exterior matrix). r_m <= R (matching at the surface, a control of step 21): no tail."""
+    if rm <= st.R:
+        return types.SimpleNamespace(y=np.asarray(y_R, dtype=complex).reshape(-1, 1), t=np.array([st.R]))
     return _ok(solve_ivp(tabs.rhs_ext(omega), (st.R, rm), y_R, method='DOP853', rtol=rtol, atol=1e-40, t_eval=r_eval))
 
 

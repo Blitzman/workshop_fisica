@@ -2,7 +2,7 @@
 
     python -m tests.n4_gate [DIR]        DIR defaults to N4_modes_radial/outputs; files of steps that were not run are skipped
 
-Numbers: relative difference below 1e-3 (the tolerance set for the N3 comparison) for frequencies and masses; integer counts must be equal. Check outcomes (ok flags) are compared separately,
+Numbers: relative difference below 1e-3 (the tolerance set for the N3 comparison) for frequencies and masses (5 % for the frequency shifts of step 23, which are differences of two frequencies); integer counts must be equal. Check outcomes (ok flags) are compared separately,
 by name with the digits masked, and every difference is listed (they do not decide PASS/FAIL: some legacy checks are known failures, see MIGRATION.md).
 """
 import json
@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 LEG = ROOT.parent / 'results'
 NEW = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'N4_modes_radial' / 'outputs'
 TOL = 1e-3
+TOL_SHIFT = 0.05          # differences of two frequencies (step 23): each frequency carries ~1e-8 noise, so the shifts themselves are compared to 5 %
 rows, flags = [], []
 
 
@@ -30,6 +31,10 @@ def num(fn, q, a, b):
 
 def cnt(fn, q, a, b):
     rows.append((fn, q, 'count', a, b))
+
+
+def shift(fn, q, a, b):
+    rows.append((fn, q, 'shift', a, b))
 
 
 def cplx(fn, q, a, b):          # [re, im] lists
@@ -107,14 +112,43 @@ def main():
     L, N = load('radial_contour.json')
     if L:
         compare_flags('radial_contour', L, N)
+    L, N = load('radial_rydberg.json')
+    if L:
+        for i, (x, y) in enumerate(zip(L['n_minus_kappa'], N['n_minus_kappa'])):
+            num('rydberg', f'n - kappa, level {i + 2}', x, y)
+        num('rydberg', 'Ritz delta_0', L['ritz']['delta0'], N['ritz']['delta0'])
+        num('rydberg', 'Ritz delta_2', L['ritz']['delta2'], N['ritz']['delta2'])
+        compare_flags('radial_rydberg', L, N)
+    L, N = load('radial_deep.json')
+    if L:
+        for i, (a, b) in enumerate(zip(L['fluid'], N['fluid'])):
+            cplx('deep', f'fluid mode {i}', a['nu'], b['nu'])
+        cnt('deep', 'deep zeros listed', len(L['deep']), len(N['deep']))
+        compare_flags('radial_deep', L, N)
+    L, N = load('radial_eos.json')
+    if L:
+        for k in L['mismatch']:
+            num('eos', f'mismatch p={k}', L['mismatch'][k], N['mismatch'][k])
+        for k in ('F6', 'H1', 'F34'):
+            cplx('eos', f'base {k}', L['base'][k], N['base'][k])
+            cplx('eos', f'alt {k}', L['alt'][k], N['alt'][k])
+            shift('eos', f'shift {k} dRe_rel', L['shift'][k]['dRe_rel'], N['shift'][k]['dRe_rel'])
+            shift('eos', f'shift_mid {k} dRe_rel', L['shift_mid'][k]['dRe_rel'], N['shift_mid'][k]['dRe_rel'])
+        compare_flags('radial_eos', L, N)
+    L, N = load('radial_scattering.json')
+    if L:
+        for k in ('H1 (6 kHz)', 'F (3,4 kHz)'):
+            num('scattering', f'{k} nu_r', L[k]['nu_r'], N[k]['nu_r'])
+            num('scattering', f'{k} Gamma/2', L[k]['half_width'], N[k]['half_width'])
+        compare_flags('radial_scattering', L, N)
     bad = 0
     worst = {}
     for fn, q, kind, a, b in rows:
-        d = abs(b / a - 1) if kind == 'num' and a else (0.0 if a == b else float('inf'))
+        d = abs(b / a - 1) if kind in ('num', 'shift') and a else (0.0 if a == b else float('inf'))
         w = worst.setdefault((fn, kind), (0.0, ''))
         if d > w[0]:
             worst[(fn, kind)] = (d, q)
-        if d >= (TOL if kind == 'num' else 1e-12):
+        if d >= (TOL if kind == 'num' else (TOL_SHIFT if kind == 'shift' else 1e-12)):
             bad += 1
             print(f'ABOVE TOLERANCE  {fn:10s} {q:34s} old {a!r:>22} new {b!r:>22}  rel diff {d:.1e}')
     print('\nworst difference by file (numbers: relative; counts: any difference):')

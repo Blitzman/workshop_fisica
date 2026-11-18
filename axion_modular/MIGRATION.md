@@ -54,7 +54,7 @@ header of each new file says what it was moved from and what changed.
 | `step15`, `step16`, `step19`, `step20`, `step22`, `step26` (`*_radial_star`, `*_radial_stability`, `*_avoided_crossing`, `*_damped_count`, `*_exterior_contour`, `*_paper1_tables`) | `N4/validation.py`, `N4/run.py` | stars from S1 (the 12 and the extra set); adaptations in item 13 |
 | `step26_paper1_tables.py` (Tables 1-3 of Paper I) | `R_paper_refs/paper1_radial_tables.py` | the paper's numbers as data |
 | `step17_radial_validation.py` | not ported | external validation against Font et al. 2002 (needs a polytrope star); dropped by decision |
-| `step18,21,23,24` | not yet | module A |
+| `step18_rydberg.py`, `step21_deep_artifacts.py`, `step23_eos_consistency.py`, `step24_scattering_width.py` | `N4/analysis.py` | extra parts of N4 (`--part analysis`), the radial analysis (formerly planned as module A); item 14 |
 
 ## Deliberate differences
 
@@ -205,6 +205,25 @@ header of each new file says what it was moved from and what changed.
       index 0. `tests/n4_gate.py` on that computer: identical to the single-process run, 143 comparisons with the same 4 above tolerance (Table 2 nu_a = 8 kHz f3 damping 1.1e-3; step 20 deep
       region 0 against 2, old-lapse control 5 against 8, old-lapse deep 2 against 0); worst differences by file: Table 2 1.1e-3, turning point 6.5e-5, avoided-crossing gap 1.1e-6, fluid-mode
       damping 4.4e-5; the check outcomes that differ from the legacy are H23 (False -> True) and the step 16 control (True -> False).
+
+14. **The radial analysis (steps 18, 21, 23, 24) as extra parts of N4 (decision 2026-11-18, project owner: parts of N4 instead of a separate module A, which would have duplicated about five N4 files).**
+    `python -m N4_modes_radial.run --part analysis` (they read the outputs of N4's steps 15 and 20 from the output directory). One core: compile 31 s, step 18 0.1 s, step 21 10 s, step 23 19 s, step 24 70 s
+    (legacy: 3,646 s wall for the four). Check pattern identical to the legacy: 18: 4/4; 21: 3 OK and 1 fail; 23: 3 OK and 1 descriptive; 24: 5/5.
+    * *18, Rydberg law:* n - kappa_n (Whittaker) = 0.0579, 0.0571, 0.0568, 0.0566, 0.0566 for n = 2..6, constant within 0.0013; Rydberg-Ritz delta_0 = 0.0564, delta_2 = 0.0055 (residual 1e-5); the hydrogenic
+      and Newtonian controls vary 0.045 and 0.048.
+    * *21, deep zeros:* the fluid modes H1 and H2 move less than 3e-7 % with the alternative matching radii; 3.4e-3 % when matching at the surface (3.5e-8 % with the alternatives); with the ingoing wave H1 stops
+      being a zero (0.15 against 5.9e-8). The check (ii) "the deep zeros move more than 5 %" **fails as in the legacy**: N4's step 20 finds index 0 in the deep region (the legacy found index 2 but Muller never located
+      a zero), so there is no zero to move and the test does not decide.
+    * *23, EOS consistency:* the fits satisfy the first law d eps/dn = (eps + p)/n to 1.3e-4 (p = 1), -7.5e-5 (10), -2.1e-4 (100), +1.5e-3 (300), +1.4e-3 (500), +1.9e-4 (900 MeV/fm^3); with c_s^2 = n dp/dn/(eps + p)
+      instead of dp/deps Re nu moves 5.8e-4 (F, 6 kHz; -2.01 Hz), 1.7e-4 (H1; -1.36 Hz), 5.9e-4 (F, 3.4 kHz; -2.00 Hz), Im nu of H1 2.6e-3 and of F (3.4 kHz) 1.4e-2 relative; the geometric mean moves about half;
+      P(rho) shifted 1 % in lg rho raises the mismatch at 100 MeV/fm^3 from 2.1e-4 to 1.2e-1.
+    * *24, scattering width:* Gamma/2 = 3.6495 Hz for H1 against 3.6495 Hz from Muller (5.2e-5 %), 0.5591 Hz for F (3.4 kHz) (0.0026 %); nu_r within 2.5e-5 and 5.1e-7 widths; |S| = 1 to 4e-16; a window shifted by 20 Gamma shows
+      no resonance (0.14 rad); with the old lapse the resonance falls 3.6 widths from the corrected mode.
+    * *Gate (`tests/n4_gate.py`, 181 comparisons):* the 38 comparisons of these four steps have a worst relative difference of 1.9e-5 (Ritz delta_2) for numbers and 3.3e-5 for the frequency shifts of step 23 (5 % tolerance for
+      those, which are differences of two frequencies); the four above tolerance are still the accepted ones of item 13; the only check outcome that differs from the legacy is still H23.
+    * *Adaptations:* step 21 uses 0.85 and 0.7 of the matching radius as alternative radii (the legacy used the first |theta_0| < 1e-5 and 1e-6), and matching at the surface means no tail; step 23 switches the c_s^2
+      definition in the EOS evaluator (`star_table._EOSVec.cs2_mode`) and rebuilds the tables (the legacy patched `bsk26.EOS.cs2` and re-integrated the stars, which gives the same background because the star integration does
+      not use c_s^2), finds F (6 kHz) with the pole-rejecting `real_root`, and builds the shifted P(rho) from the table's own P(rho) by interpolation; step 24 uses N4's fork pool.
 
 ## Known limitations (not fixed here)
 

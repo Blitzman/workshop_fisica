@@ -57,12 +57,17 @@ class _EOS:
 
 
 class _EOSVec:
-    """Vectorised EOS (scipy splines, exactly as bsk26.EOS): eps(p), n(p), c_s^2(p) for arrays of p in MeV/fm^3."""
+    """Vectorised EOS (scipy splines, exactly as bsk26.EOS): eps(p), n(p), c_s^2(p) for arrays of p in MeV/fm^3.
+
+    c_s^2 has three definitions (N4, step 23): 'eps' = dp/deps from the fits (the default of the whole project), 'n' = n dp/dn / (eps + p), and 'mid' = their geometric mean. The published fits
+    eps(n) and P(rho) are independent and do not satisfy d eps/dn = (eps + p)/n exactly (see `mismatch`), so the two definitions differ by about 1e-3; the code uses 'eps'."""
 
     def __init__(self, n, e, p):
         lp = np.log(p)
         self._le, self._ln = CubicSpline(lp, np.log(e)), CubicSpline(lp, np.log(n))
         self.p_min = p[0]
+        self.n, self.e, self.p = np.asarray(n), np.asarray(e), np.asarray(p)
+        self.cs2_mode = 'eps'
 
     def eps(self, p):
         return np.exp(self._le(np.log(p)))
@@ -70,8 +75,24 @@ class _EOSVec:
     def nb(self, p):
         return np.exp(self._ln(np.log(p)))
 
-    def cs2(self, p):
+    def _cs2_eps(self, p):
         return p / self.eps(p) / self._le(np.log(p), 1)
+
+    def _cs2_n(self, p):
+        return p / (self.eps(p) + p) / self._ln(np.log(p), 1)
+
+    def cs2(self, p):
+        if self.cs2_mode == 'eps':
+            return self._cs2_eps(p)
+        if self.cs2_mode == 'n':
+            return self._cs2_n(p)
+        return np.sqrt(self._cs2_eps(p) * self._cs2_n(p))
+
+    def mismatch(self, p):
+        """(d ln eps / d ln n) eps / (eps + p) - 1: zero if the fits satisfy the first law d eps/dn = (eps + p)/n."""
+        lp = np.log(p)
+        e = self.eps(p)
+        return float(self._le(lp, 1) / self._ln(lp, 1) * e / (e + p) - 1)
 
 
 class StarTable:

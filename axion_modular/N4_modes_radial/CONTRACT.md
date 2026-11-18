@@ -4,7 +4,8 @@
 ```bash
 make S1-extra                                   # once: the extra stars of S1 (about 2 minutes, not tracked by git)
 python -m N4_modes_radial.run                   # steps 22, 26 and 15 (about 10 minutes on one core)
-python -m N4_modes_radial.run --part all        # plus 19, 20 and 16 (the contour counts: long; --procs divides it)
+python -m N4_modes_radial.run --part all        # plus 19, 20, 16 and the analysis parts (the contour counts: long; --procs divides it)
+python -m N4_modes_radial.run --part analysis   # steps 18, 21, 23, 24 (about 100 s); they read the outputs of steps 15 and 20
 python -m tests.n4_gate                         # comparison with the committed legacy results/radial_*.json
 ```
 ## Contract
@@ -18,6 +19,10 @@ Reads: D0 `background.eq.json`; D1 `radial_linear.eq.json`; S1 `eos_bsk26.csv`, 
 | `radial_crossing.json` | 19 | avoided crossing F - gravitational atom n = 1 |
 | `radial_damped.json` | 20 | count in the damped half-plane (and the old-lapse positive control) |
 | `radial_stability.json` | 16 | argument-principle count in the unstable half-plane |
+| `radial_rydberg.json` | 18 | Rydberg law of the gravitational-atom ladder (reads step 15) |
+| `radial_deep.json` | 21 | deep zeros of step 20 against the matching radius (reads step 20) |
+| `radial_eos.json` | 23 | sensitivity to the thermodynamic inconsistency of the BSk26 fits (three c_s^2 definitions; reads step 15) |
+| `radial_scattering.json` | 24 | width from the phase of the real-frequency scattering (reads step 15) |
 | `manifest.json` | | the checks |
 
 Same keys as the legacy `results/radial_*.json`. Step 17 (Font et al. 2002) is not part of this module by decision; step 15 and 19's star construction on the fly is replaced by S1's extra stars.

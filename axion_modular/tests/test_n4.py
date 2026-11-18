@@ -67,6 +67,10 @@ def test_coefficient_tables_interpolate_a_matrix_with_1_over_r_entries(tmp_path)
     fe = lambda r, w, *B: entry(2, r, w)
     tabs = RadialTables(tab_star, fi, fe)
     assert tabs.structure_error < 1e-12
+    # matching at the surface (r_m <= R): no tail, the state is returned unchanged (control of step 21)
+    from N4_modes_radial import modes as M
+    y_R = np.array([1 + 0j, 2j])
+    assert np.array_equal(M.outward(tab_star, tabs, 0.2, y_R, tab_star.R).y[:, -1], y_R)
     om = 0.2 - 0.03j
     f = tabs.rhs_int(om)
     rng = np.random.default_rng(1)
@@ -74,3 +78,46 @@ def test_coefficient_tables_interpolate_a_matrix_with_1_over_r_entries(tmp_path)
         y = rng.normal(size=4) + 1j * rng.normal(size=4)
         exact = np.array(entry(4, r, om), dtype=complex).reshape(4, 4) @ y
         assert np.abs(f(r, y) - exact).max() <= 1e-7 * np.abs(exact).max(), r
+
+
+def test_eos_cs2_definitions_and_the_thermodynamic_mismatch():
+    """The three c_s^2 definitions of step 23 on the S1 EOS table: 'mid' is the geometric mean, 'n' differs from 'eps' by ~1e-3 and the first law is violated by ~2e-4 at 100 MeV/fm^3."""
+    from common import artifacts as A
+    from N4_modes_radial.star_table import _EOSVec
+    cols, _ = A.load_table(ROOT / 'S1_star_background' / 'outputs' / 'eos_bsk26.csv')
+    E = _EOSVec(cols['n_fm3'], cols['eps_MeV_fm3'], cols['p_MeV_fm3'])
+    p = np.array([1.0, 10.0, 100.0, 300.0])
+    c_eps, c_n = E._cs2_eps(p), E._cs2_n(p)
+    E.cs2_mode = 'mid'
+    assert np.allclose(E.cs2(p), np.sqrt(c_eps * c_n), rtol=1e-14)
+    E.cs2_mode = 'n'
+    assert np.array_equal(E.cs2(p), c_n)
+    E.cs2_mode = 'eps'
+    assert np.array_equal(E.cs2(p), c_eps)
+    assert np.all(np.abs(c_n / c_eps - 1) < 5e-3)
+    assert abs(E.mismatch(100.0)) < 1e-3 and abs(E.mismatch(100.0)) > 1e-5       # the published fits are consistent to ~1e-4, not exactly
+
+
+def test_scattering_phase_ladder_recovers_width_and_position():
+    """fit_ladder on a synthetic arg S = polynomial background + 2 arctan((x - nu_r)/g): the width and position come back."""
+    from N4_modes_radial import analysis as AN
+    nu0, g0 = 8.1148, 3.65e-6                      # kHz: resonance at nu0 with half-width g0
+    nus = nu0 + g0 * np.tan(np.linspace(-1.47, 1.47, 61))
+    x = (nus - nu0) * 1e3                          # Hz
+    ph = 0.3 + 0.002 * x - 1e-5 * x**2 + 5e-8 * x**3 + 2 * np.arctan(x / (g0 * 1e3))
+    tab, best, conv = AN.fit_ladder(nus, ph, nu0, g0)
+    assert abs(best['half_width'] / g0 - 1) < 1e-6 and abs(best['nu_r'] - nu0) < 1e-9 * 1e3 and conv < 1e-3
+
+
+def test_rydberg_step_on_an_exact_ladder(tmp_path):
+    """step18 on a ladder built from kappa_n = n - delta with the relativistic Coulomb parameter: the Whittaker defect is constant and the two negative controls vary."""
+    import json
+    from N4_modes_radial import analysis as AN
+    a, delta, nua = 0.2748, 0.0566, 6.0
+    ns = np.arange(2, 7)
+    kap = ns - delta
+    q = (-kap + np.sqrt(kap**2 + 8 * a**2)) / (4 * a)
+    nus = nua * np.sqrt(1 - q**2)
+    (tmp_path / 'radial_star.json').write_text(json.dumps({'nu6': {'alpha_g': a, 'ladder': [{'n': int(n), 'nu': float(v)} for n, v in zip(ns, nus)]}}))
+    res, out = AN.step18(tmp_path)
+    assert [r[1] for r in res[:2]] == [True, True] and np.allclose(out['n_minus_kappa'], delta, atol=1e-12)
