@@ -11,6 +11,7 @@ Before modifying code or running calculations in `ns_cooling/`, check `ns_coolin
 - **Free numbers allowed with provenance:** Free numbers are allowed. A number that is not a physical constant or a cited value (a fit parameter, a default, an approximation) carries a comment that says where it comes from, or that its source is not recorded.
 
 ## 2. Testing (decision D-028, from `Makefile` and `pytest.ini`)
+- The **Verification and Run Policy** in the root `AGENTS.md` applies (ask before anything over 2 minutes, e.g. `make test-slow`).
 - Run only the test file for the code area you changed, or the full suite on request (`nothing runs by itself`):
   - `make test-structure`, `make test-emissivities`, `make test-heat-conduction`, `make test-envelope`, `make test-integration`, `make test-output`
   - `make test-all` (skips `slow` by default via `pytest.ini`) or `make test-slow` (for mesh convergence).

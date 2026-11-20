@@ -11,5 +11,5 @@ Read the module's `CONTRACT.md`, the modular `README.md`, and the shared `CONVEN
 ## Modules and runs
 
 - Keep modules independently runnable. Exchange data through their contracted artifacts and use `common/` for shared infrastructure. Generate report numbers from module outputs.
-- Start with the relevant module's witness or quick target where available. Use the full sweep after the focused checks pass. Keep symbolic diagnostics to residuals and affected coefficients. Use exact polynomial reduction for spherical harmonics.
+- Tests and runs follow the **Verification and Run Policy** in the root `AGENTS.md` (smallest check first; ask before anything over 2 minutes). Witness and quick targets: `make S1-witness`, `N1-witness`, `N2-quick`, `N3-quick`, `N4-quick`, `T-fast`. Keep symbolic diagnostics to residuals and affected coefficients. Use exact polynomial reduction for spherical harmonics.
 - Use `MIGRATION.md` to locate the original calculation and known differences. The archived workflow and its instructions are under `archive/axion_ns/`.

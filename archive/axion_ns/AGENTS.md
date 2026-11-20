@@ -10,7 +10,7 @@ Before writing code or running calculations in `archive/axion_ns/`, read `CONVEN
 
 ## 2. Token and Compute Economy
 - **Never print raw SymPy expressions:** Never `print(expr)` expanded tensors or equations to the console. If an equation does not vanish, print only the list of variables with non-zero coefficients (`[v for v in PERT if expr.coeff(v) != 0]`) or evaluate the numerical residual at a fixed point.
-- **Iterate in `--fast` mode (1 witness point):** During numerical development and debugging, run a single star and a single witness frequency (`ν_a = 6.0 kHz`, `l = 2`, < 3 s). Only launch full sweeps (`run_all.py`) once the witness point passes all tests.
+- **Iterate in `--fast` mode (1 witness point):** During numerical development and debugging, run a single star and a single witness frequency (`ν_a = 6.0 kHz`, `l = 2`, < 3 s). Only launch full sweeps (`run_all.py`, about 75 min) once the witness point passes all tests, and ask first (root `AGENTS.md`, Verification and Run Policy).
 - **Do not re-read full `.tex` or HTML files:** Extract equations from LaTeX once into `paper.py`. When editing reports, use line ranges (`StartLine`/`EndLine`).
 - **No blind `simplify()` / `trigsimp()`:** On expressions with spherical harmonics, behavior depends on `PYTHONHASHSEED` and can hang for hours. Use exact polynomial reduction in `(cos θ, sin θ)` (`nonradial._divide`).
 
