@@ -8,9 +8,19 @@ Reproducción, desde la acción, de las ecuaciones de dos papers:
 > A. Gómez-Bañón, P. Pnigouras, J. A. Pons, *Nonradial oscillation modes of axion condensed neutron
 > stars in the Cowling approximation*, [arXiv:2610.37308](https://arxiv.org/abs/2610.37308) (Paper II).
 
+## Implementación principal
+
+`axion_ns/` contiene los módulos de cálculo, que se ejecutan por separado e intercambian
+ecuaciones en JSON y tablas en CSV. Consulta [las instrucciones de ejecución](axion_ns/README.md) y
+[el mapa de migración](axion_ns/MIGRATION.md).
+
+## Flujo original
+
+La implementación original se conserva en `archive/axion_ns/`.
+
 El flujo es el típico de Mathematica hecho a mano, pero automatizado con SymPy y con
 **verificación en cada paso** contra las ecuaciones de los papers, transcritas desde su LaTeX en
-`axion_ns/paper.py` y `axion_ns/nonradial.py`. La numeración de ecuaciones es la de los PDF publicados.
+`archive/axion_ns/paper.py` y `archive/axion_ns/nonradial.py`. La numeración de ecuaciones es la de los PDF publicados.
 El Paper I numera por secciones, (2.6), (3.3)…; el Paper II, de forma secuencial, (8a), (13), (A6)…
 
 ```
@@ -37,18 +47,12 @@ paso 10 con axión y métrica dinámica (sin publicar): f, p1, p2 para 12 masas 
 
 ```bash
 uv sync --frozen                              # entorno con las versiones de uv.lock (Python en .python-version)
-uv run python -m axion_ns.run_all             # todo (~75 min); esperado: 128/131, con 3 FAIL que son las cifras del Paper I
-uv run python -m axion_ns.step5_nonradial     # un paso suelto
+PYTHONPATH=archive uv run python -m axion_ns.run_all             # todo (~75 min); esperado: 128/131, con 3 FAIL que son las cifras del Paper I
+PYTHONPATH=archive uv run python -m axion_ns.step5_nonradial     # un paso suelto
 uv run python report/build.py                 # regenera results/informe_axiones.html y results/axion_ns_codigo.zip
 ```
 
 Las figuras salen en `results/toy_qnm_landscape.png` y `results/paper2_atom_levels.png`.
-
-## Reorganización modular
-
-`axion_modular/` contiene la misma cadena reorganizada en módulos que se ejecutan por separado e intercambian ficheros
-(ecuaciones en JSON + PDF, tablas en CSV): ver `axion_modular/README.md` y `axion_modular/MIGRATION.md`. `axion_ns/` no
-se ha modificado.
 
 ## Cómo se verifica
 

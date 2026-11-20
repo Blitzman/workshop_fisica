@@ -41,7 +41,7 @@ def test_common_does_not_import_modules():
 
 
 def test_derivation_files_do_not_import_references():
-    """Rule of axion_ns/AGENTS.md section 1: derivation code never knows the equations typed from the papers."""
+    """Rule of axion_ns/AGENTS.md “Scientific verification”: derivation code never knows the equations typed from the papers."""
     for m, files in {'D0_derive_action': ['derive.py'], 'D1_derive_radial': ['derive.py'],
                      'D2_derive_nonradial': ['derive_cowling.py', 'derive_fullgr.py']}.items():
         for fn in files:

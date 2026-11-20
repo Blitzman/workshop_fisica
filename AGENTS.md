@@ -1,8 +1,9 @@
 # Repository Agent Protocol
 
-This repository contains two independent workstreams with different rules depending on the subdirectory:
+This repository contains two independent workstreams: axion physics and neutron-star cooling.
 
-- **If working in `axion_ns/` (or `report/`, `results/`):** read `axion_ns/AGENTS.md`, `CONVENTIONS.md`, and `LAB_NOTEBOOK.md` before writing code or running calculations.
+- **`axion_ns/` is the primary implementation for axion work.** Before writing code or running calculations, read `axion_ns/AGENTS.md`, `axion_ns/README.md`, the relevant module's `CONTRACT.md` where available, `CONVENTIONS.md`, and the relevant entries in `LAB_NOTEBOOK.md`. Use `axion_ns/MIGRATION.md` to map legacy steps to modules.
+- **`archive/axion_ns/`, root `report/`, and root `results/` are the legacy axion workflow.** Use them for historical comparisons, reproducing legacy results, or work explicitly targeting the legacy implementation. Read `archive/axion_ns/AGENTS.md`, `CONVENTIONS.md`, and `LAB_NOTEBOOK.md` before writing code or running calculations there.
 - **If working in `ns_cooling/` (or `observations/`):** read `ns_cooling/AGENTS.md` and `ns_cooling/README.txt`. The `axion_ns/`-specific rules (SymPy from the action, zero free constants, `CONVENTIONS.md`) do **not** apply to `ns_cooling/` (decision D-026).
 
 ## Common Rules Across the Repository

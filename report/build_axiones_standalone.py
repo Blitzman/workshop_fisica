@@ -77,7 +77,8 @@ def main():
     # 3. ficheros incrustados, al final de «Reproducirlo»
     blocks = []
     for f in files:
-        text = (ROOT / f).read_text()
+        source_root = ROOT / 'archive' if f.startswith('axion_ns/') else ROOT
+        text = (source_root / f).read_text()
         blocks.append(f'<details class="src" id="{anchor(f)}"><summary><code>{html.escape(f)}</code> '
                       f'<span class="small">({len(text.splitlines())} líneas)</span></summary>'
                       f'<pre class="code" data-path="{html.escape(f)}"><code>{html.escape(text)}</code></pre></details>')

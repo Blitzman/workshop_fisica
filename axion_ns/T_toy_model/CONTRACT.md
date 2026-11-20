@@ -2,7 +2,7 @@
 
 ## Run
 ```bash
-python -m T_toy_model.run            # from axion_modular/ ; `--help` lists the options
+python -m T_toy_model.run            # from axion_ns/ ; `--help` lists the options
 ```
 Outputs go to `T_toy_model/outputs/` (override with `--out`). Upstream artifacts are read from the sibling `outputs/` folders
 (override with the `--*-dir` options), so this module runs on its own as soon as those files exist.

@@ -980,13 +980,13 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
 
     <h3>Cómo reproducir los tres nuevos avances desde la terminal</h3>
     <pre><code># 1. Estratificación no barotrópica y modos g / de interfaz (20/20 checks)
-.venv/bin/python -m axion_ns.step11_gmodes
+PYTHONPATH=archive .venv/bin/python -m axion_ns.step11_gmodes
 
 # 2. Rotación lenta O(Omega), arrastre de Lense-Thirring y modos r (18/18 checks)
-.venv/bin/python -m axion_ns.step12_rotation
+PYTHONPATH=archive .venv/bin/python -m axion_ns.step12_rotation
 
 # 3. Unificación Axión + Magnetar y corriente quiral efectiva (18/18 checks)
-.venv/bin/python -m axion_ns.step13_magnetar
+PYTHONPATH=archive .venv/bin/python -m axion_ns.step13_magnetar
 
 # 4. Regenerar todos los informes HTML en results/
 .venv/bin/python report/build_lineas.py &amp;&amp; .venv/bin/python report/build.py</code></pre>

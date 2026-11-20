@@ -15,7 +15,7 @@ import sympy as sp
 from scipy.integrate import solve_ivp
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path[:0] = [str(ROOT), str(ROOT.parent)]
+sys.path[:0] = [str(ROOT), str(ROOT.parent / 'archive')]
 
 from axion_ns import fmodes as FM                      # noqa: E402
 from axion_ns import fullgr as FG                      # noqa: E402

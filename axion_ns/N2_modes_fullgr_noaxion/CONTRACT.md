@@ -2,7 +2,7 @@
 
 ## Run
 ```bash
-python -m N2_modes_fullgr_noaxion.run              # full validation, from axion_modular/ (about 1,000 s of CPU / --procs)
+python -m N2_modes_fullgr_noaxion.run              # full validation, from axion_ns/ (about 1,000 s of CPU / --procs)
 python -m N2_modes_fullgr_noaxion.run --quick --out /tmp/n2_quick     # smoke run, LMI star only, about 2 minutes
 ```
 `--procs N` (default min(6, cores)) uses a fork pool (the compiled systems cannot be pickled); without `fork` it runs serially.

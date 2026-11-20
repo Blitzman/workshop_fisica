@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path[:0] = [str(ROOT), str(ROOT.parent)]
+sys.path[:0] = [str(ROOT), str(ROOT.parent / 'archive')]
 
 from axion_ns import axstar as OA                     # noqa: E402
 from axion_ns import step9_axion_cowling as O9        # noqa: E402

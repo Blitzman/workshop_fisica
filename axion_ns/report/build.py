@@ -99,7 +99,7 @@ def build(out=OUT_DEFAULT):
         if man:
             sections.append(checks_section(mod, man))
     graph = ' &nbsp; '.join(f'{u} &rarr; <b>{m}</b>' for m, (_, ups) in MODULES.items() for u in ups)
-    page = f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><title>axion_modular status</title>
+    page = f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><title>axion_ns status</title>
 <style>
 body{{font:14px/1.45 system-ui,sans-serif;margin:2rem;max-width:1200px;color:#1f2328;background:#fff}}
 @media (prefers-color-scheme: dark){{body{{color:#e6edf3;background:#0d1117}}a{{color:#79c0ff}}}}
@@ -108,7 +108,7 @@ tr.ok td:nth-child(2){{border-left:5px solid #2da44e}}tr.fail td:nth-child(2){{b
 tr.stale td:nth-child(2){{border-left:5px solid #d4a72c}}tr.none{{opacity:.55}}
 ul.checks{{list-style:none;padding-left:.5rem}}li.FAIL{{color:#cf222e}}li.RES{{opacity:.8}}code{{font-size:12px}}
 </style></head><body>
-<h1>axion_modular: module status</h1>
+<h1>axion_ns: module status</h1>
 <p>Generated from the manifests in <code>&lt;module&gt;/outputs/manifest.json</code>. Green: all checks pass;
 red: at least one check fails; amber: an input artifact changed after the run (re-run the module).
 Module A is not part of this layout yet.</p>

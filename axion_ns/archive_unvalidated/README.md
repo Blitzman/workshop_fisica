@@ -1,6 +1,6 @@
 # archive_unvalidated (not ported)
 
-Nothing is copied here on purpose. The following stay in the legacy `axion_ns/` and are **not** part of this layout:
+Nothing is copied here on purpose. The following stay in the legacy `archive/axion_ns/` and are **not** part of this layout:
 
 | legacy files | why |
 |---|---|
@@ -10,4 +10,4 @@ Nothing is copied here on purpose. The following stay in the legacy `axion_ns/` 
 
 See `LAB_NOTEBOOK.md` section 1 (H5-H7) and section 3 (the fabricated-report case). They are also excluded from the legacy
 `run_all.py`. If one of these lines is ever reopened it should enter this layout as a new module with its own
-reference check made WITHOUT the axion first (rule of `axion_ns/AGENTS.md` section 4).
+reference check made WITHOUT the axion first (rule of `archive/axion_ns/AGENTS.md` section 4).

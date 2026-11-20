@@ -633,7 +633,7 @@ _nrev = max(int(r_[0].split('ª')[0]) for r_ in REVIEWS)
 _NUM = {6: 'seis', 7: 'siete', 8: 'ocho', 9: 'nueve'}
 _CK = json.loads((ROOT / 'results' / 'checks.json').read_text())['steps']
 _dur = lambda t: '<1 s' if t < 1 else f'~{t:.0f} s' if t < 90 else f'~{t / 60:.0f} min'
-_repro = '\n'.join(f"uv run python -m axion_ns.{s_['module']:<24}  # {s_['step']} ({_dur(s_['seconds'])})"
+_repro = '\n'.join(f"PYTHONPATH=archive uv run python -m axion_ns.{s_['module']:<24}  # {s_['step']} ({_dur(s_['seconds'])})"
                     for s_ in _CK if s_['module'][4:6].isdigit() and int(s_['module'][4:6]) in (*range(14, 25), 26))   # el 25 es del informe principal
 _rv_rows = ''.join(f'<tr><td>{a}</td><td>{b}</td><td>{c}</td><td>{d}</td><td><span class="st {e}">{"resuelto" if e == "ok" else "abierto"}</span></td></tr>'
                    for a, b, c, d, e in REVIEWS)
@@ -676,7 +676,8 @@ FD = ROOT / 'report' / 'radial_files'
 FD.mkdir(exist_ok=True)
 published = {}
 for f in FILES + DATA:
-    src = ROOT / f
+    source_root = ROOT / 'archive' if f.startswith('axion_ns/') else ROOT
+    src = source_root / f
     if not src.exists():
         continue
     name = f.replace('/', '__') + ('.txt' if not f.endswith(('.json', '.txt')) else '')
@@ -880,7 +881,7 @@ a {{ color: var(--accent); }}
 <section>
   <h2>9. Reproducirlo</h2>
   <p>El código y los datos están publicados junto a esta página (los <code>.py</code> van como <code>.py.txt</code>). Con el repositorio y <a href="https://docs.astral.sh/uv/">uv</a>:</p>
-  <pre class="code"><code>uv run python -m axion_ns.step2_perturbations     # ecuaciones (3.3) desde la acción (paso 2)
+  <pre class="code"><code>PYTHONPATH=archive uv run python -m axion_ns.step2_perturbations     # ecuaciones (3.3) desde la acción (paso 2)
 {_repro}
 uv run python report/build_radial.py              # esta página, desde los JSON</code></pre>
   <ul class="files">{"".join(f'<li><a href="{k}"><code>{k.split("/", 1)[1].removesuffix(".txt").replace("__", "/").replace("//init/.py", "/__init__.py")}</code></a></li>' for k in sorted(published))}</ul>

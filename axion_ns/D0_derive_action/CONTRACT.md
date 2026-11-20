@@ -2,7 +2,7 @@
 
 ## Run
 ```bash
-python -m D0_derive_action.run            # from axion_modular/ ; `--help` lists the options
+python -m D0_derive_action.run            # from axion_ns/ ; `--help` lists the options
 ```
 Outputs go to `D0_derive_action/outputs/` (override with `--out`). Upstream artifacts are read from the sibling `outputs/` folders
 (override with the `--*-dir` options), so this module runs on its own as soon as those files exist.

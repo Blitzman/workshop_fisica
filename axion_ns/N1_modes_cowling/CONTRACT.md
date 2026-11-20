@@ -2,7 +2,7 @@
 
 ## Run
 ```bash
-python -m N1_modes_cowling.run            # from axion_modular/ ; `--help` lists the options
+python -m N1_modes_cowling.run            # from axion_ns/ ; `--help` lists the options
 ```
 Outputs go to `N1_modes_cowling/outputs/` (override with `--out`). Upstream artifacts are read from the sibling `outputs/` folders
 (override with the `--*-dir` options), so this module runs on its own as soon as those files exist.

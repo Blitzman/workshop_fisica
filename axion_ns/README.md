@@ -1,8 +1,8 @@
-# axion_modular
+# axion_ns
 
-A reorganization of `axion_ns/` into modules that run **independently**: modules never import each other. They exchange
+A reorganization of the original axion implementation into modules that run **independently**: modules never import each other. They exchange
 files (equations as JSON + PDF, tables as CSV + metadata) through `common/`, a small library that holds no physics except
-the notation contract. `axion_ns/` is untouched and still works.
+the notation contract. The original package is preserved in `archive/axion_ns/`.
 
 ```
                 R_paper_refs ──────────────┬──────────────┬─────────────┐
@@ -23,7 +23,7 @@ Every legacy step is now ported except step 17 (the Font et al. comparison, drop
 
 ```bash
 pip install numpy scipy sympy mpmath matplotlib pytest      # + a LaTeX (pdflatex) for the equation PDFs
-cd axion_modular
+cd axion_ns
 make R D0 D1 D2 S1 S1-extra N1 N2 N3 N4 T report test  # everything; D2 (about 8 min) and N2 (about 17 min of CPU, divided by the cores) are the long ones
 python -m D1_derive_radial.run --help                         # every module has its own entry point and options
 ```
@@ -119,7 +119,7 @@ loosening rtol breaks the amplitude method (`MIGRATION.md`, item 11).
 ## Known limitations
 
 * S1's TOV + Klein-Gordon integrator and N1's perturbation equations are hand-typed, as in the original; they are **not** compiled
-  from the equation artifacts (`axion_ns/AGENTS.md` section 1). Only T has the bridge so far. See `MIGRATION.md`.
+  from the equation artifacts (`axion_ns/AGENTS.md` “Scientific verification”). Only T has the bridge so far. See `MIGRATION.md`.
 * The shipped S1/N1 outputs are the full set (12 values of nu_a plus the no-axion star), produced with the current defaults. Each
   star table is about 0.3 MB (2,499 rows), 3.7 MB for the 13 tables.
 * Python 3.12 (the legacy `pyproject.toml` asks for >= 3.13); one CPU core.

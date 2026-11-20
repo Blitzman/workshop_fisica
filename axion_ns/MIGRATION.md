@@ -1,6 +1,6 @@
-# Migration map: `axion_ns/` -> `axion_modular/`
+# Migration map: `archive/axion_ns/` -> `axion_ns/`
 
-`axion_ns/` is untouched and still runs (`uv run python -m axion_ns.run_all`). Every moved file keeps its logic; the
+The original package is archived. From the repository root, run it with `PYTHONPATH=archive uv run python -m axion_ns.run_all`. Every moved file keeps its logic; the
 header of each new file says what it was moved from and what changed.
 
 ## Where each legacy file went
@@ -228,7 +228,7 @@ header of each new file says what it was moved from and what changed.
 ## Known limitations (not fixed here)
 
 * S1's `Star` and N1's `matter`/`rhs` and `modes.py` are hand-typed ODEs, as in the original. They are NOT compiled from
-  D0/D2's artifacts (rule of `axion_ns/AGENTS.md` section 1, "direct numerical bridge"). The artifacts that would back them
+  D0/D2's artifacts (rule of `axion_ns/AGENTS.md` “Scientific verification”, "direct numerical bridge"). The artifacts that would back them
   exist (`background`, `cowling_linear`); T has the pattern (`T/bridge.py`). Open item for the next iteration.
 * The check-count regression (`tests/test_golden_checks.py`) compares against the committed `results/checks.json`.
 * Python 3.12 was used; the legacy project declares >= 3.13.

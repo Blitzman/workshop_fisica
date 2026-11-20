@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path[:0] = [str(ROOT), str(ROOT.parent)]
+sys.path[:0] = [str(ROOT), str(ROOT.parent / 'archive')]
 
 from axion_ns import fmodes as FM                      # noqa: E402
 from N2_modes_fullgr_noaxion import modes as M2        # noqa: E402
