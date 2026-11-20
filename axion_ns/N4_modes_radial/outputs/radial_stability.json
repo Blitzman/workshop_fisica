@@ -38,8 +38,8 @@
    96,
    96
   ],
-  "points": 1547,
-  "max_dphase": 1.0327789837672696,
+  "points": 1548,
+  "max_dphase": 1.0269071568776078,
   "axis_sign_changes": [
    0.5790443980602487
   ],
@@ -80,18 +80,18 @@
    96,
    96
   ],
-  "points": 1541,
-  "max_dphase": 1.02945706168454,
+  "points": 1543,
+  "max_dphase": 0.9797224515916745,
   "axis_sign_changes": [],
   "axis_imag_rel": 0.0,
-  "symmetry": 1.8579778957408554e-15
+  "symmetry": 5.180155240233233e-15
  },
  "robust6": {
-  "n0_96": -3.335164978479104e-16,
+  "n0_96": 9.93923337957349e-17,
   "eps_half": 0,
-  "neg_raw_inf": -1.0000000000000007
+  "neg_raw_inf": 2.0000000000000004
  },
- "neg_sheet_principal": 1.0000864847429698,
+ "neg_sheet_principal": 1.0000116649709188,
  "nu3.4": {
   "total": 0,
   "converged": true,
@@ -113,6 +113,7 @@
     0
    ],
    [
+    1,
     0,
     0
    ],
@@ -124,14 +125,14 @@
   "n0_final": [
    96,
    96,
-   96,
+   192,
    96
   ],
-  "points": 1546,
-  "max_dphase": 1.0246938187695143,
+  "points": 1932,
+  "max_dphase": 0.9818882926486865,
   "axis_sign_changes": [],
   "axis_imag_rel": 0.0,
-  "symmetry": 5.740658230229351e-15
+  "symmetry": 3.366223865127572e-15
  },
  "region": {
   "eps": 0.05,
@@ -151,7 +152,7 @@
    "note": "H18(c)"
   },
   {
-   "name": "nu_a = 6.0 kHz: ningún cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [0, 0], [0, 0]]; 1541 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 2e-15",
+   "name": "nu_a = 6.0 kHz: ningún cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [0, 0], [0, 0]]; 1543 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 5e-15",
    "ok": true,
    "note": "H18(a)"
   },
@@ -161,17 +162,17 @@
    "note": "H18(d)"
   },
   {
-   "name": "Control negativo 1: sin quitar el factor e^(i k r_m) y con muestreo grueso, el contorno pierde vueltas (índice -1 en vez de 0)",
+   "name": "Control negativo 1: sin quitar el factor e^(i k r_m) y con muestreo grueso, el contorno pierde vueltas (índice 2 en vez de 0)",
    "ok": true,
    "note": ""
   },
   {
-   "name": "Control negativo 2: con la rama principal de k también para Re omega < 0, la simetría F(-w*) = F(w)* se rompe (1.0e+00 frente a 2e-15)",
+   "name": "Control negativo 2: con la rama principal de k también para Re omega < 0, la simetría F(-w*) = F(w)* se rompe (1.0e+00 frente a 5e-15)",
    "ok": true,
    "note": ""
   },
   {
-   "name": "nu_a = 3.4 kHz: ningún cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [0, 0], [0, 0]]; 1546 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 6e-15",
+   "name": "nu_a = 3.4 kHz: ningún cero de F con |Re nu| <= 12, 0.05 <= Im nu <= 12 kHz (índice 0: central [0, 0], derecha x2 [0, 0], cada pieza estable al doblar el muestreo, [[0, 0], [0, 0], [1, 0, 0], [0, 0]]; 1932 puntos) y ningún cambio de signo en el eje hasta 20 kHz; simetría F(-w*) = F(w)* a 3e-15",
    "ok": true,
    "note": "H18(a)"
   }

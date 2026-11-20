@@ -54,21 +54,21 @@
   "f_pi_MeV": 92.1,
   "ma_per_km": 0.08383380087806727,
   "fa2_geo": 8.335206624620822e-05,
-  "theta_c": 2.978624694447642,
-  "R_km": 11.37180370105927,
-  "M_km": 2.1081548057596007,
-  "M_msun": 1.4276414140282248,
-  "Phi_shift": -0.4806113272052962,
-  "r_end_km": 157.65605949085597,
-  "M_total_km": 2.1207360457396307,
-  "r_k_km": 11.37180370105927,
+  "theta_c": 2.978624694439626,
+  "R_km": 11.371803710701656,
+  "M_km": 2.1081548058998187,
+  "M_msun": 1.4276414141231804,
+  "Phi_shift": -0.48061132721669425,
+  "r_end_km": 190.297247182087,
+  "M_total_km": 2.120736045849438,
+  "r_k_km": 11.371803710701656,
   "KGEO": 1.3238333135663823e-06,
   "MSUN_km": 1.4766696910334391,
   "CKMS": 299792.458,
   "HBARC_MeV_fm": 197.3269804593025,
   "p_min_MeV_fm3": 9.124572027595528e-10,
   "integrator": {
-   "variable": "ln p (structure), r (vacuum tail)",
+   "variable": "ln p (structure, scalar as u = ln(pi - theta)), r (vacuum tail)",
    "method": "DOP853",
    "rtol": 1e-08,
    "atol": 1e-30,
@@ -76,21 +76,28 @@
    "max_step_s": 0.25,
    "start_r_km": 0.01,
    "p_frac": 1e-10,
-   "shoot_tol": 1e-12
+   "shoot_tol": 1e-12,
+   "shooting": "Brent in u_c = ln(delta_c), decaying-branch match at r_match_km"
   },
+  "delta_c": 0.16296795915016682,
+  "r_match_km": 71.01361820116344,
+  "match_lambda": 5.0,
+  "tail_lambda": 15.0,
+  "theta_match": 0.0007721980226347382,
+  "decay_mismatch": 5.208889934786705e-07,
   "dense": {
    "n_rows": 7197,
    "n_interior": 6198,
    "nodes": "uniform in ln p + uniform in r + geometric near the centre",
    "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
    "interp_err": {
-    "p": 1.1710685132236835e-09,
-    "m": 1.0878667075402001e-11,
-    "Phi": 1.615013489623121e-11,
-    "theta": 2.959498683604347e-08,
-    "theta_p": 5.524766398726651e-10
+    "p": 2.4171064586668707e-09,
+    "m": 1.2111202042458841e-11,
+    "Phi": 1.6616679774741173e-11,
+    "theta": 1.1153859686554356e-08,
+    "theta_p": 3.493035886240307e-08
    },
-   "interp_max_err": 2.959498683604347e-08,
+   "interp_max_err": 3.493035886240307e-08,
    "interp_tol": 1e-05
   }
  },
@@ -98,12 +105,12 @@
   "module": "S1_star_background",
   "script": "run.py",
   "git": {
-   "commit": "26f2fcc",
+   "commit": "24d010c",
    "dirty": true
   },
-  "created": "2026-11-17T20:20:15Z",
+  "created": "2026-11-20T20:07:33Z",
   "env": {
-   "python": "3.12.3",
+   "python": "3.14.6",
    "platform": "Linux x86_64",
    "sympy": "1.14.0",
    "mpmath": "1.3.0",
@@ -113,5 +120,5 @@
   }
  },
  "inputs": [],
- "csv_sha256": "235e1eaffc5049bb28b32deb46dbd92fcd924ae7c6a17c4a0c5a46bf6c299f2d"
+ "csv_sha256": "5c8ed08bee553756c34d83ccd80bf96f8ff760d6402ca9f3f7d98d71818c0c03"
 }

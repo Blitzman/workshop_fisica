@@ -14,15 +14,19 @@ from .dense import COLUMNS, DESC, UNITS, dense_state, validate_dense
 
 
 def star_parameters(st, rend):
-    return {'nu_a_kHz': st.nu_a, 'p0_MeV_fm3': st.p0, 'E0_geo_km2': st.E0, 'E0_MeV_fm3': S.E0, 'nc_fm3': st.nc,
+    par = {'nu_a_kHz': st.nu_a, 'p0_MeV_fm3': st.p0, 'E0_geo_km2': st.E0, 'E0_MeV_fm3': S.E0, 'nc_fm3': st.nc,
             'beta': S.BETA, 'sigma_N_MeV': S.SIGMA_N, 'eps': S.EPS, 'm_pi_MeV': S.MPI, 'f_pi_MeV': S.FPI,
             'ma_per_km': st.ma, 'fa2_geo': (None if not np.isfinite(st.fa2) else st.fa2), 'theta_c': st.thc,
             'R_km': float(st.R_stop), 'M_km': float(st.M_stop), 'M_msun': float(st.M_stop / S.MSUN), 'Phi_shift': float(st.Phi_shift),
             'r_end_km': float(rend), 'M_total_km': float(st.M_total), 'r_k_km': float(st.R_stop),
             'KGEO': S.KGEO, 'MSUN_km': S.MSUN, 'CKMS': S.CKMS, 'HBARC_MeV_fm': S.HBARC, 'p_min_MeV_fm3': float(S._eos.p_min),
-            'integrator': {'variable': 'ln p (structure), r (vacuum tail)', 'method': 'DOP853', 'rtol': st.rtol, 'atol': st.atol,
-                           'max_step_km': st.max_step, 'max_step_s': st.max_step_s, 'start_r_km': st.r0, 'p_frac': st.p_frac,
-                           'shoot_tol': st.shoot_tol}}
+            'integrator': {'variable': 'ln p (structure, scalar as u = ln(pi - theta)), r (vacuum tail)', 'method': 'DOP853', 'rtol': st.rtol,
+                           'atol': st.atol, 'max_step_km': st.max_step, 'max_step_s': st.max_step_s, 'start_r_km': st.r0, 'p_frac': st.p_frac,
+                           'shoot_tol': st.shoot_tol, 'shooting': 'Brent in u_c = ln(delta_c), decaying-branch match at r_match_km'}}
+    if st.nu_a:
+        par.update({'delta_c': st.delta_c, 'r_match_km': float(st.r_match), 'match_lambda': st.match, 'tail_lambda': st.tail,
+                    'theta_match': float(st.theta_match), 'decay_mismatch': float(st.decay_mismatch)})
+    return par
 
 
 def write_star(out_dir, st, name, module, inputs=(), tol=1e-5, **node_kw):

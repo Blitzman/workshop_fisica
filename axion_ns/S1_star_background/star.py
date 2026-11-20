@@ -77,32 +77,51 @@ class Star:
             self._integrate(0.0, keep=True)
 
     # ------------------------------------------------------------ materia
+    def _background_matter(self, p, shape, slope):
+        """EOS and first-order scalar coupling used by hydrostatic equilibrium."""
+        pm = p / KGEO
+        if pm <= _eos.p_min * 1.0001:
+            return 0.0, 0.0, 0.0, 0.0, 0.0
+        e0, nb = _eos.eps(pm) * KGEO, _eos.nb(pm)
+        x = nb / self.nc
+        return e0 - self.E0 * x * shape, e0, nb, x, self.E0 * x * slope
+
     def matter(self, p, t):
-        """(eps, n_b, x, c_s^2 con el eps axiónico, q1 = n dm*/dtheta, q2 = n d2m*/dtheta2) en km^-2."""
+        """(eps, n_b, x, c_s^2, q1, q2) for background and perturbation output."""
         pm = p / KGEO
         if pm <= _eos.p_min * 1.0001:
             return 0.0, 0.0, 0.0, 1.0, 0.0, 0.0
-        e0, nb, cs0 = _eos.eps(pm) * KGEO, _eos.nb(pm), _eos.cs2(pm)
-        x = nb / self.nc
-        e = e0 - self.E0 * x * (1 - g(t)) if self.nu_a else e0
-        cs2 = (e0 + p) * cs0 / (e + p)                # dp/dn n / (eps + p), con eps(n, theta)
-        q1 = self.E0 * x * g1(t) if self.nu_a else 0.0
+        e, e0, nb, x, q1 = self._background_matter(
+            p, (1 - g(t)) if self.nu_a else 0.0,
+            g1(t) if self.nu_a else 0.0)
+        cs2 = (e0 + p) * _eos.cs2(pm) / (e + p)
         q2 = self.E0 * x * g2(t) if self.nu_a else 0.0
         return e, nb, x, cs2, q1, q2
 
-    def rhs(self, r, y):
-        m, p, Phi, t, tp = y
+    def _hydro_rhs(self, r, m, p, t, tp):
+        """TOV derivatives and coefficients shared by both scalar equations."""
         inside = p / KGEO > _eos.p_min * 1.0001
-        e, nb, x, cs2, q1, q2 = self.matter(p, t) if inside else (0, 0, 0, 1, 0, 0)
         pr = p if inside else 0.0
         F = 1 - 2 * m / r
-        V = self.E0 * (1 - g(t)) if self.nu_a else 0.0
+        if self.nu_a:
+            gg = g(t)
+            shape = 1 - gg
+            slope = -BETA * np.sin(t) / (4 * gg)
+        else:
+            shape = slope = 0.0
+        V = self.E0 * shape
+        e, _, _, x, q1 = self._background_matter(p, shape, slope)
         kin = self.fa2 * tp**2 / 2 * F if self.nu_a else 0.0
         dPhi = (m + 4 * np.pi * r**3 * (pr - V + kin)) / (r**2 * F)
         dm = 4 * np.pi * r**2 * (e + V + kin)
         dp = (-(e + pr) * dPhi - q1 * tp) if inside else 0.0
+        return dm, dp, dPhi, e, x, F, V, pr, slope
+
+    def rhs(self, r, y):
+        m, p, _, t, tp = y
+        dm, dp, dPhi, e, x, F, V, pr, slope = self._hydro_rhs(r, m, p, t, tp)
         if self.nu_a:
-            src = 4 * self.ma**2 / BETA * (x - 1) * g1(t)
+            src = 4 * self.ma**2 / BETA * (x - 1) * slope
             tpp = (src - 2 * tp / r * (1 - m / r - 2 * np.pi * r**2 * (e - pr + 2 * V))) / F
         else:
             tpp = 0.0
@@ -110,8 +129,9 @@ class Star:
 
     def _start(self, r0, thc):
         p = self.p0 * KGEO
-        e, nb, x, cs2, q1, q2 = self.matter(p, thc)
-        V = self.E0 * (1 - g(thc)) if self.nu_a else 0.0
+        shape = 1 - g(thc) if self.nu_a else 0.0
+        V = self.E0 * shape
+        e, _, _, x, _ = self._background_matter(p, shape, 0.0)
         tpp0 = (4 * self.ma**2 / BETA * (x - 1) * g1(thc)) / 3 if self.nu_a else 0.0
         m = 4 * np.pi / 3 * (e + V) * r0**3
         return [m, p - 2 * np.pi / 3 * (e + p) * (e + 3 * p) * r0**2, 0.0, thc + tpp0 * r0**2 / 2, tpp0 * r0]

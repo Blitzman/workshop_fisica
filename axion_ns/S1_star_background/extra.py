@@ -17,7 +17,7 @@ from common import artifacts as A
 from common.checks import Timer, report
 
 from .export import write_eos, write_star
-from .star_logp import StarLogP
+from .star_logp import SeedTracker, StarLogP
 
 MODULE = 'S1_star_background'
 NU_STEP15 = (3.4, 3.5)
@@ -50,9 +50,13 @@ def run_extra(out_dir, kw, tol):
     arts, rows, bad = [], {}, []
     arts += [out_dir / 'eos_bsk26.csv']
     write_eos(out_dir, MODULE)
+    seeds = SeedTracker()
     for nu, p0 in all_stars():
         t0 = time.time()
-        st = StarLogP(nu, p0=p0, **kw)
+        seed = seeds.guess(nu) if (nu and p0 is None) else None
+        st = StarLogP(nu, p0=p0, seed=seed, **kw)
+        if nu and p0 is None:
+            seeds.add(nu, st.u_c)
         name = name_of(nu, p0)
         meta, dense = write_star(out_dir, st, name, MODULE, tol=tol, **(NODES_AXION if nu else NODES_NOAXION))
         arts.append(out_dir / f'{name}.csv')

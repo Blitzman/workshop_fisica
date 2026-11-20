@@ -5,12 +5,12 @@
   "module": "S1_star_background",
   "script": null,
   "git": {
-   "commit": "26f2fcc",
+   "commit": "24d010c",
    "dirty": true
   },
-  "created": "2026-11-17T20:21:07Z",
+  "created": "2026-11-20T20:07:49Z",
   "env": {
-   "python": "3.12.3",
+   "python": "3.14.6",
    "platform": "Linux x86_64",
    "sympy": "1.14.0",
    "mpmath": "1.3.0",
@@ -19,7 +19,7 @@
    "matplotlib": "3.11.2"
   }
  },
- "seconds": 75.5,
+ "seconds": 23.6,
  "inputs": [],
  "artifacts": [
   {
@@ -34,63 +34,63 @@
   },
   {
    "path": "star_nua2.8.csv",
-   "sha256": "7e1a456ed089a741513d22d185c6515fbc6f1af720640288f5fa688f2fbf7853",
-   "bytes": 830508
+   "sha256": "2ad7ea3fb8099f44e7e86adbfd830c19309c857b535a5b66b2017839bf44bb22",
+   "bytes": 830692
   },
   {
    "path": "star_nua3.csv",
-   "sha256": "d8c6551b31cc7de9cf4e7b424ca2c554fcf40a440086bac1bb46a9493486d003",
-   "bytes": 827506
+   "sha256": "83c22a99be500dcb2a157f67bd2fb115b397e79b75e33bb086c44ddff21477ab",
+   "bytes": 827624
   },
   {
    "path": "star_nua4.csv",
-   "sha256": "235e1eaffc5049bb28b32deb46dbd92fcd924ae7c6a17c4a0c5a46bf6c299f2d",
-   "bytes": 825123
+   "sha256": "5c8ed08bee553756c34d83ccd80bf96f8ff760d6402ca9f3f7d98d71818c0c03",
+   "bytes": 825516
   },
   {
    "path": "star_nua5.csv",
-   "sha256": "a71a12b96f5f51b2eef3adaa56e49fb559212d9564b10987afbf547a9d35ef86",
-   "bytes": 825150
+   "sha256": "78e74cc4fb98c04981581dd4696584390af5930efeb158d84b90d8670729ef81",
+   "bytes": 825448
   },
   {
    "path": "star_nua6.csv",
-   "sha256": "547ae04f8a7e5c8d8571ff59857cfbe655cf2a9e8728f8d5128fb5a0b5f4a6dc",
-   "bytes": 825235
+   "sha256": "1e4b59a0b298914803377fb3399f2cd518af2c67d966e2a42866041e19100a23",
+   "bytes": 825437
   },
   {
    "path": "star_nua7.csv",
-   "sha256": "0d206479485c977e48cb6d284c577ba1cff1baa5eebba173ae6d77a5ebf67d48",
-   "bytes": 824618
+   "sha256": "53afa83e0fd189d92abc848da874810467ee75f13cbdf885dd5b159ba0e44ba9",
+   "bytes": 824895
   },
   {
    "path": "star_nua8.csv",
-   "sha256": "482f4d4c3b677676bc1bee7a8b4ad82592d23cf33dfedef331f2fc656ea61052",
-   "bytes": 824241
+   "sha256": "542b5a4eb46c460d8da44b0a61b5647adeeb159de1504e408eec52bcf2b5abc1",
+   "bytes": 824426
   },
   {
    "path": "star_nua10.csv",
-   "sha256": "0c8b7a34ddd8ec5dce4453e6507c2a1ba9fd938ae3a0ef145cba330f792a73a6",
-   "bytes": 824252
+   "sha256": "445d3c3117e5e99927a0775d5d33e573468a081906b57cfe0a8f1aa2cde82b87",
+   "bytes": 824816
   },
   {
    "path": "star_nua11.csv",
-   "sha256": "49ef9633b2af5ab4648d5bb66d9bb67451c9a9291cbf2a4a5a37d91e9b4a0c42",
-   "bytes": 824590
+   "sha256": "a508507428052e5a2a5320dec533875778da0357f2372404898384dc4944b92c",
+   "bytes": 824889
   },
   {
    "path": "star_nua12.csv",
-   "sha256": "65439e43be2ad8cf51a25a82528a8ee6bb891473807d76ee286613bc65497349",
-   "bytes": 824461
+   "sha256": "14fd36247070374ff9354e4580f67e99e8578042930cca6ccf1181f09eae4899",
+   "bytes": 824876
   },
   {
    "path": "star_nua13.csv",
-   "sha256": "ca91082b638365f6d4f3df36ecec97a03f49fd31021dfdbcda9758250f8b1b76",
-   "bytes": 824508
+   "sha256": "730cf7b0786266cbd2a2def1d5d8a4c4d00282d1cd419518058a94c97a2bc390",
+   "bytes": 824870
   },
   {
    "path": "star_nua15.csv",
-   "sha256": "99cf4a5882ebe3f383ba26a10345b9f7a7460fc79d7c96216fc89c0f2a8ad635",
-   "bytes": 824541
+   "sha256": "00986fb48263f48d8239072f7c1fd20bbfb76587ea3b769d0227e71639dd3114",
+   "bytes": 825479
   }
  ],
  "summary": {
@@ -105,7 +105,7 @@
    "note": ""
   },
   {
-   "name": "Tablas de estado: la spline cúbica reproduce la solución del integrador dentro de 1e-05 (peor caso 1.3e-07, 13 estrellas, peor: 7)",
+   "name": "Tablas de estado: la spline cúbica reproduce la solución del integrador dentro de 1e-05 (peor caso 3.5e-08, 13 estrellas, peor: 4)",
    "ok": true,
    "note": ""
   },
@@ -120,7 +120,7 @@
    "noaxion": {
     "M_msun": 1.5359313225135915,
     "R_km": 11.706896538534965,
-    "seconds": 0.3,
+    "seconds": 0.2,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
@@ -136,231 +136,291 @@
     "interp_tol": 1e-05
    },
    "2.8": {
-    "M_msun": 1.5093102333348603,
-    "R_km": 11.661585345267795,
-    "theta_c": 1.1049226353499622,
-    "seconds": 8.6,
+    "M_msun": 1.509310233783727,
+    "R_km": 11.661585429025997,
+    "theta_c": 1.1049226354535602,
+    "delta_c": 2.036670018136233,
+    "r_match_km": 96.86417755825713,
+    "theta_match": 0.00018619300270563977,
+    "decay_mismatch": -1.6020716524808398e-06,
+    "trials": 35,
+    "seconds": 3.3,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 7.537584776763632e-09,
-     "m": 8.587465142752093e-12,
-     "Phi": 1.8185477758647268e-11,
-     "theta": 1.829572431230809e-08,
-     "theta_p": 2.378018020944849e-10
+     "p": 5.455181372757087e-09,
+     "m": 1.1921126575116368e-11,
+     "Phi": 1.5316087745137787e-11,
+     "theta": 9.751888635104802e-09,
+     "theta_p": 1.1787109921225824e-08
     },
-    "interp_max_err": 1.829572431230809e-08,
+    "interp_max_err": 1.1787109921225824e-08,
     "interp_tol": 1e-05
    },
    "3": {
-    "M_msun": 1.4585949185164906,
-    "R_km": 11.560328219948966,
-    "theta_c": 1.9758461325127836,
-    "seconds": 8.0,
+    "M_msun": 1.4585949187043679,
+    "R_km": 11.560328226706822,
+    "theta_c": 1.9758461324006666,
+    "delta_c": 1.1657465211891265,
+    "r_match_km": 91.08274754732253,
+    "theta_match": 0.000359084882199064,
+    "decay_mismatch": -7.18186420356393e-07,
+    "trials": 28,
+    "seconds": 2.4,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 1.9481021222970477e-09,
-     "m": 1.262784201731944e-11,
-     "Phi": 1.494759457154699e-11,
-     "theta": 2.028951434712379e-08,
-     "theta_p": 1.6953054442475322e-10
+     "p": 3.029711626489842e-09,
+     "m": 1.3044585354958061e-11,
+     "Phi": 1.466274361205846e-11,
+     "theta": 1.000247371384777e-08,
+     "theta_p": 3.040842366244589e-08
     },
-    "interp_max_err": 2.028951434712379e-08,
+    "interp_max_err": 3.040842366244589e-08,
     "interp_tol": 1e-05
    },
    "4": {
-    "M_msun": 1.4276414140282248,
-    "R_km": 11.37180370105927,
-    "theta_c": 2.978624694447642,
-    "seconds": 6.9,
+    "M_msun": 1.4276414141231804,
+    "R_km": 11.371803710701656,
+    "theta_c": 2.978624694439626,
+    "delta_c": 0.16296795915016682,
+    "r_match_km": 71.01361820116344,
+    "theta_match": 0.0007721980226347382,
+    "decay_mismatch": 5.208889934786705e-07,
+    "trials": 28,
+    "seconds": 2.3,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 1.1710685132236835e-09,
-     "m": 1.0878667075402001e-11,
-     "Phi": 1.615013489623121e-11,
-     "theta": 2.959498683604347e-08,
-     "theta_p": 5.524766398726651e-10
+     "p": 2.4171064586668707e-09,
+     "m": 1.2111202042458841e-11,
+     "Phi": 1.6616679774741173e-11,
+     "theta": 1.1153859686554356e-08,
+     "theta_p": 3.493035886240307e-08
     },
-    "interp_max_err": 2.959498683604347e-08,
+    "interp_max_err": 3.493035886240307e-08,
     "interp_tol": 1e-05
    },
    "5": {
-    "M_msun": 1.4530748273742153,
-    "R_km": 11.35264000774824,
-    "theta_c": 3.102409875604322,
-    "seconds": 5.6,
+    "M_msun": 1.4530748273176024,
+    "R_km": 11.352640044953061,
+    "theta_c": 3.102409875596534,
+    "delta_c": 0.03918277799325904,
+    "r_match_km": 59.06609163732248,
+    "theta_match": 0.0010190953954601267,
+    "decay_mismatch": -2.660989104322294e-07,
+    "trials": 30,
+    "seconds": 2.4,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 2.5298695959157696e-09,
-     "m": 1.0407191822242949e-11,
-     "Phi": 1.479973100226857e-11,
-     "theta": 3.414316693282645e-08,
-     "theta_p": 2.8312863866436064e-10
+     "p": 6.529528930973826e-09,
+     "m": 9.38682057380104e-12,
+     "Phi": 1.5369499046041703e-11,
+     "theta": 1.1953512477879102e-08,
+     "theta_p": 1.7165770812277044e-08
     },
-    "interp_max_err": 3.414316693282645e-08,
+    "interp_max_err": 1.7165770812277044e-08,
     "interp_tol": 1e-05
    },
    "6": {
-    "M_msun": 1.4724475351714965,
-    "R_km": 11.354671864018556,
-    "theta_c": 3.131041941422845,
-    "seconds": 5.9,
+    "M_msun": 1.4724475349414252,
+    "R_km": 11.354671835674624,
+    "theta_c": 3.1310419414186605,
+    "delta_c": 0.010550712171132381,
+    "r_match_km": 51.11588149598247,
+    "theta_match": 0.0012065377034948313,
+    "decay_mismatch": -8.781723567106243e-09,
+    "trials": 24,
+    "seconds": 1.8,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 8.919104442629189e-10,
-     "m": 1.1076581297476331e-11,
-     "Phi": 1.276304032152501e-11,
-     "theta": 4.3055617913487525e-08,
-     "theta_p": 2.2741866533499432e-10
+     "p": 3.69316667902648e-09,
+     "m": 1.0707838412419744e-11,
+     "Phi": 1.491338551392549e-11,
+     "theta": 1.2826233987174328e-08,
+     "theta_p": 8.197401001425605e-09
     },
-    "interp_max_err": 4.3055617913487525e-08,
+    "interp_max_err": 1.2826233987174328e-08,
     "interp_tol": 1e-05
    },
    "7": {
-    "M_msun": 1.4864318404472503,
-    "R_km": 11.35879335140956,
-    "theta_c": 3.1386600109257636,
-    "seconds": 5.6,
+    "M_msun": 1.48643184047769,
+    "R_km": 11.358793323703948,
+    "theta_c": 3.138660010924849,
+    "delta_c": 0.002932642664944372,
+    "r_match_km": 45.439830175396395,
+    "theta_match": 0.0013563086156518683,
+    "decay_mismatch": -1.108061529143509e-06,
+    "trials": 23,
+    "seconds": 1.9,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 5.876346586328079e-09,
-     "m": 7.891029857915055e-12,
-     "Phi": 1.5379979154428614e-11,
-     "theta": 1.2520877101960234e-07,
-     "theta_p": 2.3113137709152745e-10
+     "p": 5.638080119477271e-09,
+     "m": 1.0472054862396911e-11,
+     "Phi": 1.5150882811958463e-11,
+     "theta": 1.3286913483038669e-08,
+     "theta_p": 2.4516090736713796e-08
     },
-    "interp_max_err": 1.2520877101960234e-07,
+    "interp_max_err": 2.4516090736713796e-08,
     "interp_tol": 1e-05
    },
    "8": {
-    "M_msun": 1.4968182643691756,
-    "R_km": 11.361684825524257,
-    "theta_c": 3.140768674490333,
-    "seconds": 5.3,
+    "M_msun": 1.4968182644941617,
+    "R_km": 11.361684830617893,
+    "theta_c": 3.1407686744904457,
+    "delta_c": 0.0008239790993473095,
+    "r_match_km": 41.18259207584878,
+    "theta_match": 0.0014786410032329666,
+    "decay_mismatch": -8.747564411295438e-09,
+    "trials": 22,
+    "seconds": 1.8,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 1.1219683905450705e-09,
-     "m": 7.259626588109521e-12,
-     "Phi": 1.4747393233260837e-11,
-     "theta": 7.260511182570312e-08,
-     "theta_p": 2.4548948288053784e-10
+     "p": 2.172010203395315e-09,
+     "m": 8.366892065918897e-12,
+     "Phi": 1.4741626251738096e-11,
+     "theta": 1.3605395453309994e-08,
+     "theta_p": 1.6009285082701318e-09
     },
-    "interp_max_err": 7.260511182570312e-08,
+    "interp_max_err": 1.3605395453309994e-08,
     "interp_tol": 1e-05
    },
    "10": {
-    "M_msun": 1.5110541777042956,
-    "R_km": 11.362767941295166,
-    "theta_c": 3.1415271290334204,
-    "seconds": 5.5,
+    "M_msun": 1.5110541776894146,
+    "R_km": 11.36276793352965,
+    "theta_c": 3.141527129033487,
+    "delta_c": 6.552455630603741e-05,
+    "r_match_km": 35.21949372971436,
+    "theta_match": 0.0016643346926037555,
+    "decay_mismatch": 3.834374111846694e-10,
+    "trials": 20,
+    "seconds": 1.6,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 1.984760735085098e-09,
-     "m": 6.97598969960907e-12,
-     "Phi": 1.5611587415338223e-11,
-     "theta": 8.469789457624166e-08,
-     "theta_p": 2.592125833357667e-10
+     "p": 1.0805454941379234e-09,
+     "m": 7.425416477865932e-12,
+     "Phi": 1.2926525109340336e-11,
+     "theta": 1.4283268945724226e-08,
+     "theta_p": 2.784410098050866e-10
     },
-    "interp_max_err": 8.469789457624166e-08,
+    "interp_max_err": 1.4283268945724226e-08,
     "interp_tol": 1e-05
    },
    "11": {
-    "M_msun": 1.5161123590448076,
-    "R_km": 11.361469857605393,
-    "theta_c": 3.1415741896373914,
-    "seconds": 6.0,
+    "M_msun": 1.5161123623668795,
+    "R_km": 11.361471382806133,
+    "theta_c": 3.14157418963742,
+    "delta_c": 1.8463952373202093e-05,
+    "r_match_km": 33.04940392479224,
+    "theta_match": 0.0017352939287886443,
+    "decay_mismatch": 1.1751866494790008e-09,
+    "trials": 20,
+    "seconds": 1.5,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 8.677184591041477e-10,
-     "m": 7.870214497755569e-12,
-     "Phi": 1.363139887071483e-11,
-     "theta": 7.340797235662476e-08,
-     "theta_p": 2.650022488559465e-10
+     "p": 1.0811010749221315e-08,
+     "m": 6.419648979076517e-12,
+     "Phi": 1.1508739511084673e-11,
+     "theta": 1.4369670152517649e-08,
+     "theta_p": 2.847918924881997e-10
     },
-    "interp_max_err": 7.340797235662476e-08,
+    "interp_max_err": 1.4369670152517649e-08,
     "interp_tol": 1e-05
    },
    "12": {
-    "M_msun": 1.5202699288968722,
-    "R_km": 11.359316933321146,
-    "theta_c": 3.1415874588861423,
-    "seconds": 5.9,
+    "M_msun": 1.5202699288337937,
+    "R_km": 11.35931692934964,
+    "theta_c": 3.141587458886158,
+    "delta_c": 5.194703635231235e-06,
+    "r_match_km": 31.239921759503567,
+    "theta_match": 0.001795182450960195,
+    "decay_mismatch": -5.345543775276377e-10,
+    "trials": 20,
+    "seconds": 1.3,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 1.7052955936088055e-09,
-     "m": 8.127259760143373e-12,
-     "Phi": 1.429959040946577e-11,
-     "theta": 1.1408168659470853e-07,
-     "theta_p": 2.603608331199456e-10
+     "p": 1.6984617827064452e-09,
+     "m": 7.46260002136081e-12,
+     "Phi": 1.3718025197718813e-11,
+     "theta": 1.4776174115961545e-08,
+     "theta_p": 2.908688342782803e-10
     },
-    "interp_max_err": 1.1408168659470853e-07,
+    "interp_max_err": 1.4776174115961545e-08,
     "interp_tol": 1e-05
    },
    "13": {
-    "M_msun": 1.52374335191178,
-    "R_km": 11.356527312441212,
-    "theta_c": 3.141591194788066,
-    "seconds": 6.1,
+    "M_msun": 1.5237433518775116,
+    "R_km": 11.356527321277714,
+    "theta_c": 3.141591194788074,
+    "delta_c": 1.4588017189593864e-06,
+    "r_match_km": 29.707854856804413,
+    "theta_match": 0.001845903171219016,
+    "decay_mismatch": 3.712226859038183e-11,
+    "trials": 20,
+    "seconds": 1.6,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 1.2926832297016286e-09,
-     "m": 9.192261474901732e-12,
-     "Phi": 1.3841290319301837e-11,
-     "theta": 8.935857977222805e-08,
-     "theta_p": 2.584973491838365e-10
+     "p": 8.447143613274015e-10,
+     "m": 6.976800718418516e-12,
+     "Phi": 1.530570426016964e-11,
+     "theta": 1.5053137986164475e-08,
+     "theta_p": 2.9425276831550854e-10
     },
-    "interp_max_err": 8.935857977222805e-08,
+    "interp_max_err": 1.5053137986164475e-08,
     "interp_tol": 1e-05
    },
    "15": {
-    "M_msun": 1.529208459668538,
-    "R_km": 11.349674498018032,
-    "theta_c": 3.1415925392081085,
-    "seconds": 5.7,
+    "M_msun": 1.5292084588697354,
+    "R_km": 11.349674499062278,
+    "theta_c": 3.141592539208111,
+    "delta_c": 1.1438168208769464e-07,
+    "r_match_km": 27.25415836318542,
+    "theta_match": 0.0019255854955077714,
+    "decay_mismatch": 1.48548903920736e-10,
+    "trials": 20,
+    "seconds": 1.2,
     "n_rows": 7197,
     "n_interior": 6198,
     "nodes": "uniform in ln p + uniform in r + geometric near the centre",
     "interpolation": "two cubic splines (not-a-knot), split at R_stop; the tail has no ln p",
     "interp_err": {
-     "p": 1.9329888107257776e-09,
-     "m": 7.770697383875361e-12,
-     "Phi": 1.6260736010555848e-11,
-     "theta": 5.4762378425776555e-08,
-     "theta_p": 2.5791444853369117e-10
+     "p": 2.9329764786262403e-09,
+     "m": 5.076115312064734e-12,
+     "Phi": 1.4842303951365427e-11,
+     "theta": 1.5261225640790495e-08,
+     "theta_p": 2.98716277253277e-10
     },
-    "interp_max_err": 5.4762378425776555e-08,
+    "interp_max_err": 1.5261225640790495e-08,
     "interp_tol": 1e-05
    }
   },

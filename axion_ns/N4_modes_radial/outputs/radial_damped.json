@@ -25,21 +25,21 @@
    ]
   ],
   "points": 1541,
-  "max_dphase": 0.93692824483295,
+  "max_dphase": 0.9378744808794629,
   "total": 2,
   "fluid_modes": [
    [
-    8.114832187602659,
-    -0.0036494512712239875
+    8.114832198722317,
+    -0.003649453146205035
    ],
    [
-    11.66975589688433,
-    -0.021689475834919012
+    11.669756095663823,
+    -0.021689484327367423
    ]
   ],
   "fluid_fraction": [
-   0.9811149280090142,
-   0.9162199942570518
+   0.9776612922214205,
+   0.9009755152202968
   ]
  },
  "thin": {
@@ -58,7 +58,7 @@
    ]
   ],
   "points": 777,
-  "max_dphase": 0.978470635880803,
+  "max_dphase": 0.9803276863193477,
   "total": 0
  },
  "deep": {
@@ -77,20 +77,20 @@
    ]
   ],
   "points": 768,
-  "max_dphase": 0.05100210741816372,
+  "max_dphase": 0.06485826716341966,
   "total": 0,
   "roots": []
  },
  "lapse": {
-  "phi_inf_old": 0.0016208743115471158,
-  "tail_mass_frac": 0.004868003614381346
+  "phi_inf_old": 0.001620874333327027,
+  "tail_mass_frac": 0.0048680036616219014
  },
  "old_lapse": {
   "per_tile": [
    1,
    1,
    3,
-   0
+   3
   ],
   "tried": [
    [
@@ -106,18 +106,18 @@
     3
    ],
    [
-    0,
-    0
+    3,
+    3
    ]
   ],
   "points": 1542,
-  "max_dphase": 1.028633550734396,
-  "total": 5
+  "max_dphase": 1.0397232040952273,
+  "total": 8
  },
  "old_lapse_deep": {
   "per_tile": [
    0,
-   2
+   0
   ],
   "tried": [
    [
@@ -125,17 +125,17 @@
     0
    ],
    [
-    2,
-    2
+    0,
+    0
    ]
   ],
   "points": 768,
-  "max_dphase": 0.46866716777635714,
-  "total": 2
+  "max_dphase": 0.35546808030404387,
+  "total": 0
  },
  "checks": [
   {
-   "name": "H22(a): nu_a = 6 kHz, índice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ahí: 8.1148-3.65i (fluido 0.98), 11.6698-21.69i (fluido 0.92)",
+   "name": "H22(a): nu_a = 6 kHz, índice 2 en Re nu in [6.05, 12], Im nu in [-1.5, -0.002] kHz (piezas [1, 1, 0, 0], convergidas [[1, 1], [1, 1], [0, 0], [0, 0]]); Muller encuentra 2 modos fluidos ahí: 8.1148-3.65i (fluido 0.98), 11.6698-21.69i (fluido 0.90)",
    "ok": true,
    "note": "sin ceros adicionales: ninguna familia axiónica en esa región"
   },
@@ -150,7 +150,7 @@
    "note": "el resultado decide; no había predicción fuerte"
   },
   {
-   "name": "H22(b), control positivo: con la normalización antigua del lapso el índice sube a 5 (piezas [1, 1, 3, 0]): el recuento ve las resonancias de cavidad",
+   "name": "H22(b), control positivo: con la normalización antigua del lapso el índice sube a 8 (piezas [1, 1, 3, 3]): el recuento ve las resonancias de cavidad",
    "ok": true,
    "note": ""
   }

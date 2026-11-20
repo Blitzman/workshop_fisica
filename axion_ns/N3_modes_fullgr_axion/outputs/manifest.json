@@ -5,12 +5,12 @@
   "module": "N3_modes_fullgr_axion",
   "script": null,
   "git": {
-   "commit": "26f2fcc",
+   "commit": "24d010c",
    "dirty": true
   },
-  "created": "2026-11-17T20:33:10Z",
+  "created": "2026-11-20T20:17:58Z",
   "env": {
-   "python": "3.12.3",
+   "python": "3.14.6",
    "platform": "Linux x86_64",
    "sympy": "1.14.0",
    "mpmath": "1.3.0",
@@ -19,7 +19,7 @@
    "matplotlib": "3.11.2"
   }
  },
- "seconds": 256.1,
+ "seconds": 304.7,
  "inputs": [
   {
    "name": "fullgr_extended.eq.json",
@@ -44,84 +44,84 @@
   {
    "name": "manifest.json",
    "path": "S1_star_background/outputs/manifest.json",
-   "sha256": "99c6577cf874b32dd6092cb1d5520df32e2bfde48b2133110b8ddcd177de0704"
+   "sha256": "6d5a2c223b699921bc7e62679bbdd3d1cfb6a0560d2bedb6cca92c743a0fce3c"
   },
   {
    "name": "star_nua2.8.csv",
    "path": "S1_star_background/outputs/star_nua2.8.csv",
-   "sha256": "7e1a456ed089a741513d22d185c6515fbc6f1af720640288f5fa688f2fbf7853"
+   "sha256": "2ad7ea3fb8099f44e7e86adbfd830c19309c857b535a5b66b2017839bf44bb22"
   },
   {
    "name": "star_nua3.csv",
    "path": "S1_star_background/outputs/star_nua3.csv",
-   "sha256": "d8c6551b31cc7de9cf4e7b424ca2c554fcf40a440086bac1bb46a9493486d003"
+   "sha256": "83c22a99be500dcb2a157f67bd2fb115b397e79b75e33bb086c44ddff21477ab"
   },
   {
    "name": "star_nua4.csv",
    "path": "S1_star_background/outputs/star_nua4.csv",
-   "sha256": "235e1eaffc5049bb28b32deb46dbd92fcd924ae7c6a17c4a0c5a46bf6c299f2d"
+   "sha256": "5c8ed08bee553756c34d83ccd80bf96f8ff760d6402ca9f3f7d98d71818c0c03"
   },
   {
    "name": "star_nua5.csv",
    "path": "S1_star_background/outputs/star_nua5.csv",
-   "sha256": "a71a12b96f5f51b2eef3adaa56e49fb559212d9564b10987afbf547a9d35ef86"
+   "sha256": "78e74cc4fb98c04981581dd4696584390af5930efeb158d84b90d8670729ef81"
   },
   {
    "name": "star_nua6.csv",
    "path": "S1_star_background/outputs/star_nua6.csv",
-   "sha256": "547ae04f8a7e5c8d8571ff59857cfbe655cf2a9e8728f8d5128fb5a0b5f4a6dc"
+   "sha256": "1e4b59a0b298914803377fb3399f2cd518af2c67d966e2a42866041e19100a23"
   },
   {
    "name": "star_nua7.csv",
    "path": "S1_star_background/outputs/star_nua7.csv",
-   "sha256": "0d206479485c977e48cb6d284c577ba1cff1baa5eebba173ae6d77a5ebf67d48"
+   "sha256": "53afa83e0fd189d92abc848da874810467ee75f13cbdf885dd5b159ba0e44ba9"
   },
   {
    "name": "star_nua8.csv",
    "path": "S1_star_background/outputs/star_nua8.csv",
-   "sha256": "482f4d4c3b677676bc1bee7a8b4ad82592d23cf33dfedef331f2fc656ea61052"
+   "sha256": "542b5a4eb46c460d8da44b0a61b5647adeeb159de1504e408eec52bcf2b5abc1"
   },
   {
    "name": "star_nua10.csv",
    "path": "S1_star_background/outputs/star_nua10.csv",
-   "sha256": "0c8b7a34ddd8ec5dce4453e6507c2a1ba9fd938ae3a0ef145cba330f792a73a6"
+   "sha256": "445d3c3117e5e99927a0775d5d33e573468a081906b57cfe0a8f1aa2cde82b87"
   },
   {
    "name": "star_nua11.csv",
    "path": "S1_star_background/outputs/star_nua11.csv",
-   "sha256": "49ef9633b2af5ab4648d5bb66d9bb67451c9a9291cbf2a4a5a37d91e9b4a0c42"
+   "sha256": "a508507428052e5a2a5320dec533875778da0357f2372404898384dc4944b92c"
   },
   {
    "name": "star_nua12.csv",
    "path": "S1_star_background/outputs/star_nua12.csv",
-   "sha256": "65439e43be2ad8cf51a25a82528a8ee6bb891473807d76ee286613bc65497349"
+   "sha256": "14fd36247070374ff9354e4580f67e99e8578042930cca6ccf1181f09eae4899"
   },
   {
    "name": "star_nua13.csv",
    "path": "S1_star_background/outputs/star_nua13.csv",
-   "sha256": "ca91082b638365f6d4f3df36ecec97a03f49fd31021dfdbcda9758250f8b1b76"
+   "sha256": "730cf7b0786266cbd2a2def1d5d8a4c4d00282d1cd419518058a94c97a2bc390"
   },
   {
    "name": "star_nua15.csv",
    "path": "S1_star_background/outputs/star_nua15.csv",
-   "sha256": "99cf4a5882ebe3f383ba26a10345b9f7a7460fc79d7c96216fc89c0f2a8ad635"
+   "sha256": "00986fb48263f48d8239072f7c1fd20bbfb76587ea3b769d0227e71639dd3114"
   },
   {
    "name": "modes_cowling.csv",
    "path": "N1_modes_cowling/outputs/modes_cowling.csv",
-   "sha256": "9e8c16ca2138ffd2762dde03e47e6ccdd01ee4acb748308d767400ca049128a2"
+   "sha256": "523c2a99e73d449ff555e98b046adfb3261b9744ab1d1375756aaaa8b6721d62"
   }
  ],
  "artifacts": [
   {
    "path": "modes_axion.csv",
-   "sha256": "50a4a345c7811e4cf660fd881f931270972be266fbfb26f9a8ceedcaa0df2213",
-   "bytes": 4812
+   "sha256": "dd2129a40642126b3f0d312cc015c1d38b7231641f75af93e3629cb927bcfd15",
+   "bytes": 4813
   },
   {
    "path": "exterior_convergence.json",
-   "sha256": "105a86f6f8e39b5111611748c47edd73c2f28f1ee274052d14111a144c61a1fa",
-   "bytes": 5762
+   "sha256": "0184ae47c5fe91ece8ca7c8edd61c56e75fb34f910d9dc0cfbb0d0a8760a55be",
+   "bytes": 5735
   }
  ],
  "summary": {
@@ -136,7 +136,7 @@
    "note": ""
   },
   {
-   "name": "Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 1e-08 e Im nu en 0.0 %",
+   "name": "Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 4e-09 e Im nu en 0.0 %",
    "ok": true,
    "note": ""
   },
@@ -166,17 +166,17 @@
    "note": "resultado nuevo"
   },
   {
-   "name": "H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k < 0 en 4/4 frecuencias, pero L = psi'/psi coincide con la de la rama que decae a 4e-12 relativo como mucho: 2.1-0.001i kHz: 2e-13, 2.4-0.01i kHz: 1e-14, 5-0.1i kHz: 1e-12, 5.9-0.5i kHz: 4e-12",
+   "name": "H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k < 0 en 4/4 frecuencias, pero L = psi'/psi coincide con la de la rama que decae a 3e-12 relativo como mucho: 2.1-0.001i kHz: 2e-14, 2.4-0.01i kHz: 8e-15, 5-0.1i kHz: 3e-13, 5.9-0.5i kHz: 3e-12",
    "ok": true,
    "note": "la integración hacia dentro (40 longitudes de decaimiento) filtra la solución creciente"
   },
   {
-   "name": "H31: por encima del umbral la rama no cambia (diferencia 2e-17)",
+   "name": "H31: por encima del umbral la rama no cambia (diferencia 0e+00)",
    "ok": true,
    "note": "el original pedía == 0 (daba 0 exacto); aquí el redondeo deja ~1e-17"
   },
   {
-   "name": "Control negativo 1: arrancando a 2 longitudes de decaimiento, la rama principal cambia L al menos un 6e-01 relativo (frente a 4e-12 con 40)",
+   "name": "Control negativo 1: arrancando a 2 longitudes de decaimiento, la rama principal cambia L al menos un 8e-01 relativo (frente a 3e-12 con 40)",
    "ok": true,
    "note": ""
   },
@@ -186,43 +186,43 @@
    "note": ""
   },
   {
-   "name": "H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracción mueven Re nu como mucho 2e-07 relativo: p1 a 8 kHz 1e-09; p2 a 12 kHz 2e-09; p1 a 7 kHz 1e-07; p2 a 11 kHz 2e-07; p2 a 8 kHz 4e-09; f a 15 kHz 2e-08",
+   "name": "H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracción mueven Re nu como mucho 2e-06 relativo: p1 a 8 kHz 4e-10; p2 a 12 kHz 1e-09; p1 a 7 kHz 9e-08; p2 a 11 kHz 2e-06; p2 a 8 kHz 7e-09; f a 15 kHz 8e-09",
    "ok": false,
    "note": ""
   },
   {
-   "name": "H33: e Im nu como mucho: p1 a 8 kHz (Im 0.00138 Hz) 4.9e-08 Hz; p2 a 12 kHz (Im 0.00323 Hz) 9.5e-06 Hz; p1 a 7 kHz (Im 0.479 Hz) 4.1e-04 Hz; p2 a 11 kHz (Im 5.03 Hz) 1.9e-02 Hz; p2 a 8 kHz (Im 0.1 Hz) 1.4e-04 Hz; f a 15 kHz (Im 1.2 Hz) 1.8e-05 Hz",
+   "name": "H33: e Im nu como mucho: p1 a 8 kHz (Im 0.00137 Hz) 4.2e-06 Hz; p2 a 12 kHz (Im 0.00324 Hz) 1.7e-06 Hz; p1 a 7 kHz (Im 0.478 Hz) 1.0e-03 Hz; p2 a 11 kHz (Im 5.03 Hz) 1.1e-02 Hz; p2 a 8 kHz (Im 0.1 Hz) 5.2e-05 Hz; f a 15 kHz (Im 1.2 Hz) 7.9e-06 Hz",
    "ok": true,
    "note": "criterio: 1 % de Im nu o la resolución de Muller (1e-9 |nu|), lo que sea mayor"
   },
   {
-   "name": "Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.0015 Hz, frente a 4.1e-04 Hz con las variantes de arriba",
+   "name": "Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.0027 Hz, frente a 1.0e-03 Hz con las variantes de arriba",
    "ok": false,
    "note": ""
   },
   {
-   "name": "Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 7.5e-07 Hz",
+   "name": "Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 7.2e-07 Hz",
    "ok": false,
    "note": ""
   }
  ],
  "extra": {
   "quick": false,
-  "procs": 1,
+  "procs": 2,
   "matching_radius_rule": "R + 0.7 (r_end - R)",
   "step10_seconds": {
-   "15": 13.5,
-   "13": 12.6,
-   "12": 13.0,
-   "11": 13.0,
-   "10": 13.1,
-   "8": 11.6,
-   "7": 12.0,
-   "6": 13.8,
-   "5": 14.7,
-   "4": 13.9,
-   "3": 14.5,
-   "2.8": 13.9
+   "15": 33.2,
+   "13": 27.3,
+   "12": 26.0,
+   "11": 32.3,
+   "10": 35.0,
+   "8": 28.7,
+   "7": 28.7,
+   "6": 32.2,
+   "5": 25.9,
+   "4": 31.0,
+   "3": 31.2,
+   "2.8": 23.3
   }
  }
 }

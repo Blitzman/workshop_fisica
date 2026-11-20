@@ -6,14 +6,14 @@
     -0.0036
    ],
    "L": [
-    -0.012247735998102515,
-    0.12518019549120346
+    -0.010293740865276157,
+    0.12343428413034438
    ],
-   "dphi+0.4": 7.61754273530681e-15,
-   "dphi-0.4": 8.514263507763594e-15,
-   "n_decay60": 8.898738869355668e-16,
-   "ingoing": 1.9904908008226316,
-   "n_decay1": 0.00044880063966128684
+   "dphi+0.4": 5.6595556632329855e-15,
+   "dphi-0.4": 5.697682941261163e-15,
+   "n_decay60": 3.611269497480179e-16,
+   "ingoing": 1.993078286839156,
+   "n_decay1": 0.000334312547362706
   },
   "artefacto antiguo": {
    "nu": [
@@ -21,14 +21,14 @@
     -0.563
    ],
    "L": [
-    0.013477597893939933,
-    0.0715474968295982
+    0.015459974963121252,
+    0.06989225322851692
    ],
-   "dphi+0.4": 2.4738264814039e-14,
-   "dphi-0.4": 2.2868530686701324e-14,
-   "n_decay60": 1.0536704774543202e-15,
-   "ingoing": 2.0796115181087838,
-   "n_decay1": 0.0014306522629256703
+   "dphi+0.4": 1.6743269156450768e-14,
+   "dphi-0.4": 1.8347350030660754e-14,
+   "n_decay60": 6.842565929331016e-16,
+   "ingoing": 2.074642513018354,
+   "n_decay1": 0.0010972746294424717
   },
   "cero profundo": {
    "nu": [
@@ -36,14 +36,14 @@
     -4.48
    ],
    "L": [
-    0.12115386189393595,
-    0.10377150130293926
+    0.12228773662510194,
+    0.10251542173606301
    ],
-   "dphi+0.4": 2.661558374517566e-15,
-   "dphi-0.4": 2.9889141249740886e-15,
-   "n_decay60": 3.3036545425112735e-16,
-   "ingoing": 2.121443020754917,
-   "n_decay1": 0.0005076537637896585
+   "dphi+0.4": 1.9831301526668996e-15,
+   "dphi-0.4": 1.734742739037672e-15,
+   "n_decay60": 5.708906753173664e-16,
+   "ingoing": 2.102610707782919,
+   "n_decay1": 0.0003550156579226028
   },
   "nivel ligado n = 2": {
    "nu": [
@@ -51,24 +51,24 @@
     0.0
    ],
    "L": [
-    0.04253893469091158,
+    0.014176293506193873,
     0.0
    ],
-   "dphi+0.4": 1.0369448335634477e-12,
-   "dphi-0.4": 1.0369448335634477e-12,
-   "n_decay60": 4.283240429003854e-13,
+   "dphi+0.4": 9.64214423042431e-13,
+   "dphi-0.4": 9.64214423042431e-13,
+   "n_decay60": 6.750155989720952e-14,
    "ingoing": null,
-   "n_decay1": 0.6702947746094876
+   "n_decay1": 0.687243263170543
   }
  },
  "checks": [
   {
-   "name": "H24(a): girar el rayo complejo ±0.4 rad cambia L = psi'/psi en r_m como mucho 1.0e-12 (relativo) en H1, artefacto antiguo, cero profundo, nivel ligado n = 2 H1: 9e-15; artefacto antiguo: 2e-14; cero profundo: 3e-15; nivel ligado n = 2: 1e-12",
+   "name": "H24(a): girar el rayo complejo ±0.4 rad cambia L = psi'/psi en r_m como mucho 9.6e-13 (relativo) en H1, artefacto antiguo, cero profundo, nivel ligado n = 2 H1: 6e-15; artefacto antiguo: 2e-14; cero profundo: 2e-15; nivel ligado n = 2: 1e-12",
    "ok": true,
    "note": "la condición saliente no depende del camino en el plano r complejo"
   },
   {
-   "name": "H24(b): alejar el punto de partida (n_decay 40 → 60) cambia L como mucho 4.3e-13: H1: 9e-16; artefacto antiguo: 1e-15; cero profundo: 3e-16; nivel ligado n = 2: 4e-13",
+   "name": "H24(b): alejar el punto de partida (n_decay 40 → 60) cambia L como mucho 6.8e-14: H1: 4e-16; artefacto antiguo: 7e-16; cero profundo: 6e-16; nivel ligado n = 2: 7e-14",
    "ok": true,
    "note": "el truncado del desarrollo asintótico (con la fase coulombiana) no influye"
   },
@@ -78,7 +78,7 @@
    "note": "en el nivel ligado la mutación es la solución creciente: la integración no termina y se detecta"
   },
   {
-   "name": "Control negativo 2: con n_decay = 1 el cambio mínimo es 4.5e-04, frente a 1.0e-12 en (a)-(b): la prueba detecta un punto de partida demasiado cercano",
+   "name": "Control negativo 2: con n_decay = 1 el cambio mínimo es 3.3e-04, frente a 9.6e-13 en (a)-(b): la prueba detecta un punto de partida demasiado cercano",
    "ok": true,
    "note": ""
   }

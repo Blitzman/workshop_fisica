@@ -1,58 +1,58 @@
 {
  "radii": {
-  "default": 79.68541416456138,
-  "alt_0.85rm": 67.73260203987716,
-  "alt_0.7rm": 55.779789915192964,
-  "R": 11.354671864018556,
-  "theta_1e-5": 79.68541416456138,
-  "theta_1e-6": 79.68541416456138
+  "default": 94.85321212232111,
+  "alt_0.85rm": 80.62523030397294,
+  "alt_0.7rm": 66.39724848562477,
+  "R": 11.354671835674624,
+  "theta_1e-5": 84.05832706900873,
+  "theta_1e-6": 94.85321212232111
  },
  "fluid": [
   {
    "nu": [
-    8.114832174867695,
-    -0.0036494530669229828
+    8.114832195470088,
+    -0.0036494540431423043
    ],
    "shift_pct": {
-    "alt_0.85rm": 1.6258071072821744e-08,
-    "alt_0.7rm": 3.4875636723438086e-08,
-    "R": 0.003357773428646483
+    "alt_0.85rm": 9.925675867600582e-08,
+    "alt_0.7rm": 1.4238632007383037e-07,
+    "R": 0.0033574610653111267
    },
    "dIm_Hz": {
-    "alt_0.85rm": 2.4081002469866775e-07,
-    "alt_0.7rm": -5.709027703706959e-07,
-    "R": 0.07801165763493112
+    "alt_0.85rm": 1.500596079687111e-06,
+    "alt_0.7rm": 2.1032034581806858e-06,
+    "R": 0.07801526112500992
    }
   },
   {
    "nu": [
-    11.669755940066596,
-    -0.021689479406445535
+    11.669756102814357,
+    -0.02168948463948031
    ],
    "shift_pct": {
-    "alt_0.85rm": 2.459005829102021e-07,
-    "alt_0.7rm": 2.704115983796638e-07,
-    "R": 0.006338737875094888
+    "alt_0.85rm": 2.0310792052855917e-08,
+    "alt_0.7rm": 2.7778114441639447e-08,
+    "R": 0.006338586508167583
    },
    "dIm_Hz": {
-    "alt_0.85rm": 1.1756191645173608e-06,
-    "alt_0.7rm": 9.94360385697668e-07,
-    "R": -0.6984410508051528
+    "alt_0.85rm": -9.58440635884239e-07,
+    "alt_0.7rm": 4.724349904339231e-07,
+    "R": -0.6984211662577067
    }
   }
  ],
  "deep": [],
  "neg1": {
-  "ratio_ingoing": 0.14872566558882966,
-  "ratio_outgoing": 5.926568102197826e-08
+  "ratio_ingoing": 0.14872870389986131,
+  "ratio_outgoing": 3.159220936123635e-07
  },
  "neg2": {
-  "shift_R_pct": 0.003357773428646483,
-  "shift_alt_pct": 3.4875636723438086e-08
+  "shift_R_pct": 0.0033574610653111267,
+  "shift_alt_pct": 1.4238632007383037e-07
  },
  "checks": [
   {
-   "name": "H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1148 kHz, Im -3.65 Hz): 1.6e-08 % y 3.5e-08 % (Im: +2.4e-07 y -5.7e-07 Hz); (Re 11.6698 kHz, Im -21.69 Hz): 2.5e-07 % y 2.7e-07 % (Im: +1.2e-06 y +9.9e-07 Hz)",
+   "name": "H23b(i), control: los modos fluidos casi no se mueven al cambiar el radio de empalme: (Re 8.1148 kHz, Im -3.65 Hz): 9.9e-08 % y 1.4e-07 % (Im: +1.5e-06 y +2.1e-06 Hz); (Re 11.6698 kHz, Im -21.69 Hz): 2e-08 % y 2.8e-08 % (Im: -9.6e-07 y +4.7e-07 Hz)",
    "ok": true,
    "note": "radios alternativos: 0.85 y 0.7 del de empalme"
   },
@@ -62,12 +62,12 @@
    "note": "si (i) y (ii) pasan: artefactos del empalme, no modos"
   },
   {
-   "name": "Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 5.9e-08 con la saliente)",
+   "name": "Control negativo 1: con onda entrante, H1 deja de ser cero (|F(H1)|/|F(H1 + 50 Hz)| = 0.15, frente a 3.2e-07 con la saliente)",
    "ok": true,
    "note": ""
   },
   {
-   "name": "Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0034 %, más que con los radios alternativos (3.5e-08 %)",
+   "name": "Control negativo 2: empalmando en la superficie (sin la cola del campo), H1 se mueve un 0.0034 %, más que con los radios alternativos (1.4e-07 %)",
    "ok": true,
    "note": ""
   }

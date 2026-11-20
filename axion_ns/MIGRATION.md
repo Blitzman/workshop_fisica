@@ -25,7 +25,7 @@ header of each new file says what it was moved from and what changed.
 | `step5_nonradial.py` | `D2/checks_cowling.py` | `derived()` / `background_rules()` injected |
 | `step7_fullgr.py` | `D2/checks_fullgr.py` | module imports replaced by `init(...)` |
 | `bsk26.py` | `S1/bsk26.py` | unchanged |
-| `axstar.py` (background half) | `S1/star.py` (physics) + `S1/star_logp.py` (integration against ln p) | `star.py` unchanged; the ln p integrator is new (item 12) |
+| `axstar.py` (background half) | `S1/star.py` (physics) + `S1/star_logp.py` (integration against ln p) | `star.py` physics unchanged (equilibrium-only matter path added); the ln p integrator is new (item 12), its shooting item 15 |
 | `axstar.py` (mode half) | `N1/modes.py` | `st.sol.sol` -> `st.y_at`, `g2` -> `st.g2` |
 | `axstar.py` (`matter`, `rhs`) | `N1/star_table.py` | copies, validated against S1 in `tests/` |
 | `step9_axion_cowling.py` | `N1/run_tables.py` (+ the 3 background-only checks in `S1/run.py`) | stars read from tables; works on any subset of nu_a |
@@ -71,7 +71,7 @@ header of each new file says what it was moved from and what changed.
    every run because of timestamps), and Dummy symbols are serialized by order of appearance. Found by checking that two runs of D1
    produced different hashes for identical equations.
 8. **`PYTHONHASHSEED=0`** is fixed by the Makefile so that artifact hashes are reproducible.
-9. **S1 tolerances consolidated at 1e-6** (superseded for the ln p star: the defaults are now rtol 1e-8 and shooting 1e-12, item 12) (background ODE `rtol` and shooting precision). The original code used rtol 1e-11 and
+9. **S1 tolerances consolidated at 1e-6** (superseded for the ln p star: rtol 1e-8 and shooting 1e-12, item 12; then the decaying-branch match, item 15) (background ODE `rtol` and shooting precision). The original code used rtol 1e-11 and
    located theta_c to 1e-16 (about 66 integrations per star). `atol` (1e-30), `max_step` (0.25 km), the EOS table and the event
    thresholds are unchanged. The original precision is still available:
    `python -m S1_star_background.run --rtol 1e-11 --shoot-tol 0`. Single runs, one CPU core, Python 3.12:
@@ -224,6 +224,25 @@ header of each new file says what it was moved from and what changed.
     * *Adaptations:* step 21 uses 0.85 and 0.7 of the matching radius as alternative radii (the legacy used the first |theta_0| < 1e-5 and 1e-6), and matching at the surface means no tail; step 23 switches the c_s^2
       definition in the EOS evaluator (`star_table._EOSVec.cs2_mode`) and rebuilds the tables (the legacy patched `bsk26.EOS.cs2` and re-integrated the stars, which gives the same background because the star integration does
       not use c_s^2), finds F (6 kHz) with the pole-rejecting `real_root`, and builds the shifted P(rho) from the table's own P(rho) by interpolation; step 24 uses N4's fork pool.
+
+15. **S1 shooting onto the decaying exterior branch, log-offset scalar (2026-11-20; prototypes from the 2026-11-20 S1 handoff, made native).**
+    * *What changed.* `StarLogP` carries the scalar inside the star as u = ln(pi - theta), w = u' (u_c = ln delta_c is the shooting parameter, resolvable when theta_c
+      rounds to pi). The nonlinear vacuum tail is integrated to r_m = R + 5/m_a; there the residual theta' - S theta, with S the decaying-branch logarithmic derivative of
+      the linear exterior equation on Schwarzschild (Riccati integrated inward from r_m + 30/m_a), is zeroed with Brent in u_c (xtol 1e-12) after a sign bracket. The tail
+      is continued on the decaying branch (theta' = S theta, m and Phi from the vacuum equations) to r_end = R + 15/m_a. The old outward bisection stopped where theta'
+      changed sign (12-14 /m_a, depending on the tolerance) and did not verify decay. `star.py` gained `_background_matter`/`_hydro_rhs` (no c_s^2 or q2 on the
+      equilibrium path; identical numbers, about 2x faster). The monkey-patching prototype scripts were not imported.
+    * *Accuracy.* Against the previous committed tables (shooting 1e-12): delta_c within 2.2e-8 relative (15 kHz) and 1e-9 or better below 12 kHz, R within 1.5e-6 km,
+      M within 3.3e-9 Msun, Phi_shift within 2.3e-11. delta_c changes by less than 3e-10 relative between match = 5, 7 and 10 (3-20 kHz; 2.5e-9 with match = 3). At 20 kHz the previous solver
+      could not resolve theta_c (delta_c off by 6.4e-5, M by 2e-7); at 50 kHz the new one gives delta_c = 2.48e-27, as the log-offset prototype.
+    * *Speed.* 13 stars in 24 s (was 75-114 s); 20 kHz in 1.8 s (was 30-38 s).
+    * *Consumers.* N1: 19/19 checks; Re nu within 4.7e-8; only sub-micro-Hz dampings of modes below threshold (|Im nu| < 2e-9 kHz) move. N3: all checks pass; at the
+      SAME matching radius the old and new tables give the same modes to 1e-7 (p1 at 6 and 7 kHz, p2 at 11 kHz), but N3's radius R + 0.7 (r_end - R) moves outward
+      with the longer tail and the near-threshold dampings move by up to 2.3e-3 (p1 at 6 kHz 1.106417 -> 1.103845 Hz; p1 at 7 kHz 0.478972 -> 0.477785; p2 at 11 kHz
+      5.033221 -> 5.027012). Gate `tests.n3_gate`: 4 of 114 above 1e-3 (was 3; the set changed: p1 6 and 7 kHz, p2 11 kHz and the no-axion p2, instead of p1 5 kHz,
+      p2 10 kHz and the no-axion p2). N4: same check outcomes as before; gate `tests.n4_gate` 2 of 181 above tolerance (was 4: the two old-lapse indices now agree
+      with the legacy). This matching-radius sensitivity of the N3 near-threshold dampings is N3's (it was already the documented ~1e-3 floor); a rule in units of
+      1/m_a, independent of the table extent, is the natural follow-up and is NOT made here.
 
 ## Known limitations (not fixed here)
 

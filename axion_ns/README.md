@@ -74,8 +74,9 @@ written only after its checks pass: `fullgr_extended`).
 R 1.5 s, D0 4 s, D1 24 s, D2 420-460 s, T 107 s, tests 1 s. For comparison, the legacy `checks.json` (6-core i5) lists
 steps 1-3 = 63 s, 5+7 = 543 s, 4+14 = 238 s.
 
-Current S1 (all 1e-6, dense state table): 25 s for the no-axion star and all 12 values of nu_a (about 2 s per star, measured). At the
-original precision (`--rtol 1e-11 --shoot-tol 0`) one star took about 108 s. Current N1 on those tables: mode search 203 s for
+Current S1 (rtol 1e-8, Brent match onto the decaying branch, dense state table): 24 s for the no-axion star and all 12 values of nu_a
+(1.2-3.3 s per star, 2 cores, Python 3.14); `make S1-extra` about 2 minutes. The legacy r-method at the original precision (rtol 1e-11,
+theta_c to 1e-16) took about 108 s per star. Current N1 on those tables: mode search 203 s for
 the 12 stars (10-16 s per star, but 37 s at 2.8 kHz and 43 s at 15 kHz; previous route 966 s), 214 s for the whole `make N1`
 including the atom levels. N1 reads each star through one spline lookup (about 9 microseconds per background evaluation against
 about 60 for the previous Hermite/EOS route).
@@ -83,9 +84,12 @@ about 60 for the previous Hermite/EOS route).
 ## S1 / N1 / N3 status (the ln p star and the N3 port)
 * **S1 integrates the structure against ln p** (start at r = 10 m from the centre series, stop at p = 1e-10 p_c, then the vacuum axion tail in r) and writes tables whose nodes
   follow the solution (uniform in ln p, uniform in r, geometric near the centre; 7,197 rows, 0.8 MB). R and M are defined at p = 1e-10 p_c, about 9 m before the old EOS floor
-  (no-axion star: M = 1.5359 Msun, R = 11.7069 km). Defaults: ODE rtol 1e-8 and theta_c located to 1e-12 (5-9 s per star; the full run of 13 stars takes 75 s); the worst
-  interpolation error written to the tables is 1.3e-7. The earlier default (1e-6 / 1e-6) shortened the valid axion tail (41 km instead of 64 km at 11 kHz) and moved the
-  damping of the p2 mode at 11 kHz by 4.7e-3.
+  (no-axion star: M = 1.5359 Msun, R = 11.7069 km). **Shooting (2026-11-20):** the scalar is carried inside the star as u = ln(pi - theta), and theta_c is fixed by
+  matching the nonlinear vacuum tail at R + 5/m_a onto the decaying branch of the linear exterior (inward Riccati, Brent in u_c); the tail is continued on that branch to
+  R + 15/m_a, so the whole tabulated tail is valid and r_end no longer depends on the shooting tolerance. About 1.2-3 s per star, 24 s for the 13 stars (previous outward
+  bisection to 1e-12: 75-114 s); stars above ~20 kHz, where theta_c rounds to pi, are now solvable (checked to 50 kHz). Against the previous tables: theta_c, R and M agree
+  to 2e-8, 1e-8 km and 1e-9 Msun; the worst interpolation error is 3.5e-8. The previous shooting history (1e-6 / 1e-6 shortened the tail to 41 km at 11 kHz and moved the
+  p2 damping by 4.7e-3) is in MIGRATION.md item 12 and the lab notebook.
 * **N1** reads the new tables with a two-line change (the tail has no ln p): 19 of 19 paper checks pass, the coupled shifts agree with the legacy `fig_axcow.json` to 0.0056
   percentage points (36 values); the run takes 249 s.
 * **N3** (legacy steps 10 and 25) is table-based: one right-hand-side call costs about 10 us instead of 520 us; the whole run takes 256 s on one core (legacy: 5,064 s on 6
