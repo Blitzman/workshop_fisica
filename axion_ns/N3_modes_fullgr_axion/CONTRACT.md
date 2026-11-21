@@ -4,7 +4,6 @@
 ```bash
 python -m N3_modes_fullgr_axion.run                  # steps 10 and 25: 12 values of nu_a + convergence study (about 70 + 26 mode searches)
 python -m N3_modes_fullgr_axion.run --quick          # only the 6 kHz star, about 1 minute
-python -m tests.n3_gate                              # comparison with the committed legacy results/fig_axgr.json (tolerance 1e-3)
 ```
 `--procs N` (default min(6, cores)): fork pool over stars (step 10) and tasks (step 25).
 

@@ -11,7 +11,7 @@ import numpy as np
 from scipy.optimize import brentq
 
 from . import modes as M
-from .star_table import StarTable
+from common.star_table import StarTable
 from .tables import step9_shapes
 
 REF = {'M': 1.53, 'R': 11.7, 'modes': (2.43, 7.15, 10.18)}

@@ -16,7 +16,7 @@ import numpy as np
 from common.checks import ok_field
 
 from . import modes as MD
-from .star_table import StarTable
+from common.star_table import StarTable
 from .tables import LaurentTables
 
 L = 2

@@ -1,17 +1,15 @@
-"""S1's ln p star and dense state table, and N1's reader: nodes, exact state, interpolation accuracy, stacked evaluators vs SciPy, round trip
-(cross-module on purpose)."""
+"""S1's ln p star and dense state table, and the shared reader (common.star_table): nodes, exact state at the hand-over, stacked evaluators vs
+SciPy, metadata round trip. The interpolation error of the table is checked only by S1 itself, when it writes the table (dense.validate_dense)."""
 import numpy as np
 from scipy.interpolate import CubicSpline
 
-from N1_modes_cowling.star_table import StarTable, _EOS, _FastSpline
+from common.star_table import _EOS, _FastSpline
 from S1_star_background import star as S
-from S1_star_background.dense import R_MIN, dense_state, table_nodes, validate_dense
-from S1_star_background.export import write_eos, write_star
-from S1_star_background.star_logp import StarLogP
+from S1_star_background.dense import R_MIN, dense_state, table_nodes
 
 
-def test_table_nodes_are_fine_near_the_surface_and_include_the_hand_over_node():
-    st = StarLogP(None)
+def test_table_nodes_are_fine_near_the_surface_and_include_the_hand_over_node(star_noaxion):
+    st = star_noaxion
     r, k = table_nodes(st)
     assert r[0] == R_MIN and np.all(np.diff(r) > 0) and r[k] == st.R_stop
     d = np.diff(r[:k + 1])
@@ -33,22 +31,11 @@ def test_fastspline_and_stacked_eos_match_scipy():
         assert np.allclose(w, [e._le(lp), e._ln(lp), e._le(lp, 1)], rtol=1e-11, atol=1e-13)
 
 
-def test_noaxion_star_state_at_r_is_consistent_and_the_table_round_trips(tmp_path):
-    st = StarLogP(None)
+def test_noaxion_star_hand_over_and_metadata_round_trip(star_noaxion, table_noaxion):
+    st, (tab, _) = star_noaxion, table_noaxion
     # the exact state at the hand-over radius is the end of the structure integration; the tail is Schwarzschild vacuum
     m, p, Phi, t, tp = st.state_at_r(np.array([st.R_stop - 1e-6, st.R_stop, st.R_stop + 1.0]))
     assert abs(m[1] / st.M_stop - 1) < 1e-12 and m[2] == st.M_stop and p[2] == 0.0 and p[1] > 0
     cols, k = dense_state(st)
     assert np.isneginf(cols['ln_p'][k + 1:]).all() and np.isfinite(cols['ln_p'][:k + 1]).all()
-    err = validate_dense(st, cols, k)
-    assert max(err.values()) <= 1e-5, err
-    write_eos(tmp_path, 'test')
-    meta, dense = write_star(tmp_path, st, 'star_noaxion', 'test')
-    assert dense['interp_max_err'] <= 1e-5
-    tab = StarTable(tmp_path / 'eos_bsk26.csv', tmp_path / 'star_noaxion.csv')
     assert tab.R == st.R_stop and abs(tab.M / st.M_stop - 1) < 1e-14
-    rng = np.random.default_rng(4)
-    for r in rng.uniform(0.05, st.R_stop - 0.05, 40):
-        m, p, Phi, t, tp = tab.y_at(r)
-        ex = st.state_at_r(r)
-        assert abs(m / ex[0] - 1) < 1e-6 and abs(p / ex[1] - 1) < 1e-6, r

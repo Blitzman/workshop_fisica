@@ -3,10 +3,10 @@ PY ?= python3
 # SymPy simplify is hash-seed dependent (see ../archive/axion_ns/AGENTS.md): fixed for reproducible artifacts. The comment must NOT share the line: make keeps the spaces before a '#' in the value.
 export PYTHONHASHSEED = 0
 
-.PHONY: all R D0 D1 D2 S1 S1-extra S1-witness N1 N1-witness N2 N2-quick N3 N3-quick N4 N4-quick T T-fast report test test-slow clean help
+.PHONY: all R D0 D1 D2 S1 S1-extra S1-witness N1 N1-witness N2 N2-quick N3 N3-quick N4 N4-quick T T-fast report test clean help
 
 help:
-	@echo "targets: all R D0 D1 D2 S1 S1-extra S1-witness N1 N1-witness N2 N2-quick N3 N3-quick N4 N4-quick T T-fast report test test-slow clean"
+	@echo "targets: all R D0 D1 D2 S1 S1-extra S1-witness N1 N1-witness N2 N2-quick N3 N3-quick N4 N4-quick T T-fast report test clean"
 
 all: R D0 D1 D2 S1 S1-extra N1 N2 N3 N4 T report
 
@@ -30,6 +30,5 @@ T-fast:      ; $(PY) -m T_toy_model.run --part bridge
 report:      ; $(PY) -m report.build
 
 test:        ; $(PY) -m pytest -q tests
-test-slow:   ; $(PY) -m tests.verify_vs_legacy_n1
 
 clean:       ; rm -f */outputs/manifest.json report/index.html

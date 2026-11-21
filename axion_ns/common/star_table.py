@@ -1,9 +1,10 @@
-"""N1: the background star as seen by the mode solver, rebuilt from S1's tables (no import from S1).
+"""common: the background star as seen by the mode solvers (N1, N3, N4), rebuilt from S1's tables (no import from S1).
+Shared reader (moved here from the three identical copies in N1, N3 and N4); tests/test_physics_crosscheck.py checks its formulas against S1.
 
 Inputs (written by S1): eos_bsk26.csv and star_*.csv (+ .meta.json). The star table is the dense STATE table
 (ln p, m, Phi, theta, theta' on ~7,000 nodes, finer in r near the surface); interpolated with ONE cubic spline lookup per radius (not-a-knot;
 two splines, split at the node R_stop = r_k where the star hands over to the fluid-free tail; the tail has no ln p). This is the interpolation whose
-error S1 measures and records. The EOS is rebuilt from its table exactly as bsk26.EOS builds it, but
+error S1 measures and records (the only check of that interpolation). The EOS is rebuilt from its table exactly as bsk26.EOS builds it, but
 ln eps, ln n and d ln eps / d ln p are evaluated together as one stacked polynomial. Everything else (energy density, sound
 speed, couplings, Phi', lambda', m') is exact arithmetic from the state: `_matter` and `rhs` are copies of
 axion_ns/axstar.py::Star.matter / Star.rhs, validated against S1's Star in tests/ (test_physics_crosscheck).
@@ -55,6 +56,45 @@ class _EOS:
         return (((c[0] * dx + c[1]) * dx + c[2]) * dx + c[3]).tolist()
 
 
+class _EOSVec:
+    """Vectorised EOS (scipy splines, exactly as bsk26.EOS): eps(p), n(p), c_s^2(p) for arrays of p in MeV/fm^3.
+
+    c_s^2 has three definitions (N4, step 23): 'eps' = dp/deps from the fits (the default of the whole project), 'n' = n dp/dn / (eps + p), and 'mid' = their geometric mean. The published fits
+    eps(n) and P(rho) are independent and do not satisfy d eps/dn = (eps + p)/n exactly (see `mismatch`), so the two definitions differ by about 1e-3; the code uses 'eps'."""
+
+    def __init__(self, n, e, p):
+        lp = np.log(p)
+        self._le, self._ln = CubicSpline(lp, np.log(e)), CubicSpline(lp, np.log(n))
+        self.p_min = p[0]
+        self.n, self.e, self.p = np.asarray(n), np.asarray(e), np.asarray(p)
+        self.cs2_mode = 'eps'
+
+    def eps(self, p):
+        return np.exp(self._le(np.log(p)))
+
+    def nb(self, p):
+        return np.exp(self._ln(np.log(p)))
+
+    def _cs2_eps(self, p):
+        return p / self.eps(p) / self._le(np.log(p), 1)
+
+    def _cs2_n(self, p):
+        return p / (self.eps(p) + p) / self._ln(np.log(p), 1)
+
+    def cs2(self, p):
+        if self.cs2_mode == 'eps':
+            return self._cs2_eps(p)
+        if self.cs2_mode == 'n':
+            return self._cs2_n(p)
+        return np.sqrt(self._cs2_eps(p) * self._cs2_n(p))
+
+    def mismatch(self, p):
+        """(d ln eps / d ln n) eps / (eps + p) - 1: zero if the fits satisfy the first law d eps/dn = (eps + p)/n."""
+        lp = np.log(p)
+        e = self.eps(p)
+        return float(self._le(lp, 1) / self._ln(lp, 1) * e / (e + p) - 1)
+
+
 class StarTable:
     def __init__(self, eos_csv, star_csv):
         ec, _ = A.load_table(eos_csv)
@@ -62,6 +102,7 @@ class StarTable:
         par = sm['parameters']
         self.meta = sm
         self.eos = _EOS(ec['n_fm3'], ec['eps_MeV_fm3'], ec['p_MeV_fm3'])
+        self.eosv = _EOSVec(ec['n_fm3'], ec['eps_MeV_fm3'], ec['p_MeV_fm3'])
         self.nu_a, self.p0, self.E0, self.nc = par['nu_a_kHz'], par['p0_MeV_fm3'], par['E0_geo_km2'], par['nc_fm3']
         self.ma = par['ma_per_km']
         self.fa2 = np.inf if par['fa2_geo'] is None else par['fa2_geo']
@@ -79,6 +120,7 @@ class StarTable:
         # two splines, one on each side of r_k (S1 validates exactly this interpolation; one spline across the kink rings)
         # the tail (r > R_stop) has no fluid: no ln p column (stored as -inf), p = 0 there
         self._fi, self._fo = _FastSpline(r[:i + 1], Y[:i + 1]), _FastSpline(r[i:], Y[i:, 1:])
+        self.r_nodes, self.i_stop, self.cols = r, i, sc          # raw nodes and columns (N3 builds its coefficient tables on them)
 
     # ---- background functions (same definitions as axion_ns/axstar.py)
     def g(self, t):

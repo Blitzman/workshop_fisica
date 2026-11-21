@@ -6,7 +6,6 @@ make S1-extra                                   # once: the extra stars of S1 (a
 python -m N4_modes_radial.run                   # steps 22, 26 and 15 (about 10 minutes on one core)
 python -m N4_modes_radial.run --part all        # plus 19, 20, 16 and the analysis parts (the contour counts: long; --procs divides it)
 python -m N4_modes_radial.run --part analysis   # steps 18, 21, 23, 24 (about 100 s); they read the outputs of steps 15 and 20
-python -m tests.n4_gate                         # comparison with the committed legacy results/radial_*.json
 ```
 ## Contract
 Reads: D0 `background.eq.json`; D1 `radial_linear.eq.json`; S1 `eos_bsk26.csv`, `star_*.csv`, `manifest.json` and the untracked `outputs_extra/`; R `paper1_tables.ref.json`.

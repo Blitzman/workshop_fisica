@@ -7,9 +7,9 @@ import pytest
 from S1_star_background.star_logp import StarLogP
 
 
-def test_matching_radius_does_not_move_the_solution():
+def test_matching_radius_does_not_move_the_solution(star_12):
     """theta_c is a property of the star, not of where the decaying branch is imposed (5 vs 7 reduced Compton wavelengths)."""
-    a, b = StarLogP(12.0, match=5.0), StarLogP(12.0, match=7.0)
+    a, b = star_12, StarLogP(12.0, match=7.0)
     assert abs(a.delta_c / b.delta_c - 1) < 1e-8
     assert abs(a.R - b.R) < 1e-7 and abs(a.M / b.M - 1) < 1e-9
     assert abs(a.decay_mismatch) < 1e-5 and abs(b.decay_mismatch) < 1e-5
@@ -35,8 +35,8 @@ def test_no_condensate_below_threshold():
         StarLogP(2.5)
 
 
-def test_seed_only_narrows_the_bracket():
-    ref = StarLogP(6.0)
+def test_seed_only_narrows_the_bracket(star_6):
+    ref = star_6
     seeded = StarLogP(6.0, seed=ref.u_c + 0.1)
     assert seeded.nint < ref.nint
     assert abs(seeded.delta_c / ref.delta_c - 1) < 1e-10

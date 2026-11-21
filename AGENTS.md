@@ -19,8 +19,8 @@ Run the smallest check that answers the question. Nothing is rerun "to be safe".
 2. **Pushes, merges, copies and file transfers:** verify with git only (`git diff --stat A B`, `git status`, hashes). If the trees are identical, nothing is run.
 3. **Documentation, notebook or comment changes:** no tests.
 4. **Code change in one module:** run that module's own tests (`pytest tests/test_<module>.py` or the matching `make test-*`) and its witness or quick target. Not the whole suite.
-5. **A module's contracted outputs change** (tables, JSON artifacts): run the quick targets of the modules that read them. Full consumer runs and the legacy gates (`tests.n3_gate`, `tests.n4_gate`) only when the quick runs show a difference that matters, and under rule 1.
-6. **Full suite, full sweeps (`make all`, `run_all`), slow tests and gates:** only on request or before a release, under rule 1.
+5. **A module's contracted outputs change** (tables, JSON artifacts): run the quick targets of the modules that read them. Full consumer runs only when the quick runs show a difference that matters, and under rule 1.
+6. **Full sweeps (`make all`, `run_all`), slow tests and on-request comparison scripts:** only on request or before a release, under rule 1.
 7. **Do not repeat a check** whose inputs have not changed since it last passed in the session. Report the earlier result instead.
 
 Known wall times (axion_ns, 1–2 cores): `pytest tests` 10–20 s; S1 25 s; S1-witness, N1-witness, N2/N3/N4-quick under 1 min; T about 2 min; S1-extra about 2 min; N1 about 4 min; N3 about 4 min; D2 about 8 min; N2 about 17 min of CPU; N4 about 27 min; `run_all` (legacy) about 75 min. Anything at or above 2 minutes needs rule 1.

@@ -8,7 +8,7 @@ interior entries grow like 1e13 towards the surface (as the polytrope's W in N2)
 import numpy as np
 
 from .background import bg18
-from .star_table import _FastSpline
+from common.star_table import _FastSpline
 
 W_FIT = (0.05, 0.30)             # km^-1: two real frequencies for the fit; W_CHECK verifies A_0 + w^2 A_1 at a third
 W_CHECK = 0.12

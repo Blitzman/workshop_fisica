@@ -1,7 +1,7 @@
 """N2: Cowling and dynamic-metric frequencies of a polytrope without axion (moved from axion_ns/fmodes.py).
 
 Same algorithms as the original; every integration takes an explicit `rtol` (default 1e-11 = the original). `cowling_X` and
-`outgoing_amplitude` are compared with the original in tests/compare_n2_legacy.py; `cowling_modes` and `full_mode` are ported verbatim
+`outgoing_amplitude` are compared with the original in archive/axion_ns_migration_scripts/compare_n2_legacy.py; `cowling_modes` and `full_mode` are ported verbatim
 (plus the rtol argument) and not yet exercised in this layout.
 """
 import numpy as np

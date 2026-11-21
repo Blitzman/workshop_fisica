@@ -28,7 +28,7 @@ from scipy.optimize import brentq
 from common.checks import ok_field
 
 from . import modes as MD
-from .star_table import StarTable
+from common.star_table import StarTable
 from .tables import RadialTables
 
 omega_of = MD.omega_of

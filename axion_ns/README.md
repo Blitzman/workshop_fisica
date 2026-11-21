@@ -44,28 +44,18 @@ written only after its checks pass: `fullgr_extended`).
 
 ## What is checked, and against what
 
-* **Same results as the original.** `tests/test_golden_checks.py` compares the checks of D0+D1 (old steps 1-3), D2 (5, 7),
-  T (4, 14) and N1 (6) with the committed `results/checks.json`: same names (they embed the computed numbers) and same outcome.
-  `tests/test_data_vs_legacy.py`: `fig_toy.json`, `radial_branches.json`, `levels.json` equal the legacy files.
-* **N1 against the old results.** All 12 stars, current outputs: vs the legacy `results/fig_axcow.json` (4 digits) the shifts agree
-  within 0.005 percentage points (`tests/test_n1_witness.py` checks nu_a = 6 kHz); N1 passes its paper checks (19/19 with the atom
-  part). At nu_a = 6 kHz against the ORIGINAL code at full precision (`make test-slow`), relative differences:
-
-  | S1 / N1 setting | Re nu (worst) | Im nu of p1 (1.7055 Hz) | Im nu of p2 (12.77 Hz) |
-  |---|---|---|---|
-  | S1 at the original precision (rtol 1e-11), Hermite CSV tables | 1.6e-8 | 2.2e-5 | 4e-8 |
-  | S1 at 1e-6, Hermite CSV tables (previous route) | 3.6e-8 | 5.5e-6 | 1.2e-6 |
-  | **current: S1 at 1e-6, dense state table** | 3.1e-8 | 5.2e-5 | 1.6e-6 |
-
-  The Im nu of the weakly damped p1 mode is the delicate quantity (the damping changes by about 0.09 mHz); the real parts are stable.
-  Against the previous route, over all 12 stars: Re nu within 5e-8, Im nu within 1e-5 for the damped modes (typically 1e-6; 5e-5 for
-  p1 at 6 kHz and 7e-5 for p2 at 8 kHz). There is **no full-precision comparison with the original for the other 11 stars**. See
-  `MIGRATION.md`, "Deliberate differences" 5, 9 and 10.
+* **The current version is the reference (2026-11-21).** No test compares with the legacy package any more. The migration-era comparisons
+  (checks, data files, N1/N3/N4 against the legacy results) and their numbers are recorded in `MIGRATION.md`; the comparison scripts are
+  in `archive/axion_ns_migration_scripts/` and the legacy gates were removed.
+* **Test suite** (`make test`, about 10 s): S1 shooting and table nodes, the shared reader `common/star_table.py` against S1's formulas, N2,
+  N3 and N4 table pieces, artifacts and independence. Each star is built once per session (`tests/conftest.py`). The interpolation error of
+  S1's tables is checked only by S1 when it writes them. `python -m tests.compare_n3_n2_matrix` (about 1 minute, on request) checks that
+  N3's interior matrix equals N2's with the axion off.
 * **Reproducibility.** With `PYTHONHASHSEED=0`, all 10 equation artifacts have identical content hashes across independent runs
   (D1 and D2 were run twice). Inputs are recorded by the upstream *content* hash, so a rerun of an unchanged module does not
   make its consumers look stale; the Dummy symbols of `Subs` objects are serialized by order of appearance (SymPy's own index is
   random per process).
-* **Independence** (`tests/test_independence.py`): no module imports another; derivation files never import the paper references.
+* **Independence** (`tests/test_independence.py`): no module imports another (shared code lives in `common/`); derivation files never import the paper references.
 * **Equation -> numerics bridge** in T: the hand-coded Eq. (4.13) equals the matching determinant derived in D1 (lambdify).
 * **Artifact round trip** with awkward expressions, and tamper detection.
 
@@ -93,7 +83,7 @@ about 60 for the previous Hermite/EOS route).
 * **N1** reads the new tables with a two-line change (the tail has no ln p): 19 of 19 paper checks pass, the coupled shifts agree with the legacy `fig_axcow.json` to 0.0056
   percentage points (36 values); the run takes 249 s.
 * **N3** (legacy steps 10 and 25) is table-based: one right-hand-side call costs about 10 us instead of 520 us; the whole run takes 256 s on one core (legacy: 5,064 s on 6
-  workers). Against the committed `results/fig_axgr.json` (`python -m tests.n3_gate`): **111 of 114 comparisons agree within 1e-3**, every real part within 4.4e-6, the
+  workers). Against the committed `results/fig_axgr.json` (migration gate, now removed): **111 of 114 comparisons agree within 1e-3**, every real part within 4.4e-6, the
   background-only shifts within 3.9e-6. The three above 1e-3 are damping values: p1 at 5 kHz (1.4e-3), p2 at 10 kHz (2.0e-3) and the no-axion p2 (3.2e-3 relative but
   7e-7 Hz absolute, the noise floor of the search). The dampings of modes near the axion threshold are reproducible only to about 1e-3: stopping the star 10 m earlier or later
   moves them by about 1e-3 in either direction (p2 at 10 and 11 kHz), and the original-precision run differs from the legacy by 1.1e-3 at 11 kHz; for p1 at 5 kHz the cause is
@@ -106,7 +96,7 @@ about 60 for the previous Hermite/EOS route).
 ## N4 status (radial modes)
 N4 ports the legacy steps 15, 16, 19, 20, 22 and 26 (step 17, the Font et al. comparison, is not ported by decision) and, as extra parts (`--part analysis`), the radial analysis of steps 18, 21, 23 and 24 (about 100 s on one core; formerly planned as module A). The radial matrices are derived from D0's and D1's artifacts and
 satisfy A = A_0 + w^2 A_1 exactly, so two coefficient tables are enough; a `det_entire` evaluation takes 0.11 s instead of about 2.7 s and the whole module about 35 minutes on one core (legacy: 23,205 s
-wall on 6 workers). It needs S1's extra stars (`make S1-extra`, about 2 minutes, untracked). Against the committed legacy `results/radial_*.json` (`python -m tests.n4_gate`): Table 1 and 2 of
+wall on 6 workers). It needs S1's extra stars (`make S1-extra`, about 2 minutes, untracked). Against the committed legacy `results/radial_*.json` (migration gate, now removed): Table 1 and 2 of
 Paper I within 9.5e-5 (real parts) and 1.1e-3 (damping), the F and H1 modes within 2.2e-8 and 1.8e-8, the avoided-crossing gap 49.1 Hz (legacy 49.07), all counts equal except three at the noise floor or
 tied to the matching radius (step 20: deep region 0 against the legacy's 2 with no root located; old-lapse control 5 against 8; old-lapse deep 2 against 0). N4's checks: 22: 4/4, 26: 3 OK / 2 failures / 2 descriptive
 (the two failures are failing in the committed legacy result too, with the same numbers), 15: 13/13, 19: 2/2, 20: 4/4, 16: 7/7 (6/7 on the owner's second computer, where the negative control 1 depends on the platform: accepted). Item 13 of `MIGRATION.md` lists the adaptations; the caveats above were reviewed and accepted by the project owner on 2026-11-18 (same item).

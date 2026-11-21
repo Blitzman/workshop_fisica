@@ -19,7 +19,7 @@ from common.checks import Timer, report
 
 from . import atom_levels as AL
 from . import run_tables as RT
-from .star_table import StarTable
+from common.star_table import StarTable
 from .tables import load_paper2_tables, step9_shapes
 
 MODULE = 'N1_modes_cowling'

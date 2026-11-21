@@ -4,7 +4,7 @@ Port of axion_ns/step18_rydberg.py, step21_deep_artifacts.py, step23_eos_consist
 steps wrote: 18, 23 and 24 take the modes of step 15 (radial_star.json), 21 the deep zeros of step 20 (radial_damped.json), both from the output directory. Differences with the legacy:
   * step 21: the alternative matching radii are 0.85 and 0.7 of the matching radius (the legacy used the first |theta_0| < 1e-5 and 1e-6, which with a tail valid to r_end may not exist);
     matching at the surface (r_m = R) means no tail;
-  * step 23: the c_s^2 definition is a switch of the EOS evaluator (star_table._EOSVec.cs2_mode) and the coefficient tables are rebuilt for each definition (the legacy patched `bsk26.EOS.cs2`
+  * step 23: the c_s^2 definition is a switch of the EOS evaluator (common/star_table._EOSVec.cs2_mode) and the coefficient tables are rebuilt for each definition (the legacy patched `bsk26.EOS.cs2`
     and re-integrated the stars, which gives the same background: the star integration does not use c_s^2); F (6 kHz) is found with the pole-rejecting `real_root`; the P(rho) shifted by 1% in
     lg rho of the negative control is built by interpolating the table's own P(rho) instead of calling the analytic fit;
   * step 24: the real-frequency scans use N4's fork pool (`--procs`).
@@ -19,7 +19,7 @@ from common.checks import ok_field
 
 from . import modes as MD
 from . import validation as V
-from .star_table import _EOSVec
+from common.star_table import _EOSVec
 from .tables import RadialTables
 
 omega_of = MD.omega_of

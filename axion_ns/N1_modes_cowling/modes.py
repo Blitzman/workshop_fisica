@@ -1,7 +1,7 @@
 """N1: Cowling modes of the star with an axion condensate (Paper II, Eqs. 8a-8d, centre 10, surface, exterior 13).
 
 Moved from axion_ns/axstar.py (the mode half: perturbation RHS, interior, surface residual, exterior, coupled determinant,
-Muller). The star is a StarTable (star_table.py) built from S1's tables instead of an in-memory Star. The ODEs are
+Muller). The star is a StarTable (common/star_table.py) built from S1's tables instead of an in-memory Star. The ODEs are
 typed by hand (verified symbol by symbol in D2 for the equations; the numerical implementation is not yet compiled
 from the artifact: see README, "Known limitations").
 """

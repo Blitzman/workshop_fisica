@@ -27,7 +27,7 @@ header of each new file says what it was moved from and what changed.
 | `bsk26.py` | `S1/bsk26.py` | unchanged |
 | `axstar.py` (background half) | `S1/star.py` (physics) + `S1/star_logp.py` (integration against ln p) | `star.py` physics unchanged (equilibrium-only matter path added); the ln p integrator is new (item 12), its shooting item 15 |
 | `axstar.py` (mode half) | `N1/modes.py` | `st.sol.sol` -> `st.y_at`, `g2` -> `st.g2` |
-| `axstar.py` (`matter`, `rhs`) | `N1/star_table.py` | copies, validated against S1 in `tests/` |
+| `axstar.py` (`matter`, `rhs`) | `common/star_table.py` (shared by N1, N3, N4) | copies, validated against S1 in `tests/` |
 | `step9_axion_cowling.py` | `N1/run_tables.py` (+ the 3 background-only checks in `S1/run.py`) | stars read from tables; works on any subset of nu_a |
 | `step6_nonradial_numerics.py` | `N1/atom_levels.py` | tables from R |
 | `step4_numerics.py` | `T/toy.py` | dps fixed at 30 (as in the full pipeline) |

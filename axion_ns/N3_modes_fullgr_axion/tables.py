@@ -9,7 +9,7 @@ and geometric near the centre, so the coefficient tables inherit that resolution
 import numpy as np
 
 from .background import bg18
-from .star_table import _FastSpline
+from common.star_table import _FastSpline
 
 W_FIT = np.array([0.04, 0.12, 0.35])             # km^-1: three real frequencies for the Laurent fit
 VINV = np.linalg.inv(np.column_stack([1 / W_FIT**2, np.ones(3), W_FIT**2]))

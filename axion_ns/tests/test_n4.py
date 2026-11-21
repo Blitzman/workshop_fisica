@@ -1,5 +1,5 @@
 """N4: fast tests (no symbolic compile): the Paper I tables artifact, the legacy winding function, the exterior wave on an analytic exterior matrix, and the coefficient tables with a
-synthetic 1/r matrix. The comparison with the legacy results is `python -m tests.n4_gate`."""
+synthetic 1/r matrix."""
 import numpy as np
 import pytest
 
@@ -46,16 +46,10 @@ def test_exterior_wave_does_not_depend_on_the_ray_and_is_analytic():
     assert abs(d1 - d2) / abs(d1) < 1e-2
 
 
-def test_coefficient_tables_interpolate_a_matrix_with_1_over_r_entries(tmp_path):
+def test_coefficient_tables_interpolate_a_matrix_with_1_over_r_entries(table_noaxion):
     """A = A_0(r) + w^2 A_1(r) with 1/r and 1/r^2 entries (like the regular singular centre): the r^2 A tabulation must keep A y accurate."""
-    from S1_star_background.export import write_eos, write_star
-    from S1_star_background.star_logp import StarLogP
-    from N4_modes_radial.star_table import StarTable
     from N4_modes_radial.tables import RadialTables
-    st = StarLogP(None)
-    write_eos(tmp_path, 'test')
-    write_star(tmp_path, st, 'star_noaxion', 'test')
-    tab_star = StarTable(tmp_path / 'eos_bsk26.csv', tmp_path / 'star_noaxion.csv')
+    tab_star, _ = table_noaxion
 
     def entry(n, r, w):
         out = []
@@ -80,11 +74,11 @@ def test_coefficient_tables_interpolate_a_matrix_with_1_over_r_entries(tmp_path)
         assert np.abs(f(r, y) - exact).max() <= 1e-7 * np.abs(exact).max(), r
 
 
-def test_eos_cs2_definitions_and_the_thermodynamic_mismatch():
+def test_eos_cs2_definitions_and_the_thermodynamic_mismatch(table_noaxion):
     """The three c_s^2 definitions of step 23 on the S1 EOS table: 'mid' is the geometric mean, 'n' differs from 'eps' by ~1e-3 and the first law is violated by ~2e-4 at 100 MeV/fm^3."""
     from common import artifacts as A
-    from N4_modes_radial.star_table import _EOSVec
-    cols, _ = A.load_table(ROOT / 'S1_star_background' / 'outputs' / 'eos_bsk26.csv')
+    from common.star_table import _EOSVec
+    cols, _ = A.load_table(table_noaxion[1] / 'eos_bsk26.csv')
     E = _EOSVec(cols['n_fm3'], cols['eps_MeV_fm3'], cols['p_MeV_fm3'])
     p = np.array([1.0, 10.0, 100.0, 300.0])
     c_eps, c_n = E._cs2_eps(p), E._cs2_n(p)
