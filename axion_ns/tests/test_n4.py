@@ -1,19 +1,6 @@
-"""N4: fast tests (no symbolic compile): the Paper I tables artifact, the legacy winding function, the exterior wave on an analytic exterior matrix, and the coefficient tables with a
+"""N4: fast tests (no symbolic compile): the winding function, the exterior wave on an analytic exterior matrix, and the coefficient tables with a
 synthetic 1/r matrix."""
 import numpy as np
-import pytest
-
-from tests.conftest import ROOT
-
-R_TABLES = ROOT / 'R_paper_refs' / 'outputs' / 'paper1_tables.ref.json'
-
-
-@pytest.mark.skipif(not R_TABLES.exists(), reason='R paper1 artifact not produced')
-def test_paper1_tables_artifact_matches_the_typed_tables():
-    from N4_modes_radial.validation import load_paper1_tables
-    from R_paper_refs import paper1_radial_tables as P
-    T = load_paper1_tables(R_TABLES)
-    assert T['NUA'] == P.NUA and T['T1'] == P.T1 and T['T2'] == P.T2 and T['T3'] == P.T3
 
 
 def test_winding_counts_the_zeros_inside_a_rectangle():

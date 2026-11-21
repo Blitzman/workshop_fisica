@@ -47,8 +47,9 @@ written only after its checks pass: `fullgr_extended`).
 * **The current version is the reference (2026-11-21).** No test compares with the legacy package any more. The migration-era comparisons
   (checks, data files, N1/N3/N4 against the legacy results) and their numbers are recorded in `MIGRATION.md`; the comparison scripts are
   in `archive/axion_ns_migration_scripts/` and the legacy gates were removed.
-* **Test suite** (`make test`, about 10 s): S1 shooting and table nodes, the shared reader `common/star_table.py` against S1's formulas, N2,
-  N3 and N4 table pieces, artifacts and independence. Each star is built once per session (`tests/conftest.py`). The interpolation error of
+* **Test suite** (`make test`, about 12 s): S1 shooting and table nodes, the shared reader `common/star_table.py` against S1's formulas,
+  N3 and N4 table pieces, artifacts and independence. N2 has no unit tests: its equations are verified upstream (D2) and its full run
+  compares with the literature. Each star is built once per session (`tests/conftest.py`). The interpolation error of
   S1's tables is checked only by S1 when it writes them. `python -m tests.compare_n3_n2_matrix` (about 1 minute, on request) checks that
   N3's interior matrix equals N2's with the axion off.
 * **Reproducibility.** With `PYTHONHASHSEED=0`, all 10 equation artifacts have identical content hashes across independent runs
