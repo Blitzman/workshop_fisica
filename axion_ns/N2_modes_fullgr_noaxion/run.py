@@ -23,6 +23,7 @@ from pathlib import Path
 import numpy as np
 
 from common import artifacts as A
+from common import compiled as C
 from common.checks import Timer, report
 
 from . import systems as S2
@@ -41,7 +42,9 @@ def main(argv=None):
     ap.add_argument('--d2-dir', default=str(HERE.parent / 'D2_derive_nonradial' / 'outputs'))
     ap.add_argument('--r-dir', default=str(HERE.parent / 'R_paper_refs' / 'outputs'))
     ap.add_argument('--out', default=str(HERE / 'outputs'))
+    ap.add_argument('--recompile', action='store_true', help='rebuild the compiled equations (compiled/*.json) from the artifacts')
     args = ap.parse_args(argv)
+    C.RECOMPILE = args.recompile
     out, tm = Path(args.out), Timer()
     out.mkdir(parents=True, exist_ok=True)
 

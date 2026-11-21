@@ -8,6 +8,8 @@ python -m N2_modes_fullgr_noaxion.run --quick --out /tmp/n2_quick     # smoke ru
 `--procs N` (default min(6, cores)) uses a fork pool (the compiled systems cannot be pickled); without `fork` it runs serially.
 `--cowling-rtol 1e-8` relaxes only the Cowling root search (the amplitude tolerances are fixed, see below).
 
+**Compiled equations (cache).** The numerical systems compiled from the equation artifacts are cached in `compiled/cowling_energy.json, full_energy.json, full_rest.json (the last for tests/compare_n3_n2_matrix.py)` (tracked by git; `common/compiled.py`) and loaded in milliseconds. If an equation artifact or the reduction code changes, the run stops with a StaleCache error; `--recompile` rebuilds the cache (N2: about 1.5 min, N3: 16 s, N4: 22 s).
+
 ## Contract
 Reads: D2 `fullgr_extended.eq.json`; R `paper2_equations.eq.json` and `literature_modes.ref.json`.
 

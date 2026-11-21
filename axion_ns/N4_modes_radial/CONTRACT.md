@@ -7,6 +7,8 @@ python -m N4_modes_radial.run                   # steps 22, 26 and 15 (about 10 
 python -m N4_modes_radial.run --part all        # plus 19, 20, 16 and the analysis parts (the contour counts: long; --procs divides it)
 python -m N4_modes_radial.run --part analysis   # steps 18, 21, 23, 24 (about 100 s); they read the outputs of steps 15 and 20
 ```
+**Compiled equations (cache).** The numerical systems compiled from the equation artifacts are cached in `compiled/radial.json` (tracked by git; `common/compiled.py`) and loaded in milliseconds. If an equation artifact or the reduction code changes, the run stops with a StaleCache error; `--recompile` rebuilds the cache (N2: about 1.5 min, N3: 16 s, N4: 22 s).
+
 ## Contract
 Reads: D0 `background.eq.json`; D1 `radial_linear.eq.json`; S1 `eos_bsk26.csv`, `star_*.csv`, `manifest.json` and the untracked `outputs_extra/`; R `paper1_tables.ref.json`.
 

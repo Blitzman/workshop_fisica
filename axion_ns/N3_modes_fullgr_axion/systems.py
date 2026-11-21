@@ -9,9 +9,12 @@ y' = A(r, w, l, background) y by replacing the background functions with symbols
 Both are compiled with lambdify(cse=True) as FLAT lists of entries (36 and 16): tables.py evaluates them vectorised at the table nodes. The matrices depend on
 omega only through omega^2, A = A_-1/w^2 + A_0 + w^2 A_1 (measured, residual 4e-15; exact at complex w to 1.5e-16), which tables.py exploits.
 """
+from pathlib import Path
+
 import sympy as sp
 
 from common import artifacts as A
+from common import compiled as C
 from common.notation import (r, w, l, G, V, mstar, mN, eps0, dth, a0, n0, Phi0, lam0, d, fa, Xf, X_def, dn, Vt, H0, H1, K, W, eps, p, cs2, dm, dmm,
                              meff2, thp)
 
@@ -91,10 +94,15 @@ def exterior_matrix_symbolic(ext):
 
 
 def compile_flat(ext):
-    """(interior_flat, exterior_flat): functions (r, w, l, *background) -> list of 36 / 16 entries (some scalars)."""
-    Ai, Ae = interior_matrix_symbolic(ext), exterior_matrix_symbolic(ext)
+    """(interior_flat, exterior_flat): functions (r, w, l, *background) -> list of 36 / 16 entries (some scalars). From the compiled cache
+    (common/compiled.py, compiled/extended.json; --recompile rebuilds it)."""
+    here = Path(__file__).resolve().parent
     args = (r, w, l, *BG)
-    return sp.lambdify(args, list(Ai), 'numpy', cse=True), sp.lambdify(args, list(Ae), 'numpy', cse=True)
+    key = {'equations': C.expr_hash(ext), 'code': C.code_hash(here / 'systems.py', here.parent / 'common' / 'notation.py')}
+    f = C.compiled(here / 'compiled' / 'extended.json', key,
+                   lambda: {'interior': (args, list(interior_matrix_symbolic(ext)), 'numpy'),
+                            'exterior': (args, list(exterior_matrix_symbolic(ext)), 'numpy')})
+    return f['interior'], f['exterior']
 
 
 def substitution_checks():

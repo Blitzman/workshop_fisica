@@ -3,13 +3,16 @@
 Reads: D2's fullgr_extended.eq.json (the extended Lindblom-Detweiler system, verified against the action) and R's
 paper2_equations.eq.json ((8a)-(8c) of Paper II). With the axion switched off and a concrete polytrope EOS, the algebraic
 constraints are solved symbolically (as axion_ns/fmodes.py does) and the matrix A(r, w, l, background) in y' = A y is compiled with
-lambdify(cse=True). Two evaluators per system: `mat` (4x4 / 2x2 array) and `ay` (the product A y, as a list of floats, fastest).
+lambdify(cse=True), cached in compiled/ (common/compiled.py; --recompile rebuilds). Two evaluators per system: `mat` (4x4 / 2x2 array) and `ay` (the product A y, as a list of floats, fastest).
 A depends on w only through w^2: A = A_-1/w^2 + A_0 + w^2 A_1 (measured, residual 1e-15), not exploited here.
 """
+from pathlib import Path
+
 import numpy as np
 import sympy as sp
 
 from common import artifacts as A
+from common import compiled as C
 from common.notation import (r, w, l, G, V, mstar, mN, eps0, dth, a0, n0, Phi0, lam0, d, Xf, X_def, dn, Vt, H0, H1, K, W)
 
 from .polytrope import EOS, _x, eos_num
@@ -43,12 +46,22 @@ def _numeric(e, kind):
     return e.subs({Phi0: bP, lam0: bL, n0: bn, G: 1})
 
 
-def _compile(Amat, n):
+HERE = Path(__file__).resolve().parent
+_CODE = (HERE / 'systems.py', HERE / 'polytrope.py', HERE.parent / 'common' / 'notation.py')
+
+
+def _specs(Amat, n):
     args = (r, w, l, *_B)
-    mat = sp.lambdify(args, Amat, 'numpy', cse=True)
     ys = sp.symbols(f'y0:{n}')
-    ay = sp.lambdify(list(args) + list(ys), list(Amat * sp.Matrix(ys)), 'math', cse=True)
-    return Sys(lambda *a: np.asarray(mat(*a), dtype=float), ay, n)
+    return {'mat': (args, Amat, 'numpy'), 'ay': (list(args) + list(ys), list(Amat * sp.Matrix(ys)), 'math')}
+
+
+def _compile(name, eqs, keys, n, build):
+    """The system `name`, from the compiled cache (common/compiled.py) or built by build() -> A matrix."""
+    key = {'equations': C.expr_hash(eqs, keys), 'code': C.code_hash(*_CODE)}
+    f = C.compiled(HERE / 'compiled' / f'{name}.json', key, lambda: _specs(build(), n))
+    mat = f['mat']
+    return Sys(lambda *a: np.asarray(mat(*a), dtype=float), f['ay'], n)
 
 
 def _matrix(eqs, ys, alg, kind):
@@ -78,8 +91,8 @@ def _zl_from(sysm, kind):
 
 def full_systems(ext, kind):
     """(EXT, ZL): the extended system without axion and the ZL variant, from ONE symbolic solve (the legacy code solved twice)."""
-    Amat = _matrix({k: ext[k] for k in EXT_KEYS}, [H1, K, W, Xf], [('H0', H0), ('V', Vt)], kind)
-    sysm = _compile(Amat, 4)
+    sysm = _compile(f'full_{kind}', ext, EXT_KEYS, 4,
+                    lambda: _matrix({k: ext[k] for k in EXT_KEYS}, [H1, K, W, Xf], [('H0', H0), ('V', Vt)], kind))
     return sysm, _zl_from(sysm, kind)
 
 
@@ -92,6 +105,8 @@ def full_system(ext, kind, which='EXT'):
 
 def cowling_system(paper2, kind):
     """(8a)-(8c) of Paper II without axion, in variables (W, X) with X = -e^Phi Delta p."""
-    dn_of = sp.solve(Xf - X_def, dn)[0]
-    eqs = {k: paper2[k].subs(dn, dn_of).doit() for k in COWLING_KEYS}
-    return _compile(_matrix(eqs, [W, Xf], [('(8c) momento angular', Vt)], kind), 2)
+    def build():
+        dn_of = sp.solve(Xf - X_def, dn)[0]
+        eqs = {k: paper2[k].subs(dn, dn_of).doit() for k in COWLING_KEYS}
+        return _matrix(eqs, [W, Xf], [('(8c) momento angular', Vt)], kind)
+    return _compile(f'cowling_{kind}', paper2, COWLING_KEYS, 2, build)

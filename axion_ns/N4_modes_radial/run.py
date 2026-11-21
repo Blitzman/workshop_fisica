@@ -20,6 +20,7 @@ import time
 from pathlib import Path
 
 from common import artifacts as A
+from common import compiled as C
 from common.checks import Timer, report
 
 from . import analysis as AN
@@ -50,7 +51,9 @@ def main(argv=None):
     ap.add_argument('--extra-dir', default=str(HERE.parent / 'S1_star_background' / 'outputs_extra'))
     ap.add_argument('--r-dir', default=str(HERE.parent / 'R_paper_refs' / 'outputs'))
     ap.add_argument('--out', default=str(HERE / 'outputs'))
+    ap.add_argument('--recompile', action='store_true', help='rebuild the compiled equations (compiled/*.json) from the artifacts')
     args = ap.parse_args(argv)
+    C.RECOMPILE = args.recompile
     parts = ORDER if args.part == 'all' else (['22', '26', '15'] if args.part == 'fast' else (['18', '21', '23', '24'] if args.part == 'analysis' else [p for p in args.part.split(',') if p]))
     parts = [p for p in ORDER if p in parts]
     out, tm = Path(args.out), Timer()
@@ -65,7 +68,7 @@ def main(argv=None):
     if (Path(args.extra_dir) / 'manifest.json').exists():
         inputs.append(A.input_record(Path(args.extra_dir) / 'manifest.json'))
     t0 = time.time()
-    flat_i, flat_e, _, _ = SY.compile_flat(L, B)
+    flat_i, flat_e = SY.compile_flat(L, B)
     V.setup(flat_i, flat_e, str(s1 / 'eos_bsk26.csv'), s1, args.extra_dir, args.procs)
     print(f'  symbolic compile from the artifacts: {time.time() - t0:.1f} s', flush=True)
 

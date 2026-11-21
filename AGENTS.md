@@ -23,4 +23,4 @@ Run the smallest check that answers the question. Nothing is rerun "to be safe".
 6. **Full sweeps (`make all`, `run_all`), slow tests and on-request comparison scripts:** only on request or before a release, under rule 1.
 7. **Do not repeat a check** whose inputs have not changed since it last passed in the session. Report the earlier result instead.
 
-Known wall times (axion_ns, 1–2 cores): `pytest tests` 10–20 s; S1 25 s; S1-witness, N1-witness, N2/N3/N4-quick under 1 min; T about 2 min; S1-extra about 2 min; N1 about 4 min; N3 about 4 min; D2 about 8 min; N2 about 17 min of CPU; N4 about 27 min; `run_all` (legacy) about 75 min. Anything at or above 2 minutes needs rule 1.
+Known wall times (axion_ns, 1–2 cores; compiled equations cached): `pytest tests` about 12 s; N3-quick about 20 s; S1 25 s; S1-witness, N1-witness, N2/N3/N4-quick under 1 min; T about 2 min; S1-extra about 2 min; N1 about 4 min; N3 about 4 min; D2 about 8 min; N2 about 17 min of CPU; N4 about 27 min; `run_all` (legacy) about 75 min. Anything at or above 2 minutes needs rule 1.

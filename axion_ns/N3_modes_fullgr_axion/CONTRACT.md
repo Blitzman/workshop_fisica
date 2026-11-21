@@ -7,6 +7,8 @@ python -m N3_modes_fullgr_axion.run --quick          # only the 6 kHz star, abou
 ```
 `--procs N` (default min(6, cores)): fork pool over stars (step 10) and tasks (step 25).
 
+**Compiled equations (cache).** The numerical systems compiled from the equation artifacts are cached in `compiled/extended.json` (tracked by git; `common/compiled.py`) and loaded in milliseconds. If an equation artifact or the reduction code changes, the run stops with a StaleCache error; `--recompile` rebuilds the cache (N2: about 1.5 min, N3: 16 s, N4: 22 s).
+
 ## Contract
 Reads: D2 `fullgr_extended.eq.json`; S1 `eos_bsk26.csv`, `star_noaxion.csv`, `star_nua<nu>.csv`, `manifest.json`; R `paper2_tables.ref.json`; N1 `modes_cowling.csv` (optional).
 

@@ -56,6 +56,9 @@ written only after its checks pass: `fullgr_extended`).
   (D1 and D2 were run twice). Inputs are recorded by the upstream *content* hash, so a rerun of an unchanged module does not
   make its consumers look stale; the Dummy symbols of `Subs` objects are serialized by order of appearance (SymPy's own index is
   random per process).
+* **Compiled equations** (`tests/test_compiled.py`): N2, N3 and N4 load their numerical systems from `<module>/compiled/*.json` (lambdify
+  source, keyed by the equation artifacts and the reduction code); the test checks the cache round trip and that the committed caches
+  match the current artifacts. `--recompile` rebuilds them. Saves about 1.5 min (N2), 16 s (N3) and 22 s (N4) per run.
 * **Independence** (`tests/test_independence.py`): no module imports another (shared code lives in `common/`); derivation files never import the paper references.
 * **Equation -> numerics bridge** in T: the hand-coded Eq. (4.13) equals the matching determinant derived in D1 (lambdify).
 * **Artifact round trip** with awkward expressions, and tamper detection.

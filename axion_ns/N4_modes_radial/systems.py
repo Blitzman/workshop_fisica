@@ -10,9 +10,12 @@ linearised field, fluid, baryon and Klein-Gordon equations) and D0's background.
 Both are compiled with lambdify(cse=True) as FLAT lists of entries (16 and 4). A depends on omega only through omega^2 and, for this system, A = A_0(r) + omega^2 A_1(r) exactly
 (residual 2.5e-16; no 1/omega^2 term): tables.py exploits it. `to_numeric` and the background symbols are the same as N3's (copied: modules never import each other).
 """
+from pathlib import Path
+
 import sympy as sp
 
 from common import artifacts as A
+from common import compiled as C
 from common.modulo import Rules
 from common.notation import (r, w, G, V, mstar, mN, eps0, a0, n0, Phi0, lam0, d, fa, dPhi, dlam, da1, dn1, xi1, p_of)
 
@@ -136,8 +139,16 @@ def exterior_matrix_symbolic(L, B, rules):
 
 
 def compile_flat(L, B):
-    """(interior_flat, exterior_flat): functions (r, w, *background) -> list of 16 / 4 entries (some scalars)."""
-    rules = Rules(B)
-    Ai, Ae = interior_matrix_symbolic(L, B, rules), exterior_matrix_symbolic(L, B, rules)
+    """(interior_flat, exterior_flat): functions (r, w, *background) -> list of 16 / 4 entries (some scalars). From the compiled cache
+    (common/compiled.py, compiled/radial.json; --recompile rebuilds it)."""
+    here = Path(__file__).resolve().parent
     args = (r, w, *BG)
-    return sp.lambdify(args, list(Ai), 'numpy', cse=True), sp.lambdify(args, list(Ae), 'numpy', cse=True), Ai, Ae
+    key = {'equations': C.expr_hash({('L', k): v for k, v in L.items()} | {('B', k): v for k, v in B.items()}),
+           'code': C.code_hash(here / 'systems.py', here.parent / 'common' / 'notation.py', here.parent / 'common' / 'modulo.py')}
+
+    def build():
+        rules = Rules(B)
+        return {'interior': (args, list(interior_matrix_symbolic(L, B, rules)), 'numpy'),
+                'exterior': (args, list(exterior_matrix_symbolic(L, B, rules)), 'numpy')}
+    f = C.compiled(here / 'compiled' / 'radial.json', key, build)
+    return f['interior'], f['exterior']
