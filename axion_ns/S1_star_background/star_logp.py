@@ -33,6 +33,7 @@ DEFAULT_MATCH = 5.0              # matching distance beyond R, in reduced Compto
 DEFAULT_TAIL = 15.0              # table extent beyond R, in 1/m_a
 RICCATI_FAR = 30.0               # start of the inward Riccati integration beyond r_m, in 1/m_a
 U_LO, U_HI = math.log(1e-300), math.log(math.pi - 0.3)   # search interval for u_c (theta_c from pi - 1e-300 to 0.3)
+TURNED = object()                # _interior: the scalar turned back up inside the star (classified +1 by trial)
 
 
 def series_start(star, r0, thc):
@@ -170,7 +171,9 @@ class StarLogP(Star):
         self.R_stop, self.M_stop = s_in.y[0, -1], s_in.y[1, -1]
 
     def _interior(self, u_c, keep=False):
-        """Structure + log-offset scalar from r0 to p = p_frac p_c. None if theta crosses below -1e-3 inside the star."""
+        """Structure + log-offset scalar from r0 to p = p_frac p_c. None if theta crosses below -1e-3 inside the star; TURNED if theta turns
+        back up inside the star (w = u' falls through zero: delta would then collapse to 0 and u, w -> -inf before the surface; this happens
+        in the crust at large m_a, e.g. 100 kHz, where the crust is thicker than 1/m_a)."""
         thc = math.pi - math.exp(u_c)
         m, p, Phi, _, _ = series_start(self, self.r0, thc)
         d = math.exp(u_c)
@@ -181,12 +184,18 @@ class StarLogP(Star):
 
         def cross(s, z):                                              # theta = -1e-3  <=>  u = ln(pi + 1e-3)
             return math.log(math.pi + 1e-3) - z[3]
-        cross.terminal = True
-        sol = solve_ivp(self._rhs_su, (math.log(p / (self.p0 * KGEO)), math.log(self.p_frac)), [self.r0, m, Phi, u, w], events=[cross],
+
+        def turn(s, z):                                               # theta' = 0 from below  <=>  w = 0, falling
+            return z[4]
+        cross.terminal = turn.terminal = True
+        turn.direction = -1
+        sol = solve_ivp(self._rhs_su, (math.log(p / (self.p0 * KGEO)), math.log(self.p_frac)), [self.r0, m, Phi, u, w], events=[cross, turn],
                         method='DOP853', rtol=self.rtol, atol=self.atol, max_step=self.max_step_s, dense_output=keep)
         if sol.status < 0:
             raise RuntimeError(f'StarLogP (structure): {sol.message}')
-        return None if sol.status == 1 else sol
+        if sol.status == 1:
+            return None if sol.t_events[0].size else TURNED
+        return sol
 
     def _riccati(self, mass, rm):
         """S = theta'/theta on the decaying branch of the linear exterior equation (Schwarzschild, mass M), from r_m + 30/m_a inward to r_m."""
@@ -208,6 +217,8 @@ class StarLogP(Star):
         interior = self._interior(u_c, keep)
         if interior is None:
             return -1, None
+        if interior is TURNED:
+            return 1, None
         R, m, Phi, t, tp = _physical(interior.y[:, -1])
         if tp >= 0 and t > 0:                                         # already leaving the decaying branch at the surface
             return 1, None
