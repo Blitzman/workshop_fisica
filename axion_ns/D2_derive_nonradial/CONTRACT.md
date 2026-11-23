@@ -1,5 +1,7 @@
 # D2_derive_nonradial: Cowling and beyond-Cowling equations (Paper II + new work)
 
+**Stage: production** (equations derived from the action and verified; frozen). Set by José; see the root `AGENTS.md`, Module Stages.
+
 ## Run
 ```bash
 python -m D2_derive_nonradial.run            # from axion_ns/ ; `--help` lists the options

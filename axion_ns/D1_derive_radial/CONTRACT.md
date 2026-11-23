@@ -1,5 +1,7 @@
 # D1_derive_radial: Radial linearization and simplified model (Paper I)
 
+**Stage: production** (equations derived from the action and verified; frozen). Set by José; see the root `AGENTS.md`, Module Stages.
+
 ## Run
 ```bash
 python -m D1_derive_radial.run            # from axion_ns/ ; `--help` lists the options

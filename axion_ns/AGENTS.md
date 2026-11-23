@@ -11,5 +11,5 @@ Read the module's `CONTRACT.md`, the modular `README.md`, and the shared `CONVEN
 ## Modules and runs
 
 - Keep modules independently runnable. Exchange data through their contracted artifacts and use `common/` for shared infrastructure. Generate report numbers from module outputs.
-- Tests and runs follow the **Verification and Run Policy** in the root `AGENTS.md` (smallest check first; ask before anything over 2 minutes). Witness and quick targets: `make S1-witness`, `N1-witness`, `N2-quick`, `N3-quick`, `N4-quick`, `T-fast`. Keep symbolic diagnostics to residuals and affected coefficients. Use exact polynomial reduction for spherical harmonics.
-- Use `MIGRATION.md` to locate the original calculation and known differences. The archived workflow and its instructions are under `archive/axion_ns/`.
+- Tests and runs follow the **Module Stages** and the **Verification and Run Policy** in the root `AGENTS.md`: check each module's stage in its `CONTRACT.md`, run the smallest check first, ask before anything over 2 minutes, and discuss any new numerical method with José before running it. Witness and quick targets: `make S1-witness`, `N1-witness`, `N2-quick`, `N3-quick`, `N4-quick`, `T-fast`. Keep symbolic diagnostics to residuals and affected coefficients. Use exact polynomial reduction for spherical harmonics.
+- `MIGRATION.md` records how each legacy step maps to a module and what was compared during the migration. The current modules are the reference; the archived workflow (`archive/axion_ns/`) is history and is not compared against.

@@ -1,5 +1,7 @@
 # T_toy_model: Toy-model numerics (Paper I Fig. 3 and radial branches)
 
+**Stage: production** (reproduces Paper I Fig. 3). Set by José; see the root `AGENTS.md`, Module Stages.
+
 ## Run
 ```bash
 python -m T_toy_model.run            # from axion_ns/ ; `--help` lists the options

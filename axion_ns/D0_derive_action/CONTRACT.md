@@ -1,5 +1,7 @@
 # D0_derive_action: Action -> field equations and static background
 
+**Stage: production** (equations derived from the action and verified; frozen). Set by José; see the root `AGENTS.md`, Module Stages.
+
 ## Run
 ```bash
 python -m D0_derive_action.run            # from axion_ns/ ; `--help` lists the options
