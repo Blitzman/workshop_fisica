@@ -285,7 +285,10 @@ class StarLogP(Star):
                     lo, hi = a, b
                     break
         if not sample(lo)[0] > 0 > sample(hi)[0]:
-            raise ValueError('sin condensado')
+            # Both ends undershoot (or the delta = 1e-300 end overshoots): this does NOT distinguish "no condensate" from a condensate
+            # with theta_c < 0.3, outside the search interval (or delta_c < 1e-300).
+            raise ValueError('sin cambio de signo en theta_c en [0.3, pi - 1e-300]: o no hay condensado, o tiene theta_c < 0.3 '
+                             '(fuera del intervalo de búsqueda), o delta_c < 1e-300')
         for _ in range(200):                       # bisection on the sign until both ends reach r_m (Brent needs finite residuals)
             if sample(lo)[1] is not None and sample(hi)[1] is not None:
                 break

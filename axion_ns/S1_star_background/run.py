@@ -92,7 +92,8 @@ def main(argv=None):
     res.append((f'Tablas de estado: la spline cúbica reproduce la solución del integrador dentro de {args.tol:g} '
                 f'(peor caso {worst:.1e}, {len(stars)} estrellas, peor: {wname})', worst <= args.tol, ''))
 
-    # condensate threshold (Paper I: it disappears below ~2.8 kHz)
+    # condensate threshold (Paper I: it disappears below ~2.8 kHz). cond[...] = False only means that the shooting found no sign change
+    # for theta_c in [0.3, pi): a condensate with theta_c < 0.3 is not excluded (see CONTRACT.md, `condensate_exists`)
     cond = {}
     try:
         StarLogP(2.5, **kw)
@@ -101,7 +102,8 @@ def main(argv=None):
         cond['2.5'] = False
     if 2.8 in nus:
         cond['2.8'] = True
-    res.append(('Umbral del condensado: no hay a 2.5 kHz y sí a 2.8 kHz (Paper I: desaparece por debajo de ~2.8 kHz)',
+    res.append(('Umbral del condensado: a 2.5 kHz no hay condensado con theta_c >= 0.3 (no se excluye theta_c < 0.3) y sí lo hay a 2.8 kHz '
+                '(Paper I: desaparece por debajo de ~2.8 kHz)',
                 (cond['2.5'] is False and cond.get('2.8', False)) if '2.8' in cond else None,
                 '' if '2.8' in cond else 'nu_a = 2.8 no calculado en esta ejecución (descriptivo)'))
     report('S1: fondo BSk26 con condensado (tablas de estado)', res)

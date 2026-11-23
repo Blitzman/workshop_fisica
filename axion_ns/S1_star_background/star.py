@@ -165,7 +165,8 @@ class Star:
         """theta_c = pi - delta, bisección en ln delta: el límite estable fuera es theta -> 0."""
         lo, hi = np.log(1e-300), np.log(np.pi - 0.3)    # delta pequeño -> se dispara; theta_c = 0.3 -> oscila y cruza
         if self._integrate(np.pi - np.exp(hi)) > 0:
-            raise ValueError('sin condensado')
+            raise ValueError('el disparo con theta_c = 0.3 no cruza cero: o no hay condensado, o tiene theta_c < 0.3 '
+                             '(fuera del intervalo de búsqueda)')
         if self.shoot_tol is None:
             n_bis, tol_lin = 64, 1e-16
         else:
