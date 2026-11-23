@@ -1,5 +1,7 @@
 # N4_modes_radial: radial (l = 0) modes of the star with the axion condensate (full GR)
 
+**Stage: development** (Paper I Tables 1-2 not yet within the pre-set criteria). Set by José; see the root `AGENTS.md`, Module Stages.
+
 ## Run
 ```bash
 make S1-extra                                   # once: the extra stars of S1 (about 2 minutes, not tracked by git)

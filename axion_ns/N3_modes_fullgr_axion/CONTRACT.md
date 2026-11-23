@@ -1,5 +1,7 @@
 # N3_modes_fullgr_axion: modes with the axion and the dynamic metric (beyond Cowling)
 
+**Stage: development** (new results beyond Cowling; matching-radius rule under review (MIGRATION.md item 15)). Set by José; see the root `AGENTS.md`, Module Stages.
+
 ## Run
 ```bash
 python -m N3_modes_fullgr_axion.run                  # steps 10 and 25: 12 values of nu_a + convergence study (about 70 + 26 mode searches)

@@ -1,5 +1,7 @@
 # N2_modes_fullgr_noaxion: validation of the extended system against the literature
 
+**Stage: production** (reproduces Lindblom-Mendell-Ipser 1997 and Yoshida-Kojima 1997). Set by José; see the root `AGENTS.md`, Module Stages.
+
 ## Run
 ```bash
 python -m N2_modes_fullgr_noaxion.run              # full validation, from axion_ns/ (about 1,000 s of CPU / --procs)

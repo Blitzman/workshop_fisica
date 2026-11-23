@@ -1,5 +1,7 @@
 # N1_modes_cowling: Cowling modes and gravitational-atom levels
 
+**Stage: production** (reproduces Paper II Tables I, II and IV). Set by José; see the root `AGENTS.md`, Module Stages.
+
 ## Run
 ```bash
 python -m N1_modes_cowling.run            # from axion_ns/ ; `--help` lists the options

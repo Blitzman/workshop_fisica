@@ -1,5 +1,7 @@
 # S1_star_background: BSk26 star with axion condensate: profile tables
 
+**Stage: development** (shooting changed on 2026-11-20 to the decaying-branch match; reproduces Paper I M and R). Set by José; see the root `AGENTS.md`, Module Stages.
+
 ## Run
 ```bash
 python -m S1_star_background.run            # from axion_ns/ ; `--help` lists the options

@@ -1,5 +1,7 @@
 # R_paper_refs: Paper equations and tables as data
 
+**Stage: production** (transcribed paper equations and tables; frozen). Set by José; see the root `AGENTS.md`, Module Stages.
+
 ## Run
 ```bash
 python -m R_paper_refs.run            # from axion_ns/ ; `--help` lists the options
