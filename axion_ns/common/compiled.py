@@ -10,14 +10,14 @@ namespace lambdify uses. Nothing is recompiled unless asked:
   * no cache yet -> built once and written;
   * `--recompile` (sets RECOMPILE) -> rebuilt and overwritten.
 
-The key is the SHA-256 of the input expressions (srepr, without the per-process Dummy indices) and of the source files of the reduction.
+The key is the SHA-256 of the input expressions (srepr with sorted symbol assumptions, without the per-process Dummy indices) and of the source files of the reduction.
 """
 import hashlib
 import json
-import re
 from pathlib import Path
 
 import sympy as sp
+from sympy.printing.repr import ReprPrinter
 
 RECOMPILE = False          # set by the modules' --recompile flag
 
@@ -26,12 +26,22 @@ class StaleCache(RuntimeError):
     pass
 
 
+class _CacheReprPrinter(ReprPrinter):
+    def _print_Symbol(self, expr):
+        # Equivalent symbols can retain assumptions in different insertion
+        # orders, depending on which expression SymPy constructed first.
+        assumptions = sorted(expr._assumptions_orig.items())
+        args = [self._print(expr.name), *(f'{k}={v}' for k, v in assumptions)]
+        return f"{type(expr).__name__}({', '.join(args)})"
+
+
 def expr_hash(eqs, keys=None):
     """SHA-256 of the expressions (dict key -> sympy expression), in key order."""
     h = hashlib.sha256()
+    printer = _CacheReprPrinter()
     for k in sorted(keys if keys is not None else eqs, key=str):
         h.update(str(k).encode())
-        h.update(re.sub(r'dummy_index=\d+', '', sp.srepr(eqs[k])).encode())      # Dummy indices are random per process
+        h.update(printer.doprint(eqs[k]).encode())
     return h.hexdigest()
 
 

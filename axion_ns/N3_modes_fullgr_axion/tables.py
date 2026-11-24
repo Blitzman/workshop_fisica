@@ -15,33 +15,42 @@ W_FIT = np.array([0.04, 0.12, 0.35])             # km^-1: three real frequencies
 VINV = np.linalg.inv(np.column_stack([1 / W_FIT**2, np.ones(3), W_FIT**2]))
 
 
-def _entries(flat, n, st, r, state, w):
+def _entries(flat, n, st, r, state, w, ell):
     B = bg18(st, r, *state)
-    vals = flat(r, w, 2, *B)
+    vals = flat(r, w, ell, *B)
     out = np.empty((len(r), n * n))
     for j, v in enumerate(vals):
         out[:, j] = v
     return out
 
 
-def _laurent(flat, n, st, r, state):
-    A3 = np.stack([_entries(flat, n, st, r, state, w) for w in W_FIT])
+def _laurent(flat, n, st, r, state, ell):
+    A3 = np.stack([_entries(flat, n, st, r, state, w, ell) for w in W_FIT])
     c = np.einsum('ij,jnk->ink', VINV, A3)
     return np.concatenate([c[0], c[1], c[2]], axis=1) * (r**2)[:, None]       # r^2 x [A_-1, A_0, A_1]
 
 
 class LaurentTables:
-    def __init__(self, st, flat_i, flat_e):
+    """Interior and exterior coefficient tables for one multipole (ell >= 2)."""
+
+    def __init__(self, st, flat_i, flat_e, *, ell=2):
+        if not isinstance(ell, (int, np.integer)) or ell < 2:
+            raise ValueError(f'Expected an integer ell >= 2, got {ell!r}')
+        self._ell = ell
         self.st = st
         c, i = st.cols, st.i_stop
         r = c['r_km']
         ri, ro = r[:i + 1], r[i:]
         state_i = (c['m_km'][:i + 1], np.exp(c['ln_p'][:i + 1]), c['Phi'][:i + 1], c['theta'][:i + 1], c['thetap'][:i + 1])
         state_o = (c['m_km'][i:], np.zeros(len(ro)), c['Phi'][i:], c['theta'][i:], c['thetap'][i:])
-        self._Yi = _laurent(flat_i, 6, st, ri, state_i)
-        self._Yo = _laurent(flat_e, 4, st, ro, state_o)
+        self._Yi = _laurent(flat_i, 6, st, ri, state_i, ell)
+        self._Yo = _laurent(flat_e, 4, st, ro, state_o, ell)
         self.ri, self.ro = ri, ro
         self._fs = {}
+
+    @property
+    def ell(self):
+        return self._ell
 
     def _spline(self, region, n, keep):
         key = (region, keep)

@@ -130,6 +130,8 @@ def center(st, omega, ll, K0, W0, T0, r0):
 
 def basis(st, tabs, omega, ll, dyn=True, r0=1e-3, r1=0.5, rtol=1e-10, rm=None):
     """Regular solutions from the centre to R and their continuation outside to r_m. Returns [(X(R), y_exterior(r_m)) per seed]."""
+    if ll != tabs.ell:
+        raise ValueError(f'Mode ell={ll} does not match coefficient tables with ell={tabs.ell}')
     dyn = dyn and bool(st.nu_a)
     seeds = [(1.0, 0.0, 0.0), (0.0, 1.0, 0.0)] + ([(0.0, 0.0, 1.0)] if dyn else [])
     ki, ke = (None, None) if dyn else ((0, 1, 2, 3), (0, 1))
@@ -198,7 +200,8 @@ def incoming(st, tabs, omega, ll, dyn=True, rtol=1e-10, rm=None, n_far=40):
     return zerilli_amplitudes(st, tabs, omega, ll, ye, rm, n_far)[1]
 
 
-def find_mode(st, tabs, guess, ll=2, dyn=True, **kw):
+def find_mode(st, tabs, guess, ll=None, dyn=True, **kw):
     """Complex zero of the ingoing amplitude near `guess` (kHz), as axion_ns/step10._mode."""
+    ll = tabs.ell if ll is None else ll
     f = lambda z: incoming(st, tabs, omega_of(z), ll, dyn=dyn, **kw)
     return complex(muller(f, guess * 0.997, guess, guess * 1.003 - 1e-5j, tol=1e-9))
