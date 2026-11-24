@@ -53,3 +53,15 @@ def test_committed_caches_match_the_equation_artifacts(monkeypatch):
     S3.compile_flat(ext)
     S4.compile_flat(L, B)
 
+
+
+def test_equation_hash_ignores_symbol_assumption_order():
+    from sympy.printing.repr import ReprPrinter
+
+    # Bypass SymPy's symbol cache to preserve the two insertion orders.
+    a = sp.Symbol.__xnew__(sp.Symbol, 'l', integer=True, positive=True)
+    b = sp.Symbol.__xnew__(sp.Symbol, 'l', positive=True, integer=True)
+    assert a == b and ReprPrinter().doprint(a) != ReprPrinter().doprint(b)
+    assert C.expr_hash({'e': 2 * a}) == C.expr_hash({'e': 2 * b})
+    assert C.expr_hash({'e': 2 * a}) != C.expr_hash({'e': 3 * b})
+    assert C.expr_hash({'e': a}) != C.expr_hash({'e': sp.Symbol('l', integer=True)})
