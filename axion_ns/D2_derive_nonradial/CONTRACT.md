@@ -16,8 +16,8 @@ Reads: D0 `background`; R `paper2_equations`, `ld_sources`.
 |---|---|---|
 | `cowling_linear.eq.json/.pdf` | derived | (8a)-(8d) linearized from the action in Cowling, plus `Trt_ax` (axion energy flux) |
 | `fullgr_linear.eq.json/.pdf` | derived | 11 linearized equations with the Regge-Wheeler perturbed metric (Ett, Etr, Err, Etth, Erth, KG, FLUID_r, FLUID_th, BAR, Eang, Etl) |
-| `fullgr_extended.eq.json/.pdf` | candidate (verified) | extended system LD + axion; written ONLY if every equation passes its check |
+| `fullgr_extended.eq.json/.pdf` | candidate (verified) | extended system LD + axion; written only after all seven equations, preservation of the extended H0 constraint, and the omission controls pass |
 
 Every run also writes `outputs/manifest.json` (checks, runtime, environment, sha256 of each artifact and of each input).
 
-Checks of the old steps 5 and 7 (52). Derivation files never import R; R is read by the checks and by the assembly of the candidate.
+Checks of the old steps 5 and 7, plus the extended-system constraint and potential-derivative controls. Derivation files never import R; R is read by the checks and by the assembly of the candidate.

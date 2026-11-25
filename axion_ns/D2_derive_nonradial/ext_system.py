@@ -12,6 +12,14 @@ import sympy as sp
 from common.notation import (r, w, l, G, V, a0, n0, fa, Phi0, lam0, H0, H1, K, W, Vt, dth, d, ep, eL, dm, dmm, thp, Dtheta,
                              Pp)
 
+V_theta = fa * sp.diff(V(a0), a0)
+q1 = n0 * dm
+POTENTIAL_TERMS = {
+    'H0': 8 * sp.pi * G * r**2 * V_theta * dth,
+    "X'": sp.exp(Phi0 + lam0) * q1 * V_theta * W / fa**2,
+    'KG': -V_theta * H0 / fa**2,
+}
+
 NEW = {   # términos nuevos, en la forma  ecuación_LD = NEW
     "H1'": 8 * sp.pi * G * r**2 * eL * V(a0) * H1,
     "K'": 8 * sp.pi * G * r * fa**2 * thp * dth,
@@ -27,6 +35,7 @@ NEW = {   # términos nuevos, en la forma  ecuación_LD = NEW
     'KG': -(n0 * dm / fa**2 - 2 * sp.exp(-2 * lam0) * Pp * thp) * H0
     + 16 * sp.pi * G * sp.exp(-2 * lam0) * fa**2 * thp**2 * dth,
 }
+NEW = {k: v + POTENTIAL_TERMS.get(k, 0) for k, v in NEW.items()}
 
 
 def build_ext(LD_metfix, P8d):

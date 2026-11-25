@@ -10,8 +10,8 @@
      7.839255736486703e-06,
      -0.1177812638184622
     ],
-    "rel": 1.6431430300274742e-14,
-    "rel_short": 1.1675356327493052
+    "rel": 1.6653461717560323e-14,
+    "rel_short": 1.1675356327493067
    },
    {
     "nu": [
@@ -22,8 +22,8 @@
      9.146999574296608e-05,
      -0.11525264835606848
     ],
-    "rel": 7.928454810467802e-15,
-    "rel_short": 1.1513973142150236
+    "rel": 7.483594171249088e-15,
+    "rel_short": 1.151397314215014
    },
    {
     "nu": [
@@ -34,8 +34,8 @@
      0.0031549250956244717,
      -0.0696144317678357
     ],
-    "rel": 3.2739673865439e-13,
-    "rel_short": 0.7766239637938344
+    "rel": 3.2756406080497186e-13,
+    "rel_short": 0.7766239637938319
    },
    {
     "nu": [
@@ -46,8 +46,8 @@
      0.031899515055546016,
      -0.040621528972316086
     ],
-    "rel": 2.8991435102751234e-12,
-    "rel_short": 1.2168056645718697
+    "rel": 2.897759474204073e-12,
+    "rel_short": 1.2168056645719147
    }
   ],
   "above": [
@@ -57,7 +57,7 @@
      -0.001
     ],
     "rel": 0.0,
-    "rel_flipped": 1.9875322356569431
+    "rel_flipped": 1.9875322356569396
    },
    {
     "nu": [
@@ -65,7 +65,7 @@
      -0.01
     ],
     "rel": 0.0,
-    "rel_flipped": 1.9976502247849228
+    "rel_flipped": 1.9976502247849137
    }
   ]
  },
@@ -75,18 +75,18 @@
    "mode": "p1",
    "nu_a": 8.0,
    "nu": [
-    7.4103196086933645,
-    -1.3726779723596232e-06
+    7.379593582147053,
+    -5.091804004096232e-07
    ],
    "dre_rel": {
-    "rtol": 4.2406056444121987e-10,
-    "rm": 1.8804446888509574e-10,
-    "n_far": 6.954747888698876e-11
+    "rtol": 3.482361066176054e-10,
+    "rm": 8.070448753727533e-10,
+    "n_far": 4.945177600745865e-10
    },
    "dim_Hz": {
-    "rtol": 4.151978475149242e-06,
-    "rm": 4.150680216269242e-06,
-    "n_far": 4.152482867587788e-06
+    "rtol": 1.199786181579249e-09,
+    "rm": 7.488287096888184e-08,
+    "n_far": 3.8542243483271005e-09
    }
   },
   {
@@ -94,18 +94,18 @@
    "mode": "p2",
    "nu_a": 12.0,
    "nu": [
-    11.521150124612324,
-    -3.2357011626646235e-06
+    11.488549181984162,
+    -1.0759293350674445e-06
    ],
    "dre_rel": {
-    "rtol": 9.700765746245565e-10,
-    "rm": 4.637588091327416e-10,
-    "n_far": 1.953872619253616e-10
+    "rtol": 1.8508843346864978e-09,
+    "rm": 2.2403512378588175e-10,
+    "n_far": 1.9951658103423142e-09
    },
    "dim_Hz": {
-    "rtol": 1.545428487008312e-07,
-    "rm": 1.6968495176944937e-06,
-    "n_far": 2.5456480635435336e-07
+    "rtol": 1.4657068207425404e-06,
+    "rm": 4.560071971414258e-06,
+    "n_far": 8.401420604991018e-08
    }
   },
   {
@@ -113,18 +113,18 @@
    "mode": "p1",
    "nu_a": 7.0,
    "nu": [
-    7.4049950607183055,
-    -0.000477784988435468
+    7.379615046179267,
+    -0.00042838694694130407
    ],
    "dre_rel": {
-    "rtol": 1.0327728672265835e-09,
-    "rm": 9.189167915479857e-08,
-    "n_far": 1.3461569636774584e-09
+    "rtol": 1.6176671113754537e-10,
+    "rm": 7.357475451108542e-08,
+    "n_far": 5.687329496240068e-10
    },
    "dim_Hz": {
-    "rtol": 1.2237274290682193e-08,
-    "rm": 0.0010047346613291461,
-    "n_far": 2.8421794540274548e-09
+    "rtol": 9.238845723614358e-08,
+    "rm": 0.0009334216329199294,
+    "n_far": 1.2464084278573928e-07
    }
   },
   {
@@ -132,18 +132,18 @@
    "mode": "p2",
    "nu_a": 11.0,
    "nu": [
-    11.493722704645593,
-    -0.005027011832709467
+    11.464537446001154,
+    -0.0045975911705699694
    ],
    "dre_rel": {
-    "rtol": 1.5511527617917409e-09,
-    "rm": 1.6166730074651525e-06,
-    "n_far": 3.4526026482240013e-10
+    "rtol": 1.057474552368376e-09,
+    "rm": 1.5262397545789952e-06,
+    "n_far": 8.804801332473744e-11
    },
    "dim_Hz": {
-    "rtol": 2.943286170342674e-07,
-    "rm": 0.010840110951377234,
-    "n_far": 4.243533481204653e-06
+    "rtol": 2.2902911633176926e-06,
+    "rm": 0.008473773663792046,
+    "n_far": 2.191554915841054e-06
    }
   },
   {
@@ -151,18 +151,18 @@
    "mode": "p2",
    "nu_a": 8.0,
    "nu": [
-    11.368515957200358,
-    -0.0001001481298029032
+    11.349835549199561,
+    -0.00011641188186390163
    ],
    "dre_rel": {
-    "rtol": 1.053312992382871e-10,
-    "rm": 6.878998926040936e-09,
-    "n_far": 1.809015159892624e-10
+    "rtol": 1.1155698587117513e-10,
+    "rm": 3.756172706204097e-09,
+    "n_far": 4.672534137384332e-09
    },
    "dim_Hz": {
-    "rtol": 3.023095959220172e-07,
-    "rm": 5.2158334204544855e-05,
-    "n_far": 2.4065959611956934e-07
+    "rtol": 2.442336047894225e-07,
+    "rm": 9.150256902268968e-05,
+    "n_far": 1.4375120467556026e-05
    }
   },
   {
@@ -170,18 +170,18 @@
    "mode": "f",
    "nu_a": 15.0,
    "nu": [
-    2.075335385517779,
-    -0.001196371895086681
+    2.007539153184309,
+    -0.0010190906136340438
    ],
    "dre_rel": {
-    "rtol": 1.5319815416248161e-09,
-    "rm": 1.1564238455719078e-09,
-    "n_far": 7.87111154032516e-09
+    "rtol": 5.365105693044825e-09,
+    "rm": 7.904076948506145e-09,
+    "n_far": 6.528113383197365e-09
    },
    "dim_Hz": {
-    "rtol": 3.040531019234821e-07,
-    "rm": 7.931633345123826e-06,
-    "n_far": 4.285391810290515e-06
+    "rtol": 6.738764915005524e-07,
+    "rm": 1.4380446636003824e-06,
+    "n_far": 6.8810859848653094e-06
    }
   }
  ],
@@ -189,13 +189,13 @@
   "mode": "p1, justo por encima del umbral",
   "nu_a": 7.0,
   "dim_Hz": {
-   "rm=R": 0.002693534177073732,
-   "n_far=1": 7.19031128637148e-07
+   "rm=R": 0.019169440759095432,
+   "n_far=1": 2.988547591364389e-07
   }
  },
  "checks": [
   {
-   "name": "H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k < 0 en 4/4 frecuencias, pero L = psi'/psi coincide con la de la rama que decae a 3e-12 relativo como mucho: 2.1-0.001i kHz: 2e-14, 2.4-0.01i kHz: 8e-15, 5-0.1i kHz: 3e-13, 5.9-0.5i kHz: 3e-12",
+   "name": "H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k < 0 en 4/4 frecuencias, pero L = psi'/psi coincide con la de la rama que decae a 3e-12 relativo como mucho: 2.1-0.001i kHz: 2e-14, 2.4-0.01i kHz: 7e-15, 5-0.1i kHz: 3e-13, 5.9-0.5i kHz: 3e-12",
    "ok": true,
    "note": "la integraci\u00f3n hacia dentro (40 longitudes de decaimiento) filtra la soluci\u00f3n creciente"
   },
@@ -215,22 +215,22 @@
    "note": ""
   },
   {
-   "name": "H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracci\u00f3n mueven Re nu como mucho 2e-06 relativo: p1 a 8 kHz 4e-10; p2 a 12 kHz 1e-09; p1 a 7 kHz 9e-08; p2 a 11 kHz 2e-06; p2 a 8 kHz 7e-09; f a 15 kHz 8e-09",
+   "name": "H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracci\u00f3n mueven Re nu como mucho 2e-06 relativo: p1 a 8 kHz 8e-10; p2 a 12 kHz 2e-09; p1 a 7 kHz 7e-08; p2 a 11 kHz 2e-06; p2 a 8 kHz 5e-09; f a 15 kHz 8e-09",
    "ok": false,
    "note": ""
   },
   {
-   "name": "H33: e Im nu como mucho: p1 a 8 kHz (Im 0.00137 Hz) 4.2e-06 Hz; p2 a 12 kHz (Im 0.00324 Hz) 1.7e-06 Hz; p1 a 7 kHz (Im 0.478 Hz) 1.0e-03 Hz; p2 a 11 kHz (Im 5.03 Hz) 1.1e-02 Hz; p2 a 8 kHz (Im 0.1 Hz) 5.2e-05 Hz; f a 15 kHz (Im 1.2 Hz) 7.9e-06 Hz",
+   "name": "H33: e Im nu como mucho: p1 a 8 kHz (Im 0.000509 Hz) 7.5e-08 Hz; p2 a 12 kHz (Im 0.00108 Hz) 4.6e-06 Hz; p1 a 7 kHz (Im 0.428 Hz) 9.3e-04 Hz; p2 a 11 kHz (Im 4.6 Hz) 8.5e-03 Hz; p2 a 8 kHz (Im 0.116 Hz) 9.2e-05 Hz; f a 15 kHz (Im 1.02 Hz) 6.9e-06 Hz",
    "ok": true,
    "note": "criterio: 1 % de Im nu o la resoluci\u00f3n de Muller (1e-9 |nu|), lo que sea mayor"
   },
   {
-   "name": "Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.0027 Hz, frente a 1.0e-03 Hz con las variantes de arriba",
+   "name": "Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.019 Hz, frente a 9.3e-04 Hz con las variantes de arriba",
    "ok": false,
    "note": ""
   },
   {
-   "name": "Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 7.2e-07 Hz",
+   "name": "Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 3e-07 Hz",
    "ok": false,
    "note": ""
   }

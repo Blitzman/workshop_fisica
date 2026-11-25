@@ -63,15 +63,15 @@
   "module": "N3_modes_fullgr_axion",
   "script": "run.py",
   "git": {
-   "commit": "24d010c",
+   "commit": "e1c22c7",
    "dirty": true
   },
-  "created": "2026-11-20T20:16:34Z",
+  "created": "2026-11-25T08:13:29Z",
   "env": {
-   "python": "3.14.6",
-   "platform": "Linux x86_64",
+   "python": "3.14.10",
+   "platform": "Darwin x86_64",
    "sympy": "1.14.0",
-   "mpmath": "1.3.0",
+   "mpmath": "1.4.1",
    "numpy": "2.5.4",
    "scipy": "1.18.1",
    "matplotlib": "3.11.2"
@@ -81,7 +81,7 @@
   {
    "name": "fullgr_extended.eq.json",
    "path": "D2_derive_nonradial/outputs/fullgr_extended.eq.json",
-   "sha256": "9b8faf31b923ee5bb58a7040cfab0a223fc6860f0bb738e8b121d188ca88dfa3"
+   "sha256": "646f3ffebc06a76317eeb25e8229dad7bb9101a39897496079ed5374f301abe8"
   },
   {
    "name": "paper2_tables.ref.json",
@@ -169,5 +169,5 @@
    "sha256": "523c2a99e73d449ff555e98b046adfb3261b9744ab1d1375756aaaa8b6721d62"
   }
  ],
- "csv_sha256": "dd2129a40642126b3f0d312cc015c1d38b7231641f75af93e3629cb927bcfd15"
+ "csv_sha256": "4d009cd99f45b9ad7059c1da6095f3a876205c15abfb0ccd1a1aa2871474cc4f"
 }

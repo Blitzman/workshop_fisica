@@ -10,6 +10,8 @@ from functools import lru_cache
 import sympy as sp
 
 from common.modulo import is_zero
+
+from .ext_system import POTENTIAL_TERMS
 from common.notation import (r, Phi0, lam0, a0, n0, w, G, V, mstar, mN, eps0, l, fa, Rs, d, H0, H1, H2, K, W, Vt, dn,
                              dth, Xf, X_def, ep, eL, thp, nn)
 
@@ -28,28 +30,35 @@ def init(L_raw, rules, bg, L5, ref_ns):
 
 
 # ---------------------------------------------------------------- reducción "módulo el sistema"
-_eS, _pS, _cS, _Vs, _tp, _dm, _dmm, _eL = sp.symbols('varepsilon p c_s2 V_a theta0p dm dmm eL', real=True)
+_eS, _pS, _cS, _Vs, _V1, _V2, _tp, _dm, _dmm, _eL = sp.symbols(
+    'varepsilon p c_s2 V_a V_a1 V_a2 theta0p dm dmm eL', real=True)
 
 
 def _phys(e):
-    """Cambio de variables a cantidades físicas del fondo (biyectivo): ayuda a `simplify`."""
-    e = e.subs(sp.Derivative(eps0(n0), (n0, 2)), _cS * (_eS + _pS) / n0**2)
-    e = e.subs(sp.Derivative(eps0(n0), n0), (_pS + _eS) / n0 - (mstar(a0) - mN))
-    e = e.subs(eps0(n0), _eS - n0 * (mstar(a0) - mN))
-    e = e.subs(sp.Derivative(mstar(a0), (a0, 2)), _dmm / fa**2).subs(sp.Derivative(mstar(a0), a0), _dm / fa)
-    e = e.subs(sp.Derivative(a0, r), fa * _tp).subs(V(a0), _Vs)
+    """Replace background values and derivatives simultaneously, retaining their independence."""
+    e = e.doit().xreplace({
+        sp.Derivative(eps0(n0), (n0, 2)): _cS * (_eS + _pS) / n0**2,
+        sp.Derivative(eps0(n0), n0): (_pS + _eS) / n0 - (mstar(a0) - mN),
+        eps0(n0): _eS - n0 * (mstar(a0) - mN),
+        sp.Derivative(mstar(a0), (a0, 2)): _dmm / fa**2,
+        sp.Derivative(mstar(a0), a0): _dm / fa,
+        sp.Derivative(a0, r): fa * _tp,
+        sp.Derivative(V(a0), (a0, 2)): _V2,
+        sp.Derivative(V(a0), a0): _V1,
+        V(a0): _Vs,
+    })
     return e.subs(sp.exp(2 * lam0), _eL).subs(sp.exp(lam0), sp.sqrt(_eL))
 
 
 def vanishes(e):
-    """Cero coeficiente a coeficiente en las perturbaciones, tras el cambio de variables."""
+    """Check all perturbation coefficients and the remainder by exact reduction."""
     e = sp.expand(e)
     for v in PERT:
         c = e.coeff(v)
-        if c != 0 and sp.simplify(_phys(c)) != 0 and not is_zero(c):
+        if c != 0 and not is_zero(_phys(c)):
             return False
         e = e - c * v
-    return sp.simplify(_phys(sp.expand(e))) == 0
+    return is_zero(_phys(e))
 
 
 @lru_cache
@@ -234,18 +243,36 @@ def origin_checks():
     return res
 
 
+_EXT_LABELS = {"H1'": "H1'", "K'": "K'", "W'": "W' (sin cambios)", "X'": "X'",
+               'H0': 'relación algebraica de H0', 'V': 'relación algebraica de V',
+               'KG': 'Klein-Gordon: Ec. (8d) + términos métricos'}
+_EXT_CHECKS = {k: f'Sistema extendido, {label}: se sigue de la acción' for k, label in _EXT_LABELS.items()}
+_H0_PRESERVED = 'Sistema extendido, la ligadura de H0 se conserva a lo largo del flujo radial'
+_NO_AXION = 'Todos los términos nuevos se anulan sin axión'
+_FLUX_CONTROL = "Control negativo: quitar el flujo 8 pi G r f_a^2 theta_0' delta theta de K' se detecta"
+_POTENTIAL_CONTROLS = {k: f'Control negativo: quitar el término de V_theta en {k} se detecta'
+                       for k in POTENTIAL_TERMS}
+
+
 def extended_checks():
-    res = []
-    for k, label in [("H1'", "H1'"), ("K'", "K'"), ("W'", "W' (sin cambios)"), ("X'", "X'"),
-                     ('H0', 'relación algebraica de H0'), ('V', 'relación algebraica de V'),
-                     ('KG', 'Klein-Gordon: Ec. (8d) + términos métricos')]:
-        res.append((f'Sistema extendido, {label}: se sigue de la acción', implied(F.EXT[k]), ''))
+    res = [(name, implied(F.EXT[k]), '') for k, name in _EXT_CHECKS.items()]
+    # The seven identities establish the extended system on the action-derived flow.
+    res.append((_H0_PRESERVED, implied(d(F.EXT['H0'])), ''))
     ok = all(is_zero(noaxion(F.NEW[k].subs(Xf, X_def).doit())) for k in F.NEW)
-    res.append(('Todos los términos nuevos se anulan sin axión', ok, ''))
-    wrong = F.EXT["K'"] + 8 * sp.pi * G * r * fa**2 * thp * dth     # quitar el término de flujo
-    res.append(('Control negativo: quitar el flujo 8 pi G r f_a^2 theta_0\' delta theta de K\' se detecta',
-                not implied(wrong), ''))
+    res.append((_NO_AXION, ok, ''))
+    wrong = F.EXT["K'"] + 8 * sp.pi * G * r * fa**2 * thp * dth
+    res.append((_FLUX_CONTROL, not implied(wrong), ''))
+    for k, name in _POTENTIAL_CONTROLS.items():
+        # EXT = LD - NEW, so adding the term back simulates its omission.
+        res.append((name, not implied(F.EXT[k] + POTENTIAL_TERMS[k]), ''))
     return res
+
+
+def extended_checks_passed(results):
+    """Require each equation and each control before writing the artifact."""
+    required = {*_EXT_CHECKS.values(), _H0_PRESERVED, _NO_AXION, _FLUX_CONTROL, *_POTENTIAL_CONTROLS.values()}
+    passed = {name for name, ok, _ in results if ok}
+    return required <= passed
 
 
 def run_all(report):

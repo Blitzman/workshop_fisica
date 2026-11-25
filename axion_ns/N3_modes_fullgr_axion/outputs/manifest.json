@@ -5,26 +5,26 @@
   "module": "N3_modes_fullgr_axion",
   "script": null,
   "git": {
-   "commit": "24d010c",
+   "commit": "e1c22c7",
    "dirty": true
   },
-  "created": "2026-11-20T20:17:58Z",
+  "created": "2026-11-25T08:13:52Z",
   "env": {
-   "python": "3.14.6",
-   "platform": "Linux x86_64",
+   "python": "3.14.10",
+   "platform": "Darwin x86_64",
    "sympy": "1.14.0",
-   "mpmath": "1.3.0",
+   "mpmath": "1.4.1",
    "numpy": "2.5.4",
    "scipy": "1.18.1",
    "matplotlib": "3.11.2"
   }
  },
- "seconds": 304.7,
+ "seconds": 102.4,
  "inputs": [
   {
    "name": "fullgr_extended.eq.json",
    "path": "D2_derive_nonradial/outputs/fullgr_extended.eq.json",
-   "sha256": "9b8faf31b923ee5bb58a7040cfab0a223fc6860f0bb738e8b121d188ca88dfa3"
+   "sha256": "646f3ffebc06a76317eeb25e8229dad7bb9101a39897496079ed5374f301abe8"
   },
   {
    "name": "paper2_tables.ref.json",
@@ -115,13 +115,13 @@
  "artifacts": [
   {
    "path": "modes_axion.csv",
-   "sha256": "dd2129a40642126b3f0d312cc015c1d38b7231641f75af93e3629cb927bcfd15",
-   "bytes": 4813
+   "sha256": "4d009cd99f45b9ad7059c1da6095f3a876205c15abfb0ccd1a1aa2871474cc4f",
+   "bytes": 4812
   },
   {
    "path": "exterior_convergence.json",
-   "sha256": "0184ae47c5fe91ece8ca7c8edd61c56e75fb34f910d9dc0cfbb0d0a8760a55be",
-   "bytes": 5735
+   "sha256": "4a96abbf73d0e055d3ff8808dde40922dfc0fe17b205ecbddfe4fa52283acf40",
+   "bytes": 5738
   }
  ],
  "summary": {
@@ -131,12 +131,12 @@
  },
  "checks": [
   {
-   "name": "Sustituciones del axión: 8/8 cantidades del Paper II (n dm*/dtheta, m_eff^2, eps(n, theta), c_s^2...)",
+   "name": "Sustituciones del axión: 9/9 cantidades del Paper II (n dm*/dtheta, m_eff^2, eps(n, theta), c_s^2...)",
    "ok": true,
    "note": ""
   },
   {
-   "name": "Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 4e-09 e Im nu en 0.0 %",
+   "name": "Convergencia (modo f, 6 kHz): tolerancia, radio de empalme y extracción mueven Re nu en 6e-09 e Im nu en 0.0 %",
    "ok": true,
    "note": ""
   },
@@ -156,17 +156,17 @@
    "note": ""
   },
   {
-   "name": "Con la métrica dinámica, el axión sube el modo f hasta un 7.5 % (Cowling, N1: 5.2 %) y su amortiguamiento por ondas gravitacionales pasa de 0.17 a 0.13 s (a 15 kHz)",
+   "name": "Con la métrica dinámica, el axión sube el modo f hasta un 6.4 % (Cowling, N1: 5.2 %) y su amortiguamiento por ondas gravitacionales pasa de 0.17 a 0.16 s (a 15 kHz)",
    "ok": null,
    "note": "resultado nuevo"
   },
   {
-   "name": "Amortiguamiento máximo por axiones: p2 a 5 kHz, 12.8 Hz (tau_a = 12.4 ms); la suma 1/tau_GW + 1/tau_a con el tau_a de Cowling (p2 a 8 kHz: 0.10 Hz frente a 1.0)",
+   "name": "Amortiguamiento máximo por axiones: p2 a 5 kHz, 12.7 Hz (tau_a = 12.5 ms); la suma 1/tau_GW + 1/tau_a con el tau_a de Cowling (p2 a 8 kHz: 0.12 Hz frente a 1.0)",
    "ok": null,
    "note": "resultado nuevo"
   },
   {
-   "name": "H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k < 0 en 4/4 frecuencias, pero L = psi'/psi coincide con la de la rama que decae a 3e-12 relativo como mucho: 2.1-0.001i kHz: 2e-14, 2.4-0.01i kHz: 8e-15, 5-0.1i kHz: 3e-13, 5.9-0.5i kHz: 3e-12",
+   "name": "H31: por debajo del umbral (nu_a = 6 kHz) la rama principal de k tiene Im k < 0 en 4/4 frecuencias, pero L = psi'/psi coincide con la de la rama que decae a 3e-12 relativo como mucho: 2.1-0.001i kHz: 2e-14, 2.4-0.01i kHz: 7e-15, 5-0.1i kHz: 3e-13, 5.9-0.5i kHz: 3e-12",
    "ok": true,
    "note": "la integración hacia dentro (40 longitudes de decaimiento) filtra la solución creciente"
   },
@@ -186,43 +186,43 @@
    "note": ""
   },
   {
-   "name": "H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracción mueven Re nu como mucho 2e-06 relativo: p1 a 8 kHz 4e-10; p2 a 12 kHz 1e-09; p1 a 7 kHz 9e-08; p2 a 11 kHz 2e-06; p2 a 8 kHz 7e-09; f a 15 kHz 8e-09",
+   "name": "H33: en los 6 modos delicados del paso 10, tolerancia, radio de empalme y distancia de extracción mueven Re nu como mucho 2e-06 relativo: p1 a 8 kHz 8e-10; p2 a 12 kHz 2e-09; p1 a 7 kHz 7e-08; p2 a 11 kHz 2e-06; p2 a 8 kHz 5e-09; f a 15 kHz 8e-09",
    "ok": false,
    "note": ""
   },
   {
-   "name": "H33: e Im nu como mucho: p1 a 8 kHz (Im 0.00137 Hz) 4.2e-06 Hz; p2 a 12 kHz (Im 0.00324 Hz) 1.7e-06 Hz; p1 a 7 kHz (Im 0.478 Hz) 1.0e-03 Hz; p2 a 11 kHz (Im 5.03 Hz) 1.1e-02 Hz; p2 a 8 kHz (Im 0.1 Hz) 5.2e-05 Hz; f a 15 kHz (Im 1.2 Hz) 7.9e-06 Hz",
+   "name": "H33: e Im nu como mucho: p1 a 8 kHz (Im 0.000509 Hz) 7.5e-08 Hz; p2 a 12 kHz (Im 0.00108 Hz) 4.6e-06 Hz; p1 a 7 kHz (Im 0.428 Hz) 9.3e-04 Hz; p2 a 11 kHz (Im 4.6 Hz) 8.5e-03 Hz; p2 a 8 kHz (Im 0.116 Hz) 9.2e-05 Hz; f a 15 kHz (Im 1.02 Hz) 6.9e-06 Hz",
    "ok": true,
    "note": "criterio: 1 % de Im nu o la resolución de Muller (1e-9 |nu|), lo que sea mayor"
   },
   {
-   "name": "Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.0027 Hz, frente a 1.0e-03 Hz con las variantes de arriba",
+   "name": "Control negativo 3: empalmando en la superficie (sin la cola del campo), Im nu de p1 a 7 kHz se mueve 0.019 Hz, frente a 9.3e-04 Hz con las variantes de arriba",
    "ok": false,
    "note": ""
   },
   {
-   "name": "Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 7.2e-07 Hz",
+   "name": "Control negativo 4: extrayendo la onda a una sola longitud de onda se mueve 3e-07 Hz",
    "ok": false,
    "note": ""
   }
  ],
  "extra": {
   "quick": false,
-  "procs": 2,
+  "procs": 6,
   "matching_radius_rule": "R + 0.7 (r_end - R)",
   "step10_seconds": {
-   "15": 33.2,
-   "13": 27.3,
-   "12": 26.0,
-   "11": 32.3,
-   "10": 35.0,
-   "8": 28.7,
-   "7": 28.7,
-   "6": 32.2,
+   "15": 26.1,
+   "13": 22.6,
+   "12": 22.9,
+   "11": 23.5,
+   "10": 22.8,
+   "8": 25.2,
+   "7": 26.0,
+   "6": 24.7,
    "5": 25.9,
-   "4": 31.0,
-   "3": 31.2,
-   "2.8": 23.3
+   "4": 26.0,
+   "3": 28.4,
+   "2.8": 24.1
   }
  }
 }
