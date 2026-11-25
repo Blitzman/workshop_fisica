@@ -22,8 +22,25 @@ Reads: D2 `fullgr_extended.eq.json`; S1 `eos_bsk26.csv`, `star_noaxion.csv`, `st
 
 ## Method
 The mode is a complex zero of the INGOING gravitational amplitude (Muller). The numerical matrices come from D2's extended system (symbolic compile, about 25 s) as
-y' = A y with A = A_-1/w^2 + A_0 + w^2 A_1; the three real coefficient matrices (times r^2, smooth at the centre) are evaluated EXACTLY at the nodes of S1's table and spline-interpolated
+y' = A y with A = A_-1/w^2 + A_0 + w^2 A_1. The background supplies V, dV/dtheta and d²V/dtheta² to these matrices inside the star and in the exterior scalar tail.
+The three real coefficient matrices (times r^2, smooth at the centre) are evaluated EXACTLY at the nodes of S1's table and spline-interpolated
 (`tables.py`), so a right-hand-side call costs about 10 us instead of about 520 us. Phi'' is analytic (not a finite difference). The matching radius is `R + 0.7 (r_end - R)`.
+
+### Background-only control
+
+With `dyn=False`, the axion condensate remains in the equilibrium profile and
+in the fluid and metric coefficients. The calculation fixes both the scalar
+perturbation and its radial derivative to zero and omits the perturbed
+Klein–Gordon equation. The `bg_*` columns describe the resulting fluid–metric
+control. On the axion background, the retained perturbations can still source
+the omitted equation, so these roots cannot be used to assess stability of the
+coupled system.
+
+At 6 kHz the background-only p1 root gives Im ν ≈ +0.009308 Hz across changes
+to integration tolerance, matching radius, wave-extraction distance, radial
+table density, and integration start radius. Its Klein–Gordon residual is
+nonzero, including outside the star. The coupled p1 root is damped, with
+Im ν ≈ −1.054735 Hz. See the p1 diagnostics in the root lab notebook.
 
 ## Measured against the legacy (nu_a = 6 kHz, f-mode, same theta_c)
 tables vs legacy exact path on the same star: 4.0e-9 (Re), 3.5e-8 (Im); against the legacy on the r-integrated star: 1.2e-8, 3.1e-6 (star definition: 9 m truncation, 10 m start);

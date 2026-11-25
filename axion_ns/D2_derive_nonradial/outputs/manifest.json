@@ -5,21 +5,21 @@
   "module": "D2_derive_nonradial",
   "script": null,
   "git": {
-   "commit": "26f2fcc",
+   "commit": "e1c22c7",
    "dirty": true
   },
-  "created": "2026-11-17T09:44:52Z",
+  "created": "2026-11-24T15:49:53Z",
   "env": {
-   "python": "3.12.3",
-   "platform": "Linux x86_64",
+   "python": "3.14.10",
+   "platform": "Darwin x86_64",
    "sympy": "1.14.0",
-   "mpmath": "1.3.0",
+   "mpmath": "1.4.1",
    "numpy": "2.5.4",
    "scipy": "1.18.1",
    "matplotlib": "3.11.2"
   }
  },
- "seconds": 436.6,
+ "seconds": 692.1,
  "inputs": [
   {
    "name": "background.eq.json",
@@ -40,37 +40,37 @@
  "artifacts": [
   {
    "path": "cowling_linear.eq.json",
-   "sha256": "b1c496d331473ff51ae0c293199b799877e42acbc66b233f79ca0c88e91d4a51",
-   "bytes": 9481
+   "sha256": "fd00879714755fedf374986a2879dcaa1ea48474f4797f574f3f870b0df82293",
+   "bytes": 9483
   },
   {
    "path": "cowling_linear.pdf",
-   "sha256": "31a45c329688f071345851b95711715a1080d041c12ea964e49e728eefe1cd1d",
-   "bytes": 135782
+   "sha256": "a1a5f28b415681a68f6c0f8df6a1487df14a58ed29b0b4368cbcea2973b567d6",
+   "bytes": 184304
   },
   {
    "path": "fullgr_linear.eq.json",
-   "sha256": "61d7e5adb41d309b48bff433fa474c4f27e818b00e63156d006904fb3dc6ffe2",
-   "bytes": 28687
+   "sha256": "3ff160a07304816366f8163b64599897066dd32728eeb5b8ecd37823a3332f82",
+   "bytes": 29045
   },
   {
    "path": "fullgr_linear.pdf",
-   "sha256": "9dd6911c68bd2b7a7bf0f5e320c0875032cfff3a65fc720d8cd2b870f582ff2c",
-   "bytes": 158822
+   "sha256": "b45797ce11c0173570e888941a4f8f13c883d22e09785a6a7c28f2a0c3b50b94",
+   "bytes": 208201
   },
   {
    "path": "fullgr_extended.eq.json",
-   "sha256": "9889f1fe9ed4463079ed8bd00c1579814db5c36c519fd715051a3eecc8224e7e",
-   "bytes": 14380
+   "sha256": "24b91de6f3d20f998c7585a47f47033d3d708228a3143cc5457a3dc4464fee01",
+   "bytes": 15062
   },
   {
    "path": "fullgr_extended.pdf",
-   "sha256": "e2a1c9aca6f22d857f6465f37e43d134d5f0cbd170cb514aaefe1a7a395e205c",
-   "bytes": 169221
+   "sha256": "00af498d80c6ccc9e2a71f44cf17dd933b0c28bc9a196cf1ae8db412dad49d82",
+   "bytes": 219681
   }
  ],
  "summary": {
-  "n_ok": 52,
+  "n_ok": 56,
   "n_fail": 0,
   "n_descriptive": 0
  },
@@ -326,12 +326,32 @@
    "note": ""
   },
   {
+   "name": "Sistema extendido, la ligadura de H0 se conserva a lo largo del flujo radial",
+   "ok": true,
+   "note": ""
+  },
+  {
    "name": "Todos los términos nuevos se anulan sin axión",
    "ok": true,
    "note": ""
   },
   {
    "name": "Control negativo: quitar el flujo 8 pi G r f_a^2 theta_0' delta theta de K' se detecta",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo: quitar el término de V_theta en H0 se detecta",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo: quitar el término de V_theta en X' se detecta",
+   "ok": true,
+   "note": ""
+  },
+  {
+   "name": "Control negativo: quitar el término de V_theta en KG se detecta",
    "ok": true,
    "note": ""
   }

@@ -26,7 +26,8 @@ def main():
         n, n1, n2_ = rng.uniform(0.05, 0.3), -rng.uniform(0.01, 0.5), rng.uniform(-1, 1)
         P, P1, P2, Lm, L1 = rng.uniform(-1, 0), rng.uniform(0.01, 1), rng.uniform(-1, 1), rng.uniform(0, 0.5), rng.uniform(0.01, 1)
         ref = np.array(n2.mat(rr, om, 2, n, n1, n2_, P, P1, P2, Lm, L1), dtype=float)
-        vals = flat_i(rr, om, 2, P, P1, P2, Lm, L1, n, n1, 0, 0, n + n * n, n * n, 2 * n / (1 + 2 * n), 1.0, 0, 0, 0, 0, 1.0)
+        vals = flat_i(rr, om, 2, P, P1, P2, Lm, L1, n, n1, 0, 0, n + n * n, n * n, 2 * n / (1 + 2 * n),
+                      1.0, 0, 0, 0, 0, 0, 1.0)
         new = np.array([float(v) for v in vals]).reshape(6, 6)
         worst = max(worst, np.abs(new[:4, :4] - ref).max() / np.abs(ref).max())
     print(f'N3 interior matrix (axion off) vs N2 matrix at 5 random states: max relative difference {worst:.1e}  ->', 'OK' if worst < 1e-12 else 'FAIL')

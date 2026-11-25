@@ -113,7 +113,7 @@ def main(argv=None):
         arts.append(out / 'fullgr_linear.eq.json')
         _pdf(out, 'fullgr_linear', meta, {k: v['expr'] for k, v in entries.items()}, pdf, arts, max_terms=40)
 
-        ext_ok = all(ok for n_, ok, _ in r7 if n_.startswith('Sistema extendido'))
+        ext_ok = CF.extended_checks_passed(r7)
         if ext_ok:
             ee = {k: {'expr': v, 'label': f'extended system, equation for {k}',
                       'ref': 'LD (metric Q, corrected sign) + new axion terms; verified against the derived system',

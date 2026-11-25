@@ -19,8 +19,8 @@ from common.notation import (r, w, l, G, V, mstar, mN, eps0, dth, a0, n0, Phi0, 
                              meff2, thp)
 
 # background symbols, in this order in the numerical functions
-BG = sp.symbols('bP bP1 bP2 bL bL1 x x1 th th1 e0 pr cs0 fa Mst M1 M2 Vv V2')
-(bP, bP1, bP2, bL, bL1, x, x1, th, th1, e0, pr, cs0, faS, Mst, M1, M2, Vv, V2) = BG
+BG = sp.symbols('bP bP1 bP2 bL bL1 x x1 th th1 e0 pr cs0 fa Mst M1 M2 Vv V1 V2')
+(bP, bP1, bP2, bL, bL1, x, x1, th, th1, e0, pr, cs0, faS, Mst, M1, M2, Vv, V1, V2) = BG
 
 
 def load_ext(d2_dir):
@@ -36,7 +36,7 @@ def to_numeric(e):
     dpdn = (e0 + pr) * cs0 / x
     rep = [(sp.Derivative(eps0(n0), (n0, 2)), dpdn / x), (sp.Derivative(eps0(n0), n0), (e0 + pr) / x), (eps0(n0), e0),
            (sp.Derivative(mstar(a0), (a0, 2)), M2 / faS**2), (sp.Derivative(mstar(a0), a0), M1 / faS), (mstar(a0), mN + Mst),
-           (sp.Derivative(V(a0), (a0, 2)), V2 / faS**2), (V(a0), Vv),
+           (sp.Derivative(V(a0), (a0, 2)), V2 / faS**2), (sp.Derivative(V(a0), a0), V1 / faS), (V(a0), Vv),
            (sp.Derivative(Phi0, (r, 2)), bP2), (sp.Derivative(Phi0, r), bP1), (sp.Derivative(lam0, r), bL1),
            (sp.Derivative(a0, r), faS * th1), (sp.Derivative(n0, r), x1)]
     for k, v in rep:
@@ -110,5 +110,5 @@ def substitution_checks():
     eps_ = e0 + x * Mst
     cases = [('n dm*/dtheta', n0 * dm, x * M1), ('n d2m*/dtheta2', n0 * dmm, x * M2), ('m_eff^2', meff2, (V2 + x * M2) / faS**2),
              ('eps(n, theta)', eps, eps_), ('p(n)', p, pr), ('c_s^2', cs2, (e0 + pr) * cs0 / (eps_ + pr)),
-             ("theta_0'", thp, th1), ('V(a_0)', V(a0), Vv)]
+             ("theta_0'", thp, th1), ('V(a_0)', V(a0), Vv), ('dV/dtheta', fa * sp.diff(V(a0), a0), V1)]
     return [(name, sp.simplify(to_numeric(e) - want) == 0) for name, e, want in cases]
